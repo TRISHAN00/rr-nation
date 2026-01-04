@@ -1,6 +1,6 @@
 # RR Nation – Event & Community Platform
 
-A modern, scalable web platform built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**, featuring **role-based authentication**, **dashboards**, and a **CMS-style public website**.
+A modern, scalable web platform built with **Next.js 15**, and **Tailwind CSS**, featuring **role-based authentication**, **dashboards**, and a **CMS-style public website**.
 
 ---
 
@@ -53,7 +53,7 @@ The project is designed with **scalability, maintainability, and performance** i
 ## 🧱 Tech Stack
 
 * **Framework:** Next.js 14 (App Router)
-* **Language:** TypeScript
+* **Language:** JavaScript
 * **Styling:** Tailwind CSS
 * **State Management:** React hooks / Context API
 * **Authentication:** JWT / NextAuth (planned)
@@ -68,7 +68,6 @@ src/
 ├── app/            # Routing (App Router)
 ├── components/     # Reusable UI & sections
 ├── lib/            # Auth, fetchers, helpers
-├── types/          # TypeScript types
 ├── utils/          # Utility functions
 ├── styles/         # Tailwind component layers
 └── middleware.ts   # Route protection
