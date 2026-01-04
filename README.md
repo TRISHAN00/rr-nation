@@ -1,40 +1,181 @@
-<<<<<<< HEAD
-# rr-nation
-=======
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# RR Nation – Event & Community Platform
 
-## Getting Started
+A modern, scalable web platform built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**, featuring **role-based authentication**, **dashboards**, and a **CMS-style public website**.
 
-First, run the development server:
+---
+
+## 🚀 Project Overview
+
+RR Nation is a full-featured event and community management platform that supports:
+
+* Public-facing website (events, services, blogs, gallery)
+* Role-based user system (User, Member, Partner, Admin)
+* Separate dashboards and profiles per role
+* Admin panel for full system management
+
+The project is designed with **scalability, maintainability, and performance** in mind.
+
+---
+
+## ✨ Key Features
+
+### 🌐 Public Website
+
+* Home page with dynamic sections
+* Events listing & event details
+* Services & service details
+* Blog with dynamic routing
+* Gallery & team pages
+* Contact page
+
+### 🔐 Authentication & Roles
+
+* User registration
+* Member registration
+* Partner registration
+* Secure login/logout
+* Role-based access control (RBAC)
+
+### 📊 Dashboards
+
+* User dashboard + profile
+* Member dashboard + profile
+* Partner dashboard + profile
+* Admin dashboard
+
+  * Manage users
+  * Manage members
+  * Manage partners
+  * Application settings
+
+---
+
+## 🧱 Tech Stack
+
+* **Framework:** Next.js 14 (App Router)
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS
+* **State Management:** React hooks / Context API
+* **Authentication:** JWT / NextAuth (planned)
+* **Version Control:** Git & GitHub
+
+---
+
+## 📁 Project Structure (Simplified)
+
+```txt
+src/
+├── app/            # Routing (App Router)
+├── components/     # Reusable UI & sections
+├── lib/            # Auth, fetchers, helpers
+├── types/          # TypeScript types
+├── utils/          # Utility functions
+├── styles/         # Tailwind component layers
+└── middleware.ts   # Route protection
+```
+
+---
+
+## ⚙️ Getting Started
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/TRISHAN00/rr-nation.git
+cd rr-nation
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Environment Variables
+
+Create a `.env.local` file based on the example:
+
+```bash
+cp .env.example .env.local
+```
+
+### 4️⃣ Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open: [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔑 Environment Variables
 
-## Learn More
+```env
+NEXT_PUBLIC_API_URL=
+DATABASE_URL=
+JWT_SECRET=
+```
 
-To learn more about Next.js, take a look at the following resources:
+> ⚠️ Never commit `.env` files to GitHub
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧪 Scripts
 
-## Deploy on Vercel
+```bash
+npm run dev       # Start development server
+npm run build     # Build for production
+npm run start     # Start production server
+npm run lint      # Run ESLint
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
->>>>>>> e20e85b (Initial commit from Create Next App)
+## 🧠 Development Workflow
+
+* `main` → Production-ready code only
+* `develop` → Active development
+* `feature/*` → New features
+* `fix/*` → Bug fixes
+
+All features are developed via pull requests.
+
+---
+
+## 📌 Roadmap
+
+* [ ] Authentication (NextAuth / JWT)
+* [ ] Admin CRUD modules
+* [ ] CMS integration
+* [ ] Payment integration
+* [ ] Email notifications
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`feature/your-feature-name`)
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is currently **private / proprietary**.
+
+---
+
+## 👤 Author
+
+**Trishan Saha**
+Frontend & WordPress Developer
+
+* GitHub: [https://github.com/TRISHAN00](https://github.com/TRISHAN00)
+
+---
+
+> Built with ❤️ using Next.js & Tailwind CSS
