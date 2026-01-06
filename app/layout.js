@@ -1,3 +1,5 @@
+import Footer from "@/components/common/footer/Footer.";
+import Header from "@/components/common/header/Header";
 import { Albert_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -17,7 +19,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${albertSans.variable} antialiased`}>
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
