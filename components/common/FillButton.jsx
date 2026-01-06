@@ -6,7 +6,7 @@ export default function FillButton({ children }) {
   font-bold text-[16px] leading-[24px]
   bg-[var(--color-brand)] text-[var(--color-white)]
   px-6 py-3 rounded-[28px]
-  group
+  group cursor-pointer
 "
     >
       <span className="relative z-10">{children}</span>

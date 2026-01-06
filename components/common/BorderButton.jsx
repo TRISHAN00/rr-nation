@@ -9,7 +9,7 @@ export default function BorderButton({children}) {
   text-[var(--color-light)] bg-transparent
   border border-[var(--color-light)]
   group
-  transition-colors duration-300
+  transition-colors duration-300 cursor-pointer
 "
       >
         {/* Button Text */}
