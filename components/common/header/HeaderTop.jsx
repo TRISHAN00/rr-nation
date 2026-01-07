@@ -25,7 +25,7 @@ const rightItems = [
 
 export default function HeaderTop() {
   return (
-    <div className="flex justify-between border-b border-white/20 pb-2.5">
+    <div className="flex justify-between border-b border-white/20 pb-2.5 mb-2.5">
       <ul className="flex gap-10">
         {leftItems.map((item, index) => (
           <HeaderTopListItem key={index} {...item} />

@@ -9,6 +9,21 @@
   --color-gray: #868681;
 }
 
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #ef8f00;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  width: 28px;
+  height: 8px;
+  border-radius: 999px;
+  background: #ef8f00; /* brand color */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

@@ -13,7 +13,7 @@ export default function BorderButton({children}) {
 "
       >
         {/* Button Text */}
-        <span className="relative z-10 transition-colors duration-300 group-hover:text-[var(--color-black)]">
+        <span className="relative z-10 transition-colors duration-300 group-hover:text-[var(--color-brand)]">
           {children}
         </span>
 
