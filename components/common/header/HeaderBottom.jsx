@@ -1,14 +1,14 @@
 import BorderButton from "../BorderButton";
 import CartIcon from "../CartIcon";
 import FillButton from "../FillButton";
-import NavItems from "./NavItems";
+import MainMenu from "./NavigationMenuDemo";
 import SearchInput from "./SearchInput";
 
 export default function HeaderBottom() {
   return (
     <div className=" flex items-center justify-between">
       {/* Navigation Items */}
-      <NavItems />
+      <MainMenu />
 
       {/* Add to cart and search  */}
       <div className=" flex gap-7">

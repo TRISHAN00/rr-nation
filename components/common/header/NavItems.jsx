@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation"; // for active link
 
 export default function NavItems() {
-  const pathname = usePathname(); // current route
+  const pathname = usePathname(); 
 
   const navLinks = [
     { label: "Home", href: "/" },
