@@ -63,7 +63,7 @@ export default function BannerSlider() {
           />
         </SwiperSlide>
       </Swiper>
-      <div className="custom-pagination absolute right-1/6 w-10  justify-center items-center top-1/2 -translate-y-1/2 flex flex-col gap-5 z-20" />
+    
     </>
   );
 }

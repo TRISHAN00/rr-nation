@@ -2,6 +2,7 @@ import BannerCTA from "./BannerCTA";
 import BannerShapes from "./BannerShapes";
 import Overlay from "./Overlay";
 
+import BannerPagination from "./BannerPagination";
 import BannerSlider from "./BannerSlider";
 import FollowUs from "./FollowUs";
 
@@ -21,6 +22,9 @@ export default function Banner() {
 
         {/* Banner Text */}
         <BannerCTA />
+
+        {/* Slider Bullet Points */}
+        <BannerPagination />
       </div>
 
       {/* Shapes */}
