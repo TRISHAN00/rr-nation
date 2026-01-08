@@ -1,21 +1,26 @@
 "use client";
 
 import Image from "next/image";
+import "swiper/css";
+import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function BannerSlider() {
+
   return (
     <>
       <Swiper
         className="w-full h-screen"
         modules={[Autoplay, Pagination]}
+        direction={"vertical"}
         autoplay={{
           delay: 4000,
           disableOnInteraction: false,
         }}
-        speed={1500} // smooth transition
+        speed={1500}
         pagination={{
+          el: ".custom-pagination",
           clickable: true,
         }}
         loop
@@ -38,6 +43,7 @@ export default function BannerSlider() {
             className="object-cover"
           />
         </SwiperSlide>
+
         <SwiperSlide className="relative w-full h-screen">
           <Image
             src="/dynamic/home/banner/banner.jpg"
@@ -57,6 +63,7 @@ export default function BannerSlider() {
           />
         </SwiperSlide>
       </Swiper>
+      <div className="custom-pagination absolute right-1/6 w-10  justify-center items-center top-1/2 -translate-y-1/2 flex flex-col gap-5 z-20" />
     </>
   );
 }
