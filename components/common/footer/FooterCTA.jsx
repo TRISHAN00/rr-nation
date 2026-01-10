@@ -4,23 +4,24 @@ import FillButton from "../FillButton";
 
 export default function FooterCTA() {
   return (
-    <div className=" bg-[#00a19a] py-10 px-16 flex rounded-3xl justify-between items-center overflow-hidden">
+    <div className=" bg-[#00a19a] py-10 px-16 flex rounded-3xl items-center overflow-hidden relative">
       {/* Title */}
-      <h2 className=" text-4xl font-semibold text-white">
+      <h2 className=" text-4xl text-left font-semibold z-10 text-white">
         Run and Rise Together
       </h2>
 
       {/* Icon */}
-      <div className=" w-14 h-14">
+      <div className=" w-16 h-16 m-auto">
         <Image
-          src={"/static/run-icon.svg"}
+          src={"/static/marathon.gif"}
           alt="run rise"
-          width={50}
-          height={50}
+          width={80}
+          height={80}
         />
       </div>
 
       {/* Registration Button */}
+      <div className=" ml-auto" >
       <FillButton
         icon={NotebookPen}
         bgColor="#fafafa "
@@ -31,6 +32,16 @@ export default function FooterCTA() {
       >
         Registration
       </FillButton>
+      </div>
+
+      <div className=" absolute left-0 bottom-0  ">
+        <Image
+          src={"/static/shine-shape.svg"}
+          alt="run rise"
+          width={340}
+          height={125}
+        />
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import FillButton from "@/components/common/FillButton";
+import { Activity } from "lucide-react";
 
 export default function BannerCTA() {
   return (
@@ -44,7 +45,7 @@ export default function BannerCTA() {
         Join a growing community of runners committed to fitness,
         sustainability, and positive environmental impact.
       </p>
-      <FillButton>Start Running Today</FillButton>
+      <FillButton icon={Activity} iconPosition="right" >Start Running Today</FillButton>
     </div>
   );
 }

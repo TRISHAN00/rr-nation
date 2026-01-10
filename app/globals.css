@@ -45,6 +45,48 @@
   transform: translate(-50%, -50%) scale(1);
 }
 
+/* RUN SVG ANIMATION */
+.run-icon {
+  animation: run-bounce 0.9s infinite ease-in-out;
+}
+
+.run-leg {
+  transform-origin: top center;
+  animation: leg-move 0.6s infinite alternate ease-in-out;
+}
+
+.run-body {
+  animation: body-tilt 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes run-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+
+@keyframes leg-move {
+  from {
+    transform: rotate(6deg);
+  }
+  to {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes body-tilt {
+  from {
+    transform: rotate(1deg);
+  }
+  to {
+    transform: rotate(-1deg);
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

@@ -18,7 +18,7 @@ export default function HeaderBottom() {
 
       {/* Button Group */}
       <div className=" flex gap-5">
-        <BorderButton>Become a Member</BorderButton>
+        <BorderButton >Become a Member</BorderButton>
         <FillButton>Login</FillButton>
       </div>
     </div>

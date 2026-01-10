@@ -1,9 +1,10 @@
 import BannerShapes from "@/components/common/ShapeIcon";
+import Logo from "../Logo";
 import FooterCTA from "./FooterCTA";
 
 export default function Footer() {
   return (
-    <div
+    <footer
       className="w-full bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: "url('/static/footer-bg.jpg')",
@@ -22,10 +23,15 @@ export default function Footer() {
         <div className=" flex justify-end w-full">
           <BannerShapes type={"indicator"} />
         </div>
+
         {/* Logo */}
+        <Logo/>
+
         {/* Footer Item Column */}
+        
+
         {/* Copyright */}
       </div>
-    </div>
+    </footer>
   );
 }
