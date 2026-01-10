@@ -1,5 +1,5 @@
+import BannerShapes from "../../../common/ShapeIcon";
 import BannerCTA from "./BannerCTA";
-import BannerShapes from "./BannerShapes";
 import Overlay from "./Overlay";
 
 import BannerPagination from "./BannerPagination";

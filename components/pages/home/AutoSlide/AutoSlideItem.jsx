@@ -7,7 +7,7 @@ export default function AutoSlideItem() {
         Run Rise Nation
       </h1>
       <Image
-        src="/static/run-icon.svg"
+        src="/static/double-run.svg"
         alt="run rise nation"
         width={28}
         height={28}

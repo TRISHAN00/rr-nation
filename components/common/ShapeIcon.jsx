@@ -28,6 +28,28 @@ export default function BannerShapes({ type }) {
       );
       break;
 
+    case "medal":
+      shape = (
+        <Image
+          src={"/static/medal.svg"}
+          alt="run rise medal"
+          width={80}
+          height={126}
+        />
+      );
+      break;
+
+    case "indicator":
+      shape = (
+        <Image
+          src={"/static/arrow-shape.svg"}
+          alt="run rise medal"
+          width={93}
+          height={110}
+        />
+      );
+      break;
+
     default:
       shape = null;
   }

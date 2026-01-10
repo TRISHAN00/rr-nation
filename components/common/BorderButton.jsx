@@ -21,8 +21,8 @@ export default function BorderButton({children}) {
         <span
           className="
     absolute inset-0 bg-[var(--color-light)]
-    -translate-x-full transition-transform duration-300
-    group-hover:translate-x-0
+    -translate-y-full transition-transform duration-300
+    group-hover:translate-y-0
     z-0
   "
         />
