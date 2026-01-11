@@ -1,16 +1,12 @@
-export default function RunIcon({ size = 18 }) {
+import Image from "next/image";
+
+export default function RunIcon() {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {/* SVG paths here */}
-    </svg>
+    <Image
+      src={"/static/marathon.gif"}
+      height={20}
+      width={20}
+      alt="runrise run"
+    />
   );
 }

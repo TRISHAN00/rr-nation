@@ -9,6 +9,10 @@
   --color-gray: #868681;
 }
 
+body {
+  background-color: #fffdfa;
+}
+
 .custom-pagination .swiper-pagination-bullet {
   position: relative;
   width: 16px;

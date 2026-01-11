@@ -3,7 +3,8 @@ import { Loader2 } from "lucide-react";
 export default function FillButton({
   children,
   icon: Icon,
-  iconPosition = "left", // left | right
+  gitIcon,
+  iconPosition = "left",
   bgColor = "var(--color-brand)",
   hoverBg = "var(--color-light)",
   textColor = "#FAFAFA",
@@ -24,14 +25,13 @@ export default function FillButton({
         relative overflow-hidden
         font-bold text-[16px] leading-[24px]
         px-6 py-3 rounded-[28px]
-        group cursor-pointer
         bg-[var(--btn-bg)]
         flex items-center gap-2
-        transition-opacity
-        ${disabled ? "opacity-60 cursor-not-allowed" : ""}
+        group transition-opacity
+        ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
       `}
     >
-      {/* Hover background */}
+      {/* Hover Background */}
       <span
         className="
           absolute inset-0
@@ -53,9 +53,10 @@ export default function FillButton({
         "
       >
         {/* Left Icon */}
-        {Icon && iconPosition === "left" && !loading && (
+        {!loading && iconPosition === "left" && Icon && (
           <Icon size={18} strokeWidth={2} />
         )}
+        {!loading && iconPosition === "left" && gitIcon && gitIcon}
 
         {/* Loader */}
         {loading && <Loader2 size={18} className="animate-spin" />}
@@ -63,9 +64,10 @@ export default function FillButton({
         {children}
 
         {/* Right Icon */}
-        {Icon && iconPosition === "right" && !loading && (
+        {!loading && iconPosition === "right" && Icon && (
           <Icon size={18} strokeWidth={2} />
         )}
+        {!loading && iconPosition === "right" && gitIcon && gitIcon}
       </span>
     </button>
   );

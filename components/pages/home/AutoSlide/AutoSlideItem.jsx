@@ -4,7 +4,7 @@ export default function AutoSlideItem() {
   return (
     <div className="flex items-center gap-4 whitespace-nowrap">
       <h1 className="text-2xl md:text-3xl font-bold text-light">
-        Run Rise Nation
+        RunRise Nation
       </h1>
       <Image
         src="/static/double-run.svg"
@@ -15,3 +15,4 @@ export default function AutoSlideItem() {
     </div>
   );
 }
+     
