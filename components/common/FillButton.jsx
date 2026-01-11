@@ -3,7 +3,7 @@ import { Loader2 } from "lucide-react";
 export default function FillButton({
   children,
   icon: Icon,
-  gitIcon,
+  gifIcon,
   iconPosition = "left",
   bgColor = "var(--color-brand)",
   hoverBg = "var(--color-light)",
@@ -56,7 +56,7 @@ export default function FillButton({
         {!loading && iconPosition === "left" && Icon && (
           <Icon size={18} strokeWidth={2} />
         )}
-        {!loading && iconPosition === "left" && gitIcon && gitIcon}
+        {!loading && iconPosition === "left" && gifIcon && gifIcon}
 
         {/* Loader */}
         {loading && <Loader2 size={18} className="animate-spin" />}
@@ -67,7 +67,7 @@ export default function FillButton({
         {!loading && iconPosition === "right" && Icon && (
           <Icon size={18} strokeWidth={2} />
         )}
-        {!loading && iconPosition === "right" && gitIcon && gitIcon}
+        {!loading && iconPosition === "right" && gifIcon && gifIcon}
       </span>
     </button>
   );

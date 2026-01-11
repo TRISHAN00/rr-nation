@@ -1,5 +1,6 @@
 import FillButton from "@/components/common/FillButton";
-import { Activity } from "lucide-react";
+import VideoPlayBtn from "@/components/common/VideoPlayBtn";
+import RunIcon from "@/components/icons/RunIcon";
 
 export default function BannerCTA() {
   return (
@@ -45,7 +46,19 @@ export default function BannerCTA() {
         Join a growing community of runners committed to fitness,
         sustainability, and positive environmental impact.
       </p>
-      <FillButton icon={Activity} iconPosition="right" >Start Running Today</FillButton>
+
+      <div className=" flex gap-8" >
+        <FillButton
+          hoverBg="#001819"
+          textColor="#FAFAFA"
+          hoverText="#FAFAFA"
+          iconPosition="right"
+          gifIcon={<RunIcon icon={"/static/marathon.gif"} />}
+        >
+          Start Running Today
+        </FillButton>
+        <VideoPlayBtn />
+      </div>
     </div>
   );
 }

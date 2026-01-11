@@ -1,6 +1,6 @@
 import FillButton from "@/components/common/FillButton";
-import RunIcon from "@/components/icons/RunIcon";
 import BannerShapes from "@/components/common/ShapeIcon";
+import RunIcon from "@/components/icons/RunIcon";
 import Image from "next/image";
 
 export default function MissionList() {
@@ -59,10 +59,9 @@ export default function MissionList() {
           textColor="#FAFAFA"
           hoverText="#FAFAFA"
           iconPosition="right"
-          gitIcon={<RunIcon/>}
+          gifIcon={<RunIcon icon={"/static/marathon.gif"} />}
         >
           Start Running Today
-          
         </FillButton>
 
         <div className="flex justify-end absolute right-0 mt-1.5 mr-[-100px] ">
