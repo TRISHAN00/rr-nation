@@ -7,7 +7,7 @@ export default function Home() {
     <>
       <Banner />
       <AutoSlideLogo />
-      <OurMission/>
+      <OurMission />
     </>
   );
 }

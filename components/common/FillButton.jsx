@@ -23,11 +23,18 @@ export default function FillButton({
       }}
       className={`
         relative overflow-hidden
-        font-bold text-[16px] leading-[24px]
-        px-6 py-3 rounded-[28px]
+        font-bold
+        rounded-full
         bg-[var(--btn-bg)]
-        flex items-center gap-2
-        group transition-opacity
+        flex items-center justify-center gap-2
+        group transition-all duration-300
+        whitespace-nowrap
+
+        /* Responsive sizing */
+        text-sm px-4 py-2
+        sm:text-[15px] sm:px-5 sm:py-2.5
+        md:text-[16px] md:px-6 md:py-3
+
         ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
       `}
     >
@@ -54,20 +61,26 @@ export default function FillButton({
       >
         {/* Left Icon */}
         {!loading && iconPosition === "left" && Icon && (
-          <Icon size={18} strokeWidth={2} />
+          <Icon className="w-4 h-4 md:w-[18px] md:h-[18px]" />
         )}
-        {!loading && iconPosition === "left" && gifIcon && gifIcon}
+        {!loading && iconPosition === "left" && gifIcon && (
+          <span className="w-4 h-4 md:w-5 md:h-5">{gifIcon}</span>
+        )}
 
         {/* Loader */}
-        {loading && <Loader2 size={18} className="animate-spin" />}
+        {loading && (
+          <Loader2 className="w-4 h-4 md:w-[18px] md:h-[18px] animate-spin" />
+        )}
 
         {children}
 
         {/* Right Icon */}
         {!loading && iconPosition === "right" && Icon && (
-          <Icon size={18} strokeWidth={2} />
+          <Icon className="w-4 h-4 md:w-[18px] md:h-[18px]" />
         )}
-        {!loading && iconPosition === "right" && gifIcon && gifIcon}
+        {!loading && iconPosition === "right" && gifIcon && (
+          <span className="w-4 h-4 md:w-5 md:h-5">{gifIcon}</span>
+        )}
       </span>
     </button>
   );

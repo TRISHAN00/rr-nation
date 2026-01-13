@@ -2,17 +2,30 @@ import Image from "next/image";
 
 export default function AutoSlideItem() {
   return (
-    <div className="flex items-center gap-4 whitespace-nowrap">
-      <h1 className="text-2xl md:text-3xl font-bold text-light">
+    <div className="flex items-center gap-3 md:gap-4 whitespace-nowrap">
+      <h1
+        className="
+          font-bold text-light
+          text-lg
+          sm:text-xl
+          md:text-2xl
+          xl:text-3xl
+        "
+      >
         RunRise Nation
       </h1>
+
       <Image
         src="/static/double-run.svg"
-        alt="run rise nation"
+        alt="Run Rise Nation"
         width={28}
         height={28}
+        className="
+          w-5 h-5
+          sm:w-6 sm:h-6
+          md:w-7 md:h-7
+        "
       />
     </div>
   );
 }
-     

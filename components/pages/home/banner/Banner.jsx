@@ -18,13 +18,16 @@ export default function Banner() {
       {/* Banner Content */}
       <div className="absolute inset-0 z-10 flex items-center max-w-7xl mx-auto px-[30px] text-white">
         {/* Follow Us */}
+        <div className=" hidden md:flex lg:flex xl:flex 2xl:flex" >
         <FollowUs />
+        
+        {/* Slider Bullet Points */}
+        <BannerPagination />
+        </div>
 
         {/* Banner Text */}
         <BannerCTA />
 
-        {/* Slider Bullet Points */}
-        <BannerPagination />
       </div>
 
       {/* Shapes */}
