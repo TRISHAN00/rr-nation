@@ -22,7 +22,7 @@ export default function VideoPlayBtn({
         />
 
         {/* Inner Border */}
-        <span className="relative z-10 p-1.5 border border-white/80 rounded-full flex items-center justify-center">
+        <span className="relative z-10 p-1 border border-white/80 rounded-full flex items-center justify-center">
           <Play size={16} className="text-white ml-[2px]" />
         </span>
       </span>

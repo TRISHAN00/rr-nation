@@ -57,7 +57,7 @@ export default function BannerCTA() {
         >
           Start Running Today
         </FillButton>
-        <VideoPlayBtn />
+        <VideoPlayBtn size={50} />
       </div>
     </div>
   );
