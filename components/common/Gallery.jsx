@@ -1,13 +1,18 @@
 "use client";
 
 import lgVideo from "lightgallery/plugins/video";
-import LightGallery from "lightgallery/react";
+import dynamic from "next/dynamic";
 import { useRef } from "react";
 
 import "lightgallery/css/lg-video.css";
 import "lightgallery/css/lightgallery.css";
 
 import VideoPlayBtn from "./VideoPlayBtn";
+
+// ✅ Disable SSR for LightGallery
+const LightGallery = dynamic(() => import("lightgallery/react"), {
+  ssr: false,
+});
 
 export default function Gallery() {
   const lightGalleryRef = useRef(null);
@@ -19,9 +24,7 @@ export default function Gallery() {
   };
 
   const openVideo = () => {
-    if (lightGalleryRef.current) {
-      lightGalleryRef.current.openGallery(0);
-    }
+    lightGalleryRef.current?.openGallery(0);
   };
 
   const videos = [
@@ -33,19 +36,12 @@ export default function Gallery() {
 
   return (
     <div className="flex items-center gap-4 sm:gap-5 md:gap-6">
-      {/* Play Button */}
       <VideoPlayBtn
         openVideo={openVideo}
-        size={44} // base size
-        className="
-          scale-90 
-          sm:scale-100 
-          md:scale-110 
-          lg:scale-125
-        "
+        size={44}
+        className="scale-90 sm:scale-100 md:scale-110 lg:scale-125"
       />
 
-      {/* LightGallery (hidden, modal only) */}
       <LightGallery
         onInit={onInit}
         plugins={[lgVideo]}

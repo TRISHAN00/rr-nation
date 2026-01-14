@@ -1,25 +1,20 @@
+import DestinationIcon from "@/components/icons/DestinationIcon";
 import AwardWin from "./AwardWin";
 import MissionItem from "./MissionItem";
 
 export default function OurMission() {
   return (
     <section
-      className="
-        bg-cover bg-no-repeat bg-center
-        py-16 sm:py-24 xl:py-36
-      "
+      className="relative bg-cover bg-no-repeat bg-center py-16 sm:py-24 xl:py-36"
       style={{
         backgroundImage: "url('/static/bg-about.jpg')",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover"
       }}
     >
       <div
-        className="
-          max-w-7xl mx-auto
-          px-4 sm:px-6 lg:px-[30px]
-          grid grid-cols-1
-          lg:grid-cols-2
-          gap-10 xl:gap-16
-          items-center
+        className=" md:max-w-7xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-[30px] grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center
         "
       >
         {/* Left Image Section */}
@@ -27,6 +22,10 @@ export default function OurMission() {
 
         {/* Right Content */}
         <MissionItem />
+      </div>
+
+      <div className=" absolute top-14 right-28 hidden  lg:block 2xl:block  ">
+        <DestinationIcon />
       </div>
     </section>
   );

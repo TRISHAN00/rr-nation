@@ -91,6 +91,8 @@ body {
   }
 }
 
+/* Destination Icon Animated */
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

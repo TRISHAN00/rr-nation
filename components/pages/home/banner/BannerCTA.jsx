@@ -30,9 +30,10 @@ export default function BannerCTA() {
         >
           Start Running Today
         </FillButton>
-
+        
         {/* Video CTA */}
-        <Gallery />
+        <Gallery/>
+
       </div>
     </div>
   );

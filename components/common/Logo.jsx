@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,12 +13,7 @@ export default function Logo() {
         src="/rr-nation-logo.svg"
         alt="Run Rise Nation"
         priority
-        className="
-          w-[70px] h-auto
-          sm:w-[80px]
-          md:w-[90px]
-          xl:w-[100px]
-        "
+        className={clsx("w-[70px] h-auto sm:w-[80px] md:w-[90px] xl:w-[100px]")}
         width={100}
         height={97}
       />
