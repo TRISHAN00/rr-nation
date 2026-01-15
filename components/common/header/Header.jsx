@@ -11,8 +11,8 @@ export default function Header() {
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
   return (
-    <header className="absolute top-[30px] left-0 right-0 z-50">
-      <div className="max-w-7xl mx-auto px-[30px] flex items-center gap-x-20">
+    <header className="absolute top-7.5 left-0 right-0 z-50">
+      <div className="max-w-7xl mx-auto px-7.5 flex items-center gap-x-20">
         {/* Logo */}
         <Logo />
 
