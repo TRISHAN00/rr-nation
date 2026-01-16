@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className="absolute top-7.5 left-0 right-0 z-50">
-      <div className="max-w-7xl mx-auto px-7.5 flex items-center gap-x-20">
+      <div className="container mx-auto px-7.5 flex items-center gap-x-20">
         {/* Logo */}
         <Logo />
 

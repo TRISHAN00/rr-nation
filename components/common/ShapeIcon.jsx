@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function BannerShapes({ type }) {
+export default function BannerShapes({ type, rotate }) {
   let shape;
 
   switch (type) {
@@ -46,6 +46,7 @@ export default function BannerShapes({ type }) {
           alt="run rise medal"
           width={93}
           height={110}
+          style={{ transform: `rotate(${rotate}deg)` }}
         />
       );
       break;

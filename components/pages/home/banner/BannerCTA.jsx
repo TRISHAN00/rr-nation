@@ -5,12 +5,12 @@ import RunIcon from "@/components/icons/RunIcon";
 export default function BannerCTA() {
   return (
     <div className=" w-2xl">
-      <span className="block font-bold text-[14px] sm:text-[16px] leading-[20px] uppercase text-[#00a19a] mb-4 sm:mb-5">
+      <span className="block font-bold text-[14px] sm:text-[16px] leading-5 uppercase text-brand mb-4 sm:mb-5">
         Run Rise Nation
       </span>
 
       {/* Heading */}
-      <h1 className="font-['Albert_Sans'] font-black text-[34px] sm:text-[44px] lg:text-[62px] leading-[42px] sm:leading-[54px] lg:leading-[72px] tracking-[-0.02em] text-[#FAFAFA]">
+      <h1 className="font-['Albert_Sans'] font-black text-[34px] sm:text-[44px] lg:text-[62px] leading-10.5 sm:leading-13.5 lg:leading-[72px] tracking-[-0.02em] text-[#FAFAFA]">
         Stride Together for a Better Tomorrow
       </h1>
       {/* Description */}

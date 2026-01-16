@@ -14,7 +14,7 @@ export default function OurMission() {
       }}
     >
       <div
-        className=" md:max-w-7xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-[30px] grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center
+        className=" container mx-auto px-4 sm:px-6 lg:px-7.5 grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center
         "
       >
         {/* Left Image Section */}

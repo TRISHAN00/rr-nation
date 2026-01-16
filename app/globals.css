@@ -31,7 +31,7 @@ body {
   inset: 50%;
   width: 8px;
   height: 8px;
-  background: #00a19a;
+  background: var(--color-brand);
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0.35s ease;
@@ -41,11 +41,48 @@ body {
 .custom-pagination .swiper-pagination-bullet-active {
   width: 26px;
   height: 26px;
-  border-color: #d9d9d9;
+  border-color: var(--color-brand);
 }
 
 /* Show center dot on active */
 .custom-pagination .swiper-pagination-bullet-active::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/*  */
+.testimonial-pagination .swiper-pagination-bullet {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--color-brand); /* light mint */
+  background: transparent;
+  opacity: 1;
+  transition: all 0.35s ease;
+}
+
+/* Center dot (hidden initially) */
+.testimonial-pagination .swiper-pagination-bullet::after {
+  content: "";
+  position: absolute;
+  inset: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--color-brand);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.35s ease;
+}
+
+/* Active state */
+.testimonial-pagination .swiper-pagination-bullet-active {
+  width: 26px;
+  height: 26px;
+  border-color: var(--color-brand);
+}
+
+/* Show center dot on active */
+.testimonial-pagination .swiper-pagination-bullet-active::after {
   transform: translate(-50%, -50%) scale(1);
 }
 
@@ -94,6 +131,45 @@ body {
 /* Counter BG Animation */
 
 /* Destination Icon Animated */
+
+/* Journey BG Shape Animation */
+
+/* Testimonial BG Animation */
+/* Slow background movement */
+.testimonial-path {
+  animation: testimonialDash 18s linear infinite;
+}
+
+@keyframes testimonialDash {
+  to {
+    stroke-dashoffset: -220;
+  }
+}
+
+/* Soft dot pulse */
+.testimonial-dot {
+  opacity: 0.4;
+  animation: testimonialPulse 3.5s ease-in-out infinite;
+}
+
+.testimonial-dot.delay {
+  animation-delay: 1.8s;
+}
+
+@keyframes testimonialPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+}
 
 @custom-variant dark (&:is(.dark *));
 

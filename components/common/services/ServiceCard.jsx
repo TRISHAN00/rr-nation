@@ -1,4 +1,5 @@
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
+import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,18 +25,11 @@ export default function ServiceCard({
 
             {/* Corner Shape (Desktop Only) */}
             <div
-              className="
-              hidden md:block
-              absolute top-0 right-0
-              opacity-0 scale-90 translate-x-3 -translate-y-3
-              transition-all duration-700
-              ease-[cubic-bezier(0.22,1,0.36,1)]
-              group-hover:opacity-100
-              group-hover:scale-100
+              className={clsx(`hidden md:block absolute top-0 right-0 opacity-0 scale-90 translate-x-3 -translate-y-3
+              transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-hover:scale-100
               group-hover:translate-x-0
               group-hover:translate-y-0
-              pointer-events-none
-            "
+              pointer-events-none`)}
             >
               <Image
                 src="/static/service-corner.svg"
@@ -48,8 +42,7 @@ export default function ServiceCard({
 
           {/* Floating Info Card */}
           <div
-            className="
-            absolute left-0 bottom-0 translate-y-1/2
+            className={clsx(`absolute left-0 bottom-0 translate-y-1/2
             w-[90%] sm:w-[80%] md:w-[75%]
             rounded-xl md:rounded-2xl
             bg-[#E0F7F6]
@@ -58,26 +51,20 @@ export default function ServiceCard({
             shadow-lg
             transition-all duration-700
             ease-[cubic-bezier(0.22,1,0.36,1)]
-            md:group-hover:bg-brand
-          "
+            md:group-hover:bg-brand`)}
           >
             {/* Title */}
             <h5
-              className="
-              text-[18px] sm:text-[20px] md:text-[26px]
-              leading-snug font-bold
-              text-dark
+              className={clsx(`text-[18px] sm:text-[20px] md:text-[26px] leading-snug font-bold  text-dark
               transition-colors duration-500
-              md:group-hover:text-light
-            "
+              md:group-hover:text-light`)}
             >
               {title}
             </h5>
 
             {/* Description */}
             <p
-              className="
-              mt-2 md:mt-3
+              className={`mt-2 md:mt-3
               text-[13px] sm:text-[14px] leading-6
               text-dark md:text-light
               opacity-100 md:opacity-0
@@ -88,8 +75,7 @@ export default function ServiceCard({
               ease-[cubic-bezier(0.22,1,0.36,1)]
               md:group-hover:opacity-100
               md:group-hover:max-h-40
-              md:group-hover:translate-y-0
-            "
+              md:group-hover:translate-y-0`}
             >
               {description}
             </p>

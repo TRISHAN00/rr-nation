@@ -12,7 +12,7 @@ export default function SuccessfulEvents() {
 
   return (
     <div className="py-20 lg:py-35 bg-white">
-      <div className="max-w-7xl m-auto px-7.5 overflow-hidden">
+      <div className="container m-auto px-7.5 overflow-hidden">
         <SubtitleWithArrow
           label="Our Successful Events"
           title="Featuring Our Successful Marathon Events"

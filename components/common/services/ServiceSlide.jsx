@@ -4,6 +4,7 @@ import { useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import clsx from "clsx";
 import SubtitleWithArrow from "../SubtitleWithArrow";
 import ServiceCard from "./ServiceCard";
 
@@ -13,20 +14,13 @@ export default function ServiceSlide() {
   const [isEnd, setIsEnd] = useState(false);
 
   return (
-    <div className="   relative service-slide
-        before:content-['']
-        before:absolute
-        before:bottom-0
-        before:left-0
-        before:right-0
-        before:h-[110px]
-        lg:before:h-[212px]
-        md:before:h-[110px]
-        before:bg-white
-        before:z-0" >
-      
+    <div
+      className={clsx(
+        `relative service-slide before:content-[''] before:absolute before:bottom-0 before:left-0 before:right-0 before:h-27.5 lg:before:h-53 md:before:h-27.5  before:bg-white before:z-0`
+      )}
+    >
       <div className="pt-20 lg:pt-35 bg-[#E0F7F6] ">
-        <div className="max-w-7xl m-auto px-7.5 overflow-hidden">
+        <div className="container m-auto px-7.5 overflow-hidden">
           <SubtitleWithArrow
             label="Our Services"
             title="Latest Training Tips & Community Stories"
@@ -40,7 +34,7 @@ export default function ServiceSlide() {
         </div>
       </div>
       <div className=" bg-[#E0F7F6]   lg:pb-25">
-        <div className="max-w-7xl m-auto px-7.5 overflow-hidden ">
+        <div className="container m-auto px-7.5 overflow-hidden ">
           <Swiper
             spaceBetween={30}
             slidesPerView={3}
@@ -67,7 +61,6 @@ export default function ServiceSlide() {
           </Swiper>
         </div>
       </div>
-      
     </div>
   );
 }
