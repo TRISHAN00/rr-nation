@@ -14,7 +14,7 @@ const LightGallery = dynamic(() => import("lightgallery/react"), {
   ssr: false,
 });
 
-export default function Gallery() {
+export default function VideoModalGallery() {
   const lightGalleryRef = useRef(null);
 
   const onInit = (detail) => {

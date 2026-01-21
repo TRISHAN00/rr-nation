@@ -14,7 +14,7 @@ export default function ServiceSlide() {
   const [isEnd, setIsEnd] = useState(false);
 
   return (
-    <div
+    <section
       className={clsx(
         `relative service-slide before:content-[''] before:absolute before:bottom-0 before:left-0 before:right-0 before:h-27.5 lg:before:h-53 md:before:h-27.5  before:bg-white before:z-0`
       )}
@@ -61,6 +61,6 @@ export default function ServiceSlide() {
           </Swiper>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

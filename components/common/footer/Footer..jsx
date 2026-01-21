@@ -22,7 +22,7 @@ export default function Footer() {
         <FooterCTA />
 
         {/* Indicator */}
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-2">
           <BannerShapes type="indicator" />
         </div>
 

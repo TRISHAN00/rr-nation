@@ -1,5 +1,5 @@
 import FillButton from "@/components/common/FillButton";
-import Gallery from "@/components/common/Gallery";
+import Gallery from "@/components/common/VideoModalGallery";
 import RunIcon from "@/components/icons/RunIcon";
 
 export default function BannerCTA() {

@@ -1,10 +1,13 @@
 import Counter from "@/components/common/counter/Counter";
+import PhotoGallery from "@/components/common/gallery/PhotoGallery";
 import TestimonialSec from "@/components/common/testimonial/TestimonialSec";
 import OurMission from "@/components/pages/about/OurMission";
+import FeatureEventList from "@/components/pages/events/FeatureEventList";
 import SuccessfulEvents from "@/components/pages/events/SuccessfulEvents";
 import AutoSlideLogo from "@/components/pages/home/AutoSlide/AutoSlideLogo";
 import Banner from "@/components/pages/home/banner/Banner";
 import JourneySection from "@/components/pages/home/journey/JourneySection";
+import Partners from "@/components/pages/home/partners/Partners";
 import ServiceSlide from "../components/common/services/ServiceSlide";
 
 export default function Home() {
@@ -18,6 +21,10 @@ export default function Home() {
       <ServiceSlide/>
       <JourneySection/>
       <TestimonialSec/>
+      <Partners/>
+      <PhotoGallery/>
+      <FeatureEventList/>
+      
     </>
   );
 }

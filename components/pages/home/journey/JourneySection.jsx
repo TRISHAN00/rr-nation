@@ -4,7 +4,7 @@ import JourneyShapeBg from "./JourneyShapeBg";
 
 export default function JourneySection() {
   return (
-    <section className="relative bg-white py-20 xl:py-28 overflow-hidden">
+    <section className="relative bg-white py-20 mb-7.5  overflow-hidden">
       <div className="relative container mx-auto px-4">
         {/* Decorative background */}
         <JourneyShapeBg />

@@ -30,7 +30,7 @@ export default function Counter() {
   ];
 
   return (
-    <div
+    <section
       style={{
         backgroundImage: "url('/static/bg-counter.jpg')",
         padding: "80px 0",
@@ -51,6 +51,6 @@ export default function Counter() {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }

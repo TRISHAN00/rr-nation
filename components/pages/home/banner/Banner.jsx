@@ -8,7 +8,7 @@ import FollowUs from "./FollowUs";
 
 export default function Banner() {
   return (
-    <div className="relative w-full min-h-screen overflow-hidden">
+    <section className="relative w-full min-h-screen overflow-hidden">
       {/* Swiper */}
       <BannerSlider />
 
@@ -33,6 +33,6 @@ export default function Banner() {
       {/* Shapes */}
       <BannerShapes type="corner" />
       <BannerShapes type="wave" />
-    </div>
+    </section>
   );
 }

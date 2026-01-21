@@ -11,7 +11,7 @@ export default function SuccessfulEvents() {
   const [isEnd, setIsEnd] = useState(false);
 
   return (
-    <div className="py-20 lg:py-35 bg-white">
+    <section className="py-20 lg:py-35 bg-white">
       <div className="container m-auto px-7.5 overflow-hidden">
         <SubtitleWithArrow
           label="Our Successful Events"
@@ -53,6 +53,6 @@ export default function SuccessfulEvents() {
           ))}
         </Swiper>
       </div>
-    </div>
+    </section>
   );
 }
