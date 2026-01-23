@@ -1,5 +1,5 @@
 
-export default function FeaturedTeamSlide() {
+export default function TeamFeaturedSlide() {
   return (
     <div>FeaturedTeamSlide</div>
   )
