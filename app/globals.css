@@ -17,7 +17,6 @@ body {
   font-family: var(--font-anta);
 }
 
-
 .custom-pagination .swiper-pagination-bullet {
   position: relative;
   width: 16px;
@@ -296,5 +295,44 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Icon Flow Animation */
+@keyframes call {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  20% {
+    transform: rotate(10deg) scale(1.05);
+  }
+  40% {
+    transform: rotate(-10deg) scale(1.05);
+  }
+  60% {
+    transform: rotate(6deg) scale(1.03);
+  }
+  80% {
+    transform: rotate(-6deg) scale(1.03);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.animate-call {
+  animation: call 1.5s ease-in-out infinite;
+}
+
+/* Team */
+.animate-spin-slow {
+  animation: spin 12s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -6,7 +6,7 @@ export default function TestimonialCard({ name = "Chris Diaz", role = "Community
     <div className="bg-white flex flex-col sm:flex-row gap-5 sm:gap-7.5 pt-6 sm:pt-10 pb-6 sm:pb-25 px-5 sm:px-7.5 rounded-4xl overflow-hidden  duration-300">
       
       {/* Avatar */}
-      <div className="flex-shrink-0">
+      <div className="shrink-0">
         <Avatar className="w-16 h-16 sm:w-20 sm:h-20">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>{name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
