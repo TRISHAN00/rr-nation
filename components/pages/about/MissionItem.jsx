@@ -1,6 +1,6 @@
 import MissionList from "./MissionList";
 
-export default function MissionItem() {
+export default function MissionItem({hideBtn}) {
   return (
     <div className="max-w-xl">
       {/* Section Label */}
@@ -15,7 +15,7 @@ export default function MissionItem() {
       </h3>
 
       {/* Mission List */}
-      <MissionList />
+      <MissionList hideBtn={hideBtn} />
     </div>
   );
 }

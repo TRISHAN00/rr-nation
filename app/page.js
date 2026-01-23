@@ -9,7 +9,6 @@ import AutoSlideLogo from "@/components/pages/home/AutoSlide/AutoSlideLogo";
 import Banner from "@/components/pages/home/banner/Banner";
 import JourneySection from "@/components/pages/home/journey/JourneySection";
 import Partners from "@/components/pages/home/partners/Partners";
-import Team from "@/components/pages/team/Team";
 import ServiceSlide from "../components/common/services/ServiceSlide";
 
 export default function Home() {
@@ -17,7 +16,7 @@ export default function Home() {
     <>
       <Banner />
       <AutoSlideLogo />
-      <OurMission />
+      <OurMission hideTopImage />
       <SuccessfulEvents />
       <Counter />
       <ServiceSlide />
@@ -27,7 +26,6 @@ export default function Home() {
       <PhotoGallery />
       <FeatureEventList />
       <Blogs/>
-      <Team/>
     </>
   );
 }

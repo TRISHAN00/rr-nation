@@ -3,7 +3,7 @@ import BannerShapes from "@/components/common/ShapeIcon";
 import RunIcon from "@/components/icons/RunIcon";
 import Image from "next/image";
 
-export default function MissionList() {
+export default function MissionList({ hideBtn }) {
   return (
     <>
       {/* Mission Items */}
@@ -55,23 +55,24 @@ export default function MissionList() {
         </li>
       </ul>
 
-      {/* CTA Section */}
-      <div className="mt-8 sm:mt-10 relative w-fit mx-auto sm:ml-20">
-        <FillButton
-          hoverBg="#001819"
-          textColor="#FAFAFA"
-          hoverText="#FAFAFA"
-          iconPosition="right"
-          gifIcon={<RunIcon icon="/static/marathon.gif" />}
-        >
-          Start Running Today
-        </FillButton>
+      {!hideBtn && (
+        <div className="mt-8 sm:mt-10 relative w-fit mx-auto sm:ml-20">
+          <FillButton
+            hoverBg="#001819"
+            textColor="#FAFAFA"
+            hoverText="#FAFAFA"
+            iconPosition="right"
+            gifIcon={<RunIcon icon="/static/marathon.gif" />}
+          >
+            Start Running Today
+          </FillButton>
 
-        {/* Decorative Shape */}
-        <div className="hidden sm:flex justify-end absolute right-0 mt-1.5 -mr-25 animate-arrow-indicate">
-          <BannerShapes type="indicator" />
+          {/* Decorative Shape */}
+          <div className="hidden sm:flex justify-end absolute right-0 mt-1.5 -mr-25 animate-arrow-indicate">
+            <BannerShapes type="indicator" />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

@@ -2,7 +2,13 @@ import DestinationIcon from "@/components/icons/DestinationIcon";
 import AwardWin from "./AwardWin";
 import MissionItem from "./MissionItem";
 
-export default function OurMission() {
+export default function OurMission({
+  hideIcon,
+  hideBtn,
+  hideShape,
+  hideRound,
+  hideTopImage
+}) {
   return (
     <section
       className="relative bg-cover bg-no-repeat bg-center py-16 sm:py-24 xl:py-36"
@@ -10,7 +16,7 @@ export default function OurMission() {
         backgroundImage: "url('/static/bg-about.jpg')",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover"
+        backgroundSize: "cover",
       }}
     >
       <div
@@ -18,15 +24,16 @@ export default function OurMission() {
         "
       >
         {/* Left Image Section */}
-        <AwardWin />
+        <AwardWin hideShape={hideShape} hideRound={hideRound} hideTopImage={hideTopImage} />
 
         {/* Right Content */}
-        <MissionItem />
+        <MissionItem hideBtn={hideBtn} />
       </div>
-
-      <div className=" absolute top-14 right-28 hidden  lg:block 2xl:block  ">
-        <DestinationIcon />
-      </div>
+      {!hideIcon && (
+        <div className=" absolute top-14 right-28 hidden  lg:block 2xl:block  ">
+          <DestinationIcon />
+        </div>
+      )}
     </section>
   );
 }
