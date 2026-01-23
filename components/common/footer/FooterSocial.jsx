@@ -1,6 +1,6 @@
 import HeaderSocial from "../header/HeaderSocial";
 
-export default function FooterSocial() {
+export default function FooterSocial({gap}) {
   return (
     <div>
       {/* Title */}
@@ -10,7 +10,7 @@ export default function FooterSocial() {
       <p className="text-[15px] sm:text-[16px] lg:text-[18px] leading-relaxed mb-8 text-[#868681]">
         Follow us for news & updates
       </p>
-      <HeaderSocial bgColor="#00A19A" size={36} />
+      <HeaderSocial bgColor="#00A19A" size={36} gap={gap} />
     </div>
   );
 }

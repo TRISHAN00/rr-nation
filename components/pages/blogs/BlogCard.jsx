@@ -57,9 +57,11 @@ export default function BlogCard({ name = "John D. Alexon" }) {
 
           <Link
             href="/"
-            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border transition hover:bg-[#4DC9C1] hover:text-white"
+            className="flex items-center  justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border transition hover:bg-[#4DC9C1] hover:text-white"
           >
+            <div className=" -rotate-90" >
             <ArrowDownRight size={18} />
+            </div>
           </Link>
         </div>
       </div>

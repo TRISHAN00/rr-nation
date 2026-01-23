@@ -68,7 +68,7 @@ export default function MissionList() {
         </FillButton>
 
         {/* Decorative Shape */}
-        <div className="hidden sm:flex justify-end absolute right-0 mt-1.5 -mr-25">
+        <div className="hidden sm:flex justify-end absolute right-0 mt-1.5 -mr-25 animate-arrow-indicate">
           <BannerShapes type="indicator" />
         </div>
       </div>

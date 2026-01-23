@@ -22,7 +22,7 @@ export default function Footer() {
         <FooterCTA />
 
         {/* Indicator */}
-        <div className="flex justify-end mt-2">
+        <div className="flex justify-end mt-2 animate-arrow-indicate">
           <BannerShapes type="indicator" />
         </div>
 
@@ -58,7 +58,7 @@ export default function Footer() {
             ]}
           />
 
-          <FooterSocial />
+          <FooterSocial gap={2} />
         </div>
       </div>
     </footer>

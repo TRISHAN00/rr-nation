@@ -1,6 +1,5 @@
 import Footer from "@/components/common/footer/Footer.";
 import Header from "@/components/common/header/Header";
-import clsx from "clsx";
 import { Albert_Sans, Anta } from "next/font/google";
 import "./globals.css";
 
@@ -25,9 +24,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={clsx(`${albertSans.variable} ${anta.variable} antialiased`)}
-      >
+      <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
         <Header />
         {children}
         <Footer />

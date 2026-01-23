@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Loader2 } from "lucide-react";
 
 export default function FillButton({
@@ -21,11 +22,11 @@ export default function FillButton({
         "--btn-text": textColor,
         "--btn-hover-text": hoverText,
       }}
-      className={`
+      className={clsx(`
         relative overflow-hidden
         font-bold
         rounded-full
-        bg-[var(--btn-bg)]
+        bg-(--btn-bg)
         flex items-center justify-center gap-2
         group transition-all duration-300
         whitespace-nowrap
@@ -36,32 +37,28 @@ export default function FillButton({
         md:text-[16px] md:px-6 md:py-3
 
         ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
-      `}
+      `)}
     >
       {/* Hover Background */}
       <span
-        className="
-          absolute inset-0
-          bg-[var(--btn-hover-bg)]
+        className={clsx(`absolute inset-0
+          bg-(--btn-hover-bg)
           translate-y-full
           transition-transform duration-300
-          group-hover:translate-y-0
-        "
+          group-hover:translate-y-0`)}
       />
 
       {/* Content */}
       <span
-        className="
-          relative z-10
+        className={clsx(`relative z-10
           flex items-center gap-2
-          text-[var(--btn-text)]
+          text-(--btn-text)
           transition-colors duration-300
-          group-hover:text-[var(--btn-hover-text)]
-        "
+          group-hover:text`)}
       >
         {/* Left Icon */}
         {!loading && iconPosition === "left" && Icon && (
-          <Icon className="w-4 h-4 md:w-[18px] md:h-[18px]" />
+          <Icon className="w-4 h-4 md:w-4.5 md:h-4.5" />
         )}
         {!loading && iconPosition === "left" && gifIcon && (
           <span className="w-4 h-4 md:w-5 md:h-5">{gifIcon}</span>
@@ -69,14 +66,14 @@ export default function FillButton({
 
         {/* Loader */}
         {loading && (
-          <Loader2 className="w-4 h-4 md:w-[18px] md:h-[18px] animate-spin" />
+          <Loader2 className="w-4 h-4 md:w-4.5 md:h-4.5 animate-spin" />
         )}
 
         {children}
 
         {/* Right Icon */}
         {!loading && iconPosition === "right" && Icon && (
-          <Icon className="w-4 h-4 md:w-[18px] md:h-[18px]" />
+          <Icon className="w-4 h-4 md:w-4.5 md:h-4.5" />
         )}
         {!loading && iconPosition === "right" && gifIcon && (
           <span className="w-4 h-4 md:w-5 md:h-5">{gifIcon}</span>

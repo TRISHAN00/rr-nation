@@ -1,5 +1,6 @@
+"use client";
 import FillButton from "@/components/common/FillButton";
-import Gallery from "@/components/common/VideoModalGallery";
+import VideoModalGallery from "@/components/common/VideoModalGallery";
 import RunIcon from "@/components/icons/RunIcon";
 
 export default function BannerCTA() {
@@ -10,11 +11,11 @@ export default function BannerCTA() {
       </span>
 
       {/* Heading */}
-      <h1 className="font-['Albert_Sans'] font-black text-[34px] sm:text-[44px] lg:text-[62px] leading-10.5 sm:leading-13.5 lg:leading-[72px] tracking-[-0.02em] text-[#FAFAFA]">
+      <h1 className="font-['Albert_Sans'] font-black text-[34px] sm:text-[44px] lg:text-[62px] leading-10.5 sm:leading-13.5 lg:leading-18 tracking-[-0.02em] text-[#FAFAFA]">
         Stride Together for a Better Tomorrow
       </h1>
       {/* Description */}
-      <p className="font-semibold text-[15px] sm:text-[16px] lg:text-[18px] leading-[24px] sm:leading-[26px] lg:leading-[28px] mt-4 sm:mt-5 mb-8 sm:mb-10 text-[var(--color-light)]">
+      <p className="font-semibold text-[15px] sm:text-[16px] lg:text-[18px] leading-6 sm:leading-6.5 lg:leading-7 mt-4 sm:mt-5 mb-8 sm:mb-10 text-light">
         Join a growing community of runners committed to fitness,
         sustainability, and positive environmental impact.
       </p>
@@ -30,10 +31,9 @@ export default function BannerCTA() {
         >
           Start Running Today
         </FillButton>
-        
-        {/* Video CTA */}
-        <Gallery/>
 
+        {/* Video CTA */}
+        <VideoModalGallery />
       </div>
     </div>
   );

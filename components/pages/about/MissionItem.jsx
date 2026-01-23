@@ -9,7 +9,7 @@ export default function MissionItem() {
       </span>
 
       {/* Title */}
-      <h3 className="text-[28px] sm:text-[34px] md:text-[40px] leading-[36px] sm:leading-[42px] md:leading-[48px] font-bold text-dark mb-6 sm:mb-8 md:mb-10">
+      <h3 className="text-[28px] sm:text-[34px] md:text-[40px] leading-9 sm:leading-10.5 md:leading-12 font-bold text-dark mb-6 sm:mb-8 md:mb-10">
         {" "}
         Running with Purpose. Building a Greener Future.
       </h3>
