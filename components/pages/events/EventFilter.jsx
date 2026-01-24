@@ -34,7 +34,7 @@ export default function EventFilter({ onChange }) {
                 "border border-brand transition-all duration-300",
                 active === item.key
                   ? "bg-brand text-white shadow-md"
-                  : "text-brand hover:bg-brand/10"
+                  : "text-brand hover:bg-brand/10",
               )}
             >
               {item.label}
@@ -44,14 +44,7 @@ export default function EventFilter({ onChange }) {
       </div>
 
       {/* 🧩 Event Grid */}
-      <div
-        className="
-          grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10
-          grid-cols-1
-          sm:grid-cols-2
-          lg:grid-cols-3
-        "
-      >
+      <div className=" grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
         <EventCard />
         <EventCard />
         <EventCard />

@@ -71,10 +71,10 @@ export default function MainMenu() {
           <NavigationMenuLink
             asChild
             className={navigationMenuTriggerStyle({
-              className: pathname === "/blog" ? activeClass : defaultClass,
+              className: pathname === "/blogs" ? activeClass : defaultClass,
             })}
           >
-            <Link href="/blog">Blog</Link>
+            <Link href="/blogs">Blogs</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
 

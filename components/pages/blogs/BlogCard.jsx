@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function BlogCard({ name = "John D. Alexon" }) {
   return (
-    <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition hover:shadow-lg">
+    <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition ">
       {/* IMAGE */}
       <div className="relative w-full h-45 sm:h-55 md:h-65 lg:h-[280px] overflow-hidden">
         <Image

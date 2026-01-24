@@ -2,7 +2,7 @@ import Counter from "@/components/common/counter/Counter";
 import PhotoGallery from "@/components/common/gallery/PhotoGallery";
 import TestimonialSec from "@/components/common/testimonial/TestimonialSec";
 import OurMission from "@/components/pages/about/OurMission";
-import Blogs from "@/components/pages/blogs/Blogs";
+import FeaturedBlogSlide from "@/components/pages/blogs/FeaturedBlogSlide";
 import FeatureEventList from "@/components/pages/events/FeatureEventList";
 import SuccessfulEvents from "@/components/pages/events/SuccessfulEvents";
 import AutoSlideLogo from "@/components/pages/home/AutoSlide/AutoSlideLogo";
@@ -25,7 +25,7 @@ export default function Home() {
       <Partners />
       <PhotoGallery />
       <FeatureEventList />
-      <Blogs/>
+      <FeaturedBlogSlide/>
     </>
   );
 }

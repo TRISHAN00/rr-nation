@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ServiceCard({
-  image = "/dynamic/service/service-01.jpg",
+  image = "/dynamic/about/about-us-dd.jpg",
   title = "Championship Event",
   description = "RunRise Nation is a passionate running community built on fitness, endurance.",
 }) {
@@ -14,7 +14,7 @@ export default function ServiceCard({
         <div className="relative z-10">
           {/* Image Wrapper */}
           <div className="relative rounded-3xl md:rounded-4xl overflow-hidden">
-            <AspectRatio ratio={8 / 11}>
+            <AspectRatio ratio={10 / 11}>
               <Image
                 src={image}
                 fill
