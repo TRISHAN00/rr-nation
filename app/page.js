@@ -9,7 +9,7 @@ import AutoSlideLogo from "@/components/pages/home/AutoSlide/AutoSlideLogo";
 import Banner from "@/components/pages/home/banner/Banner";
 import JourneySection from "@/components/pages/home/journey/JourneySection";
 import Partners from "@/components/pages/home/partners/Partners";
-import ServiceSlide from "../components/common/services/ServiceSlide";
+import ServiceSlide from "@/components/pages/services/ServiceSlide";
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
       <OurMission hideTopImage />
       <SuccessfulEvents />
       <Counter />
-      <ServiceSlide />
+      <ServiceSlide/>
       <JourneySection />
       <TestimonialSec />
       <Partners />

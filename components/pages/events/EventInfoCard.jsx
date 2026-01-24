@@ -1,4 +1,4 @@
-import { Facebook, X } from "lucide-react";
+import HeaderSocial from "@/components/common/header/HeaderSocial";
 import Image from "next/image";
 
 export default function EventInfoCard() {
@@ -65,12 +65,7 @@ export default function EventInfoCard() {
       <div className="space-y-2">
         <p className="text-sm text-gray-500 mb-1">Share on Socials:</p>
         <div className="flex gap-2">
-          <button className="p-2 bg-blue-600 text-white rounded-full">
-            <Facebook />
-          </button>
-          <button className="p-2 bg-blue-400 text-white rounded-full">
-            <X />
-          </button>
+          <HeaderSocial bgColor="#00A19A" size={36} gap={2} />
         </div>
       </div>
     </div>

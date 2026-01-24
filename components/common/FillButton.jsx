@@ -22,43 +22,19 @@ export default function FillButton({
         "--btn-text": textColor,
         "--btn-hover-text": hoverText,
       }}
-      className={clsx(`
-        relative overflow-hidden
-        font-bold rounded-full
-        bg-(--btn-bg)
-        flex items-center justify-center gap-2
-        group transition-all duration-300
-        whitespace-nowrap min-w-fit
-
-        /* XS → Desktop responsive */
-        text-[13px] px-3 py-2
-        sm:text-sm sm:px-4 sm:py-2
-        md:text-[15px] md:px-5 md:py-2.5
-        lg:text-[16px] lg:px-6 lg:py-3
-
+      className={clsx(` relative overflow-hidden font-bold rounded-full bg-(--btn-bg) flex items-center justify-center gap-2 group transition-all duration-300 whitespace-nowrap min-w-fit text-[13px] px-3 py-2 sm:text-sm sm:px-4 sm:py-2 md:text-[15px] md:px-5 md:py-2.5 lg:text-[16px] lg:px-6 lg:py-3 
         ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
       `)}
     >
       {/* Hover Background (LEFT → RIGHT) */}
       <span
-        className={clsx(`
-          absolute inset-0
-          bg-(--btn-hover-bg)
-          -translate-x-full
-          transition-transform duration-300 ease-out
-          group-hover:translate-x-0
+        className={clsx(` absolute inset-0 bg-(--btn-hover-bg) -translate-x-full transition-transform duration-300 ease-out group-hover:translate-x-0
         `)}
       />
 
       {/* Content */}
       <span
-        className={clsx(`
-          relative z-10
-          flex items-center gap-2
-          text-(--btn-text)
-          transition-colors duration-300
-          group-hover:text-(--btn-hover-text)
-        `)}
+        className={clsx(` relative z-10 flex items-center gap-2 text-(--btn-text) transition-colors duration-300 group-hover:text-(--btn-hover-text) `)}
       >
         {/* Left Icon */}
         {!loading && iconPosition === "left" && Icon && (

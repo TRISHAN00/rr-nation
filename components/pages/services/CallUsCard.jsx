@@ -1,7 +1,7 @@
 "use client";
+import FillButton from "@/components/common/FillButton";
 import { Mail, PhoneCall } from "lucide-react";
 import Link from "next/link";
-import FillButton from "../FillButton";
 
 export default function CallUsCard() {
   return (

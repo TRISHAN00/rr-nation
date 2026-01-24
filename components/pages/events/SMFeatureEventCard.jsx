@@ -1,5 +1,5 @@
-import FeaturedCardLeft from "./FeaturedCardLeft";
-import FeaturedCardRight from "./FeaturedCardRight";
+import SMFeaturedCardLeft from "./SMFeaturedCardLeft";
+import SMFeaturedCardRight from "./SMFeaturedCardRight";
 
 export default function SMFeatureEventCard({
   bgImage = null,
@@ -8,19 +8,18 @@ export default function SMFeatureEventCard({
   organizer,
 }) {
   return (
-    <div
-      className="font-anta rounded-3xl mb-7.5 overflow-hidden"
-      style={{ backgroundColor: bgColor }}
-    >
+    <div className="font-anta rounded-3xl  overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] relative">
-        <FeaturedCardLeft
+        {/* Left card */}
+        <SMFeaturedCardLeft
           bgImage={bgImage}
           bgColor={bgColor}
           overlayColor={overlayColor}
           organizer={organizer}
         />
 
-        <FeaturedCardRight bgColor={bgColor} />
+        {/* Right card */}
+        <SMFeaturedCardRight bgColor={bgColor} />
       </div>
     </div>
   );

@@ -4,8 +4,8 @@ import { useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import SubtitleWithArrow from "@/components/common/SubtitleWithArrow";
 import clsx from "clsx";
-import SubtitleWithArrow from "../SubtitleWithArrow";
 import ServiceCard from "./ServiceCard";
 
 export default function ServiceSlide() {

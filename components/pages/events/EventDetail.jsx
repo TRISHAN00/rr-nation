@@ -1,14 +1,14 @@
-import CallUsCard from "@/components/common/services/CallUsCard";
 import Image from "next/image";
+import CallUsCard from "../services/CallUsCard";
 import EventContent from "./EventContent";
 import EventInfoCard from "./EventInfoCard";
-import FeaturedEventCard from "./FeaturedEventCard";
+import SMFeatureEventCard from "./SMFeatureEventCard";
 
 export default function EventDetail() {
   return (
-    <div className="container m-auto px-7.5  sm:px-6 lg:px-0 py-30">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-12 sm:py-20">
       {/* Banner */}
-      <div className="rounded-4xl overflow-hidden relative">
+      <div className="rounded-3xl overflow-hidden relative">
         <Image
           src="/dynamic/event/event-banner.jpg"
           alt="run rise banner"
@@ -19,28 +19,36 @@ export default function EventDetail() {
         />
       </div>
 
-      {/* Content */}
-      <div className="mt-12 grid grid-cols-4 gap-4">
+      {/* Main Content */}
+      <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Content */}
-        <div className=" col-span-3">
+        <div className="lg:col-span-8">
           <EventContent />
         </div>
 
         {/* Right Sidebar */}
-        <div className="relative w-full lg:w-full col-span-1">
-          <div className="lg:sticky lg:top-24 max-w-full overflow-x-hidden space-y-6">
+        <div className="lg:col-span-4">
+          <div className="lg:sticky lg:top-24 space-y-6">
             <EventInfoCard />
-            <CallUsCard />
+            <CallUsCard/>
           </div>
         </div>
       </div>
 
-      {/* Event Tickets */}
-      <div  className=" grid grid-cols-2 gap-7.5" >
-        <FeaturedEventCard/>
-        <FeaturedEventCard/>
-        <FeaturedEventCard/>
-        <FeaturedEventCard/>
+      {/* Event Tickets / Feature Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-1 xl:grid-cols-1 xl:grid-cols-2 gap-6 mt-12">
+        <SMFeatureEventCard
+          bgImage="/dynamic/home/banner/banner-01.jpg"
+          bgColor="#003A3B"
+          overlayColor="#003A3B"
+        />
+        <SMFeatureEventCard
+          bgColor="#004C0B"
+          overlayColor="#004C0B"
+          bgImage="/dynamic/home/banner/banner-01.jpg"
+        />
+        <SMFeatureEventCard />
+        <SMFeatureEventCard />
       </div>
     </div>
   );

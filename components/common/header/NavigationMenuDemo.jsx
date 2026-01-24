@@ -54,6 +54,18 @@ export default function MainMenu() {
           </NavigationMenuLink>
         </NavigationMenuItem>
 
+        {/* Services */}
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            asChild
+            className={navigationMenuTriggerStyle({
+              className: pathname === "/services" ? activeClass : defaultClass,
+            })}
+          >
+            <Link href="/services">Services</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+
         {/* Blog */}
         <NavigationMenuItem>
           <NavigationMenuLink
