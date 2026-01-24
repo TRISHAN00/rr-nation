@@ -15,9 +15,9 @@ export default function AboutPage() {
   ]}
 />
 
-      <OurMission hideIcon hideBtn hideShape hideRound />
+      <OurMission hideIcon hideBtn hideShape hideRound  />
       <Counter />
-      <Team />
+      <Team hideSearch />
     </>
   );
 }

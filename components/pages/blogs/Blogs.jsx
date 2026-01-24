@@ -12,16 +12,19 @@ export default function Blogs() {
   return (
     <section className=" py-20 lg:py-30 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">
-        <Title
-          label="Our Services"
-          title="Latest Training Tips & Community Stories"
-          onPrev={() => swiperInstance?.slidePrev()}
-          onNext={() => swiperInstance?.slideNext()}
-          isBeginning={isBeginning}
-          isEnd={isEnd}
-          className="mb-10"
-          bgColor={"#E0F7F6"}
-        />
+        <div className=" mb-10" >
+          <Title
+            label="Our Services"
+            title="Latest Training Tips & Community Stories"
+            onPrev={() => swiperInstance?.slidePrev()}
+            onNext={() => swiperInstance?.slideNext()}
+            isBeginning={isBeginning}
+            isEnd={isEnd}
+            className="mb-10"
+            bgColor={"#E0F7F6"}
+            hideSearch
+          />
+        </div>
         <div className=" relative">
           <Swiper
             spaceBetween={30}

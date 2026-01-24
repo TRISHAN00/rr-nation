@@ -7,7 +7,8 @@ export default function OurMission({
   hideBtn,
   hideShape,
   hideRound,
-  hideTopImage
+  hideTopImage,
+  hideSearch
 }) {
   return (
     <section

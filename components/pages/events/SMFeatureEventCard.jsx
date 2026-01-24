@@ -1,12 +1,11 @@
 import FeaturedCardLeft from "./FeaturedCardLeft";
 import FeaturedCardRight from "./FeaturedCardRight";
 
-export default function FeaturedEventCard({
+export default function SMFeatureEventCard({
   bgImage = null,
   bgColor = "#003A3B",
   overlayColor = "#003A3B",
   organizer,
-  fontSize
 }) {
   return (
     <div

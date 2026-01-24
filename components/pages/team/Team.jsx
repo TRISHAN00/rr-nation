@@ -5,14 +5,15 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import TeamCard from "./TeamCard";
 
-export default function Team() {
+export default function Team({hideSearch}) {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   return (
     <section className=" py-20 lg:py-30 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">
-        <Title
+        <div className=" mb-10" >
+          <Title
           label="TEAM"
           title="Latest Training Tips & Community Stories"
           onPrev={() => swiperInstance?.slidePrev()}
@@ -21,7 +22,9 @@ export default function Team() {
           isEnd={isEnd}
           className="mb-10"
           bgColor={"#E0F7F6"}
+          hideSearch
         />
+        </div>
         <div className=" relative">
           <Swiper
             spaceBetween={30}

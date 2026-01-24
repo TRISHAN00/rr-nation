@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function EventCard() {
   return (
-    <Link href="/event/account-day-run-2025" className="block">
+    <Link href="/events/account-day-run-2025" className="block">
       <div className="group relative rounded-4xl overflow-hidden w-full bg-[#E0F7F6]">
         {/* Card BG – Bottom to Top */}
         <span className="absolute inset-0 bg-dark scale-y-0 origin-bottom transition-transform duration-500 ease-out group-hover:scale-y-100 z-0" />
