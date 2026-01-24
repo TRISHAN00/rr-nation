@@ -41,7 +41,7 @@ export default function AwardWin({ hideShape, hideRound, hideTopImage }) {
       )}
 
       {!hideTopImage && (
-        <div className=" absolute -bottom-20 right-0 rounded-4xl overflow-hidden">
+        <div className=" absolute -bottom-20 right-0 rounded-4xl hidden md:flex lg:flex overflow-hidden">
           <Image
             src="/dynamic/about/about-us-dd.jpg"
             alt="Run Rise About and Mission"

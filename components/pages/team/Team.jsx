@@ -13,7 +13,7 @@ export default function Team() {
     <section className=" py-20 lg:py-30 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">
         <Title
-          label="Our Services"
+          label="TEAM"
           title="Latest Training Tips & Community Stories"
           onPrev={() => swiperInstance?.slidePrev()}
           onNext={() => swiperInstance?.slideNext()}

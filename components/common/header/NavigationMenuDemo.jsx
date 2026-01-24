@@ -1,13 +1,11 @@
 "use client";
 
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -44,35 +42,16 @@ export default function MainMenu() {
           </NavigationMenuLink>
         </NavigationMenuItem>
 
-        {/* Event Dropdown */}
+        {/* Events */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger
-            className={`${
-              pathname.startsWith("/event") ? activeClass : defaultClass
-            }`}
+          <NavigationMenuLink
+            asChild
+            className={navigationMenuTriggerStyle({
+              className: pathname === "/events" ? activeClass : defaultClass,
+            })}
           >
-            Event
-          </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="w-48 space-y-2 p-3 bg-gray-800 rounded-md shadow-lg">
-              {["event-one", "event-two"].map((event) => (
-                <li key={event}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href={`/event/${event}`}
-                      className={`block px-4 py-2 rounded-md text-sm transition ${
-                        pathname === `/event/${event}`
-                          ? "text-teal-400 bg-gray-700"
-                          : "text-gray-200 hover:text-teal-400 hover:bg-gray-700"
-                      }`}
-                    >
-                      {event.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-              ))}
-            </ul>
-          </NavigationMenuContent>
+            <Link href="/events">Events</Link>
+          </NavigationMenuLink>
         </NavigationMenuItem>
 
         {/* Blog */}
