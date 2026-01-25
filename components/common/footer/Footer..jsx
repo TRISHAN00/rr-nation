@@ -14,7 +14,7 @@ export default function Footer() {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/60" />
 
-      <div className="relative max-w-7xl mx-auto px-4">
+      <div className="relative container mx-auto px-4">
         {/* Medal Icon */}
         <BannerShapes type="medal" />
 

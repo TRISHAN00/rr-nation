@@ -2,17 +2,16 @@
 import Title from "@/components/common/Title";
 import { useState } from "react";
 import "swiper/css";
-import { Swiper, SwiperSlide } from "swiper/react";
 import BlogCard from "./BlogCard";
 
-export default function Blogs() {
+export default function Blogs({hideBtnArrow}) {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   return (
     <section className=" py-20 lg:py-30 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">
-        <div className=" mb-10" >
+        <div className=" mb-10">
           <Title
             label="Our Services"
             title="Latest Training Tips & Community Stories"
@@ -22,34 +21,15 @@ export default function Blogs() {
             isEnd={isEnd}
             className="mb-10"
             bgColor={"#E0F7F6"}
-            hideSearch
+            hideBtnArrow
           />
         </div>
-        <div className=" relative">
-          <Swiper
-            spaceBetween={30}
-            slidesPerView={3}
-            onSlideChange={(swiper) => {
-              setIsBeginning(swiper.isBeginning);
-              setIsEnd(swiper.isEnd);
-            }}
-            onSwiper={(swiper) => {
-              setSwiperInstance(swiper);
-              setIsBeginning(swiper.isBeginning);
-              setIsEnd(swiper.isEnd);
-            }}
-            breakpoints={{
-              320: { slidesPerView: 1 },
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-            }}
-          >
-            {[...Array(5)].map((_, i) => (
-              <SwiperSlide key={i}>
-                <BlogCard />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        <div className=" grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
+          <BlogCard />
+          <BlogCard />
+          <BlogCard />
+          <BlogCard />
+          <BlogCard />
         </div>
       </div>
     </section>

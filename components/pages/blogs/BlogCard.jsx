@@ -7,7 +7,7 @@ export default function BlogCard({ name = "John D. Alexon" }) {
   return (
     <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition ">
       {/* IMAGE */}
-      <div className="relative w-full h-45 sm:h-55 md:h-65 lg:h-[280px] overflow-hidden">
+      <div className="relative w-full h-45 sm:h-55 md:h-65 lg:h-70 overflow-hidden">
         <Image
           src="/dynamic/event/event-01.jpg"
           fill
@@ -56,7 +56,7 @@ export default function BlogCard({ name = "John D. Alexon" }) {
           </div>
 
           <Link
-            href="/"
+            href="/blogs/abc"
             className="flex items-center  justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border transition hover:bg-[#4DC9C1] hover:text-white"
           >
             <div className=" -rotate-90" >
