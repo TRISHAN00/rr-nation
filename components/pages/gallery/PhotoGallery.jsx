@@ -28,7 +28,7 @@ export default function PhotoGallery() {
       }}
     >
       <div
-        className={clsx(`absolute top-25 right-50`)}
+        className={clsx(`absolute lg:top-25 lg:right-50 top-10 right-10`)}
       >
         <AnimatedShowSVG />
       </div>

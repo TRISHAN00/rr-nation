@@ -22,7 +22,7 @@ export default function Partners() {
       <div className="  mx-10">
         {/* Half background */}
 
-        <div className="relative bg-brand py-14 px-8 md:px-16 container mx-auto rounded-4xl overflow-hidden z-10">
+        <div className="relative bg-brand py-3 px-4 lg:py-14 lg:px-8 md:px-16 container mx-auto rounded-4xl overflow-hidden z-10">
           <h6 className="text-[24px] text-white leading-7 font-bold text-center mb-10">
             Our Trusted Partners
           </h6>

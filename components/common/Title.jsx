@@ -12,6 +12,7 @@ export default function Title({
   isEnd,
   hideBtnArrow,
   hideSearch,
+  searchPlaceholder
 }) {
   return (
     <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -46,7 +47,7 @@ export default function Title({
 
       {!hideSearch && (
         <div className="w-full flex justify-center lg:justify-end">
-          <SearchEvent placeholder="Search event..." />
+          <SearchEvent placeholder={searchPlaceholder} />
         </div>
       )}
     </div>

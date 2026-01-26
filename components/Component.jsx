@@ -28,6 +28,9 @@ export default function Component() {
   <button className="bg-[var(--color-brand)] text-[var(--color-white)] px-6 py-3 rounded-md hover:bg-[var(--color-dark)] transition">
     Get Started
   </button>
+
+
+  
 </div>
 
   );

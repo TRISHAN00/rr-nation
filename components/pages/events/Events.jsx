@@ -9,6 +9,7 @@ export default function Events() {
         label="EVENTS"
         title="Explore Our Featured Running Programs"
         hideBtnArrow
+        searchPlaceholder="Search event..."
       />
 
       {/* Switch */}

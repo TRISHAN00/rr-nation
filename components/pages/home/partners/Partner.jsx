@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Partner({ src }) {
   return (
-    <div className="w-[130px] h-[90px] flex items-center justify-center">
+    <div className="w-32 h-22 flex items-center justify-center">
       <Image
         src={src}
         width={130}

@@ -1,5 +1,5 @@
 import Counter from "@/components/common/counter/Counter";
-import PhotoGallery from "@/components/common/gallery/PhotoGallery";
+import PhotoGallery from "@/components/pages/gallery/PhotoGallery";
 import TestimonialSec from "@/components/common/testimonial/TestimonialSec";
 import OurMission from "@/components/pages/about/OurMission";
 import FeaturedBlogSlide from "@/components/pages/blogs/FeaturedBlogSlide";

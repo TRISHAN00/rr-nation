@@ -4,13 +4,13 @@ import JourneyShapeBg from "./JourneyShapeBg";
 
 export default function JourneySection() {
   return (
-    <section className="relative bg-white py-20 mb-7.5  overflow-hidden">
+    <section className="relative bg-white py-16 mb-7.5  overflow-hidden">
       <div className="relative container mx-auto px-4">
         {/* Decorative background */}
         <JourneyShapeBg />
 
         {/* Heading */}
-        <div className="text-center mb-20 relative z-10">
+        <div className="text-center mb-10 mb:20 lg:mb-20 relative z-10">
           <span className="text-brand uppercase font-bold tracking-wide text-sm">
             Our Marathon Journey
           </span>
