@@ -23,7 +23,8 @@ export default function BannerCTA() {
       {/* Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
         <FillButton
-          hoverBg="#001819"
+          hoverBg="#f090008f"
+          hoverBgOpacity="0.5"
           textColor="#FAFAFA"
           hoverText="#FAFAFA"
           iconPosition="right"

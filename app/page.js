@@ -1,10 +1,10 @@
 import Counter from "@/components/common/counter/Counter";
-import PhotoGallery from "@/components/pages/gallery/PhotoGallery";
 import TestimonialSec from "@/components/common/testimonial/TestimonialSec";
 import OurMission from "@/components/pages/about/OurMission";
 import FeaturedBlogSlide from "@/components/pages/blogs/FeaturedBlogSlide";
 import FeatureEventList from "@/components/pages/events/FeatureEventList";
 import SuccessfulEvents from "@/components/pages/events/SuccessfulEvents";
+import PhotoGallery from "@/components/pages/gallery/PhotoGallery";
 import AutoSlideLogo from "@/components/pages/home/AutoSlide/AutoSlideLogo";
 import Banner from "@/components/pages/home/banner/Banner";
 import JourneySection from "@/components/pages/home/journey/JourneySection";
@@ -19,13 +19,13 @@ export default function Home() {
       <OurMission hideTopImage />
       <SuccessfulEvents />
       <Counter />
-      <ServiceSlide/>
+      <ServiceSlide />
       <JourneySection />
       <TestimonialSec />
       <Partners />
       <PhotoGallery />
       <FeatureEventList />
-      <FeaturedBlogSlide/>
+      <FeaturedBlogSlide />
     </>
   );
 }

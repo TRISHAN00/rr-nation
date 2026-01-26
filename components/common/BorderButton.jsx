@@ -23,32 +23,30 @@ export default function BorderButton({
       }}
       className={`
         relative overflow-hidden
-        font-bold
-        rounded-[28px]
+        font-bold rounded-full
         bg-transparent
-        border border-[var(--border)]
-        group cursor-pointer
+        border border-border
+        group
         flex items-center justify-center gap-2
         transition-opacity duration-300
-        ${disabled ? "opacity-60 cursor-not-allowed" : ""}
+        ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
 
         /* Responsive */
-        text-[14px] leading-[20px]
+        text-[14px] leading-5
         px-4 py-2
-        sm:text-[15px] sm:leading-[22px] sm:px-5 sm:py-2.5
-        md:text-[16px] md:leading-[24px] md:px-6 md:py-3
+        sm:text-[15px] sm:leading-5.5 sm:px-5 sm:py-2.5
+        md:text-[16px] md:leading-6 md:px-6 md:py-3
         ${fullWidthOnMobile ? "w-full sm:w-auto" : ""}
       `}
     >
-      {/* Hover Background (Bottom → Top) */}
+      {/* Hover Fill (CENTER → OUT) */}
       <span
         className="
           absolute inset-0
           bg-[var(--hover-bg)]
-          translate-y-full
+          scale-x-0 origin-center
           transition-transform duration-300 ease-out
-          group-hover:translate-y-0
-          z-0
+          group-hover:scale-x-100
         "
       />
 
@@ -63,7 +61,7 @@ export default function BorderButton({
         "
       >
         {/* Left Icon */}
-        {Icon && iconPosition === "left" && !loading && (
+        {!loading && Icon && iconPosition === "left" && (
           <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
         )}
 
@@ -75,7 +73,7 @@ export default function BorderButton({
         {children}
 
         {/* Right Icon */}
-        {Icon && iconPosition === "right" && !loading && (
+        {!loading && Icon && iconPosition === "right" && (
           <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
         )}
       </span>

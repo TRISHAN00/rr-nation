@@ -389,3 +389,32 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Hover Me */
+.button {
+  width: 120px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #dd6395;
+  border-radius: 5px;
+
+  font-size: 16px;
+  text-decoration: none;
+  color: #dd6395;
+  background: transparent;
+
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+/* btn-style503 hover effect */
+.button:hover {
+  box-shadow:
+    inset 5em 0 0 0 #dd7e2a,
+    inset -5em 0 0 0 #dd7e2a;
+  border-color: #dd7e2a;
+  color: #ffffff;
+}
