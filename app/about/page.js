@@ -1,7 +1,7 @@
 import Counter from "@/components/common/counter/Counter";
 import InnerBanner from "@/components/common/InnerBanner";
 import OurMission from "@/components/pages/about/OurMission";
-import Team from "@/components/pages/team/Team";
+import Team from "@/components/pages/team/FeatureTeamSlide";
 
 export default function AboutPage() {
   return (
