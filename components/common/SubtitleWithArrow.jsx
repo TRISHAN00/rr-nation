@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import SwiperArrows from "./SwiperArrows"; // path to your component
 
 export default function SubtitleWithArrow({
   label,
@@ -23,14 +22,14 @@ export default function SubtitleWithArrow({
           {title}
         </h3>
 
-        {showArrows && (
+        {/* {showArrows && (
           <SwiperArrows
             onPrev={onPrev}
             onNext={onNext}
             isBeginning={isBeginning}
             isEnd={isEnd}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

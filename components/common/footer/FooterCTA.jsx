@@ -4,24 +4,13 @@ import FillButton from "../FillButton";
 
 export default function FooterCTA() {
   return (
-      <div
-      className="
-        relative overflow-hidden rounded-3xl bg-[#00a19a]
-        px-6 py-10
-        sm:px-10 sm:py-10
-        lg:px-16
-        flex flex-col gap-6
-        md:flex-row md:items-center
-      "
+    <div
+      className={`relative overflow-hidden rounded-3xl bg-brand px-6 py-10 sm:px-10 sm:py-10 lg:px-16 flex flex-col gap-6
+        md:flex-row md:items-center`}
     >
       {/* Title */}
       <h2
-        className="
-          text-2xl sm:text-3xl lg:text-4xl
-          font-semibold text-white
-          text-center md:text-left
-          z-10
-        "
+        className={`text-2xl sm:text-3xl lg:text-4xl font-semibold text-white text-center md:text-left z-10`}
       >
         Run and Rise Together
       </h2>

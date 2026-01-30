@@ -24,7 +24,7 @@ export default function FeaturedCardRight({ bgColor }) {
 
       {/* Button */}
       <div className="mt-6 lg:mt-0">
-        <FillButton className="w-full lg:w-auto">Book Your Ticket</FillButton>
+        <FillButton className="w-full lg:w-auto">Add to Ticket</FillButton>
       </div>
     </div>
   );

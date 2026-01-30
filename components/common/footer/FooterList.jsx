@@ -9,7 +9,7 @@ export default function FooterList({
   return (
     <div>
       {/* Title */}
-      <h6 className="text-[#FAFAFA] text-[24px] leading-[28px] font-bold mb-[30px]">
+      <h6 className="text-[#FAFAFA] text-[24px] leading-7 font-bold mb-7.5">
         {title}
       </h6>
 
@@ -19,19 +19,16 @@ export default function FooterList({
           <li key={index}>
             <Link
               href={item.href}
-              style={{ "--hover": hoverColor }}
-              className="
-                flex items-center gap-3
-                text-[#868681]
-                text-[16px] leading-[24px] font-medium
-                transition-all duration-200
-                hover:text-[var(--hover)]
-                hover:font-bold
-              "
+              className="flex items-center gap-3 text-gray-300 text-[16px] leading-6 font-medium transition-colors duration-200 hover:font-bold"
+              style={{
+                // Apply hover color with inline CSS
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = hoverColor)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")} // gray-300 fallback
             >
               {/* Icon */}
               <ChevronRight className="w-4 h-4 shrink-0" />
-
               {/* Text */}
               <span>{item.label}</span>
             </Link>

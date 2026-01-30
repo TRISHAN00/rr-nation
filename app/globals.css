@@ -9,8 +9,19 @@
   --color-gray: #868681;
 }
 
+/* For all browsers */
+html {
+  scrollbar-gutter: stable;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
 body {
   background-color: #fffdfa;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 .font-anta {

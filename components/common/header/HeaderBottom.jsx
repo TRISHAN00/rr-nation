@@ -1,6 +1,6 @@
+import AuthModal from "@/components/auth/AuthModal";
 import BorderButton from "../BorderButton";
 import CartIcon from "../CartIcon";
-import FillButton from "../FillButton";
 import MainMenu from "./NavigationMenuDemo";
 import SearchInput from "./SearchInput";
 
@@ -18,8 +18,8 @@ export default function HeaderBottom() {
 
       {/* Button Group */}
       <div className=" flex gap-5">
-        <BorderButton >Become a Member</BorderButton>
-        <FillButton>Login</FillButton>
+        <BorderButton>Become a Member</BorderButton>
+        <AuthModal />
       </div>
     </div>
   );

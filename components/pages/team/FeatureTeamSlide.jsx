@@ -12,7 +12,7 @@ export default function FeatureTeamSlide({hideSearch}) {
   return (
     <section className=" py-20 lg:py-30 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">
-        <div className=" mb-10" >
+        <div className=" mb-20" >
           <Title
           label="TEAM"
           title="Latest Training Tips & Community Stories"

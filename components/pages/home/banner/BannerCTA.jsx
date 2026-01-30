@@ -1,7 +1,4 @@
 "use client";
-import FillButton from "@/components/common/FillButton";
-import VideoModalGallery from "@/components/common/VideoModalGallery";
-import RunIcon from "@/components/icons/RunIcon";
 
 export default function BannerCTA() {
   return (
@@ -22,19 +19,18 @@ export default function BannerCTA() {
 
       {/* Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
-        <FillButton
+        {/* <FillButton
           hoverBg="#f090008f"
-          hoverBgOpacity="0.5"
           textColor="#FAFAFA"
           hoverText="#FAFAFA"
           iconPosition="right"
           gifIcon={<RunIcon icon="/static/marathon.gif" />}
         >
           Start Running Today
-        </FillButton>
+        </FillButton> */}
 
         {/* Video CTA */}
-        <VideoModalGallery />
+        {/* <VideoModalGallery /> */}
       </div>
     </div>
   );

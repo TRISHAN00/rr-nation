@@ -1,4 +1,7 @@
+"use client";
+
 import BannerShapes from "@/components/common/ShapeIcon";
+import { useEffect, useState } from "react";
 import Logo from "../Logo";
 import FooterCTA from "./FooterCTA";
 import FooterInfo from "./FooterInfo";
@@ -6,6 +9,12 @@ import FooterList from "./FooterList";
 import FooterSocial from "./FooterSocial";
 
 export default function Footer() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true); // only render dynamic parts on client
+  }, []);
+
   return (
     <footer
       className="relative w-full bg-cover bg-center bg-no-repeat"
@@ -16,15 +25,17 @@ export default function Footer() {
 
       <div className="relative container mx-auto px-4">
         {/* Medal Icon */}
-        <BannerShapes type="medal" />
+        {mounted && <BannerShapes type="medal" />}
 
         {/* Footer CTA */}
         <FooterCTA />
 
         {/* Indicator */}
-        <div className="flex justify-end mt-2 animate-arrow-indicate">
-          <BannerShapes type="indicator" />
-        </div>
+        {mounted && (
+          <div className="flex justify-end mt-2 animate-arrow-indicate">
+            <BannerShapes type="indicator" />
+          </div>
+        )}
 
         {/* Logo */}
         <div className="mt-10">

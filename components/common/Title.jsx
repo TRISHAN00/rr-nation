@@ -12,7 +12,7 @@ export default function Title({
   isEnd,
   hideBtnArrow,
   hideSearch,
-  searchPlaceholder
+  searchPlaceholder,
 }) {
   return (
     <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -34,7 +34,9 @@ export default function Title({
       {/* Right Controls */}
       {!hideBtnArrow && (
         <div className="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-4 sm:gap-6 items-center sm:items-end">
-          <FillButton className="w-full sm:w-auto">View All Blogs</FillButton>
+          <FillButton className="w-full sm:w-auto">
+            View All Blogs
+          </FillButton>
 
           <SwiperArrows
             onPrev={onPrev}
