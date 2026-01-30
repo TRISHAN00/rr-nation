@@ -17,8 +17,42 @@ const anta = Anta({
 });
 
 export const metadata = {
-  title: "RR Nation",
-  description: "RR Nation Web Platform",
+  title: {
+    template: "%s | RunRise Nation",
+    default: "RunRise Nation | Bangladesh's Premier Running Community",
+  },
+  description:
+    "RunRise Nation (RRN) is an AIMS-associate running community in Bangladesh dedicated to fitness, endurance, and the spirit of 'Running and Rising Together'. Join our marathons and events.",
+  metadataBase: new URL("https://runrisenation.com"), // Replace with your production URL
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
+  },
+  // This ensures the site looks good when shared
+  openGraph: {
+    title: "RunRise Nation",
+    description:
+      "Run and Rise Together with Bangladesh's most active fitness community.",
+    url: "https://runrisenation.com",
+    siteName: "RunRise Nation",
+    images: [
+      {
+        url: "/og-main.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -15,7 +15,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hide, setHide] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [mounted, setMounted] = useState(false); // 👈 detect client mount
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true); // now client is mounted
@@ -53,7 +53,7 @@ export default function Header() {
       className={clsx(
         "fixed left-0 right-0 z-50 transition-all duration-500 ease-in-out",
         topClass,
-        bgClass
+        bgClass,
       )}
     >
       <div className="container mx-auto px-7.5 py-4 flex items-center gap-x-20">
