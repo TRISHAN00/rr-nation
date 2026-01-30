@@ -1,4 +1,13 @@
 "use client";
+import FillButton from "@/components/common/FillButton";
+import RunIcon from "@/components/icons/RunIcon";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+const VideoModalGallery = dynamic(
+  () => import("@/components/common/VideoModalGallery"),
+  { ssr: false },
+);
 
 export default function BannerCTA() {
   return (
@@ -19,7 +28,7 @@ export default function BannerCTA() {
 
       {/* Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
-        {/* <FillButton
+        <FillButton
           hoverBg="#f090008f"
           textColor="#FAFAFA"
           hoverText="#FAFAFA"
@@ -27,10 +36,13 @@ export default function BannerCTA() {
           gifIcon={<RunIcon icon="/static/marathon.gif" />}
         >
           Start Running Today
-        </FillButton> */}
+        </FillButton>
 
         {/* Video CTA */}
-        {/* <VideoModalGallery /> */}
+
+        <Suspense fallback={null}>
+          <VideoModalGallery />
+        </Suspense>
       </div>
     </div>
   );

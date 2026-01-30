@@ -3,24 +3,21 @@
 import lgVideo from "lightgallery/plugins/video";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-
-import "lightgallery/css/lg-video.css";
-import "lightgallery/css/lightgallery.css";
-
 import VideoPlayBtn from "./VideoPlayBtn";
 
-// ✅ Disable SSR for LightGallery
+// ✅ Only import LightGallery on the client
 const LightGallery = dynamic(() => import("lightgallery/react"), {
   ssr: false,
 });
+
+import "lightgallery/css/lg-video.css";
+import "lightgallery/css/lightgallery.css";
 
 export default function VideoModalGallery() {
   const lightGalleryRef = useRef(null);
 
   const onInit = (detail) => {
-    if (detail) {
-      lightGalleryRef.current = detail.instance;
-    }
+    if (detail) lightGalleryRef.current = detail.instance;
   };
 
   const openVideo = () => {
@@ -42,14 +39,17 @@ export default function VideoModalGallery() {
         className="scale-90 sm:scale-100 md:scale-110 lg:scale-125"
       />
 
-      <LightGallery
-        onInit={onInit}
-        plugins={[lgVideo]}
-        dynamic
-        dynamicEl={videos}
-        closable
-        hash={false}
-      />
+      {/* Only render LightGallery on client */}
+      {typeof window !== "undefined" && (
+        <LightGallery
+          onInit={onInit}
+          plugins={[lgVideo]}
+          dynamic
+          dynamicEl={videos}
+          closable
+          hash={false}
+        />
+      )}
     </div>
   );
 }
