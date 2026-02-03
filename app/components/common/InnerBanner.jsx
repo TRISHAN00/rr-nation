@@ -9,9 +9,7 @@ export default function InnerBanner({
 }) {
   return (
     <section
-      className="relative flex items-end justify-center sm:justify-start
-                 h-80 sm:h-105 md:h-120 lg:h-137.5
-                 bg-cover bg-center bg-no-repeat"
+      className={`relative flex items-end justify-center sm:justify-start h-80 sm:h-105 md:h-120 lg:h-137.5 bg-cover bg-center bg-no-repeat`}
       style={{ backgroundImage: `url('${background}')` }}
     >
       {/* Overlay */}

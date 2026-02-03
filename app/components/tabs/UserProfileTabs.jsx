@@ -25,12 +25,44 @@ import {
   ShoppingBag,
   User,
 } from "lucide-react";
+import { useState } from "react";
 
 export function UserProfileTabs() {
+  const [profileImage, setProfileImage] = useState(null);
+  const fileInputRef = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload an image file (JPG, PNG, or GIF)');
+        return;
+      }
+      
+      // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size must be less than 2MB');
+        return;
+      }
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
-    <div className="w-full max-w-6xl mx-auto p-6">
+    <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 pt-16 sm:pt-20">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">My Profile</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">My Profile</h1>
         <p className="text-gray-600 text-sm mt-1">
           Manage your events, profile, and security settings
         </p>
@@ -38,24 +70,26 @@ export function UserProfileTabs() {
 
       <Tabs defaultValue="my-events" className="w-full">
         {/* Horizontal Tab List */}
-        <TabsList className="w-full justify-start border-b bg-transparent p-0 h-auto">
+        <TabsList className="w-full justify-start border-b bg-transparent p-0 h-auto overflow-x-auto flex-nowrap">
           <TabsTrigger
             value="my-events"
-            className="px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            className="px-4 sm:px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none cursor-pointer whitespace-nowrap text-sm sm:text-base"
           >
             <Calendar className="h-4 w-4 mr-2" />
-            My Events
+            <span className="hidden sm:inline">My Events</span>
+            <span className="sm:hidden">Events</span>
           </TabsTrigger>
           <TabsTrigger
             value="profile"
-            className="px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            className="px-4 sm:px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none cursor-pointer whitespace-nowrap text-sm sm:text-base"
           >
             <User className="h-4 w-4 mr-2" />
-            Profile Settings
+            <span className="hidden sm:inline">Profile Settings</span>
+            <span className="sm:hidden">Profile</span>
           </TabsTrigger>
           <TabsTrigger
             value="security"
-            className="px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            className="px-4 sm:px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none cursor-pointer whitespace-nowrap text-sm sm:text-base"
           >
             <Lock className="h-4 w-4 mr-2" />
             Security
@@ -65,7 +99,7 @@ export function UserProfileTabs() {
         {/* My Events Tab */}
         <TabsContent value="my-events" className="mt-6 space-y-6">
           {/* Stats Cards */}
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <Card className="border-gray-200">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -119,8 +153,8 @@ export function UserProfileTabs() {
           {/* Events List */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-lg">All Registered Events</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">All Registered Events</CardTitle>
+              <CardDescription className="text-sm">
                 Complete list of events you've joined and participated in
               </CardDescription>
             </CardHeader>
@@ -167,38 +201,38 @@ export function UserProfileTabs() {
                 ].map((event, index) => (
                   <div
                     key={index}
-                    className="p-4 border rounded-lg mb-3 hover:bg-gray-50 transition"
+                    className="p-3 sm:p-4 border rounded-lg mb-3 hover:bg-gray-50 transition"
                   >
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-base">
+                        <h4 className="font-semibold text-sm sm:text-base">
                           {event.name}
                         </h4>
-                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs sm:text-sm text-gray-600">
                           <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
+                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                             {event.date}
                           </div>
                           <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
+                            <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                             {event.time}
                           </div>
                           <div className="flex items-center gap-1">
-                            <Award className="h-4 w-4" />
+                            <Award className="h-3 w-3 sm:h-4 sm:w-4" />
                             {event.distance}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 mt-1 text-sm text-gray-600">
-                          <MapPinned className="h-4 w-4" />
-                          {event.location}
+                        <div className="flex items-center gap-1 mt-1 text-xs sm:text-sm text-gray-600">
+                          <MapPinned className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                          <span className="break-words">{event.location}</span>
                         </div>
                       </div>
-                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">
+                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded text-xs font-medium self-start">
                         {event.status}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between pt-3 border-t">
-                      <div className="flex gap-6 text-xs text-gray-600">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-3 border-t gap-3">
+                      <div className="flex flex-col sm:flex-row sm:gap-6 gap-1 text-xs text-gray-600">
                         <div>
                           <span className="text-gray-500">Order:</span>{" "}
                           <span className="font-medium text-gray-900">
@@ -218,7 +252,7 @@ export function UserProfileTabs() {
                           </span>
                         </div>
                       </div>
-                      <button className="text-sm font-medium hover:underline">
+                      <button className="text-xs sm:text-sm font-medium hover:underline text-left sm:text-right">
                         View Details
                       </button>
                     </div>
@@ -290,38 +324,38 @@ export function UserProfileTabs() {
                 ].map((event, index) => (
                   <div
                     key={index}
-                    className="p-4 border rounded-lg mb-3 hover:bg-gray-50 transition opacity-75"
+                    className="p-3 sm:p-4 border rounded-lg mb-3 hover:bg-gray-50 transition opacity-75"
                   >
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-base">
+                        <h4 className="font-semibold text-sm sm:text-base">
                           {event.name}
                         </h4>
-                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs sm:text-sm text-gray-600">
                           <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
+                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                             {event.date}
                           </div>
                           <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
+                            <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                             {event.time}
                           </div>
                           <div className="flex items-center gap-1">
-                            <Award className="h-4 w-4" />
+                            <Award className="h-3 w-3 sm:h-4 sm:w-4" />
                             {event.distance}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 mt-1 text-sm text-gray-600">
-                          <MapPinned className="h-4 w-4" />
-                          {event.location}
+                        <div className="flex items-center gap-1 mt-1 text-xs sm:text-sm text-gray-600">
+                          <MapPinned className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                          <span className="break-words">{event.location}</span>
                         </div>
                       </div>
-                      <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
+                      <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium self-start">
                         {event.status}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between pt-3 border-t">
-                      <div className="flex gap-6 text-xs text-gray-600">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-3 border-t gap-3">
+                      <div className="flex flex-col sm:flex-row sm:gap-6 gap-1 text-xs text-gray-600">
                         <div>
                           <span className="text-gray-500">Order:</span>{" "}
                           <span className="font-medium text-gray-900">
@@ -341,7 +375,7 @@ export function UserProfileTabs() {
                           </span>
                         </div>
                       </div>
-                      <button className="text-sm font-medium hover:underline">
+                      <button className="text-xs sm:text-sm font-medium hover:underline text-left sm:text-right">
                         View Details
                       </button>
                     </div>
@@ -357,23 +391,44 @@ export function UserProfileTabs() {
           {/* Profile Photo */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-lg">Profile Photo</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">Profile Photo</CardTitle>
+              <CardDescription className="text-sm">
                 Upload a profile picture to personalize your account
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col sm:flex-row items-center gap-6">
                 <div className="relative">
-                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-                    <User className="h-12 w-12 text-gray-400" />
+                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User className="h-12 w-12 text-gray-400" />
+                    )}
                   </div>
-                  <button className="absolute bottom-0 right-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center hover:bg-gray-800">
+                  <button
+                    onClick={triggerFileInput}
+                    className="absolute bottom-0 right-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center hover:bg-gray-800"
+                  >
                     <Camera className="h-4 w-4" />
                   </button>
                 </div>
                 <div>
-                  <button className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 text-sm font-medium">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <button
+                    onClick={triggerFileInput}
+                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 text-sm font-medium"
+                  >
                     Upload Photo
                   </button>
                   <p className="text-xs text-gray-600 mt-2">
@@ -387,13 +442,13 @@ export function UserProfileTabs() {
           {/* Personal Information */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-lg">Personal Information</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">Personal Information</CardTitle>
+              <CardDescription className="text-sm">
                 Update your personal details and contact information
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium text-gray-700 block mb-2">
                     First Name
@@ -401,7 +456,7 @@ export function UserProfileTabs() {
                   <input
                     type="text"
                     defaultValue="John"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
                 <div>
@@ -411,7 +466,7 @@ export function UserProfileTabs() {
                   <input
                     type="text"
                     defaultValue="Doe"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
               </div>
@@ -425,7 +480,7 @@ export function UserProfileTabs() {
                   <input
                     type="email"
                     defaultValue="john.doe@example.com"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
               </div>
@@ -439,7 +494,7 @@ export function UserProfileTabs() {
                   <input
                     type="tel"
                     defaultValue="+1 (555) 123-4567"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
               </div>
@@ -453,12 +508,12 @@ export function UserProfileTabs() {
                   <textarea
                     rows={3}
                     defaultValue="123 Main Street, San Francisco, CA 94102"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium text-gray-700 block mb-2">
                     Date of Birth
@@ -466,14 +521,14 @@ export function UserProfileTabs() {
                   <input
                     type="date"
                     defaultValue="1990-01-15"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-700 block mb-2">
                     Gender
                   </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black">
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm">
                     <option>Male</option>
                     <option>Female</option>
                     <option>Other</option>
@@ -483,7 +538,7 @@ export function UserProfileTabs() {
               </div>
 
               <div className="pt-4">
-                <button className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
+                <button className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
                   Save Changes
                 </button>
               </div>
@@ -493,13 +548,13 @@ export function UserProfileTabs() {
           {/* Emergency Contact */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-lg">Emergency Contact</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">Emergency Contact</CardTitle>
+              <CardDescription className="text-sm">
                 Add an emergency contact for safety purposes
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium text-gray-700 block mb-2">
                     Contact Name
@@ -507,7 +562,7 @@ export function UserProfileTabs() {
                   <input
                     type="text"
                     placeholder="Jane Doe"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
                 <div>
@@ -517,7 +572,7 @@ export function UserProfileTabs() {
                   <input
                     type="text"
                     placeholder="Spouse"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
               </div>
@@ -528,11 +583,11 @@ export function UserProfileTabs() {
                 <input
                   type="tel"
                   placeholder="+1 (555) 987-6543"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                 />
               </div>
               <div className="pt-2">
-                <button className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
+                <button className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
                   Save Emergency Contact
                 </button>
               </div>
@@ -545,8 +600,8 @@ export function UserProfileTabs() {
           {/* Change Password */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-lg">Change Password</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">Change Password</CardTitle>
+              <CardDescription className="text-sm">
                 Update your password to keep your account secure
               </CardDescription>
             </CardHeader>
@@ -560,7 +615,7 @@ export function UserProfileTabs() {
                   <input
                     type="password"
                     placeholder="Enter current password"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
               </div>
@@ -574,7 +629,7 @@ export function UserProfileTabs() {
                   <input
                     type="password"
                     placeholder="Enter new password"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
                 <p className="text-xs text-gray-600 mt-1">
@@ -592,13 +647,13 @@ export function UserProfileTabs() {
                   <input
                     type="password"
                     placeholder="Confirm new password"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
                 </div>
               </div>
 
               <div className="pt-2">
-                <button className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
+                <button className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
                   Update Password
                 </button>
               </div>
@@ -608,8 +663,8 @@ export function UserProfileTabs() {
           {/* Forgot Password */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-lg">Forgot Password</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">Forgot Password</CardTitle>
+              <CardDescription className="text-sm">
                 Reset your password if you've forgotten it
               </CardDescription>
             </CardHeader>
@@ -627,94 +682,16 @@ export function UserProfileTabs() {
                   <input
                     type="email"
                     defaultValue="john.doe@example.com"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
                     disabled
                   />
                 </div>
               </div>
-              <button className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 font-medium text-sm">
+              <button className="w-full sm:w-auto px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 font-medium text-sm">
                 Send Reset Link
               </button>
             </CardContent>
           </Card>
-
-          {/* Two-Factor Authentication */}
-          {/* <Card className="border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-lg">
-                Two-Factor Authentication
-              </CardTitle>
-              <CardDescription>
-                Add an extra layer of security to your account
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="text-sm font-medium">2FA Status</p>
-                  <p className="text-xs text-gray-600 mt-1">
-                    Two-factor authentication is currently disabled
-                  </p>
-                </div>
-                <span className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
-                  Disabled
-                </span>
-              </div>
-              <button className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
-                Enable 2FA
-              </button>
-            </CardContent>
-          </Card> */}
-
-          {/* Active Sessions */}
-          {/* <Card className="border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-lg">Active Sessions</CardTitle>
-              <CardDescription>
-                Manage devices where you're currently logged in
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {[
-                {
-                  device: "Chrome on MacBook Pro",
-                  location: "San Francisco, CA",
-                  lastActive: "Active now",
-                  current: true,
-                },
-                {
-                  device: "Safari on iPhone 15",
-                  location: "San Francisco, CA",
-                  lastActive: "2 hours ago",
-                  current: false,
-                },
-              ].map((session, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between p-4 border rounded-lg"
-                >
-                  <div>
-                    <p className="text-sm font-medium">
-                      {session.device}
-                      {session.current && (
-                        <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                          Current
-                        </span>
-                      )}
-                    </p>
-                    <p className="text-xs text-gray-600 mt-1">
-                      {session.location} • {session.lastActive}
-                    </p>
-                  </div>
-                  {!session.current && (
-                    <button className="text-sm text-red-600 hover:underline">
-                      Revoke
-                    </button>
-                  )}
-                </div>
-              ))}
-            </CardContent>
-          </Card> */}
         </TabsContent>
       </Tabs>
     </div>
