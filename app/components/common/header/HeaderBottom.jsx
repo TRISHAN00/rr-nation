@@ -10,7 +10,7 @@ import SearchInput from "./SearchInput";
 export default function HeaderBottom() {
   const [isCartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const handleAddTicket = (ticket) => {
     setCartItems([...cartItems, ticket]);

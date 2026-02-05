@@ -1,6 +1,7 @@
+import Overview from "./_components/module/Overview/Overview";
 
-export default function DashboardPage() {
+export default function DashboardOverviewPage() {
   return (
-    <div>Dashboard Page</div>
+    <Overview/>
   )
 }
