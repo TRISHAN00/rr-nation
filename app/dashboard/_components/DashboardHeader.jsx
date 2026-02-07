@@ -1,6 +1,4 @@
-"use client";
-
-import { Avatar, AvatarFallback } from "@/app/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
@@ -10,83 +8,85 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { ExternalLink, LogOut, Moon, Sun, User } from "lucide-react";
-import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Bell, Moon, Search, Sun, User } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-import { mockUserProfile } from "../data/mockData";
 
 export function DashboardHeader() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
-      {/* Left */}
-      <h1 className="text-lg font-semibold">Dashboard</h1>
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card px-6">
+      {/* Search */}
+      <div className="relative w-full max-w-md">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder="Search events, posts, team..."
+          className="pl-10 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-primary"
+        />
+      </div>
 
-      {/* Right */}
+      {/* Actions */}
       <div className="flex items-center gap-3">
-        {/* Visit website */}
-        <Link href="/">
-          <Button variant="outline" size="sm" className="gap-2">
-            <ExternalLink className="h-4 w-4" />
-            Visit Website
-          </Button>
-        </Link>
-
-        {/* Theme toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleTheme}
-          className="h-9 w-9"
-        >
-          {theme === "light" ? (
-            <Moon className="h-5 w-5" />
-          ) : (
-            <Sun className="h-5 w-5" />
-          )}
-        </Button>
-
-        {/* User menu */}
+        {/* Theme Toggle */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-9 w-9 rounded-full p-0">
-              <Avatar className="h-9 w-9">
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  {mockUserProfile.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
+            <Button variant="ghost" size="icon">
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground" />
+              <span className="sr-only">Toggle theme</span>
             </Button>
           </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              <Sun className="mr-2 h-4 w-4" />
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              <Moon className="mr-2 h-4 w-4" />
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              <span className="mr-2">💻</span>
+              System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>
-              <div className="flex flex-col space-y-1">
-                <span className="text-sm font-medium">
-                  {mockUserProfile.name}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {mockUserProfile.email}
-                </span>
+        {/* Notifications */}
+        <Button variant="ghost" size="icon" className="relative">
+          <Bell className="h-5 w-5 text-muted-foreground" />
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground">
+            3
+          </span>
+        </Button>
+
+        {/* User Menu */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="gap-2 px-2">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src="" />
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                  AD
+                </AvatarFallback>
+              </Avatar>
+              <div className="hidden flex-col items-start text-left md:flex">
+                <span className="text-sm font-medium">Admin User</span>
+                <span className="text-xs text-muted-foreground">admin@runrise.com</span>
               </div>
-            </DropdownMenuLabel>
-
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
               Profile
             </DropdownMenuItem>
-
+            <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-
-            <DropdownMenuItem className="text-destructive">
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

@@ -1,6 +1,9 @@
+import MyEvents from "../_components/module/events/MyEvents";
 
 export default function DashboardEventPage() {
   return (
-    <h1>Dashboard Event Page</h1>
-  )
+    <>
+      <MyEvents />
+    </>
+  );
 }

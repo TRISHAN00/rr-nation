@@ -19,7 +19,7 @@ export default function FooterList({
           <li key={index}>
             <Link
               href={item.href}
-              className="flex items-center gap-3 text-gray-300 text-[16px] leading-6 font-medium transition-colors duration-200 hover:font-bold"
+              className="flex items-center gap-3 text-gray-300 text-[16px] leading-6 font-medium transition-colors duration-200 hover:font-bold w-fit"
               style={{
                 // Apply hover color with inline CSS
                 transition: "color 0.2s",

@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app
 
 import { mockEvents, mockStats } from "@/app/dashboard/data/mockData";
 import { format, isAfter, parseISO } from "date-fns";
-import { Calendar, CheckCircle, ClipboardList, CreditCard } from "lucide-react";
+import { Calendar, CheckCircle, ClipboardListIcon, CreditCard } from "lucide-react";
 import { StatCard } from "../../StatCard";
 import { StatusBadge } from "../../StatusBadge";
 
@@ -27,25 +27,25 @@ export default function Overview() {
         <StatCard
           title="Total Events"
           value={mockStats.totalEventsRegistered}
-          icon={ClipboardList}
+          icon={<ClipboardListIcon/>}
           description="All time registrations"
         />
         <StatCard
           title="Upcoming Events"
           value={mockStats.upcomingEvents}
-          icon={Calendar}
+          icon={<Calendar/>}
           description="Events scheduled"
         />
         <StatCard
           title="Completed Events"
           value={mockStats.completedEvents}
-          icon={CheckCircle}
+          icon={<CheckCircle/>}
           description="Events attended"
         />
         <StatCard
           title="Total Payments"
           value={`$${mockStats.totalPayments.toFixed(2)}`}
-          icon={CreditCard}
+          icon={<CreditCard/>}
           description="All time spending"
         />
       </div>

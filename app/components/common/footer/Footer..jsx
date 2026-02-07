@@ -69,7 +69,7 @@ export default function Footer() {
             ]}
           />
 
-          <FooterSocial gap={2} />
+          <FooterSocial gap={5} />
         </div>
       </div>
     </footer>

@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/app/components/ui/card";
 
-export function StatCard({ title, value, description }) {
+export function StatCard({ title, value, description, icon }) {
   return (
     <Card className="stat-card-shadow transition-shadow hover:stat-card-shadow-hover">
       <CardContent className="p-6">
@@ -14,9 +14,7 @@ export function StatCard({ title, value, description }) {
               <p className="text-xs text-muted-foreground">{description}</p>
             )}
           </div>
-          <div className="rounded-lg bg-accent p-2.5">
-            <icon className="h-5 w-5 text-accent-foreground" />
-          </div>
+          <div className="rounded-lg bg-accent p-2.5">{icon}</div>
         </div>
       </CardContent>
     </Card>
