@@ -47,7 +47,7 @@ export function DashboardSidebar({ collapsed, onToggle }) {
       <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
         {!collapsed ? (
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand">
               <Trophy className="h-5 w-5 text-sidebar-primary-foreground" />
             </div>
             <div>
@@ -58,7 +58,7 @@ export function DashboardSidebar({ collapsed, onToggle }) {
             </div>
           </div>
         ) : (
-          <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary">
+          <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg bg-brand">
             <Trophy className="h-5 w-5 text-sidebar-primary-foreground" />
           </div>
         )}
@@ -76,7 +76,7 @@ export function DashboardSidebar({ collapsed, onToggle }) {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                 isActive
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                  ? "bg-brand text-sidebar-primary-foreground"
                   : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 collapsed && "justify-center px-2"
               )}
