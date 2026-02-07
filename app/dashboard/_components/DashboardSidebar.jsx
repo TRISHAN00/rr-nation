@@ -28,7 +28,7 @@ const menuItems = [
   { title: "Blog Posts", icon: FileText, path: "/dashboard/blog" },
   { title: "Team", icon: Users, path: "/dashboard/team" },
   { title: "Gallery", icon: Image, path: "/dashboard/gallery" },
-  { title: "Testimonials", icon: MessageSquare, path: "/dashboard/testimonials" },
+  { title: "Testimonial", icon: MessageSquare, path: "/dashboard/testimonial" },
   { title: "Payments", icon: CreditCard, path: "/dashboard/payments" },
   { title: "Settings", icon: Settings, path: "/dashboard/settings" },
 ];
