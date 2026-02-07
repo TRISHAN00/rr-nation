@@ -21,16 +21,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const menuItems = [
-  { title: "Dashboard", icon: LayoutDashboard, path: "/" },
-  { title: "Events", icon: Calendar, path: "/events" },
-  { title: "Registrations", icon: UserCheck, path: "/registrations" },
-  { title: "Services", icon: Briefcase, path: "/services" },
-  { title: "Blog Posts", icon: FileText, path: "/blog" },
-  { title: "Team", icon: Users, path: "/team" },
-  { title: "Gallery", icon: Image, path: "/gallery" },
-  { title: "Testimonials", icon: MessageSquare, path: "/testimonials" },
-  { title: "Payments", icon: CreditCard, path: "/payments" },
-  { title: "Settings", icon: Settings, path: "/settings" },
+  { title: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+  { title: "Events", icon: Calendar, path: "/dashboard/events" },
+  { title: "Registrations", icon: UserCheck, path: "/dashboard/registrations" },
+  { title: "Services", icon: Briefcase, path: "/dashboard/services" },
+  { title: "Blog Posts", icon: FileText, path: "/dashboard/blog" },
+  { title: "Team", icon: Users, path: "/dashboard/team" },
+  { title: "Gallery", icon: Image, path: "/dashboard/gallery" },
+  { title: "Testimonials", icon: MessageSquare, path: "/dashboard/testimonials" },
+  { title: "Payments", icon: CreditCard, path: "/dashboard/payments" },
+  { title: "Settings", icon: Settings, path: "/dashboard/settings" },
 ];
 
 export function DashboardSidebar({ collapsed, onToggle }) {
