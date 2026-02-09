@@ -2,19 +2,19 @@
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/app/components/ui/dialog";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
@@ -22,15 +22,15 @@ import { Textarea } from "@/app/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import {
-    Briefcase,
-    CheckCircle,
-    DollarSign,
-    Edit,
-    MoreHorizontal,
-    Plus,
-    Search,
-    Trash2,
-    XCircle,
+  Briefcase,
+  CheckCircle,
+  DollarSign,
+  Edit,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Trash2,
+  XCircle,
 } from "lucide-react";
 import { useState } from "react";
 
