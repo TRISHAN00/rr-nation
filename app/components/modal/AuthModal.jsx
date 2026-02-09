@@ -1,21 +1,100 @@
 "use client";
 
+import { useState } from "react";
+
 import { Button } from "@/app/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/app/components/ui/dialog";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/app/components/ui/tabs";
+
 import FillButton from "../common/FillButton";
 
+import { registerUser } from "@/services/auth.service";
+import { verifyOtp } from "@/services/otp.service";
+import SendOTPForm from "../form/SendOTPForm";
+import UserLoginForm from "../form/UserLoginForm";
+
 export default function AuthModal() {
+  const [registerStep, setRegisterStep] = useState(1);
+  const [registerData, setRegisterData] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  /* ---------------- VERIFY OTP ---------------- */
+  async function handleVerifyOtp(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    const otp = e.target.otp.value.trim();
+
+    if (otp.length !== 6) {
+      alert("OTP must be 6 digits");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await verifyOtp({
+        email: registerData.email,
+        otp,
+        otpType: "REGISTRATION",
+        type: "EMAIL",
+      });
+
+      // ✅ save OTP for final registration
+      setRegisterData((prev) => ({
+        ...prev,
+        otp,
+      }));
+
+      setRegisterStep(3);
+    } catch (err) {
+      alert(err.response?.data?.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  /* ---------------- REGISTER ---------------- */
+  async function handleRegister(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await registerUser({
+        firstName: registerData.firstName,
+        lastName: registerData.lastName,
+        email: registerData.email,
+        password: e.target.password.value,
+        roleId: 1,
+        otp: registerData.otp, // ✅ correct OTP
+      });
+
+      alert("Registration successful");
+
+      // optional reset
+      setRegisterData({});
+      setRegisterStep(1);
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <Dialog  >
+    <Dialog>
       <DialogTrigger asChild>
         <FillButton>Login</FillButton>
       </DialogTrigger>
@@ -33,63 +112,63 @@ export default function AuthModal() {
             <TabsTrigger value="register">Register</TabsTrigger>
           </TabsList>
 
-          {/* LOGIN */}
+          {/* ================= LOGIN ================= */}
           <TabsContent value="login">
-            <form className="space-y-4">
-              <div className=" flex flex-col gap-1.5">
-                <Label>Email</Label>
-                <Input type="email" placeholder="Enter your email" />
-              </div>
-
-              <div className=" flex flex-col gap-1.5">
-                <Label>Password</Label>
-                <Input type="password" placeholder="Enter password" />
-              </div>
-
-              <Button
-                className="w-full"
-                style={{ backgroundColor: "var(--color-brand)" }}
-              >
-                Login
-              </Button>
-            </form>
+            <UserLoginForm loading setLoading />
           </TabsContent>
 
-          {/* REGISTER */}
+          {/* ================= REGISTER ================= */}
           <TabsContent value="register">
-            <form className="space-y-4">
-              <div className=" flex flex-col gap-1.5">
-                <Label>Name</Label>
-                <Input type="text" placeholder="Full name" />
-              </div>
+            {/* STEP 1: SEND OTP */}
+            {registerStep === 1 && (
+              <SendOTPForm
+                loading={loading}
+                setLoading={setLoading}
+                setRegisterData={setRegisterData}
+                setRegisterStep={setRegisterStep}
+              />
+            )}
 
-              <div className=" flex flex-col gap-1.5">
-                <Label>Email</Label>
-                <Input type="email" placeholder="Email address" />
-              </div>
+            {/* STEP 2: VERIFY OTP */}
+            {registerStep === 2 && (
+              <form className="space-y-4" onSubmit={handleVerifyOtp}>
+                <div className="flex flex-col gap-1.5">
+                  <Label>OTP</Label>
+                  <Input name="otp" placeholder="Enter OTP" required />
+                </div>
 
-              <div className=" flex flex-col gap-1.5">
-                <Label>Phone</Label>
-                <Input type="tel" placeholder="Phone number" />
-              </div>
+                <Button
+                  className="w-full"
+                  disabled={loading}
+                  style={{ backgroundColor: "var(--color-brand)" }}
+                >
+                  {loading ? "Verifying..." : "Verify OTP"}
+                </Button>
+              </form>
+            )}
 
-              <div className=" flex flex-col gap-1.5">
-                <Label>Password</Label>
-                <Input type="password" placeholder="Create password" />
-              </div>
+            {/* STEP 3: PASSWORD */}
+            {registerStep === 3 && (
+              <form className="space-y-4" onSubmit={handleRegister}>
+                <div className="flex flex-col gap-1.5">
+                  <Label>Password</Label>
+                  <Input
+                    name="password"
+                    type="password"
+                    placeholder="Create password"
+                    required
+                  />
+                </div>
 
-              <div className=" flex flex-col gap-1.5">
-                <Label>Confirm Password</Label>
-                <Input type="password" placeholder="Confirm password" />
-              </div>
-
-              <Button
-                className="w-full"
-                style={{ backgroundColor: "var(--color-brand)" }}
-              >
-                Register
-              </Button>
-            </form>
+                <Button
+                  className="w-full"
+                  disabled={loading}
+                  style={{ backgroundColor: "var(--color-brand)" }}
+                >
+                  {loading ? "Registering..." : "Register"}
+                </Button>
+              </form>
+            )}
           </TabsContent>
         </Tabs>
       </DialogContent>
