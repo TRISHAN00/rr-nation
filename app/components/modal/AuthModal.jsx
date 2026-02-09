@@ -1,8 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
-import { Button } from "@/app/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,23 +7,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/app/components/ui/dialog";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/app/components/ui/tabs";
+import { useState } from "react";
 
-import FillButton from "../common/FillButton";
-
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 import { registerUser } from "@/services/auth.service";
 import { verifyOtp } from "@/services/otp.service";
+import FillButton from "../common/FillButton";
 import SendOTPForm from "../form/SendOTPForm";
 import UserLoginForm from "../form/UserLoginForm";
 
 export default function AuthModal() {
+  const [open, setOpen] = useState(false);            // ✅ modal control
+  const [tab, setTab] = useState("login");            // ✅ tab control
   const [registerStep, setRegisterStep] = useState(1);
   const [registerData, setRegisterData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -38,12 +38,6 @@ export default function AuthModal() {
 
     const otp = e.target.otp.value.trim();
 
-    if (otp.length !== 6) {
-      alert("OTP must be 6 digits");
-      setLoading(false);
-      return;
-    }
-
     try {
       await verifyOtp({
         email: registerData.email,
@@ -52,12 +46,7 @@ export default function AuthModal() {
         type: "EMAIL",
       });
 
-      // ✅ save OTP for final registration
-      setRegisterData((prev) => ({
-        ...prev,
-        otp,
-      }));
-
+      setRegisterData((prev) => ({ ...prev, otp }));
       setRegisterStep(3);
     } catch (err) {
       alert(err.response?.data?.message || "Invalid OTP");
@@ -78,14 +67,15 @@ export default function AuthModal() {
         email: registerData.email,
         password: e.target.password.value,
         roleId: 1,
-        otp: registerData.otp, // ✅ correct OTP
+        otp: registerData.otp,
       });
 
       alert("Registration successful");
 
-      // optional reset
+      // ✅ Reset + switch to login tab
       setRegisterData({});
       setRegisterStep(1);
+      setTab("login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
     } finally {
@@ -94,7 +84,7 @@ export default function AuthModal() {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <FillButton>Login</FillButton>
       </DialogTrigger>
@@ -106,7 +96,7 @@ export default function AuthModal() {
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="login" className="w-full">
+        <Tabs value={tab} onValueChange={setTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="register">Register</TabsTrigger>
@@ -114,12 +104,13 @@ export default function AuthModal() {
 
           {/* ================= LOGIN ================= */}
           <TabsContent value="login">
-            <UserLoginForm loading setLoading />
+            <UserLoginForm
+              onSuccess={() => setOpen(false)}   // ✅ close modal after login
+            />
           </TabsContent>
 
           {/* ================= REGISTER ================= */}
           <TabsContent value="register">
-            {/* STEP 1: SEND OTP */}
             {registerStep === 1 && (
               <SendOTPForm
                 loading={loading}
@@ -129,7 +120,6 @@ export default function AuthModal() {
               />
             )}
 
-            {/* STEP 2: VERIFY OTP */}
             {registerStep === 2 && (
               <form className="space-y-4" onSubmit={handleVerifyOtp}>
                 <div className="flex flex-col gap-1.5">
@@ -137,35 +127,21 @@ export default function AuthModal() {
                   <Input name="otp" placeholder="Enter OTP" required />
                 </div>
 
-                <Button
-                  className="w-full"
-                  disabled={loading}
-                  style={{ backgroundColor: "var(--color-brand)" }}
-                >
-                  {loading ? "Verifying..." : "Verify OTP"}
+                <Button className="w-full" disabled={loading}>
+                  Verify OTP
                 </Button>
               </form>
             )}
 
-            {/* STEP 3: PASSWORD */}
             {registerStep === 3 && (
               <form className="space-y-4" onSubmit={handleRegister}>
                 <div className="flex flex-col gap-1.5">
                   <Label>Password</Label>
-                  <Input
-                    name="password"
-                    type="password"
-                    placeholder="Create password"
-                    required
-                  />
+                  <Input name="password" type="password" required />
                 </div>
 
-                <Button
-                  className="w-full"
-                  disabled={loading}
-                  style={{ backgroundColor: "var(--color-brand)" }}
-                >
-                  {loading ? "Registering..." : "Register"}
+                <Button className="w-full" disabled={loading}>
+                  Register
                 </Button>
               </form>
             )}
