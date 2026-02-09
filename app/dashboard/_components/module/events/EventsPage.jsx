@@ -1,6 +1,12 @@
 "use client";
+import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/app/components/ui/collapsible";
 import {
   Dialog,
   DialogContent,
@@ -16,23 +22,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { Tabs, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
-import { Textarea } from "@/app/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/app/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
+import { Textarea } from "@/app/components/ui/textarea";
 import {
   Calendar,
   CalendarClock,

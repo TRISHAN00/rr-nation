@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/app/components/ui/badge";
+import { Label } from "@/app/components/ui/label";
+import { Switch } from "@/app/components/ui/switch";
 import { Asterisk, GripVertical, Settings } from "lucide-react";
 import { useState } from "react";
 

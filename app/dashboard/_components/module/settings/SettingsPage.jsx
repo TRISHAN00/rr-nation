@@ -1,9 +1,9 @@
 "use client"
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 import { Textarea } from "@/app/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Facebook, Globe, Instagram, Mail, MapPin, Phone, Save, Twitter } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

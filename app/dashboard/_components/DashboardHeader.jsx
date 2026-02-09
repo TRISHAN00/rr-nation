@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/app/components/ui/input";
 import { Bell, Moon, Search, Sun, User } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
