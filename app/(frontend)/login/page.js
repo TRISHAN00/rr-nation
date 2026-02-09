@@ -4,7 +4,6 @@ import { loginUser } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import InnerBanner from "@/app/components/common/InnerBanner";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
@@ -42,11 +41,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <InnerBanner
-        title="Login"
-        background="/dynamic/about/inner-banner.jpg"
-        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Login" }]}
-      />
+     
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
           {/* Header */}
