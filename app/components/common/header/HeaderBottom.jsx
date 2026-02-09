@@ -1,9 +1,9 @@
-import AuthModal from "@/app/components/modal/AuthModal";
 import { ProfileDropdown } from "@/app/components/pages/profile/ProfileDropdown";
 import Link from "next/link";
 import { useState } from "react";
 import BorderButton from "../BorderButton";
 import CartIcon from "../CartIcon";
+import FillButton from "../FillButton";
 import MainMenu from "./NavigationMenuDemo";
 import SearchInput from "./SearchInput";
 
@@ -42,7 +42,9 @@ export default function HeaderBottom() {
               <Link href={"member-register"}>
                 <BorderButton>Become a Member</BorderButton>
               </Link>
-              <AuthModal />
+              <Link href={"/login"}>
+                <FillButton>Login</FillButton>
+              </Link>
             </>
           ) : (
             <ProfileDropdown />
