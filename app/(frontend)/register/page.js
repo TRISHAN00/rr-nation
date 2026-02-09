@@ -3,14 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-
 import { registerUser } from "@/services/auth.service";
 import { verifyOtp } from "@/services/otp.service";
 
+import SendOTPForm from "@/app/components/form/SendOTPForm";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
-import SendOTPForm from "@/app/components/form/SendOTPForm";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -70,15 +70,10 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Create Account
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Register to get started
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
+          <p className="text-sm text-gray-500 mt-1">Register to get started</p>
         </div>
 
         {/* REGISTER FLOW */}
@@ -126,12 +121,12 @@ export default function RegisterPage() {
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
-            <button
-              onClick={() => router.push("/login")}
-              className="text-brand font-medium hover:underline"
+            <Link
+              href="/login"
+              className="ml-1 font-medium text-brand hover:underline transition"
             >
               Login
-            </button>
+            </Link>
           </p>
         </div>
       </div>

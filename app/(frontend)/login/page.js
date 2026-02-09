@@ -4,9 +4,11 @@ import { loginUser } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import Logo from "@/app/components/common/Logo";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -41,19 +43,17 @@ export default function LoginPage() {
 
   return (
     <>
-     
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
           {/* Header */}
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-            <p className="text-sm text-gray-500 mt-1">Login to continue</p>
+            <Logo />
           </div>
 
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <Label>Email</Label>
+              <Label className={"mb-2"}>Email</Label>
               <Input
                 name="email"
                 type="email"
@@ -63,7 +63,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <Label>Password</Label>
+              <Label className={"mb-2"}>Password</Label>
               <Input
                 name="password"
                 type="password"
@@ -91,8 +91,16 @@ export default function LoginPage() {
           </div>
 
           {/* Register */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600 mb-2">Don’t have an account?</p>
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-400">
+              Don’t have an account?
+              <Link
+                href="/register"
+                className="ml-1 font-medium text-brand hover:underline hover:text-brand/90 transition-colors"
+              >
+                Register now
+              </Link>
+            </p>
           </div>
         </div>
       </div>
