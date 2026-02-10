@@ -2,6 +2,7 @@ import Footer from "@/app/components/common/footer/Footer.";
 import Header from "@/app/components/common/header/Header";
 import { AuthProvider } from "@/context/AuthContext";
 import { Albert_Sans, Anta } from "next/font/google";
+import { Toaster } from "sonner";
 import "../globals.css";
 
 const albertSans = Albert_Sans({
@@ -61,6 +62,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
         <AuthProvider>
+          <Toaster />
           <Header />
           {children}
           <Footer />

@@ -14,45 +14,21 @@ import {
 import {
   Award,
   Calendar,
-  Camera,
   Clock,
   DollarSign,
   Lock,
   Mail,
   MapPinned,
   ShoppingBag,
-  User
+  User,
 } from "lucide-react";
 import { useState } from "react";
 import PersonalInformationForm from "../profile/PersonalInformationForm";
+import UpdateProfilePhoto from "../profile/UpdateProfilePhoto";
 
 export function UserProfileTabs() {
   const [profileImage, setProfileImage] = useState(null);
   const fileInputRef = useState(null);
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith("image/")) {
-        alert("Please upload an image file (JPG, PNG, or GIF)");
-        return;
-      }
-
-      // Validate file size (2MB = 2 * 1024 * 1024 bytes)
-      if (file.size > 2 * 1024 * 1024) {
-        alert("File size must be less than 2MB");
-        return;
-      }
-
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
@@ -400,45 +376,11 @@ export function UserProfileTabs() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col sm:flex-row items-center gap-6">
-                <div className="relative">
-                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                    {profileImage ? (
-                      <img
-                        src={profileImage}
-                        alt="Profile"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <User className="h-12 w-12 text-gray-400" />
-                    )}
-                  </div>
-                  <button
-                    onClick={triggerFileInput}
-                    className="absolute bottom-0 right-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center hover:bg-gray-800"
-                  >
-                    <Camera className="h-4 w-4" />
-                  </button>
-                </div>
-                <div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={triggerFileInput}
-                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 text-sm font-medium"
-                  >
-                    Upload Photo
-                  </button>
-                  <p className="text-xs text-gray-600 mt-2">
-                    JPG, PNG or GIF. Max size 2MB.
-                  </p>
-                </div>
-              </div>
+              <UpdateProfilePhoto
+                profileImage={profileImage}
+                triggerFileInput={triggerFileInput}
+                fileInputRef={fileInputRef}
+              />
             </CardContent>
           </Card>
 
@@ -453,7 +395,7 @@ export function UserProfileTabs() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <PersonalInformationForm/>
+              <PersonalInformationForm />
             </CardContent>
           </Card>
 
