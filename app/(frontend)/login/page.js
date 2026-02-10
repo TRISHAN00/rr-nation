@@ -29,9 +29,13 @@ export default function LoginPage() {
 
       const { token, refreshToken, userData } = response.data.data;
 
+      // 1. Client Storage
       localStorage.setItem("authToken", token);
       localStorage.setItem("refresh_token", refreshToken);
       localStorage.setItem("userData", JSON.stringify(userData));
+
+      // 2. Cookie for Middleware
+      document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
 
       router.replace("/profile");
     } catch (err) {

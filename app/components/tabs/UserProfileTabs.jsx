@@ -19,13 +19,12 @@ import {
   DollarSign,
   Lock,
   Mail,
-  MapPin,
   MapPinned,
-  Phone,
   ShoppingBag,
-  User,
+  User
 } from "lucide-react";
 import { useState } from "react";
+import PersonalInformationForm from "../profile/PersonalInformationForm";
 
 export function UserProfileTabs() {
   const [profileImage, setProfileImage] = useState(null);
@@ -35,14 +34,14 @@ export function UserProfileTabs() {
     const file = event.target.files[0];
     if (file) {
       // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please upload an image file (JPG, PNG, or GIF)');
+      if (!file.type.startsWith("image/")) {
+        alert("Please upload an image file (JPG, PNG, or GIF)");
         return;
       }
-      
+
       // Validate file size (2MB = 2 * 1024 * 1024 bytes)
       if (file.size > 2 * 1024 * 1024) {
-        alert('File size must be less than 2MB');
+        alert("File size must be less than 2MB");
         return;
       }
 
@@ -153,7 +152,9 @@ export function UserProfileTabs() {
           {/* Events List */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">All Registered Events</CardTitle>
+              <CardTitle className="text-base sm:text-lg">
+                All Registered Events
+              </CardTitle>
               <CardDescription className="text-sm">
                 Complete list of events you've joined and participated in
               </CardDescription>
@@ -391,7 +392,9 @@ export function UserProfileTabs() {
           {/* Profile Photo */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Profile Photo</CardTitle>
+              <CardTitle className="text-base sm:text-lg">
+                Profile Photo
+              </CardTitle>
               <CardDescription className="text-sm">
                 Upload a profile picture to personalize your account
               </CardDescription>
@@ -442,113 +445,24 @@ export function UserProfileTabs() {
           {/* Personal Information */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Personal Information</CardTitle>
+              <CardTitle className="text-base sm:text-lg">
+                Personal Information
+              </CardTitle>
               <CardDescription className="text-sm">
                 Update your personal details and contact information
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="John"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="Doe"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="email"
-                    defaultValue="john.doe@example.com"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Phone Number
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="tel"
-                    defaultValue="+1 (555) 123-4567"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Address
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <textarea
-                    rows={3}
-                    defaultValue="123 Main Street, San Francisco, CA 94102"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    defaultValue="1990-01-15"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
-                    Gender
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm">
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Other</option>
-                    <option>Prefer not to say</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <button className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
-                  Save Changes
-                </button>
-              </div>
+              <PersonalInformationForm/>
             </CardContent>
           </Card>
 
           {/* Emergency Contact */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Emergency Contact</CardTitle>
+              <CardTitle className="text-base sm:text-lg">
+                Emergency Contact
+              </CardTitle>
               <CardDescription className="text-sm">
                 Add an emergency contact for safety purposes
               </CardDescription>
@@ -600,7 +514,9 @@ export function UserProfileTabs() {
           {/* Change Password */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Change Password</CardTitle>
+              <CardTitle className="text-base sm:text-lg">
+                Change Password
+              </CardTitle>
               <CardDescription className="text-sm">
                 Update your password to keep your account secure
               </CardDescription>
@@ -663,7 +579,9 @@ export function UserProfileTabs() {
           {/* Forgot Password */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Forgot Password</CardTitle>
+              <CardTitle className="text-base sm:text-lg">
+                Forgot Password
+              </CardTitle>
               <CardDescription className="text-sm">
                 Reset your password if you've forgotten it
               </CardDescription>

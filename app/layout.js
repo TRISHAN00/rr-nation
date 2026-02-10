@@ -14,8 +14,6 @@ const anta = Anta({
   display: "swap",
 });
 
-
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

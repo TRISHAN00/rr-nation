@@ -1,5 +1,6 @@
 import Footer from "@/app/components/common/footer/Footer.";
 import Header from "@/app/components/common/header/Header";
+import { AuthProvider } from "@/context/AuthContext";
 import { Albert_Sans, Anta } from "next/font/google";
 import "../globals.css";
 
@@ -59,9 +60,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
-        <Header />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

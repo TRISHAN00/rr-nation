@@ -1,14 +1,19 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/components/ui/avatar";
 import { Button } from "@/app/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
+import { performLogout } from "@/services/auth.service";
 import { LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 
@@ -23,7 +28,11 @@ export function ProfileDropdown() {
           className="flex items-center gap-2 rounded-full bg-light h-12.5 p-2 text-dark hover:bg-white"
         >
           <Avatar className="h-7 w-7">
-            <AvatarImage className={' object-cover'} src="/main-logo.png" alt={name} />
+            <AvatarImage
+              className={" object-cover"}
+              src="/main-logo.png"
+              alt={name}
+            />
             <AvatarFallback>
               {name
                 .split(" ")
@@ -67,8 +76,10 @@ export function ProfileDropdown() {
 
         {/* Logout */}
         <DropdownMenuItem className="flex gap-2 text-red-500 focus:text-red-500">
-          <LogOut className="h-4 w-4" />
-          Logout
+          <button onClick={performLogout} className=" flex w-full items-center gap-1" >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

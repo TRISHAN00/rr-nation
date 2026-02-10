@@ -1,4 +1,6 @@
+
 import { ProfileDropdown } from "@/app/components/pages/profile/ProfileDropdown";
+import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
 import { useState } from "react";
 import BorderButton from "../BorderButton";
@@ -11,6 +13,8 @@ export default function HeaderBottom() {
   const [isCartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [loggedIn, setLoggedIn] = useState(true);
+  const isAuthenticated = useAuth()
+ 
 
   const handleAddTicket = (ticket) => {
     setCartItems([...cartItems, ticket]);
@@ -37,12 +41,12 @@ export default function HeaderBottom() {
 
         {/* Button Group */}
         <div className=" flex gap-5">
-          {loggedIn ? (
+          {!isAuthenticated ? (
             <>
-              <Link href={"member-register"}>
+              <Link href="/member-register">
                 <BorderButton>Become a Member</BorderButton>
               </Link>
-              <Link href={"/login"}>
+              <Link href="/login">
                 <FillButton>Login</FillButton>
               </Link>
             </>

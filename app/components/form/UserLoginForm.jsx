@@ -3,6 +3,7 @@
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
+import { useAuthContext } from "@/context/AuthContext";
 import { loginUser } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,10 +11,12 @@ import { useState } from "react";
 export default function UserLoginForm({ onSuccess }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { setIsAuthenticated } = useAuthContext();
 
   async function handleLogin(e) {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     try {
       const response = await loginUser({
@@ -24,14 +27,17 @@ export default function UserLoginForm({ onSuccess }) {
 
       const { token, refreshToken, userData } = response.data.data;
 
+      // 1. Client Storage
       localStorage.setItem("authToken", token);
       localStorage.setItem("refresh_token", refreshToken);
       localStorage.setItem("userData", JSON.stringify(userData));
 
-      onSuccess?.();              // ✅ close modal
-      router.push("/profile");    // ✅ redirect
+      // 2. Cookie for Middleware
+      document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
+      setIsAuthenticated(true);
+      window.location.href = "/";
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }

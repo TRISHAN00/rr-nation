@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -14,9 +12,9 @@ export default function useAuth() {
     if (token && userData) {
       setIsAuthenticated(true);
     } else {
-      router.replace("/login"); // redirect to login if not authenticated
+      setIsAuthenticated(false);
     }
-  }, [router]);
+  });
 
   return isAuthenticated;
 }
