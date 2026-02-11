@@ -8,7 +8,7 @@ export default function EventCard() {
     <Link href="/events/account-day-run-2025" className="block">
       <div className="group relative rounded-4xl overflow-hidden w-full bg-[#E0F7F6]">
         {/* Card BG – Bottom to Top */}
-        <span className="absolute inset-0 bg-[#f090008f] scale-y-0 origin-bottom transition-transform duration-500 ease-out group-hover:scale-y-100 z-0" />
+        <span className="absolute inset-0 bg-[#F39200]/80 scale-y-0 origin-bottom transition-transform duration-500 ease-out group-hover:scale-y-100 z-0" />
 
         {/* Card Content */}
         <div className="relative p-4 flex flex-col z-10">

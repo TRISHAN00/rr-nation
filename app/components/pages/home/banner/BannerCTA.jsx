@@ -26,8 +26,7 @@ export default function BannerCTA() {
       </h1>
       {/* Description */}
       <p className="font-semibold text-[15px] sm:text-[16px] lg:text-[18px] leading-6 sm:leading-6.5 lg:leading-7 mt-4 sm:mt-5 mb-8 sm:mb-10 text-light">
-        Join a growing community of runners committed to fitness,
-        sustainability, and positive environmental impact.
+        Join a passionate community where movement meets purpose. Experience the best, and become the best version of yourself.
       </p>
 
       {/* Actions */}

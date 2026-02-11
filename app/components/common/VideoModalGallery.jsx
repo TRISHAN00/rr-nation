@@ -26,8 +26,8 @@ export default function VideoModalGallery() {
 
   const videos = [
     {
-      src: "https://www.youtube.com/watch?v=IUN664s7N-c",
-      subHtml: "<h4>Peck Pocketed – Disney Favorite</h4>",
+      src: "https://youtu.be/hWfn751NQys?si=BiQX4YZbyPPd4uN_",
+      subHtml: "<h4>অনুষ্ঠিত হলো দৌড় প্রতিযোগিতা রানরাইজ নেশন ফিফটিন-কে ২০২৫ | RunRise Marathon | Jamuna TV</h4>",
     },
   ];
 
