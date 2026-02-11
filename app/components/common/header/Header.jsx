@@ -13,7 +13,7 @@ export default function Header() {
   const isDesktop = useMediaQuery("(min-width: 1280px)");
   const pathname = usePathname();
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/policies";
 
   const [scrolled, setScrolled] = useState(false);
   const [hide, setHide] = useState(false);
