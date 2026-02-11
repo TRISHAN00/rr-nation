@@ -35,7 +35,7 @@ export function UserProfileTabs() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 pt-16 sm:pt-20">
+    <div className="w-full  mx-auto p-4 sm:p-6 pt-16 sm:pt-20">
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">My Profile</h1>
         <p className="text-gray-600 text-sm mt-1">
@@ -81,7 +81,7 @@ export function UserProfileTabs() {
                   <CardTitle className="text-sm font-medium text-gray-600">
                     Total Events Joined
                   </CardTitle>
-                  <Calendar className="h-4 w-4 text-gray-400" />
+                  <Calendar className="h-4 w-4" color="#00a19a" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -96,7 +96,7 @@ export function UserProfileTabs() {
                   <CardTitle className="text-sm font-medium text-gray-600">
                     Total Orders
                   </CardTitle>
-                  <ShoppingBag className="h-4 w-4 text-gray-400" />
+                  <ShoppingBag className="h-4 w-4 text-gray-400" color="#00a19a" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -113,7 +113,7 @@ export function UserProfileTabs() {
                   <CardTitle className="text-sm font-medium text-gray-600">
                     Total Spent
                   </CardTitle>
-                  <DollarSign className="h-4 w-4 text-gray-400" />
+                  <DollarSign className="h-4 w-4 text-gray-400" color="#00a19a" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -204,7 +204,7 @@ export function UserProfileTabs() {
                           <span className="break-words">{event.location}</span>
                         </div>
                       </div>
-                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded text-xs font-medium self-start">
+                      <span className="px-3 py-1 bg-[#F39200] text-light rounded text-xs font-medium self-start">
                         {event.status}
                       </span>
                     </div>
@@ -327,7 +327,7 @@ export function UserProfileTabs() {
                           <span className="break-words">{event.location}</span>
                         </div>
                       </div>
-                      <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium self-start">
+                      <span className="px-3 py-1 bg-brand text-light rounded text-xs font-medium self-start">
                         {event.status}
                       </span>
                     </div>
