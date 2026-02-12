@@ -10,8 +10,12 @@ export const getProfileData = async () => {
   return data.data.userData;
 };
 
+export const updateEmergencyContact = async (payload) => {
+  const { data } = await api.post("/auth/user/emergency-contact", payload);
+  return data;
+};
 
-export const updateEmergencyContact = async () => {
-  const { data } = await api.post("/auth/user/emergency-contact");
-  return data.data.userData;
+export const getEmergencyContactData = async () => {
+  const { data } = await api.get("/auth/user/emergency-contact");
+  return data;
 };

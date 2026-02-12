@@ -5,7 +5,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function PersonalInformationForm({ user }) {
+export default function PersonalInformationForm({user}) {
   const [loading, setLoading] = useState(false);
 
   /* -------- UPDATE PROFILE -------- */
@@ -26,13 +26,19 @@ export default function PersonalInformationForm({ user }) {
 
     try {
       await updateProfile(payload);
-      toast.success("Profile updated successfully");
+      toast.success("Profile updated successfully", {
+        position: "top-right",
+        className: "bg-green-600 text-white",
+      });
     } catch (err) {
-      toast.error(err.response?.data?.message || "Profile update failed");
+      toast.error(err.response?.data?.message || "Profile update failed", {
+        position: "top-right",
+      });
     } finally {
       setLoading(false);
     }
   }
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -43,6 +49,7 @@ export default function PersonalInformationForm({ user }) {
             name="firstName"
             defaultValue={user?.firstName}
             className="w-full border px-3 py-2 rounded-md"
+            required
           />
         </div>
 
@@ -52,6 +59,7 @@ export default function PersonalInformationForm({ user }) {
             name="lastName"
             defaultValue={user?.lastName}
             className="w-full border px-3 py-2 rounded-md"
+            required
           />
         </div>
       </div>

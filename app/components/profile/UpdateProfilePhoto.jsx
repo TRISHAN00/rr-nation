@@ -40,6 +40,8 @@ export default function UpdateProfilePhoto({ initialImage }) {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+      console.log(data);
+
       setProfileImage(data?.data?.image);
       toast.success("Profile updated successfully!");
     } catch (error) {

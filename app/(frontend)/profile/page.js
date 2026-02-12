@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
 
-
-
   const [fetching, setFetching] = useState(true);
 
   /* -------- FETCH PROFILE DATA -------- */
@@ -38,7 +36,7 @@ export default function ProfilePage() {
 
       <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
         <div className="container m-auto">
-          <UserProfileTabs user={user}  />
+          <UserProfileTabs user={user} />
         </div>
       </div>
     </>
