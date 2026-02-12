@@ -23,6 +23,7 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
+import ChangePasswordForm from "../profile/ChangePasswordForm";
 import EmergencyContactForm from "../profile/EmergencyContactForm";
 import PersonalInformationForm from "../profile/PersonalInformationForm";
 import UpdateProfilePhoto from "../profile/UpdateProfilePhoto";
@@ -436,57 +437,9 @@ export function UserProfileTabs({ user }) {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Current Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="password"
-                    placeholder="Enter current password"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-              </div>
+             
 
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  New Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="password"
-                    placeholder="Enter new password"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-                <p className="text-xs text-gray-600 mt-1">
-                  Must be at least 8 characters with uppercase, lowercase, and
-                  numbers
-                </p>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Confirm New Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="password"
-                    placeholder="Confirm new password"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <button className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
-                  Update Password
-                </button>
-              </div>
+              <ChangePasswordForm />
             </CardContent>
           </Card>
 

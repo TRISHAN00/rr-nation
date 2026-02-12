@@ -1,4 +1,3 @@
-
 import { ProfileDropdown } from "@/app/components/pages/profile/ProfileDropdown";
 import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
@@ -15,7 +14,7 @@ export default function HeaderBottom() {
   const [loggedIn, setLoggedIn] = useState(true);
   const { isAuthenticated, user } = useAuthContext();
 
-  console.log(user)
+  console.log(user);
 
   const handleAddTicket = (ticket) => {
     setCartItems([...cartItems, ticket]);
@@ -26,7 +25,7 @@ export default function HeaderBottom() {
     newCart.splice(index, 1);
     setCartItems(newCart);
   };
-  
+
   return (
     <>
       <div className=" flex items-center justify-between">
@@ -48,7 +47,7 @@ export default function HeaderBottom() {
               <Link href="/member-register">
                 <BorderButton>Become a Member</BorderButton>
               </Link>
-              <Link href="/login">
+              <Link href="/accounts/login">
                 <FillButton>Login</FillButton>
               </Link>
             </>

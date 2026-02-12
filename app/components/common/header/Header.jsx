@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuthContext } from "@/context/AuthContext";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
@@ -11,14 +10,16 @@ import HeaderBottom from "./HeaderBottom";
 import HeaderTop from "./HeaderTop";
 
 export default function Header() {
-  const { isAuthenticated, isLoading } = useAuthContext();
 
   // Prevents the "Login" button from showing while we check the token
-  if (isLoading) return <div className="h-16" />;
   const isDesktop = useMediaQuery("(min-width: 1280px)");
   const pathname = usePathname();
 
-  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/policies";
+  const isAuthPage =
+    pathname === "/accounts/login" ||
+    pathname === "/accounts/register" ||
+    pathname === "/accounts/password/reset" ||
+    pathname === "/policies";
 
   const [scrolled, setScrolled] = useState(false);
   const [hide, setHide] = useState(false);
@@ -63,8 +64,6 @@ export default function Header() {
         bgClass,
       )}
     >
-
-
       <div className="container mx-auto px-7.5 py-4 flex items-center gap-x-20">
         <Logo />
 

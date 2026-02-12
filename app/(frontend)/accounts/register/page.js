@@ -120,7 +120,7 @@ export default function RegisterPage() {
         {step === 3 && (
           <form className="space-y-4" onSubmit={handleRegister}>
             <div>
-              <Label>Password</Label>
+              <Label className={"mb-1"} >Password</Label>
               <Input
                 name="password"
                 type="password"
@@ -140,7 +140,7 @@ export default function RegisterPage() {
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href="/accounts/login"
               className="ml-1 font-medium text-brand hover:underline transition"
             >
               Login

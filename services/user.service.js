@@ -19,3 +19,9 @@ export const getEmergencyContactData = async () => {
   const { data } = await api.get("/auth/user/emergency-contact");
   return data;
 };
+
+
+export const updatePassword = async (payload) => {
+  const { data } = await api.post("/auth/user/change-password", payload);
+  return data;
+};

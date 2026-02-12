@@ -1,3 +1,4 @@
+"use client"
 import { Badge } from "@/app/components/ui/badge";
 import { Label } from "@/app/components/ui/label";
 import { Switch } from "@/app/components/ui/switch";

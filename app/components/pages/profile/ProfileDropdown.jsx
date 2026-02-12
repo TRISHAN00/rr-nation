@@ -23,7 +23,7 @@ export function ProfileDropdown({ user }) {
           variant="ghost"
           className="flex items-center gap-2 rounded-full bg-light h-12.5 p-2 text-dark hover:bg-white"
         >
-          <Avatar className="h-7 w-7">
+          <Avatar className="h-8 w-8">
             <AvatarImage
               className={" object-cover"}
               src={user?.image || "/main-logo.png"}

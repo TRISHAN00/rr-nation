@@ -37,7 +37,7 @@ export default function LoginPage() {
       // 2. Cookie for Middleware
       document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
 
-      window.location.reload()
+      window.location.reload();
       router.push("/");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
@@ -79,6 +79,25 @@ export default function LoginPage() {
 
             {error && <p className="text-sm text-red-500">{error}</p>}
 
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={false}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-4 w-4 rounded border-gray-300"
+                />
+                Remember me
+              </label>
+
+              <Link
+                href="/accounts/password/reset"
+                className="text-brand hover:underline font-medium"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
             <Button
               className="w-full"
               disabled={loading}
@@ -100,7 +119,7 @@ export default function LoginPage() {
             <p className="text-sm text-gray-400">
               Don’t have an account?
               <Link
-                href="/register"
+                href="/accounts/register"
                 className="ml-1 font-medium text-brand hover:underline hover:text-brand/90 transition-colors"
               >
                 Register now

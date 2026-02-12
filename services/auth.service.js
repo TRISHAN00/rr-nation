@@ -15,7 +15,7 @@ export const loginUser = async (data) => {
 export const logoutUser = () => {
   localStorage.clear();
   document.cookie = "authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-  window.location.href = "/login";
+  window.location.href = "/accounts/login";
 };
 
 /* REGISTER */
@@ -23,3 +23,6 @@ export const registerUser = (data) => {
   return api.post("/auth/user", data);
 };
 
+export const forgotPassword = (data) => {
+  return api.post("/auth/forgot-password", data);
+};

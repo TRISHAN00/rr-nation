@@ -7,3 +7,4 @@ export const sendOtp = (data) => {
 export const verifyOtp = (data) => {
   return api.post("/auth/otp/verify", data);
 };
+
