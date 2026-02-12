@@ -1,30 +1,12 @@
 "use client";
 
-import { getProfile, updateProfile } from "@/services/user.service";
+import { updateProfile } from "@/services/user.service";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
-export default function PersonalInformationForm() {
-  const [user, setUser] = useState(null);
+export default function PersonalInformationForm({ user }) {
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
-
-  /* -------- FETCH PROFILE DATA -------- */
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const res = await getProfile();
-        setUser(res);
-      } catch (err) {
-        console.error("Failed to load profile");
-      } finally {
-        setFetching(false);
-      }
-    }
-
-    fetchProfile();
-  }, []);
 
   /* -------- UPDATE PROFILE -------- */
   async function handleSubmit(e) {
@@ -44,21 +26,12 @@ export default function PersonalInformationForm() {
 
     try {
       await updateProfile(payload);
-      toast.success("Profile updated successfully", {
-        position: "top-right",
-        className: "bg-green-600 text-white",
-      });
+      toast.success("Profile updated successfully");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Profile update failed", {
-        position: "top-right",
-      });
+      toast.error(err.response?.data?.message || "Profile update failed");
     } finally {
       setLoading(false);
     }
-  }
-
-  if (fetching) {
-    return <p className="text-sm text-gray-500">Loading profile...</p>;
   }
 
   return (

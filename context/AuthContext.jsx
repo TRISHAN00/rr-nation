@@ -1,34 +1,26 @@
 "use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check if token exists on initial load
     const token = localStorage.getItem("authToken");
-    setIsAuthenticated(!!token);
-    setHydrated(true);
-  }, [isAuthenticated]);
-
-  const login = () => {
-    setIsAuthenticated(true);
-  };
-
-  const logout = () => {
-    localStorage.clear();
-    document.cookie = "authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    setIsAuthenticated(false);
-  };
+    if (token) {
+      setIsAuthenticated(true);
+    }
+    setLoading(false);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, hydrated, setIsAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export const useAuthContext = () => useContext(AuthContext);

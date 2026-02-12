@@ -23,10 +23,11 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
+import EmergencyContactForm from "../profile/EmergencyContactForm";
 import PersonalInformationForm from "../profile/PersonalInformationForm";
 import UpdateProfilePhoto from "../profile/UpdateProfilePhoto";
 
-export function UserProfileTabs() {
+export function UserProfileTabs({ user }) {
   const [profileImage, setProfileImage] = useState(null);
   const fileInputRef = useState(null);
 
@@ -96,7 +97,10 @@ export function UserProfileTabs() {
                   <CardTitle className="text-sm font-medium text-gray-600">
                     Total Orders
                   </CardTitle>
-                  <ShoppingBag className="h-4 w-4 text-gray-400" color="#00a19a" />
+                  <ShoppingBag
+                    className="h-4 w-4 text-gray-400"
+                    color="#00a19a"
+                  />
                 </div>
               </CardHeader>
               <CardContent>
@@ -113,7 +117,10 @@ export function UserProfileTabs() {
                   <CardTitle className="text-sm font-medium text-gray-600">
                     Total Spent
                   </CardTitle>
-                  <DollarSign className="h-4 w-4 text-gray-400" color="#00a19a" />
+                  <DollarSign
+                    className="h-4 w-4 text-gray-400"
+                    color="#00a19a"
+                  />
                 </div>
               </CardHeader>
               <CardContent>
@@ -380,6 +387,7 @@ export function UserProfileTabs() {
                 profileImage={profileImage}
                 triggerFileInput={triggerFileInput}
                 fileInputRef={fileInputRef}
+                initialImage={user?.image}
               />
             </CardContent>
           </Card>
@@ -395,7 +403,7 @@ export function UserProfileTabs() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <PersonalInformationForm />
+              <PersonalInformationForm user={user} />
             </CardContent>
           </Card>
 
@@ -410,43 +418,7 @@ export function UserProfileTabs() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
-                    Contact Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Jane Doe"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
-                    Relationship
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Spouse"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Emergency Phone
-                </label>
-                <input
-                  type="tel"
-                  placeholder="+1 (555) 987-6543"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                />
-              </div>
-              <div className="pt-2">
-                <button className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 font-medium text-sm">
-                  Save Emergency Contact
-                </button>
-              </div>
+              <EmergencyContactForm />
             </CardContent>
           </Card>
         </TabsContent>

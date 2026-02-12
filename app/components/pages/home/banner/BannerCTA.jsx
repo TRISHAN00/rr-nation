@@ -1,7 +1,6 @@
 "use client";
 import FillButton from "@/app/components/common/FillButton";
 import RunIcon from "@/app/components/icons/RunIcon";
-import useAuth from "@/hooks/useAuth";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -12,13 +11,11 @@ const VideoModalGallery = dynamic(
 );
 
 export default function BannerCTA() {
-  const isAuthenticated = useAuth();
   return (
     <div className=" w-2xl">
       <span className="block font-bold text-[14px] sm:text-[16px] leading-5 uppercase text-brand mb-4 sm:mb-5">
         Run Rise Nation
       </span>
-      {isAuthenticated ? "USER AUTHENTICATED" : "PLEASE LOG IN"}
 
       {/* Heading */}
       <h1 className="font-['Albert_Sans'] font-black text-[34px] sm:text-[44px] lg:text-[62px] leading-10.5 sm:leading-13.5 lg:leading-18 tracking-[-0.02em] text-[#FAFAFA]">

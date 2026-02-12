@@ -1,4 +1,4 @@
-import api from "@/lib/axios.interceptor";
+import api from "@/lib/api";
 
 export const sendOtp = (data) => {
   return api.post("/auth/otp/send", data);

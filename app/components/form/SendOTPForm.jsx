@@ -38,7 +38,7 @@ export default function SendOTPForm({loading, setLoading, setRegisterData, setRe
 
       <div className="flex flex-col gap-1.5">
         <Label>Last Name</Label>
-        <Input name="lastName" placeholder="Full name" required />
+        <Input name="lastName" placeholder="Last name" required />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -56,7 +56,7 @@ export default function SendOTPForm({loading, setLoading, setRegisterData, setRe
         disabled={loading}
         style={{ backgroundColor: "var(--color-brand)" }}
       >
-        {loading ? "Sending OTP..." : "Send OTP"}
+        {loading ? "Sending OTP..." : "Submit"}
       </Button>
     </form>
   );

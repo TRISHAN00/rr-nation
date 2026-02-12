@@ -37,7 +37,8 @@ export default function LoginPage() {
       // 2. Cookie for Middleware
       document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
 
-      router.replace("/profile");
+      window.location.reload()
+      router.push("/");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {

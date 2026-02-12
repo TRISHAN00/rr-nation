@@ -10,6 +10,7 @@ import { useState } from "react";
 
 export default function UserLoginForm({ onSuccess }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); // Added missing error state
   const router = useRouter();
   const { setIsAuthenticated } = useAuthContext();
 
@@ -19,25 +20,41 @@ export default function UserLoginForm({ onSuccess }) {
     setError("");
 
     try {
-      const response = await loginUser({
+      const formData = {
         email: e.target.email.value,
         password: e.target.password.value,
         roleId: 1,
-      });
+      };
 
+      const response = await loginUser(formData);
+
+      // Destructure based on your backend API response structure
       const { token, refreshToken, userData } = response.data.data;
 
-      // 1. Client Storage
+      // 1. Client Storage (for Axios Interceptors)
       localStorage.setItem("authToken", token);
       localStorage.setItem("refresh_token", refreshToken);
       localStorage.setItem("userData", JSON.stringify(userData));
 
-      // 2. Cookie for Middleware
-      document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
+      // 2. Cookie for Middleware (Server-side protection)
+      const secure = window.location.protocol === "https:" ? "Secure;" : "";
+      document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax; ${secure}`;
+
+      // 3. Update Global State
       setIsAuthenticated(true);
-      window.location.href = "/";
+
+      // 4. Finalize
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        // router.push("/") followed by refresh ensures the Middleware 
+        // and Server Components see the new cookie.
+        router.push("/profile");
+        router.refresh(); 
+      }
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid credentials");
+      console.error("Login Error:", err);
+      setError(err.response?.data?.message || "Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -45,17 +62,23 @@ export default function UserLoginForm({ onSuccess }) {
 
   return (
     <form className="space-y-4" onSubmit={handleLogin}>
+      {error && (
+        <div className="p-3 text-sm text-white bg-red-500 rounded-md">
+          {error}
+        </div>
+      )}
+
       <div className="flex flex-col gap-1.5">
-        <Label>Email</Label>
-        <Input name="email" type="email" required />
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" name="email" type="email" placeholder="name@example.com" required />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label>Password</Label>
-        <Input name="password" type="password" required />
+        <Label htmlFor="password">Password</Label>
+        <Input id="password" name="password" type="password" required />
       </div>
 
-      <Button className="w-full" disabled={loading}>
+      <Button className="w-full" disabled={loading} type="submit">
         {loading ? "Logging in..." : "Login"}
       </Button>
     </form>

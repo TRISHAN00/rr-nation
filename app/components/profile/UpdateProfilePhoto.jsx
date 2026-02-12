@@ -1,47 +1,31 @@
-
-import api from "@/lib/axios.interceptor";
-import { getProfile, updateProfile } from "@/services/user.service";
+"use client";
+import api from "@/lib/api";
 import { Camera, User } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 
-export default function UpdateProfilePhoto() {
-  const [profileImage, setProfileImage] = useState(null);
+export default function UpdateProfilePhoto({ initialImage }) {
+  const [profileImage, setProfileImage] = useState(initialImage || null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   const triggerFileInput = () => fileInputRef.current?.click();
 
-  // Fetch current user profile on mount
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const userData = await getProfile();
-        setProfileImage(userData.imageUrl || null);
-      } catch (err) {
-        console.error("Failed to fetch profile:", err);
-      }
-    };
-    fetchProfile();
-  }, []);
-
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith("image/")) {
-      alert("Please upload an image file (JPG, PNG, or GIF)");
+      toast.error("Please upload an image file");
       return;
     }
 
-    // Validate file size (2MB max)
     if (file.size > 2 * 1024 * 1024) {
-      alert("File size must be less than 2MB");
+      toast.error("File size must be less than 2MB");
       return;
     }
 
-    // Preview locally
+    // Local preview (instant)
     const reader = new FileReader();
     reader.onload = (e) => setProfileImage(e.target.result);
     reader.readAsDataURL(file);
@@ -49,7 +33,6 @@ export default function UpdateProfilePhoto() {
     try {
       setLoading(true);
 
-      // Upload image to server
       const formData = new FormData();
       formData.append("file", file);
 
@@ -57,17 +40,10 @@ export default function UpdateProfilePhoto() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      const uploadedImageUrl = data.data.imageUrl;
-
-
-      // Update profile with new image URL
-      await updateProfile({ imageUrl: uploadedImageUrl });
-
-      setProfileImage(uploadedImageUrl); // Update UI
+      setProfileImage(data?.data?.image);
       toast.success("Profile updated successfully!");
     } catch (error) {
-      console.error("Upload failed:", error);
-      toast.error("Failed to upload image. Please try again.");
+      toast.error("Failed to upload image");
     } finally {
       setLoading(false);
     }
@@ -79,7 +55,7 @@ export default function UpdateProfilePhoto() {
         <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
           {profileImage ? (
             <img
-              src={profileImage}
+              src={profileImage || "/avatar.png"}
               alt="Profile"
               className="w-full h-full object-cover"
             />

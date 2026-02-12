@@ -10,7 +10,9 @@ import SendOTPForm from "@/app/components/form/SendOTPForm";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
+import { updateProfile } from "@/services/user.service";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -58,10 +60,14 @@ export default function RegisterPage() {
         otp: registerData.otp,
       });
 
-      alert("Registration successful!");
-      router.replace("/login"); // ✅ go to login page
+      toast.success("Registration successful!");
+      await updateProfile({
+        email: registerData.email,
+        phone: registerData.phone,
+      });
+      router.replace("/login");
     } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
+      toast.error(err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -89,7 +95,7 @@ export default function RegisterPage() {
         {step === 2 && (
           <form className="space-y-4" onSubmit={handleVerifyOtp}>
             <div>
-              <Label>OTP</Label>
+              <Label className={"mb-1"}>OTP</Label>
               <Input name="otp" placeholder="Enter OTP" required />
             </div>
 

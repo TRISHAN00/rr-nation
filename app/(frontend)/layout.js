@@ -62,7 +62,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
         <AuthProvider>
-          <Toaster />
+          <Toaster position="top-right" />
           <Header />
           {children}
           <Footer />

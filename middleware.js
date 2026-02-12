@@ -4,18 +4,15 @@ export function middleware(request) {
   const token = request.cookies.get("authToken")?.value;
   const { pathname } = request.nextUrl;
 
-  // 1. Define Public vs Protected paths
   const isAuthPage = pathname === "/login" || pathname === "/register";
-  const isProtectedRoute = pathname.startsWith("/profile") || pathname.startsWith("/dashboard") || pathname.startsWith("/events/");
+  const isProtectedRoute = pathname.startsWith("/dashboard") || pathname.startsWith("/profile");
 
-  // 2. Redirect logic
+  // 1. If trying to access dashboard without token -> Login
   if (isProtectedRoute && !token) {
-    const loginUrl = new URL("/login", request.url);
-    // Optional: save the intended destination to redirect back after login
-    loginUrl.searchParams.set("from", pathname);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  // 2. If logged in and trying to access login page -> Dashboard
   if (isAuthPage && token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -24,5 +21,6 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/dashboard/:path*", "/login", "/register"],
+  // Add all routes you want the middleware to run on
+  matcher: ["/dashboard/:path*", "/profile/:path*", "/login", "/register"],
 };

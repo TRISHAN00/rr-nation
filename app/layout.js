@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/context/AuthContext";
 import { Albert_Sans, Anta } from "next/font/google";
 import "./globals.css";
 
@@ -18,7 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

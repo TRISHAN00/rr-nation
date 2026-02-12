@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { performLogout } from "@/services/auth.service";
+import { logoutUser } from "@/services/auth.service";
 import { LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 
@@ -76,7 +76,10 @@ export function ProfileDropdown() {
 
         {/* Logout */}
         <DropdownMenuItem className="flex gap-2 text-red-500 focus:text-red-500">
-          <button onClick={performLogout} className=" flex w-full items-center gap-1" >
+          <button
+            onClick={logoutUser}
+            className=" flex w-full items-center gap-1"
+          >
             <LogOut className="h-4 w-4" />
             Logout
           </button>
