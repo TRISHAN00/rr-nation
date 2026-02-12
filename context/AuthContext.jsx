@@ -1,26 +1,50 @@
 "use client";
+
+import { getProfileData } from "@/services/user.service"; // your API to get user data
 import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // overall loading state
+  const [user, setUser] = useState(null); // store global user data
 
+  console.log(user)
+
+  /* -------- FETCH PROFILE DATA -------- */
   useEffect(() => {
-    // Check if token exists on initial load
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setIsAuthenticated(true);
+    async function fetchProfile() {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) return;
+
+        setIsAuthenticated(true);
+
+        const res = await getProfileData(); // fetch user data
+        setUser(res); // save to context
+      } catch (err) {
+        console.error("Failed to load profile", err);
+        toast.error("Failed to load profile data");
+        setIsAuthenticated(false);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
     }
-    setLoading(false);
+
+    fetchProfile();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, setIsAuthenticated, user, setUser, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
+// Custom hook to use AuthContext
 export const useAuthContext = () => useContext(AuthContext);

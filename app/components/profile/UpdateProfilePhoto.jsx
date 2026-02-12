@@ -1,11 +1,13 @@
 "use client";
+import { useAuthContext } from "@/context/AuthContext"; // global user context
 import api from "@/lib/api";
 import { Camera, User } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 export default function UpdateProfilePhoto({ initialImage }) {
-  const [profileImage, setProfileImage] = useState(initialImage || null);
+  const { user, setUser } = useAuthContext(); // access global user
+  const [profileImage, setProfileImage] = useState(initialImage || user?.image || null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -40,11 +42,16 @@ export default function UpdateProfilePhoto({ initialImage }) {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log(data);
-
-      setProfileImage(data?.data?.image);
-      toast.success("Profile updated successfully!");
+      if (data?.data?.image) {
+        // update local and global user state
+        setProfileImage(data.data.image);
+        setUser((prev) => ({ ...prev, image: data.data.image }));
+        toast.success("Profile updated successfully!");
+      } else {
+        toast.error("Failed to upload image");
+      }
     } catch (error) {
+      console.error(error);
       toast.error("Failed to upload image");
     } finally {
       setLoading(false);
@@ -57,7 +64,7 @@ export default function UpdateProfilePhoto({ initialImage }) {
         <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
           {profileImage ? (
             <img
-              src={profileImage || "/avatar.png"}
+              src={profileImage}
               alt="Profile"
               className="w-full h-full object-cover"
             />

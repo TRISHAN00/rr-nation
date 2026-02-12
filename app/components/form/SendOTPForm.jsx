@@ -10,8 +10,8 @@ export default function SendOTPForm({loading, setLoading, setRegisterData, setRe
     setLoading(true);
 
     const payload = {
-      firstName: e.target.name.value,
-      lastName: e.target.name.value,
+      firstName: e.target.firstName.value,
+      lastName: e.target.lastName.value,
       email: e.target.email.value,
       phone: e.target.phone.value,
       otpType: "REGISTRATION",

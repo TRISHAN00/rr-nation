@@ -13,7 +13,9 @@ export default function HeaderBottom() {
   const [isCartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [loggedIn, setLoggedIn] = useState(true);
-  const { isAuthenticated, loading } = useAuthContext();
+  const { isAuthenticated, user } = useAuthContext();
+
+  console.log(user)
 
   const handleAddTicket = (ticket) => {
     setCartItems([...cartItems, ticket]);
@@ -51,7 +53,7 @@ export default function HeaderBottom() {
               </Link>
             </>
           ) : (
-            <ProfileDropdown />
+            <ProfileDropdown user={user} />
           )}
         </div>
       </div>

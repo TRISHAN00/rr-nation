@@ -18,6 +18,7 @@ export default function PersonalInformationForm({user}) {
     const payload = {
       firstName: form.firstName.value,
       lastName: form.lastName.value,
+      phone: form.phone.value,
       address: form.address.value,
       birthDate: form.birthDate.value
         ? new Date(form.birthDate.value).toISOString()

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/app/components/ui/avatar";
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
@@ -17,8 +13,8 @@ import { logoutUser } from "@/services/auth.service";
 import { LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 
-export function ProfileDropdown() {
-  const name = "Sumon";
+export function ProfileDropdown({ user }) {
+  const name = user?.firstName;
 
   return (
     <DropdownMenu>
@@ -30,15 +26,9 @@ export function ProfileDropdown() {
           <Avatar className="h-7 w-7">
             <AvatarImage
               className={" object-cover"}
-              src="/main-logo.png"
+              src={user?.image || "/main-logo.png"}
               alt={name}
             />
-            <AvatarFallback>
-              {name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
           </Avatar>
 
           <span className="text-sm font-medium">{name}</span>
