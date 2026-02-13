@@ -24,7 +24,7 @@ export default function LoginPage() {
       const response = await loginUser({
         email: e.target.email.value,
         password: e.target.password.value,
-        roleId: 1,
+        roleId: 2,
       });
 
       const { token, refreshToken, userData } = response.data.data;
