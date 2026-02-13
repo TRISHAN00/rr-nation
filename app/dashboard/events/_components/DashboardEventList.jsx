@@ -1,64 +1,37 @@
 "use client";
-import { Badge } from "@/app/components/ui/badge";
-import { Button } from "@/app/components/ui/button";
+import { Card, CardContent } from "@/app/components/ui/card";
+import { Collapsible } from "@/app/components/ui/collapsible";
 import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/app/components/ui/card";
-import {
-    Collapsible,
-    CollapsibleTrigger,
-} from "@/app/components/ui/collapsible";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/app/components/ui/dropdown-menu";
-import {
-    Calendar,
-    CalendarClock,
-    ChevronDown,
-    ChevronUp,
-    Clock,
-    Edit,
-    Eye,
-    MapPin,
-    Monitor,
-    MoreHorizontal,
-    Package,
-    Radio,
-    Shirt,
-    Trash2,
-    Trophy,
-    User,
-    Users,
+  Calendar,
+  CalendarClock,
+  Clock,
+  MapPin,
+  Monitor,
+  Radio,
+  Trophy,
+  User,
+  Users,
 } from "lucide-react";
 import { useState } from "react";
 import DashboardPackageContent from "../_components/DashboardPackageContent";
+import DashboardEventCardHeader from "./DashboardEventCardHeader";
 
 const eventTypes = {
   live: {
     label: "Live",
     icon: Radio,
-    className: "bg-red-500/10 text-red-600 border-red-500/20",
   },
   virtual: {
     label: "Virtual",
     icon: Monitor,
-    className: "bg-blue-500/10 text-blue-600 border-blue-500/20",
   },
   upcoming: {
     label: "Upcoming",
     icon: CalendarClock,
-    className: "bg-warning/10 text-warning border-warning/20",
   },
   successful: {
     label: "Successful",
     icon: Trophy,
-    className: "bg-success/10 text-success border-success/20",
   },
 };
 
@@ -217,82 +190,14 @@ export default function DashboardEventList() {
             }
           >
             <Card className="overflow-hidden transition-all hover:shadow-md">
-              <div className="h-1.5 bg-gradient-to-r from-primary to-primary/70" />
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 space-y-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge variant="outline" className={typeConfig.className}>
-                        <TypeIcon className="h-3 w-3 mr-1" />
-                        {typeConfig.label}
-                      </Badge>
-                      <Badge variant="outline" className="gap-1">
-                        <Package className="h-3 w-3" />
-                        {event.packages.length} packages
-                      </Badge>
-                      {event.tshirtSettings?.enabled && (
-                        <Badge
-                          variant="outline"
-                          className={`gap-1 ${event.tshirtSettings.required ? "bg-primary/10 text-primary border-primary/20" : ""}`}
-                        >
-                          <Shirt className="h-3 w-3" />
-                          T-Shirt{" "}
-                          {event.tshirtSettings.required
-                            ? "(Required)"
-                            : "(Optional)"}
-                        </Badge>
-                      )}
-                    </div>
-                    <CardTitle className="font-display text-xl">
-                      {event.title}
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground line-clamp-1">
-                      {event.description}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CollapsibleTrigger asChild>
-                      <Button variant="ghost" size="sm" className="gap-1">
-                        {expandedEvent === event.id ? (
-                          <>
-                            <ChevronUp className="h-4 w-4" />
-                            Hide Packages
-                          </>
-                        ) : (
-                          <>
-                            <ChevronDown className="h-4 w-4" />
-                            View Packages
-                          </>
-                        )}
-                      </Button>
-                    </CollapsibleTrigger>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-destructive"
-                          onClick={() => handleDelete(event.id)}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </div>
-              </CardHeader>
+              <div className="h-1.5 bg-linear-to-r from-primary to-primary/70" />
+              <DashboardEventCardHeader
+                TypeIcon={TypeIcon}
+                typeConfig={typeConfig}
+                expandedEvent={expandedEvent}
+                event={event}
+              />
+
               <CardContent className="pt-0">
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground">
