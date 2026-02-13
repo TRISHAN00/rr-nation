@@ -3,9 +3,9 @@
 import { getAllDashbaordEvents } from "@/services/admin/admin.event.service";
 import { useEffect, useState } from "react";
 
-import DashboardEventLoading from "./_components/DashboardEventLoading";
 import DashboardEventFooter from "./_components/DashboardEventFooter";
 import DashboardEventList from "./_components/DashboardEventList";
+import DashboardEventLoading from "./_components/DashboardEventLoading";
 import DashboardEventPageHeader from "./_components/DashboardEventPageHeader";
 import DashboardEventSearch from "./_components/DashboardEventSearch";
 import DashboardEventTab from "./_components/DashboardEventTab";

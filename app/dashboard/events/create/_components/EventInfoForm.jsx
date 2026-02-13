@@ -25,13 +25,19 @@ import {
   Radio,
   Trophy,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function EventInfoForm({event}) {
+/* ---------- DATE FORMATTER ---------- */
+const formatDateForInput = (date) => {
+  if (!date) return "";
+  return new Date(date).toISOString().split("T")[0];
+};
+
+export default function EventInfoForm({ event }) {
   const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState(event || {
+  const [form, setForm] = useState({
     name: "",
     organizerName: "",
     description: "",
@@ -40,6 +46,21 @@ export default function EventInfoForm({event}) {
     address: "",
     eventType: "",
   });
+
+  /* ---------- PREFILL FORM (EDIT MODE) ---------- */
+  useEffect(() => {
+    if (event) {
+      setForm({
+        name: event?.name || "",
+        organizerName: event?.organizerName || "",
+        description: event?.description || "",
+        date: formatDateForInput(event?.date),
+        time: event?.time || "",
+        address: event?.address || "",
+        eventType: event?.eventType || "",
+      });
+    }
+  }, [event]);
 
   const handleChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -62,12 +83,11 @@ export default function EventInfoForm({event}) {
 
     try {
       setLoading(true);
-      // await createEvent(payload);
       await createEvent(payload);
       toast.success("Event created successfully");
     } catch (error) {
       console.error(error);
-      toast.error("Please try again!!");
+      toast.error("Please try again!");
     } finally {
       setLoading(false);
     }
@@ -88,9 +108,9 @@ export default function EventInfoForm({event}) {
           <div className="grid gap-2">
             <Label>Event Name *</Label>
             <Input
-              placeholder="Enter event name"
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
+              placeholder="Enter event name"
               required
             />
           </div>
@@ -123,9 +143,9 @@ export default function EventInfoForm({event}) {
             <div className="grid gap-2">
               <Label>Venue / Address *</Label>
               <Input
-                placeholder="Event location"
                 value={form.address}
                 onChange={(e) => handleChange("address", e.target.value)}
+                placeholder="Event location"
                 required
               />
             </div>
@@ -173,9 +193,11 @@ export default function EventInfoForm({event}) {
           <div className="grid gap-2">
             <Label>Organizer Name *</Label>
             <Input
-              placeholder="e.g., Dhaka Marathon"
               value={form.organizerName}
-              onChange={(e) => handleChange("organizerName", e.target.value)}
+              onChange={(e) =>
+                handleChange("organizerName", e.target.value)
+              }
+              placeholder="e.g., Dhaka Marathon"
               required
             />
           </div>
@@ -185,9 +207,11 @@ export default function EventInfoForm({event}) {
             <Label>Description</Label>
             <Textarea
               rows={4}
-              placeholder="Write event details..."
               value={form.description}
-              onChange={(e) => handleChange("description", e.target.value)}
+              onChange={(e) =>
+                handleChange("description", e.target.value)
+              }
+              placeholder="Write event details..."
             />
           </div>
 
