@@ -19,11 +19,11 @@ export default function EventMeta({ event }) {
       </div>
       <div className="flex items-center gap-2 text-muted-foreground">
         <MapPin className="h-4 w-4" />
-        {event.venue}
+        {event.address}
       </div>
       <div className="flex items-center gap-2 text-muted-foreground">
         <User className="h-4 w-4" />
-        {event.organizer}
+        {event.organizerName}
       </div>
       <DashboardEventCardTotalReg event={event} />
     </div>

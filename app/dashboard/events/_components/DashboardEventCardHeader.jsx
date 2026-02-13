@@ -17,8 +17,8 @@ import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
+import Link from "next/link";
 import DashboardEventBadges from "./DashboardEventCardBadge";
-
 
 export default function DashboardEventCardHeader({
   TypeIcon,
@@ -38,9 +38,7 @@ export default function DashboardEventCardHeader({
             event={event}
           />
 
-          <CardTitle className="font-display text-xl">
-            {event.title}
-          </CardTitle>
+          <CardTitle className="font-display text-xl">{event.name}</CardTitle>
 
           <p className="text-sm text-muted-foreground line-clamp-1">
             {event.description}
@@ -58,7 +56,7 @@ export default function DashboardEventCardHeader({
               ) : (
                 <>
                   <ChevronDown className="h-4 w-4" />
-                  View Packages
+                    View Packages
                 </>
               )}
             </Button>
@@ -76,8 +74,13 @@ export default function DashboardEventCardHeader({
                 View Details
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
+                <Link
+                  className=" flex items-center w-full"
+                  href={`/dashboard/events/edit/${event.id}`}
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive"

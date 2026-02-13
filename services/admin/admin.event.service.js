@@ -1,6 +1,22 @@
 import api from "@/lib/api";
 
-export const getAllEvents = async () => {
+// Admin Dashboard Event List
+export const getAllDashbaordEvents = async () => {
   const { data } = await api.get("/admin/event/all");
   return data;
+};
+
+// Create Event
+export const createEvent = (data) => {
+  return api.post("/admin/event", data);
+};
+
+// Update Event
+export const updateEvent = (eventId, data) => {
+  return api.patch(`/admin/event/${eventId}`, data);
+};
+
+// Get Event By Id
+export const getEventById = (eventId) => {
+  return api.get(`/admin/event/${eventId}`);
 };

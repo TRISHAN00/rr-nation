@@ -122,8 +122,7 @@ const initialEvents = [
   },
 ];
 
-export default function DashboardEventList() {
-  const [events, setEvents] = useState(initialEvents);
+export default function DashboardEventList({events}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -134,13 +133,7 @@ export default function DashboardEventList() {
   const [tshirtConfig, setTshirtConfig] = useState(null);
   const [formFieldsConfig, setFormFieldsConfig] = useState(null);
 
-  const filteredEvents = events.filter((event) => {
-    const matchesSearch = event.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    const matchesType = filterType === "all" || event.type === filterType;
-    return matchesSearch && matchesType;
-  });
+
 
   const handleDelete = (id) => {
     setEvents(events.filter((e) => e.id !== id));
@@ -169,8 +162,8 @@ export default function DashboardEventList() {
 
   return (
     <div className="space-y-4">
-      {filteredEvents.map((event) => {
-        const typeConfig = eventTypes[event.type];
+      {events?.map((event) => {
+        const typeConfig = eventTypes[event.eventType];
         const TypeIcon = typeConfig.icon;
         return (
           <Collapsible
