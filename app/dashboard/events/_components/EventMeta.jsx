@@ -1,4 +1,5 @@
-import { Calendar, Clock, MapPin, User, Users } from "lucide-react";
+import { Calendar, Clock, MapPin, User } from "lucide-react";
+import DashboardEventCardTotalReg from "./DashboardEventCardTotalReg";
 
 export default function EventMeta({ event }) {
   return (
@@ -24,13 +25,7 @@ export default function EventMeta({ event }) {
         <User className="h-4 w-4" />
         {event.organizer}
       </div>
-      <div className="flex items-center gap-2 ml-auto">
-        <Users className="h-4 w-4 text-primary" />
-        <span className="font-semibold text-foreground">
-          {event.totalRegistrations}
-        </span>
-        <span className="text-muted-foreground">registrations</span>
-      </div>
+      <DashboardEventCardTotalReg event={event} />
     </div>
   );
 }
