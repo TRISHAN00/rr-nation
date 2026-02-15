@@ -1,16 +1,11 @@
 "use client"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/app/components/ui/accordion";
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Switch } from "@/app/components/ui/switch";
-import { Plus, Shirt, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Shirt } from "lucide-react";
+import { useEffect, useState } from "react";
+import AddEditTShirtSizeModal from "./AddEditTShirtSizeModal";
+import TShirtSizeList from "./TShirtSizeList";
+import { createTShirtSizes, getTShirtSizesByEvent } from "@/services/admin/admin.tshirtSize.service";
 
 const sizeCategories = [
   { id: "tshirt", label: "T-Shirt (Adult)", fields: ["chest", "length"] },
@@ -35,195 +30,138 @@ const defaultSizes = {
   ],
 };
 
-export function TShirtSizeManager({ value, onChange }) {
-  const [sizes, setSizes] = useState(value?.sizes || defaultSizes);
-  const [settings, setSettings] = useState(
-    value?.settings || {
-      enabled: false,
-      required: false,
-      categories: ["tshirt"],
+const defaultSettings = {
+  enabled: true,
+  required: false,
+  categories: ["adult"], // default category
+};
+
+export function TShirtSizeManager({ eventId }) {
+ const [sizes, setSizes] = useState({ adult: [], kids: [] });
+  const [settings, setSettings] = useState(defaultSettings);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  // ---------- FETCH SIZES ----------
+  const fetchSizes = async () => {
+    try {
+      const res = await getTShirtSizesByEvent(eventId);
+      if (res.status === 200) {
+        const grouped = { adult: [], kids: [] };
+        res.data.data.forEach((item) => {
+          grouped[item.category] = [...(grouped[item.category] || []), item];
+        });
+        setSizes(grouped);
+      }
+    } catch (err) {
+      console.error("Failed to fetch T-shirt sizes", err);
     }
-  );
-
-  const updateSettings = (key, newValue) => {
-    const updated = { ...settings, [key]: newValue };
-    setSettings(updated);
-    onChange?.({ sizes, settings: updated });
   };
 
-  const updateSizes = (category, newSizes) => {
-    const updated = { ...sizes, [category]: newSizes };
-    setSizes(updated);
-    onChange?.({ sizes: updated, settings });
+  useEffect(() => {
+    if (eventId) fetchSizes();
+  }, [eventId]);
+
+  // ---------- SETTINGS ----------
+  const updateSettings = (key, value) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
-  const addSize = (category) => {
-    const categoryItems = sizes[category] || [];
-    const newId = Math.max(...categoryItems.map((s) => s.id), 0) + 1;
-    updateSizes(category, [...categoryItems, { id: newId, name: "", chest: "", length: "" }]);
-  };
-
-  const removeSize = (category, id) => {
-    updateSizes(
-      category,
-      sizes[category].filter((s) => s.id !== id)
-    );
-  };
-
-  const updateSize = (category, id, field, value) => {
-    updateSizes(
-      category,
-      sizes[category].map((s) => (s.id === id ? { ...s, [field]: value } : s))
-    );
-  };
-
-  const toggleCategory = (categoryId) => {
-    const currentCategories = settings.categories || [];
-    const updated = currentCategories.includes(categoryId)
-      ? currentCategories.filter((c) => c !== categoryId)
-      : [...currentCategories, categoryId];
-    updateSettings("categories", updated);
-  };
+    // ---------- MODAL SUBMIT ----------
+  const handleSizeSubmit = async (category, size) => {
+    try {
+      const payload = [
+        {
+          eventId,
+          category,
+          sizeName: size.name,
+          chest: Number(size.chest),
+          length: Number(size.length),
+        },
+      ];
+      const res = await createTShirtSizes(payload);
+      if (res.status === 200) {
+        fetchSizes();
+      }
+    } catch (err) {
+      console.error("Failed to create T-shirt size", err);
+    } finally {
+      setModalOpen(false);
+    }
+  }
 
   return (
-    <div className="border border-border rounded-lg p-4 space-y-4  mt-4 mb-4">
-      <div className="flex items-center justify-between">
+    <div className="border rounded-lg p-4 mt-4 mb-4 space-y-4">
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
+          <div className="p-2 bg-primary/10 rounded-lg">
             <Shirt className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <Label className="text-base font-semibold">T-Shirt Size Selection</Label>
+            <Label className="text-base font-semibold">
+              T-Shirt Size Selection
+            </Label>
             <p className="text-sm text-muted-foreground">
-              Allow participants to choose their T-shirt size
+              Allow participants to choose T-shirt size
             </p>
           </div>
         </div>
+
         <Switch
           checked={settings.enabled}
-          onCheckedChange={(checked) => updateSettings("enabled", checked)}
+          onCheckedChange={(v) => updateSettings("enabled", v)}
         />
       </div>
 
       {settings.enabled && (
-        <div className="space-y-4 pt-4 border-t border-border">
-          {/* Required/Optional Toggle */}
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-            <div>
-              <Label className="font-medium">Required Field</Label>
-              <p className="text-xs text-muted-foreground">
-                Make T-shirt size mandatory for registration
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">
-                {settings.required ? "Required" : "Optional"}
-              </span>
-              <Switch
-                checked={settings.required}
-                onCheckedChange={(checked) => updateSettings("required", checked)}
-              />
-            </div>
-          </div>
+        <>
+          {/* SIZE LIST */}
+          <TShirtSizeList
+            sizes={sizes}
+            categories={settings.categories}
+            onAdd={(cat) => {
+              setActiveCategory(cat);
+              setModalOpen(true);
+            }}
+            onRemove={async (cat, id) => {
+              try {
+                await updateTShirtSizes(eventId, [
+                  { tShirtSizeId: id, isArchived: true },
+                ]);
+                fetchSizes();
+              } catch (err) {
+                console.error("Failed to archive size", err);
+              }
+            }}
+            onUpdate={async (cat, id, field, value) => {
+              try {
+                const existing = sizes[cat].find((s) => s.id === id);
+                if (!existing) return;
+                await updateTShirtSizes(eventId, [
+                  {
+                    tShirtSizeId: id,
+                    category: cat,
+                    sizeName: field === "name" ? value : existing.sizeName,
+                    chest: field === "chest" ? Number(value) : existing.chest,
+                    length: field === "length" ? Number(value) : existing.length,
+                  },
+                ]);
+                fetchSizes();
+              } catch (err) {
+                console.error("Failed to update size", err);
+              }
+            }}
+          />
 
-          {/* Category Selection */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Size Categories</Label>
-            <div className="flex flex-wrap gap-2">
-              {sizeCategories.map((cat) => (
-                <Button
-                  key={cat.id}
-                  type="button"
-                  variant={settings.categories?.includes(cat.id) ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => toggleCategory(cat.id)}
-                >
-                  {cat.label}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Size Management Accordions */}
-          <Accordion type="multiple" className="w-full">
-            {sizeCategories
-              .filter((cat) => settings.categories?.includes(cat.id))
-              .map((category) => (
-                <AccordionItem key={category.id} value={category.id}>
-                  <AccordionTrigger className="text-sm font-medium">
-                    {category.label} Sizes ({sizes[category.id]?.length || 0})
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-3 pt-2">
-                      {/* Size Headers */}
-                      <div className="grid grid-cols-4 gap-2 text-xs font-medium text-muted-foreground px-1">
-                        <span>Size Name</span>
-                        <span>Chest (inches)</span>
-                        <span>Length (inches)</span>
-                        <span></span>
-                      </div>
-
-                      {/* Size Rows */}
-                      {(sizes[category.id] || []).map((size) => (
-                        <div
-                          key={size.id}
-                          className="grid grid-cols-4 gap-2 items-center"
-                        >
-                          <Input
-                            placeholder="e.g., M"
-                            value={size.name}
-                            onChange={(e) =>
-                              updateSize(category.id, size.id, "name", e.target.value)
-                            }
-                            className="h-9"
-                          />
-                          <Input
-                            type="number"
-                            placeholder="38"
-                            value={size.chest}
-                            onChange={(e) =>
-                              updateSize(category.id, size.id, "chest", e.target.value)
-                            }
-                            className="h-9"
-                          />
-                          <Input
-                            type="number"
-                            placeholder="28"
-                            value={size.length}
-                            onChange={(e) =>
-                              updateSize(category.id, size.id, "length", e.target.value)
-                            }
-                            className="h-9"
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-9 w-9 text-destructive"
-                            onClick={() => removeSize(category.id, size.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-
-                      {/* Add Size Button */}
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="w-full mt-2"
-                        onClick={() => addSize(category.id)}
-                      >
-                        <Plus className="h-4 w-4 mr-1" />
-                        Add {category.label} Size
-                      </Button>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-          </Accordion>
-        </div>
+          {/* ADD/EDIT MODAL */}
+          <AddEditTShirtSizeModal
+            open={modalOpen}
+            setOpen={setModalOpen}
+            category={activeCategory}
+            onSubmit={handleSizeSubmit}
+          />
+        </>
       )}
     </div>
   );

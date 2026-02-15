@@ -9,7 +9,6 @@ import {
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddEditPackageForm from "./AddEditPackageForm";
-import api from "@/lib/api";
 
 export default function EventTickets({ eventId }) {
   const [tickets, setTickets] = useState([]);
@@ -67,9 +66,7 @@ export default function EventTickets({ eventId }) {
     }
   };
 
-  const handleEditTicket = (eventId, ticketId) => {
-    
-  }
+
 
   return (
     <div className="space-y-4 border rounded-lg p-4 mt-4 mb-4">
@@ -87,7 +84,7 @@ export default function EventTickets({ eventId }) {
 
       {/* DYNAMIC LIST */}
       <div className="space-y-2">
-        {tickets.map((ticket, index) => (
+        {tickets?.map((ticket, index) => (
           <div
             key={index}
             className="flex justify-between items-center p-3 bg-muted rounded-lg"

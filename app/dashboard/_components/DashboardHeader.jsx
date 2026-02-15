@@ -14,12 +14,16 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import { Input } from "@/app/components/ui/input";
+import { useAuthContext } from "@/context/AuthContext";
 import { logoutAdmin } from "@/services/admin/admin.auth.service";
 import { Bell, Moon, Search, Sun, User } from "lucide-react";
+import Link from "next/link";
 import { useTheme } from "../context/ThemeContext";
 
 export function DashboardHeader() {
   const { theme, setTheme } = useTheme();
+  const { isAuthenticated, user } = useAuthContext();
+  console.log(isAuthenticated, user);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card px-6">
@@ -71,17 +75,27 @@ export function DashboardHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-2 px-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="" />
-                <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                  AD
-                </AvatarFallback>
-              </Avatar>
+              {user?.image && (
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.image} />
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                    AD
+                  </AvatarFallback>
+                </Avatar>
+              )}
+
               <div className="hidden flex-col items-start text-left md:flex">
-                <span className="text-sm font-medium">Admin User</span>
-                <span className="text-xs text-muted-foreground">
-                  admin@runrise.com
-                </span>
+                {user?.role?.title && (
+                  <span className="text-sm font-medium">
+                    {user?.role?.title}
+                  </span>
+                )}
+
+                {user?.email && (
+                  <span className="text-xs text-muted-foreground">
+                    {user?.email}
+                  </span>
+                )}
               </div>
             </Button>
           </DropdownMenuTrigger>
@@ -89,10 +103,11 @@ export function DashboardHeader() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              Profile
+              <Link className=" flex items-center w-full" href={"/profile"}>
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={logoutAdmin}

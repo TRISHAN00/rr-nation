@@ -8,7 +8,6 @@ export const getAllDashbaordEvents = async () => {
 
 // Create Event
 export const createEvent = (data) => {
-  console.log(data);
   return api.post("/admin/event", data);
 };
 
@@ -17,15 +16,12 @@ export const updateEvent = (eventId, data) => {
   return api.patch(`/admin/event/${eventId}`, data);
 };
 
-
 // Get Event By Id
 export const getEventById = (eventId) => {
   return api.get(`/admin/event/${eventId}`);
 };
 
-// Archive Event
-export const archiveEvent = (id) => {
-  return api.patch(`/admin/event/${id}`, {
-    isArchived: true,
-  });
+// Delete Event
+export const deleteEvent = (eventId) => {
+  return api.delete(`/admin/event/${eventId}`);
 };

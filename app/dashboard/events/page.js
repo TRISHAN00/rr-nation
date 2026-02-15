@@ -2,6 +2,7 @@
 
 import { getAllDashbaordEvents } from "@/services/admin/admin.event.service";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import DashboardEventFooter from "./_components/DashboardEventFooter";
 import DashboardEventList from "./_components/DashboardEventList";
@@ -16,6 +17,7 @@ export default function DashboardEventsPage() {
 
   const fetchEvent = async () => {
     try {
+      setLoading(true);
       const res = await getAllDashbaordEvents();
       setEvents(res?.data?.items || []);
     } catch (err) {
@@ -31,20 +33,20 @@ export default function DashboardEventsPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Page Header */}
       <DashboardEventPageHeader />
 
-      {/* Filters */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <DashboardEventSearch />
         <DashboardEventTab />
       </div>
 
-      {/* Content */}
       {loading ? (
         <DashboardEventLoading />
-      ) : events?.length > 0 ? (
-        <DashboardEventList events={events} />
+      ) : events.length > 0 ? (
+        <DashboardEventList
+          events={events}
+          fetchEvent={fetchEvent} // ✅ passed correctly
+        />
       ) : (
         <DashboardEventFooter />
       )}
