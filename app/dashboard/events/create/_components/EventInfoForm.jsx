@@ -21,6 +21,7 @@ import { createEvent } from "@/services/admin/admin.event.service";
 import {
   CalendarClock,
   ClipboardList,
+  ImageIcon,
   Monitor,
   Radio,
   Trophy,
@@ -49,6 +50,9 @@ export default function EventInfoForm({ event, onEventCreated }) {
     thumbImage: "",
   });
 
+  const [bannerImage, setBannerImage] = useState(null);
+  const [thumbImage, setThumbImage] = useState(null);
+
   /* ---------- PREFILL FORM (EDIT MODE) ---------- */
   useEffect(() => {
     if (event) {
@@ -70,31 +74,31 @@ export default function EventInfoForm({ event, onEventCreated }) {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  /* ---------- SUBMIT ---------- */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = {
-      name: form.name,
-      organizerName: form.organizerName,
-      description: form.description,
-      date: form.date,
-      time: form.time,
-      address: form.address,
-      eventType: form.eventType,
-      bannerImage: null,
-      thumbImage: null,
-      status: "active",
-    };
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("organizerName", form.organizerName);
+    formData.append("description", form.description);
+    formData.append("date", form.date);
+    formData.append("time", form.time);
+    formData.append("address", form.address);
+    formData.append("eventType", form.eventType);
+    formData.append("status", "active");
+
+    if (bannerImage) formData.append("bannerImage", bannerImage);
+    if (thumbImage) formData.append("thumbImage", thumbImage);
 
     try {
       setLoading(true);
-      const response = await createEvent(payload);
+      const response = await createEvent(formData);
 
-      console.log(response?.data?.data?.id);
       toast.success("Event created successfully");
 
       if (onEventCreated && response?.data?.data?.id) {
-        onEventCreated(response?.data?.data?.id);
+        onEventCreated(response.data.data.id);
       }
     } catch (error) {
       console.error(error);
@@ -220,6 +224,33 @@ export default function EventInfoForm({ event, onEventCreated }) {
               onChange={(e) => handleChange("description", e.target.value)}
               placeholder="Write event details..."
             />
+          </div>
+
+          {/* Images */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label className="flex items-center gap-2">
+                <ImageIcon className="h-4 w-4" />
+                Banner Image
+              </Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setBannerImage(e.target.files[0])}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label className="flex items-center gap-2">
+                <ImageIcon className="h-4 w-4" />
+                Thumbnail Image
+              </Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setThumbImage(e.target.files[0])}
+              />
+            </div>
           </div>
 
           {/* Submit */}
