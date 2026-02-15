@@ -86,7 +86,7 @@ export function TShirtSizeManager({ value, onChange }) {
   };
 
   return (
-    <div className="border border-border rounded-lg p-4 space-y-4">
+    <div className="border border-border rounded-lg p-4 space-y-4  mt-4 mb-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-primary/10">

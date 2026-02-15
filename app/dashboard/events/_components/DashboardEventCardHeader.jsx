@@ -25,7 +25,7 @@ export default function DashboardEventCardHeader({
   typeConfig,
   expandedEvent,
   event,
-  handleDelete,
+  onDelete,
 }) {
   return (
     <CardHeader className="pb-3">
@@ -56,7 +56,7 @@ export default function DashboardEventCardHeader({
               ) : (
                 <>
                   <ChevronDown className="h-4 w-4" />
-                    View Packages
+                  View Packages
                 </>
               )}
             </Button>
@@ -70,8 +70,13 @@ export default function DashboardEventCardHeader({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
-                <Eye className="mr-2 h-4 w-4" />
-                View Details
+                <Link
+                  className=" flex items-center"
+                  href={`/dashboard/events/${event?.id}`}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  View Details
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link
@@ -84,7 +89,7 @@ export default function DashboardEventCardHeader({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive"
-                onClick={() => handleDelete(event.id)}
+                onClick={() => onDelete(event.id)}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete

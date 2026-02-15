@@ -14,19 +14,19 @@ export default function DashboardEventsPage() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await getAllDashbaordEvents();
-        setEvents(res?.data?.items || []);
-      } catch (err) {
-        console.error("Failed to load events");
-      } finally {
-        setLoading(false);
-      }
+  const fetchEvent = async () => {
+    try {
+      const res = await getAllDashbaordEvents();
+      setEvents(res?.data?.items || []);
+    } catch (err) {
+      toast.error("Failed to load event");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchEvent();
   }, []);
 
   return (

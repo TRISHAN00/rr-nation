@@ -4,9 +4,9 @@ import { Badge } from "@/app/components/ui/badge";
 
 export default function DashboardPackageCard({ pkg }) {
   const progress =
-    pkg.slots > 0 ? Math.min((pkg.registered / pkg.slots) * 100, 100) : 0;
+    pkg.availableSlots > 0 ? Math.min((100 / pkg.availableSlots) * 100, 100) : 0;
 
-  const remainingSlots = pkg.slots - pkg.registered;
+  const remainingSlots = pkg.availableSlots - 10;
 
   return (
     <div className="p-4 rounded-lg border border-border bg-card hover:border-primary/50 transition-colors">
@@ -24,7 +24,7 @@ export default function DashboardPackageCard({ pkg }) {
         <div className="flex justify-between text-muted-foreground">
           <span>Registered</span>
           <span className="font-medium text-foreground">
-            {pkg.registered}/{pkg.slots}
+            {10}/{pkg.availableSlots}
           </span>
         </div>
 

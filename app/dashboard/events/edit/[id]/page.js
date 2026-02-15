@@ -10,6 +10,7 @@ import {
   updateEvent,
 } from "@/services/admin/admin.event.service";
 import EventInfoFormSkeleton from "../../create/_components/EventInfoFormSkeleton";
+import EventPackages from "../../create/_components/EventPackages";
 
 export default function DashboardEventEdit() {
   const { id } = useParams();
@@ -18,18 +19,18 @@ export default function DashboardEventEdit() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchEvent() {
-      try {
-        const res = await getEventById(id);
-        setEvent(res?.data?.data);
-      } catch (err) {
-        toast.error("Failed to load event");
-      } finally {
-        setLoading(false);
-      }
+  const fetchEvent = async () => {
+    try {
+      const res = await getEventById(id);
+      setEvent(res?.data?.data);
+    } catch (err) {
+      toast.error("Failed to load event");
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchEvent();
   }, [id]);
 
@@ -43,11 +44,13 @@ export default function DashboardEventEdit() {
     }
   };
 
-  if (loading) return <EventInfoFormSkeleton/>;
+  if (loading) return <EventInfoFormSkeleton />;
 
   return (
     <div className="space-y-6">
       <EventInfoForm event={event} onSubmit={handleUpdate} isEdit />
+
+      <EventPackages eventId={id} />
     </div>
   );
 }

@@ -15,7 +15,7 @@ export default function DashboardEventBadges({ TypeIcon, typeConfig, event }) {
       {/* Package Badge */}
       <Badge variant="outline" className="gap-1">
         <Package className="h-3 w-3" />
-        50 packages
+        {event?.packages?.length} packages
       </Badge>
 
       {/* T-Shirt Badge */}

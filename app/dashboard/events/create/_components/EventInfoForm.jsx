@@ -34,7 +34,7 @@ const formatDateForInput = (date) => {
   return new Date(date).toISOString().split("T")[0];
 };
 
-export default function EventInfoForm({ event }) {
+export default function EventInfoForm({ event, onEventCreated }) {
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -45,6 +45,8 @@ export default function EventInfoForm({ event }) {
     time: "",
     address: "",
     eventType: "",
+    bannerImage: "",
+    thumbImage: "",
   });
 
   /* ---------- PREFILL FORM (EDIT MODE) ---------- */
@@ -58,6 +60,8 @@ export default function EventInfoForm({ event }) {
         time: event?.time || "",
         address: event?.address || "",
         eventType: event?.eventType || "",
+        bannerImage: event?.eventType || "",
+        thumbImage: event?.eventType || "",
       });
     }
   }, [event]);
@@ -73,18 +77,25 @@ export default function EventInfoForm({ event }) {
       name: form.name,
       organizerName: form.organizerName,
       description: form.description,
-      images: [],
       date: form.date,
       time: form.time,
       address: form.address,
       eventType: form.eventType,
+      bannerImage: null,
+      thumbImage: null,
       status: "active",
     };
 
     try {
       setLoading(true);
-      await createEvent(payload);
+      const response = await createEvent(payload);
+
+      console.log(response?.data?.data?.id);
       toast.success("Event created successfully");
+
+      if (onEventCreated && response?.data?.data?.id) {
+        onEventCreated(response?.data?.data?.id);
+      }
     } catch (error) {
       console.error(error);
       toast.error("Please try again!");
@@ -194,9 +205,7 @@ export default function EventInfoForm({ event }) {
             <Label>Organizer Name *</Label>
             <Input
               value={form.organizerName}
-              onChange={(e) =>
-                handleChange("organizerName", e.target.value)
-              }
+              onChange={(e) => handleChange("organizerName", e.target.value)}
               placeholder="e.g., Dhaka Marathon"
               required
             />
@@ -208,9 +217,7 @@ export default function EventInfoForm({ event }) {
             <Textarea
               rows={4}
               value={form.description}
-              onChange={(e) =>
-                handleChange("description", e.target.value)
-              }
+              onChange={(e) => handleChange("description", e.target.value)}
               placeholder="Write event details..."
             />
           </div>

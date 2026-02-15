@@ -1,6 +1,23 @@
 import api from "@/lib/api";
 
-// Create Event
-export const createTicket = (data) => {
-  return api.post("/admin/ticket", data);
+/* ---------- CREATE ---------- */
+export const createTicket = (payload, isMultipart = false) => {
+  return api.post("/admin/ticket", payload, {
+    headers: {
+      "Content-Type": isMultipart
+        ? "multipart/form-data"
+        : "application/json",
+    },
+  });
+};
+
+
+/* ---------- UPDATE ---------- */
+export const updateTicket = (eventId, payload) => {
+  return api.patch(`/admin/ticket/${eventId}`, payload);
+};
+
+/* ---------- GET BY EVENT ---------- */
+export const getTicketsById = (eventId) => {
+  return api.get(`/admin/ticket/${eventId}`);
 };
