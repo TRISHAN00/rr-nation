@@ -7,8 +7,8 @@ import {
 } from "@/services/admin/admin.event.service";
 import { CalendarClock, Monitor, Radio, Trophy } from "lucide-react";
 import { useState } from "react";
-import DashboardPackageContent from "../_components/DashboardPackageContent";
 import DashboardEventCardHeader from "./DashboardEventCardHeader";
+import DashboardTicketContent from "./DashboardTicketContent";
 import EventMeta from "./EventMeta";
 
 const eventTypes = {
@@ -44,8 +44,6 @@ export default function DashboardEventList({ events, fetchEvent }) {
         ...payload,
         isArchived: true,
       };
-
-      console.log(updatedPayload)
 
       await updateEvent(id, updatedPayload);
 
@@ -83,7 +81,7 @@ export default function DashboardEventList({ events, fetchEvent }) {
                 <EventMeta event={event} />
 
                 {/* Packages Section */}
-                <DashboardPackageContent event={event} />
+                <DashboardTicketContent event={event} />
               </CardContent>
             </Card>
           </Collapsible>

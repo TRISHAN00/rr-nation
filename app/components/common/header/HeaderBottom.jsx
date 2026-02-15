@@ -14,8 +14,6 @@ export default function HeaderBottom() {
   const [loggedIn, setLoggedIn] = useState(true);
   const { isAuthenticated, user } = useAuthContext();
 
-  console.log(user);
-
   const handleAddTicket = (ticket) => {
     setCartItems([...cartItems, ticket]);
   };
