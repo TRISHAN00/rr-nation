@@ -1,5 +1,4 @@
 "use client";
-import clsx from "clsx";
 import { useState } from "react";
 import EventCard from "./EventCard";
 
@@ -11,7 +10,7 @@ const FILTERS = [
   { key: "successful", label: "Successful" },
 ];
 
-export default function EventFilter({ onChange }) {
+export default function EventFilter({ onChange, events }) {
   const [active, setActive] = useState("all");
 
   const handleChange = (key) => {
@@ -22,7 +21,7 @@ export default function EventFilter({ onChange }) {
   return (
     <div className="w-full">
       {/* 🔘 Filters */}
-      <div className="w-full overflow-x-auto pb-2">
+      {/* <div className="w-full overflow-x-auto pb-2">
         <div className="flex items-center justify-start sm:justify-center gap-3 min-w-max px-2">
           {FILTERS.map((item) => (
             <button
@@ -41,16 +40,13 @@ export default function EventFilter({ onChange }) {
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* 🧩 Event Grid */}
       <div className=" grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
+        {
+          events?.map(item => <EventCard key={item?.id} event={item} />)
+        }
       </div>
     </div>
   );

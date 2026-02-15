@@ -25,6 +25,7 @@ export const updatePassword = async (payload) => {
   return data;
 };
 
+// GET ALL EVENT WITHOUT AUTH
 export const getAllEvent = async () => {
   const { data } = await api.get(`/auth/user/event/all`);
   return data;

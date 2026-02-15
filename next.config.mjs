@@ -2,6 +2,10 @@
 const nextConfig = {
   /* config options here */
   reactCompiler: true,
+
+  images: {
+    domains: ["api.runrisenation.com"],
+  },
 };
 
 export default nextConfig;

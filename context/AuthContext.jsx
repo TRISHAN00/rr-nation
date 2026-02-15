@@ -11,8 +11,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true); // overall loading state
   const [user, setUser] = useState(null); // store global user data
 
-  console.log(user)
-
   /* -------- FETCH PROFILE DATA -------- */
   useEffect(() => {
     async function fetchProfile() {

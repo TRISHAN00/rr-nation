@@ -58,7 +58,6 @@ export default function DashboardEventDetails({ event }) {
             {/* Event Details */}
             <div className="md:col-span-3 space-y-4">
               <div>
-                <CardTitle className="text-2xl">{event.name}</CardTitle>
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <CardTitle className="text-2xl">{event.name}</CardTitle>

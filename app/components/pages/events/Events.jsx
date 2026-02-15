@@ -1,8 +1,22 @@
+"use client";
 import Title from "@/app/components/common/Title";
+import { getAllEvent } from "@/services/user.service";
+import { useEffect, useState } from "react";
 import EventFilter from "./EventFilter";
 import EventSwitch from "./EventSwitch";
 
-export default function Events() {
+export default function Events({ hideTab }) {
+  const [events, setEvents] = useState([]);
+
+  const fetchEvents = async () => {
+    const events = await getAllEvent();
+    setEvents(events?.data?.items);
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   return (
     <section className="container mx-auto px-4 sm:px-6 lg:px-7.5 py-14 sm:py-20 lg:py-30">
       <Title
@@ -10,18 +24,19 @@ export default function Events() {
         title="Explore Our Featured Running Programs"
         hideBtnArrow
         searchPlaceholder="Search event..."
+        hideSearch
       />
 
-      {/* Switch */}
-      <div className="flex justify-center pt-8 sm:pt-12 lg:pt-20">
-        <EventSwitch />
-      </div>
+      {!hideTab && (
+        <div className="flex justify-center pt-8 sm:pt-12 lg:pt-20">
+          <EventSwitch />
+        </div>
+      )}
 
       {/* Filter */}
       <div className="flex justify-center pt-6 sm:pt-10 lg:pt-16">
-        <EventFilter />
+        <EventFilter events={events} />
       </div>
     </section>
   );
 }
-
