@@ -59,7 +59,7 @@ export default function AddEditPackageForm({
     <Dialog open={modalOpen} onOpenChange={setModalOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Package</DialogTitle>
+          <DialogTitle>Add Ticket</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>

@@ -43,7 +43,7 @@ export default function DashboardEventsPage() {
       {/* Content */}
       {loading ? (
         <DashboardEventLoading />
-      ) : events.length > 0 ? (
+      ) : events?.length > 0 ? (
         <DashboardEventList events={events} />
       ) : (
         <DashboardEventFooter />

@@ -4,17 +4,18 @@ import api from "@/lib/api";
 export const createTicket = (payload, isMultipart = false) => {
   return api.post("/admin/ticket", payload, {
     headers: {
-      "Content-Type": isMultipart
-        ? "multipart/form-data"
-        : "application/json",
+      "Content-Type": isMultipart ? "multipart/form-data" : "application/json",
     },
   });
 };
 
-
 /* ---------- UPDATE ---------- */
-export const updateTicket = (eventId, payload) => {
-  return api.patch(`/admin/ticket/${eventId}`, payload);
+export const updateTicket = (eventId, payload, isMultipart = false) => {
+  return api.patch(`/admin/ticket/${eventId}`, payload, {
+    headers: {
+      "Content-Type": isMultipart ? "multipart/form-data" : "application/json",
+    },
+  });
 };
 
 /* ---------- GET BY EVENT ---------- */

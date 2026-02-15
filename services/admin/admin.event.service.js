@@ -8,7 +8,7 @@ export const getAllDashbaordEvents = async () => {
 
 // Create Event
 export const createEvent = (data) => {
-  console.log(data)
+  console.log(data);
   return api.post("/admin/event", data);
 };
 
@@ -16,6 +16,7 @@ export const createEvent = (data) => {
 export const updateEvent = (eventId, data) => {
   return api.patch(`/admin/event/${eventId}`, data);
 };
+
 
 // Get Event By Id
 export const getEventById = (eventId) => {

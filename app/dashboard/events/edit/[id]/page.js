@@ -10,7 +10,8 @@ import {
   updateEvent,
 } from "@/services/admin/admin.event.service";
 import EventInfoFormSkeleton from "../../create/_components/EventInfoFormSkeleton";
-import EventPackages from "../../create/_components/EventPackages";
+import EventTickets from "../../create/_components/EventTickets";
+import { TShirtSizeManager } from "../../create/_components/TShirtSizeManager";
 
 export default function DashboardEventEdit() {
   const { id } = useParams();
@@ -50,7 +51,9 @@ export default function DashboardEventEdit() {
     <div className="space-y-6">
       <EventInfoForm event={event} onSubmit={handleUpdate} isEdit />
 
-      <EventPackages eventId={id} />
+      <EventTickets eventId={id} />
+
+      <TShirtSizeManager/>
     </div>
   );
 }

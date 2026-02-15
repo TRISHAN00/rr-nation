@@ -30,5 +30,5 @@ export default function EventDetailsPage() {
   if (loading) {
     return <DashboardEventDetailsSkeleton />;
   }
-  return <DashboardEventDetails event={event} />;
+  return <DashboardEventDetails event={event} eventId={id} />;
 }

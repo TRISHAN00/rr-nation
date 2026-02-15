@@ -2,25 +2,55 @@ import { NextResponse } from "next/server";
 
 export function middleware(request) {
   const token = request.cookies.get("authToken")?.value;
+  const role = request.cookies.get("userRole")?.value;
   const { pathname } = request.nextUrl;
 
-  const isAuthPage = pathname === "/accounts/login" || pathname === "/accounts/register";
-  const isProtectedRoute = pathname.startsWith("/dashboard") || pathname.startsWith("/profile");
+  const isUserLogin = pathname.startsWith("/accounts/login");
+  const isAdminLogin = pathname.startsWith("/admin/login");
 
-  // 1. If trying to access dashboard without token -> Login
-  if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL("/accounts/login", request.url));
+  const isDashboard = pathname.startsWith("/dashboard");
+  const isProfile = pathname.startsWith("/profile");
+
+  /* ---------- NOT LOGGED IN ---------- */
+  if (!token) {
+    if (isDashboard || isProfile) {
+      return NextResponse.redirect(
+        new URL("/accounts/login", request.url)
+      );
+    }
+    return NextResponse.next();
   }
 
-  // 2. If logged in and trying to access login page -> Dashboard
-  if (isAuthPage && token) {
-    return NextResponse.redirect(new URL("/", request.url));
+  /* ---------- LOGGED IN ---------- */
+
+  // 🚫 Block ALL login pages after login
+  if (isUserLogin || isAdminLogin) {
+    if (role === "admin") {
+      return NextResponse.redirect(
+        new URL("/dashboard", request.url)
+      );
+    }
+
+    return NextResponse.redirect(
+      new URL("/profile", request.url)
+    );
+  }
+
+  // 🚫 User trying to access admin dashboard
+  if (role === "user" && isDashboard) {
+    return NextResponse.redirect(
+      new URL("/profile", request.url)
+    );
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  // Add all routes you want the middleware to run on
-  matcher: ["/dashboard/:path*", "/profile/:path*", "/accounts/login", "/accounts/register"],
+  matcher: [
+    "/accounts/login",
+    "/admin/login",
+    "/dashboard/:path*",
+    "/profile/:path*",
+  ],
 };

@@ -45,6 +45,8 @@ export default function DashboardEventList({ events, fetchEvent }) {
         isArchived: true,
       };
 
+      console.log(updatedPayload)
+
       await updateEvent(id, updatedPayload);
 
       // refresh list after update

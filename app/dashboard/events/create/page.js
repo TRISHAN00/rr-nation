@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import EventInfoForm from "./_components/EventInfoForm";
-import EventPackages from "./_components/EventPackages";
+import EventPackages from "./_components/EventTickets";
 import { RegistrationFormSettings } from "./_components/RegistrationFormSettings";
 import { TShirtSizeManager } from "./_components/TShirtSizeManager";
 

@@ -9,8 +9,9 @@ import {
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddEditPackageForm from "./AddEditPackageForm";
+import api from "@/lib/api";
 
-export default function EventPackagesStatic({ eventId }) {
+export default function EventTickets({ eventId }) {
   const [tickets, setTickets] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -66,13 +67,16 @@ export default function EventPackagesStatic({ eventId }) {
     }
   };
 
+  const handleEditTicket = (eventId, ticketId) => {
+    
+  }
+
   return (
     <div className="space-y-4 border rounded-lg p-4 mt-4 mb-4">
       {/* HEADER */}
       <div className="flex justify-between items-center">
         <div>
-          <Label className="text-lg font-semibold">Registration Packages</Label>
-          <p className="text-sm text-muted-foreground">Static demo version</p>
+          <Label className="text-lg font-semibold">Event Tickets</Label>
         </div>
 
         <Button size="sm" onClick={() => setModalOpen(true)}>

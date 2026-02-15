@@ -1,13 +1,10 @@
 "use client";
 
 import { Badge } from "@/app/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardTitle
-} from "@/app/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/app/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Calendar, Clock, MapPin, User } from "lucide-react";
+import Link from "next/link";
 import DashboardPackageCard from "../../_components/DashboardPackageCard";
 
 export default function DashboardEventDetails({ event }) {
@@ -31,9 +28,7 @@ export default function DashboardEventDetails({ event }) {
 
         {/* Status Badge */}
         <div className="absolute top-4 right-4">
-          <Badge
-            variant={event.status === "active" ? "default" : "secondary"}
-          >
+          <Badge variant={event.status === "active" ? "default" : "secondary"}>
             {event.status?.toUpperCase()}
           </Badge>
         </div>
@@ -63,15 +58,23 @@ export default function DashboardEventDetails({ event }) {
             {/* Event Details */}
             <div className="md:col-span-3 space-y-4">
               <div>
-                <CardTitle className="text-2xl">
-                  {event.name}
-                </CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Organized by{" "}
-                  <span className="font-medium">
-                    {event.organizerName}
-                  </span>
-                </p>
+                <CardTitle className="text-2xl">{event.name}</CardTitle>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <CardTitle className="text-2xl">{event.name}</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Organized by{" "}
+                      <span className="font-medium">{event.organizerName}</span>
+                    </p>
+                  </div>
+
+                  <Link
+                    href={`/dashboard/events/edit/${event?.id}`}
+                    className="px-4 py-2 text-sm rounded-md border hover:bg-muted"
+                  >
+                    Edit
+                  </Link>
+                </div>
               </div>
 
               <Separator />
@@ -102,9 +105,7 @@ export default function DashboardEventDetails({ event }) {
 
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="capitalize">
-                    {event.eventType} event
-                  </span>
+                  <span className="capitalize">{event.eventType} event</span>
                 </div>
               </div>
 
@@ -122,9 +123,7 @@ export default function DashboardEventDetails({ event }) {
 
       {/* ---------- PACKAGES ---------- */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">
-          Event Packages
-        </h3>
+        <h3 className="text-lg font-semibold mb-4">Event Packages</h3>
 
         {event?.packages?.length ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

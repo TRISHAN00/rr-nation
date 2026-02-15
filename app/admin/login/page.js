@@ -1,6 +1,5 @@
 "use client";
 
-import { loginUser } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -8,10 +7,11 @@ import Logo from "@/app/components/common/Logo";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
+import { loginAdmin } from "@/services/admin/admin.auth.service";
 import { Eye, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -23,10 +23,10 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await loginUser({
+      const response = await loginAdmin({
         email: e.target.email.value,
         password: e.target.password.value,
-        roleId: 1,
+        roleId: 2,
       });
 
       const { token, refreshToken, userData } = response.data.data;
@@ -38,10 +38,11 @@ export default function LoginPage() {
 
       // 2. Cookie for Middleware
       document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
-      document.cookie = `userRole=user; path=/; max-age=604800; SameSite=Lax`;
+      document.cookie = `userRole=admin; path=/; max-age=604800; SameSite=Lax`;
+
 
       window.location.reload();
-      router.push("/");
+      router.push("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {

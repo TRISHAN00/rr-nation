@@ -20,8 +20,12 @@ export const getEmergencyContactData = async () => {
   return data;
 };
 
-
 export const updatePassword = async (payload) => {
   const { data } = await api.post("/auth/user/change-password", payload);
+  return data;
+};
+
+export const getAllEvent = async () => {
+  const { data } = await api.get(`/auth/user/event/all`);
   return data;
 };

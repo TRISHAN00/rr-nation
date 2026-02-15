@@ -11,7 +11,7 @@ import { Label } from "@/app/components/ui/label";
 import { Eye, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -38,7 +38,6 @@ export default function LoginPage() {
 
       // 2. Cookie for Middleware
       document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
-      document.cookie = `userRole=user; path=/; max-age=604800; SameSite=Lax`;
 
       window.location.reload();
       router.push("/");

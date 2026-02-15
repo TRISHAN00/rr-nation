@@ -1,4 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/components/ui/avatar";
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
@@ -9,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import { Input } from "@/app/components/ui/input";
+import { logoutAdmin } from "@/services/admin/admin.auth.service";
 import { Bell, Moon, Search, Sun, User } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
@@ -73,7 +78,9 @@ export function DashboardHeader() {
               </Avatar>
               <div className="hidden flex-col items-start text-left md:flex">
                 <span className="text-sm font-medium">Admin User</span>
-                <span className="text-xs text-muted-foreground">admin@runrise.com</span>
+                <span className="text-xs text-muted-foreground">
+                  admin@runrise.com
+                </span>
               </div>
             </Button>
           </DropdownMenuTrigger>
@@ -86,7 +93,12 @@ export function DashboardHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">Log out</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={logoutAdmin}
+              className="text-destructive"
+            >
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
