@@ -17,7 +17,7 @@ const formatDate = (dateString) => {
 export default function EventCard({ event }) {
   if (!event) return null;
 
-  const { day, month } = formatDate(event.date);
+  const { day, month } = formatDate(event?.date);
 
   return (
     <Link href={`/events/${event.id}`} className="block">
@@ -32,8 +32,8 @@ export default function EventCard({ event }) {
             className="bg-muted rounded-t-4xl overflow-hidden"
           >
             <Image
-              src={event.thumbImage || "/images/placeholder.jpg"}
-              alt={event.name}
+              src={event?.thumbImage || "/images/placeholder.jpg"}
+              alt={event?.name}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -46,7 +46,7 @@ export default function EventCard({ event }) {
             <div className="overflow-hidden relative">
               <h5 className="text-dark group-hover:text-white text-lg sm:text-xl lg:text-2xl font-bold leading-snug whitespace-nowrap">
                 <span className="inline-block group-hover:animate-marquee">
-                  {event.name}
+                  {event?.name}
                 </span>
               </h5>
             </div>
@@ -73,7 +73,7 @@ export default function EventCard({ event }) {
               <div className="flex items-center gap-2 flex-1">
                 <MapPin className="text-gray group-hover:text-white transition-colors duration-300" />
                 <p className="text-gray group-hover:text-white text-sm sm:text-[16px] font-medium transition-colors duration-300">
-                  {event.address}
+                  {event?.address}
                 </p>
               </div>
             </div>
