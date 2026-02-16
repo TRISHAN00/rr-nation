@@ -25,7 +25,7 @@ export default function DashboardEventList({ events, fetchEvent }) {
     try {
       await deleteEvent(id);
       toast.success("Event deleted successfully");
-      await fetchEvent(); // 🔥 re-fetch after delete
+      await fetchEvent(); 
     } catch (err) {
       toast.error("Failed to delete event");
     }

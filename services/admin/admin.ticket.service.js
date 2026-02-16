@@ -22,3 +22,9 @@ export const updateTicket = (eventId, payload, isMultipart = false) => {
 export const getTicketsById = (eventId) => {
   return api.get(`/admin/ticket/${eventId}`);
 };
+
+
+// Delete Ticket
+export const deleteTicket = (ticketId) => {
+  return api.delete(`/admin/ticket/${ticketId}`);
+};

@@ -6,7 +6,18 @@ export default function SMFeaturedCardLeft({
   bgColor,
   overlayColor = "#00a19a",
   organizer,
+  title,
+  event,
+  pak,
 }) {
+  const formatDate = (dateString) => {
+    const d = new Date(dateString);
+    return d.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  };
   return (
     <div
       className="relative p-6 sm:p-8 lg:p-10 overflow-hidden rounded-t-3xl lg:rounded-l-3xl lg:rounded-tr-none"
@@ -28,20 +39,29 @@ export default function SMFeaturedCardLeft({
       {/* CONTENT */}
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div>
-          <h4 className="text-white text-2xl sm:text-3xl lg:text-4xl mb-2">
-            Marathon Race
-          </h4>
-          <h1 className="text-brand text-4xl sm:text-5xl lg:text-[80px] leading-none">
-            35K
-          </h1>
+          {pak?.name && (
+            <h4 className="text-white text-2xl sm:text-3xl lg:text-4xl mb-2">
+              {pak?.name}
+            </h4>
+          )}
+          {pak?.distance && (
+            <h1 className="text-brand text-4xl sm:text-5xl lg:text-[80px] leading-none">
+              {pak?.distance}
+            </h1>
+          )}
 
           <ul className="mt-5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-light">
-            <li className="flex items-center gap-2.5 text-sm sm:text-base">
-              <MapPin size={18} /> 456 Progoti Sharini Road
-            </li>
-            <li className="flex items-center gap-2.5 text-sm sm:text-base">
-              <Calendar size={18} /> 24 March, 2026
-            </li>
+            {event?.address && (
+              <li className="flex items-center gap-2.5 text-sm sm:text-base">
+                <MapPin size={18} /> {event?.address}
+              </li>
+            )}
+
+            {event?.date && (
+              <li className="flex items-center gap-2.5 text-sm sm:text-base">
+                <Calendar size={18} /> {formatDate(event?.date)}
+              </li>
+            )}
           </ul>
         </div>
       </div>

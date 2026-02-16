@@ -3,7 +3,7 @@ import FillButton from "@/app/components/common/FillButton";
 import TicketModal from "@/app/components/modal/TicketModal";
 import { useState } from "react";
 
-export default function SMFeaturedCardRight({ bgColor }) {
+export default function SMFeaturedCardRight({ bgColor, price, event }) {
   const [open, setOpen] = useState(false);
 
   const handleAddToCart = (ticketData) => {
@@ -33,7 +33,7 @@ export default function SMFeaturedCardRight({ bgColor }) {
           <span className="text-white text-[10px] leading-[11px]">BDT</span>
           <div className="flex items-end gap-2 mt-2">
             <h3 className="text-white text-2xl sm:text-3xl lg:text-4xl leading-8">
-              1000
+              {price}
             </h3>
             <span className="text-white text-xs sm:text-sm">/Person</span>
           </div>

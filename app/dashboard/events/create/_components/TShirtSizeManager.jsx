@@ -1,11 +1,11 @@
 "use client"
 import { Label } from "@/app/components/ui/label";
 import { Switch } from "@/app/components/ui/switch";
+import { createTShirtSizes, getTShirtSizesByEvent } from "@/services/admin/admin.tshirtSize.service";
 import { Shirt } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddEditTShirtSizeModal from "./AddEditTShirtSizeModal";
 import TShirtSizeList from "./TShirtSizeList";
-import { createTShirtSizes, getTShirtSizesByEvent } from "@/services/admin/admin.tshirtSize.service";
 
 const sizeCategories = [
   { id: "tshirt", label: "T-Shirt (Adult)", fields: ["chest", "length"] },

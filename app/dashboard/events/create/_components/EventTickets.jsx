@@ -4,10 +4,12 @@ import { Button } from "@/app/components/ui/button";
 import { Label } from "@/app/components/ui/label";
 import {
   createTicket,
+  deleteTicket,
   getTicketsById,
 } from "@/services/admin/admin.ticket.service";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import AddEditPackageForm from "./AddEditPackageForm";
 
 export default function EventTickets({ eventId }) {
@@ -32,8 +34,6 @@ export default function EventTickets({ eventId }) {
 
   /* ---------- RECEIVE DATA FROM MODAL ---------- */
   const handleTicketSubmit = (ticket) => {
-    console.log("Received ticket:", ticket);
-
     setTickets((prev) => [...prev, ticket]);
     setModalOpen(false);
   };
@@ -46,6 +46,7 @@ export default function EventTickets({ eventId }) {
       // Ensure numbers are numbers
       const payload = tickets.map((t) => ({
         ...t,
+        name: t.name,
         price: Number(t.price),
         availableSlots: Number(t.availableSlots),
         eventId: Number(t.eventId) || Number(eventId),
@@ -57,16 +58,23 @@ export default function EventTickets({ eventId }) {
       console.log("Ticket created:", response);
       // }
 
-      alert("All tickets submitted successfully!");
+      toast.success("All tickets submitted successfully!");
       setTickets([]); // clear local tickets
       fetchData(); // refresh list from API
     } catch (error) {
       console.error("Error submitting tickets:", error.response || error);
-      alert("Failed to submit tickets. Check console for details.");
     }
   };
 
-
+  const handleDeleteTicket = async (ticketId) => {
+    try {
+      await deleteTicket(ticketId);
+      toast.success("Ticket deleted successfully");
+      await fetchData();
+    } catch (err) {
+      toast.error("Failed to delete ticket");
+    }
+  };
 
   return (
     <div className="space-y-4 border rounded-lg p-4 mt-4 mb-4">
@@ -90,9 +98,10 @@ export default function EventTickets({ eventId }) {
             className="flex justify-between items-center p-3 bg-muted rounded-lg"
           >
             <div>
-              <p className="font-medium">{ticket.distance}</p>
+              <p className="font-medium">{ticket.name}</p>
               <p className="text-sm text-muted-foreground">
-                BDT {ticket.price} · Slots {ticket.availableSlots}
+                BDT {ticket.price} | Slots {ticket.availableSlots} |{" "}
+                {ticket?.distance}
               </p>
             </div>
 
@@ -101,7 +110,11 @@ export default function EventTickets({ eventId }) {
                 <Edit className="w-4 h-4" />
               </Button>
 
-              <Button size="icon" variant="ghost">
+              <Button
+                onClick={() => handleDeleteTicket(ticket?.id)}
+                size="icon"
+                variant="ghost"
+              >
                 <Trash2 className="w-4 h-4 text-destructive" />
               </Button>
             </div>

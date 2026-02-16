@@ -1,4 +1,3 @@
-import InnerBanner from "@/app/components/common/InnerBanner";
 import EventDetail from "@/app/components/pages/events/EventDetail";
 
 export const metadata = {
@@ -29,16 +28,10 @@ export const metadata = {
 };
 
 export default function EventDetailPage() {
+  
   return (
     <>
-      <InnerBanner
-        title="Account Day Run 2025"
-        background="/dynamic/about/inner-banner.jpg"
-        breadcrumbs={[
-          { label: "Events", href: "/events" },
-          { label: "Account Day Run 2025" },
-        ]}
-      />
+    
       <EventDetail />
     </>
   );

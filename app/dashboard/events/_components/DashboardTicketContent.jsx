@@ -16,7 +16,7 @@ export default function DashboardTicketContent({ event }) {
         </h4>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {event.packages.map((pkg) => (
+          {event?.packages?.map((pkg) => (
             <DashboardPackageCard key={pkg.id} pkg={pkg} />
           ))}
         </div>

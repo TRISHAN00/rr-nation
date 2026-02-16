@@ -2,8 +2,8 @@
 import { useState } from "react";
 import EventInfoForm from "./_components/EventInfoForm";
 import EventTickets from "./_components/EventTickets";
+import EventTshirt from "./_components/EventTshirt";
 import { RegistrationFormSettings } from "./_components/RegistrationFormSettings";
-import { TShirtSizeManager } from "./_components/TShirtSizeManager";
 
 export default function EventCreatePage() {
   const [eventId, setEventId] = useState(null);
@@ -15,7 +15,7 @@ export default function EventCreatePage() {
       {eventId && (
         <>
           <EventTickets eventId={eventId} />
-          <TShirtSizeManager eventId={eventId} />
+          <EventTshirt eventId={eventId} />
           <RegistrationFormSettings eventId={eventId} />
         </>
       )}

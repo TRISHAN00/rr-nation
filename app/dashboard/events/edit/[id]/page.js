@@ -11,7 +11,7 @@ import {
 } from "@/services/admin/admin.event.service";
 import EventInfoFormSkeleton from "../../create/_components/EventInfoFormSkeleton";
 import EventTickets from "../../create/_components/EventTickets";
-import { TShirtSizeManager } from "../../create/_components/TShirtSizeManager";
+import EventTshirt from "../../create/_components/EventTshirt";
 
 export default function DashboardEventEdit() {
   const { id } = useParams();
@@ -50,10 +50,9 @@ export default function DashboardEventEdit() {
   return (
     <div className="space-y-6">
       <EventInfoForm event={event} handleUpdate={handleUpdate} isEdit />
-
       <EventTickets eventId={id} />
+      <EventTshirt eventId={id} />
 
-      <TShirtSizeManager/>
     </div>
   );
 }

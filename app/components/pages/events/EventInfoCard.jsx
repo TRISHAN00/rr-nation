@@ -41,16 +41,6 @@ export default function EventInfoCard({ event }) {
           <p className="font-semibold text-dark">{event?.organizerName}</p>
         </li>
 
-        <li>
-          <p className="text-sm text-gray-500 mb-1">Race Packages:</p>
-          <ul className="list-disc list-inside space-y-1">
-            {event?.packages?.map((pkg) => (
-              <li key={pkg.id}>
-                {pkg.distance} – {pkg.price} BDT ({pkg.availableSlots} slots)
-              </li>
-            ))}
-          </ul>
-        </li>
       </ul>
 
       <div className="space-y-2">
@@ -72,15 +62,6 @@ export default function EventInfoCard({ event }) {
         </div>
       </div>
 
-      <div className="w-full overflow-hidden rounded-xl">
-        <Image
-          src={event?.bannerImage}
-          alt={event?.name}
-          width={800}
-          height={300}
-          className="object-cover w-full h-auto"
-        />
-      </div>
     </div>
   );
 }

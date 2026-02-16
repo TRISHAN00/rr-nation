@@ -20,6 +20,7 @@ export default function AddEditPackageForm({
 }) {
   const [ticket, setTicket] = useState({
     eventId,
+    name: "",
     distance: "",
     price: "",
     availableSlots: "",
@@ -42,12 +43,14 @@ export default function AddEditPackageForm({
 
     onTicketSubmit({
       ...ticket,
+      name: ticket.name,
       price: Number(ticket.price),
       availableSlots: Number(ticket.availableSlots),
     });
 
     setTicket({
       eventId,
+      name: "",
       distance: "",
       price: "",
       availableSlots: "",
@@ -64,6 +67,17 @@ export default function AddEditPackageForm({
 
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label>Ticket Name</Label>
+              <Input
+                name="name"
+                value={ticket.name}
+                onChange={handleChange}
+                placeholder="Your Ticket Name.."
+                required
+              />
+            </div>
+
             <div className="grid gap-2">
               <Label>Distance</Label>
               <Input

@@ -47,12 +47,14 @@ export function ProfileDropdown({ user }) {
 
       <DropdownMenuContent align="end" className="w-44 rounded-md p-1">
         {/* Dashboard */}
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <LayoutDashboard className="h-4 w-4 text-cyan-500" />
-            Dashboard
-          </Link>
-        </DropdownMenuItem>
+        {user?.role?.id === 2 && (
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <LayoutDashboard className="h-4 w-4 text-cyan-500" />
+              Dashboard
+            </Link>
+          </DropdownMenuItem>
+        )}
 
         {/* Profile */}
         <DropdownMenuItem asChild>
