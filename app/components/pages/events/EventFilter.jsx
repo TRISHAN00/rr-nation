@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import EventCard from "./EventCard";
+import EventCardSkeleton from "./skeleton/EventCardSkeleton";
 
 const FILTERS = [
   { key: "all", label: "All" },
@@ -10,7 +11,7 @@ const FILTERS = [
   { key: "successful", label: "Successful" },
 ];
 
-export default function EventFilter({ onChange, events }) {
+export default function EventFilter({ onChange, events = [], loading }) {
   const [active, setActive] = useState("all");
 
   const handleChange = (key) => {
@@ -43,10 +44,12 @@ export default function EventFilter({ onChange, events }) {
       </div> */}
 
       {/* 🧩 Event Grid */}
-      <div className=" grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
-        {
-          events?.map(item => <EventCard key={item?.id} event={item} />)
-        }
+      <div className="grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        {loading
+          ? Array.from({ length: events?.length || 0 }).map((_, i) => (
+              <EventCardSkeleton key={i} />
+            ))
+          : events.map((item) => <EventCard key={item.id} event={item} />)}
       </div>
     </div>
   );

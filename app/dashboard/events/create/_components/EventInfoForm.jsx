@@ -35,7 +35,12 @@ const formatDateForInput = (date) => {
   return new Date(date).toISOString().split("T")[0];
 };
 
-export default function EventInfoForm({ event, onEventCreated }) {
+export default function EventInfoForm({
+  event,
+  onEventCreated,
+  isEdit,
+  handleUpdate,
+}) {
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -93,12 +98,14 @@ export default function EventInfoForm({ event, onEventCreated }) {
 
     try {
       setLoading(true);
-      const response = await createEvent(formData);
-
-      toast.success("Event created successfully");
-
-      if (onEventCreated && response?.data?.data?.id) {
-        onEventCreated(response.data.data.id);
+      if (isEdit && handleUpdate) {
+        await handleUpdate(formData);
+      } else {
+        const response = await createEvent(formData);
+        toast.success("Event created successfully");
+        if (onEventCreated && response?.data?.data?.id) {
+          onEventCreated(response.data.data.id);
+        }
       }
     } catch (error) {
       console.error(error);

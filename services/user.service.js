@@ -30,3 +30,7 @@ export const getAllEvent = async () => {
   const { data } = await api.get(`/auth/user/event/all`);
   return data;
 };
+
+export const getEventById = (eventId) => {
+  return api.get(`/auth/user/event/${eventId}`);
+};

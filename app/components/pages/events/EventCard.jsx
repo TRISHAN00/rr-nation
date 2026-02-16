@@ -45,7 +45,7 @@ export default function EventCard({ event }) {
             {/* Title with hover scroll */}
             <div className="overflow-hidden relative">
               <h5 className="text-dark group-hover:text-white text-lg sm:text-xl lg:text-2xl font-bold leading-snug whitespace-nowrap">
-                <span className="inline-block group-hover:animate-marquee">
+                <span className="inline-block animate-marquee">
                   {event?.name}
                 </span>
               </h5>

@@ -7,10 +7,17 @@ import EventSwitch from "./EventSwitch";
 
 export default function Events({ hideTab }) {
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchEvents = async () => {
-    const events = await getAllEvent();
-    setEvents(events?.data?.items);
+    try {
+      const res = await getAllEvent();
+      setEvents(res?.data?.items || []);
+    } catch (err) {
+      console.error("Failed to load events", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -35,7 +42,7 @@ export default function Events({ hideTab }) {
 
       {/* Filter */}
       <div className="flex justify-center pt-6 sm:pt-10 lg:pt-16">
-        <EventFilter events={events} />
+        <EventFilter events={events} loading={loading} />
       </div>
     </section>
   );

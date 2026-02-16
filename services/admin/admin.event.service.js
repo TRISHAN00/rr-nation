@@ -12,8 +12,10 @@ export const createEvent = (data) => {
 };
 
 // Update Event
-export const updateEvent = (eventId, data) => {
-  return api.patch(`/admin/event/${eventId}`, data);
+export const updateEvent = (eventId, payload, isMultipart = true) => {
+  return api.patch(`/admin/event/${eventId}`, payload, {
+    headers: isMultipart ? {} : { "Content-Type": "application/json" },
+  });
 };
 
 // Get Event By Id

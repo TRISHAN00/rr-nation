@@ -49,7 +49,7 @@ export default function DashboardEventEdit() {
 
   return (
     <div className="space-y-6">
-      <EventInfoForm event={event} onSubmit={handleUpdate} isEdit />
+      <EventInfoForm event={event} handleUpdate={handleUpdate} isEdit />
 
       <EventTickets eventId={id} />
 
