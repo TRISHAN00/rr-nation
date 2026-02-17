@@ -30,12 +30,14 @@ export default function HeaderBottom() {
         <MainMenu />
 
         {/* Add to cart and search  */}
-        <div className=" flex gap-7">
-          <div onClick={() => setIsCartOpen(true)}>
-            <CartIcon count={cartData?.items?.length} />
+        {isAuthenticated && (
+          <div className=" flex gap-7">
+            <div onClick={() => setIsCartOpen(true)}>
+              <CartIcon count={cartData?.items?.length} />
+            </div>
+            {/* <SearchInput /> */}
           </div>
-          {/* <SearchInput /> */}
-        </div>
+        )}
 
         {/* Button Group */}
         <div className=" flex gap-5">

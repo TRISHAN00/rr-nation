@@ -1,7 +1,7 @@
 "use client";
 
 import CartDetailModal from "@/app/components/modal/CartDetailModal";
-import { getCartItems } from "@/services/cart.service";
+import { deleteCartItem, getCartItems } from "@/services/cart.service";
 import {
   createContext,
   useCallback,
@@ -19,7 +19,6 @@ export function CartProvider({ children }) {
     totalAmount: "0.00",
     items: [],
   });
-
 
   const fetchCart = useCallback(async () => {
     // 🛡️ THE GUARD: Only fetch if a token exists in localStorage
@@ -40,15 +39,13 @@ export function CartProvider({ children }) {
     }
   }, []);
 
-  console.log(cartData)
-
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
 
-  const handleAddToCart = async (cartItem) => {
-    console.log("Adding to cart:", cartItem);
-    // After a successful API call here, you would call refreshCart()
+  const handleDeleteCartItem = async (cartItemId) => {
+    await deleteCartItem(cartItemId);
+    await fetchCart();
   };
 
   return (
@@ -57,8 +54,8 @@ export function CartProvider({ children }) {
         isCartOpen,
         setIsCartOpen,
         cartData,
-        handleAddToCart,
-        fetchCart
+        fetchCart,
+        handleDeleteCartItem,
       }}
     >
       {children}

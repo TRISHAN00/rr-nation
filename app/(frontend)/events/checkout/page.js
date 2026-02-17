@@ -1,137 +1,15 @@
 "use client";
 
 import InnerBanner from "@/app/components/common/InnerBanner";
+import { useCart } from "@/context/CartContext";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
-const initialCartData = {
-  id: 4,
-  totalAmount: "5665.00",
-  items: [
-    {
-      id: 1,
-      totalPrice: "1133.00",
-      participant: {
-        name: "John Doe",
-        gender: "Male",
-        tshirtSize: "M",
-        bloodGroup: "O+",
-        contactNumber: "+1234567890",
-        district: "Dhaka",
-      },
-      eventTicket: {
-        name: "Boishakhi Fun Run",
-        distance: "1.33km",
-      },
-    },
-    {
-      id: 2,
-      totalPrice: "1133.00",
-      participant: {
-        name: "Trishan Saha",
-        gender: "Male",
-        tshirtSize: "L",
-        bloodGroup: "B+",
-        contactNumber: "+8801712345678",
-        district: "Dhaka",
-      },
-      eventTicket: {
-        name: "Boishakhi Fun Run",
-        distance: "1.33km",
-      },
-    },
-    {
-      id: 3,
-      totalPrice: "1133.00",
-      participant: {
-        name: "Rishan Saha",
-        gender: "Male",
-        tshirtSize: "S",
-        bloodGroup: "A+",
-        contactNumber: "+8801812345678",
-        district: "Gazipur",
-      },
-      eventTicket: {
-        name: "Boishakhi Fun Run",
-        distance: "1.33km",
-      },
-    },
-    {
-      id: 4,
-      totalPrice: "1133.00",
-      participant: {
-        name: "Nabila Khan",
-        gender: "Female",
-        tshirtSize: "M",
-        bloodGroup: "O-",
-        contactNumber: "+8801912345678",
-        district: "Narayanganj",
-      },
-      eventTicket: {
-        name: "Boishakhi Fun Run",
-        distance: "1.33km",
-      },
-    },
-    {
-      id: 5,
-      totalPrice: "1133.00",
-      participant: {
-        name: "Arif Hossain",
-        gender: "Male",
-        tshirtSize: "XL",
-        bloodGroup: "AB+",
-        contactNumber: "+8801612345678",
-        district: "Chattogram",
-      },
-      eventTicket: {
-        name: "Boishakhi Fun Run",
-        distance: "1.33km",
-      },
-    },
-  ],
-};
-
 export default function CheckoutPage() {
-  const [cartItems, setCartItems] = useState(initialCartData.items);
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [agree, setAgree] = useState(false);
-
-  const handleDelete = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
-
-  const calculateSubtotal = () => {
-    return cartItems.reduce(
-      (sum, item) => sum + parseFloat(item.totalPrice),
-      0,
-    );
-  };
-
-  const applyCoupon = () => {
-    if (coupon.toUpperCase() === "SAVE10") {
-      setDiscount(calculateSubtotal() * 0.1);
-      alert("Coupon applied! 10% discount applied.");
-    } else {
-      setDiscount(0);
-      alert("Invalid coupon code.");
-    }
-  };
-
-  const handleCheckout = () => {
-    if (!agree) {
-      alert("You must agree to the terms and conditions before payment.");
-      return;
-    }
-
-    console.log("Checkout Data:", {
-      cart: cartItems,
-      subtotal: calculateSubtotal(),
-      discount,
-      total: calculateSubtotal() - discount,
-    });
-    alert("Checkout submitted! Check console for data.");
-  };
+  const { cartData, handleDeleteCartItem } = useCart();
 
   return (
     <>
@@ -145,134 +23,153 @@ export default function CheckoutPage() {
           {/* LEFT: Cart Items */}
           <div className="flex-1 space-y-4">
             <h1 className="text-2xl font-bold text-[#001819] mb-4">
-              Your Cart
+              Your Cart ({cartData?.items?.length || 0})
             </h1>
 
-            {cartItems.length === 0 && (
-              <p className="text-gray-500">Your cart is empty.</p>
+            {cartData?.items?.length === 0 && (
+              <div className="bg-white p-8 rounded-lg border text-center">
+                <p className="text-gray-500 text-lg">Your cart is empty.</p>
+              </div>
             )}
 
-            {cartItems.map((item) => (
+            {cartData?.items?.map((item) => (
               <div
                 key={item.id}
-                className="border rounded-lg bg-white p-4 shadow-sm"
+                className="border rounded-lg bg-white overflow-hidden shadow-sm"
               >
-                <div className="flex justify-between items-center mb-2">
+                {/* Header: Ticket Type & Price */}
+                <div className="bg-[#f8f9fa] px-4 py-3 border-b flex justify-between items-center">
                   <div>
-                    <p className="font-medium text-[#001819]">
+                    <p className="font-bold text-[#001819] text-lg">
                       {item.eventTicket.name}
                     </p>
-                    <p className="text-sm text-gray-500">
-                      Distance: {item.eventTicket.distance}
+                    <p className="text-sm font-semibold text-[#00a19a]">
+                      Distance: {item.participant.distanceCategory}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-[#00a19a]">
+                  <div className="flex items-center gap-4">
+                    <p className="font-bold text-xl text-[#001819]">
                       ৳ {item.totalPrice}
                     </p>
                     <button
-                      onClick={() => handleDelete(item.id)}
-                      className="p-1 text-red-500 hover:bg-red-100 rounded"
-                      title="Delete item"
+                      onClick={() => handleDeleteCartItem(item.id)}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                      title="Remove item"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={20} />
                     </button>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
-                  <div>
-                    <span className="opacity-60">Name:</span>{" "}
-                    {item.participant.name}
-                  </div>
-                  <div>
-                    <span className="opacity-60">Gender:</span>{" "}
-                    {item.participant.gender}
-                  </div>
-                  <div>
-                    <span className="opacity-60">T-shirt:</span>{" "}
-                    {item.participant.tshirtSize}
-                  </div>
-                  <div>
-                    <span className="opacity-60">Blood:</span>{" "}
-                    {item.participant.bloodGroup}
-                  </div>
-                  <div>
-                    <span className="opacity-60">Contact:</span>{" "}
-                    {item.participant.contactNumber}
-                  </div>
-                  <div>
-                    <span className="opacity-60">District:</span>{" "}
-                    {item.participant.district}
-                  </div>
+                {/* Body: Full Participant Details */}
+                <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 text-sm">
+                  <Detail label="Name" value={item.participant.name} />
+                  <Detail label="Email" value={item.participant.email} />
+                  <Detail label="Contact" value={item.participant.contactNumber} />
+                  <Detail label="Age Category" value={item.participant.ageCategory} />
+                  <Detail label="Runner Category" value={item.participant.runnerCategory} />
+                  <Detail label="Gender" value={item.participant.gender} />
+                  <Detail label="Date of Birth" value={item.participant.dateOfBirth} />
+                  <Detail label="Blood Group" value={item.participant.bloodGroup} />
+                  <Detail label="T-shirt Size" value={item.participant.tshirtSize} />
+                  <Detail label="Community" value={item.participant.communityName} />
+                  <Detail 
+                    label="Emergency Contact" 
+                    value={`${item.participant.emergencyContactName} (${item.participant.emergencyContactNumber})`} 
+                    fullWidth
+                  />
                 </div>
               </div>
             ))}
           </div>
 
           {/* RIGHT: Summary & Coupon (Sticky) */}
-          <div className="w-full max-w-md shrink-0">
-            <div className="sticky top-20 rounded-lg border bg-white p-6 shadow-sm space-y-4">
-              <h2 className="text-xl font-semibold text-dark">
-                Order Summary
-              </h2>
+          <div className="w-full lg:w-[380px] shrink-0">
+            <div className="sticky top-24 rounded-xl border bg-white p-6 shadow-md space-y-5">
+              <h2 className="text-xl font-bold text-[#001819] border-b pb-3">Order Summary</h2>
 
-              <div className="flex justify-between text-gray-700">
-                <span>Subtotal</span>
-                <span>৳ {calculateSubtotal().toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-gray-700">
-                <span>Discount</span>
-                <span>৳ {discount.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between font-semibold text-brand text-lg">
-                <span>Total</span>
-                <span>৳ {(calculateSubtotal() - discount).toFixed(2)}</span>
+              <div className="space-y-3">
+                <div className="flex justify-between text-gray-600">
+                  <span>Subtotal</span>
+                  <span className="font-medium">৳ {cartData?.totalAmount}</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>Discount</span>
+                  <span className="font-medium text-red-500">- ৳ {discount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between font-bold text-[#00a19a] text-xl pt-2 border-t">
+                  <span>Total</span>
+                  <span>৳ {cartData?.totalAmount}</span>
+                </div>
               </div>
 
               {/* Coupon Code */}
-              <div className="mt-4 flex gap-2">
+              <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Enter coupon code"
+                  placeholder="Coupon code"
                   value={coupon}
                   onChange={(e) => setCoupon(e.target.value)}
-                  className="flex-1 rounded border border-gray-300 p-2"
+                  className="flex-1 rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-2 focus:ring-[#00a19a] outline-none"
                 />
                 <button
-                  onClick={applyCoupon}
-                  className="h-full rounded-lg bg-brand p-4 text-white font-medium hover:bg-[#009088]"
+                  className="rounded-lg bg-[#001819] px-4 py-2 text-white text-sm font-semibold hover:bg-black transition-colors"
                 >
-                  Apply Coupon
+                  Apply
                 </button>
               </div>
 
               {/* Agree Terms */}
-              <label className="flex items-center gap-2 text-sm mt-3">
-                <input
-                  type="checkbox"
-                  checked={agree}
-                  onChange={() => setAgree(!agree)}
-                  className="rounded border-gray-300"
-                />
-                I agree to the{" "}
-                <a href="#" className="text-brand underline">
-                  terms & conditions
-                </a>
-              </label>
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={agree}
+                    onChange={() => setAgree(!agree)}
+                    className="mt-1 h-4 w-4 rounded border-gray-300 text-[#00a19a] focus:ring-[#00a19a]"
+                  />
+                  <span className="text-xs text-gray-600 leading-tight">
+                    I have read and agree to the website{" "}
+                    <a href="#" className="text-[#00a19a] font-bold underline">
+                      terms and conditions
+                    </a>{" "}
+                    and event regulations.
+                  </span>
+                </label>
+              </div>
 
               {/* Checkout Button */}
               <button
-                onClick={handleCheckout}
-                className="w-full mt-4 rounded-lg bg-brand py-3 text-white font-medium hover:bg-[#009088]"
-                disabled={cartItems.length === 0 || !agree}
+                className={`w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg transition-all ${
+                  cartData?.items?.length === 0 || !agree
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-[#00a19a] hover:bg-[#008c86] active:scale-[0.98]"
+                }`}
+                disabled={cartData?.items?.length === 0 || !agree}
               >
-                Confirm & Pay ৳ {(calculateSubtotal() - discount).toFixed(2)}
+                Confirm & Pay ৳ {cartData?.totalAmount}
               </button>
+              
+              <p className="text-[10px] text-center text-gray-400">
+                Secure SSL Encrypted Payment
+              </p>
             </div>
           </div>
         </div>
       </div>
     </>
+  );
+}
+
+// Helper Component for cleaner code
+function Detail({ label, value, fullWidth = false }) {
+  if (!value) return null;
+  return (
+    <div className={`flex flex-col mb-1 ${fullWidth ? "md:col-span-2 lg:col-span-3" : ""}`}>
+      <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
+        {label}
+      </span>
+      <span className="text-gray-800 font-medium">{value}</span>
+    </div>
   );
 }

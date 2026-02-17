@@ -8,3 +8,9 @@ export const getCartItems = async () => {
 export const eventAddToCart = async (cartItem) => {
   return api.post(`/auth/user/cart/item/add-to-cart`, cartItem);
 };
+
+
+// Added Delete Function
+export const deleteCartItem = async (cartItemId) => {
+  return api.delete(`/auth/user/cart/item/${cartItemId}`);
+};
