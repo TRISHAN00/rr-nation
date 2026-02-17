@@ -25,7 +25,7 @@ export default function SMFeatureEventCard({
         />
 
         {/* Right card */}
-        <SMFeaturedCardRight bgColor={bgColor} price={price} event={event} />
+        <SMFeaturedCardRight bgColor={bgColor} price={price} event={event} pak={pak} />
       </div>
     </div>
   );

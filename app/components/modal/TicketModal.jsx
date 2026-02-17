@@ -1,176 +1,184 @@
 "use client";
 
-import FillButton from "@/app/components/common/FillButton";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/app/components/ui/dialog"; // ShadCN Dialog
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/app/components/ui/dialog";
 import { useState } from "react";
+import { Button } from "../ui/button";
 
-export default function TicketModal({ isOpen, onOpenChange, onAddToCart }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    age: "",
-    bloodGroup: "",
-    gender: "",
-    dob: "",
-  });
+export default function TicketModal({
+  isOpen,
+  onOpenChange,
+  onAddToCart,
+  eventTicketId,
+  pak,
+}) {
+  // 1. Defined T-Shirt options with labels for UI and clean values for Backend
+  const tshirtOptions = [
+    { label: "XS (Chest: 36\", Length: 25\")", value: "XS" },
+    { label: "S (Chest: 38\", Length: 26\")", value: "S" },
+    { label: "M (Chest: 40\", Length: 27\")", value: "M" },
+    { label: "L (Chest: 42\", Length: 28\")", value: "L" },
+    { label: "XL (Chest: 44\", Length: 29\")", value: "XL" },
+    { label: "2XL (Chest: 46\", Length: 30\")", value: "2XL" },
+    { label: "3XL (Chest: 48\", Length: 31\")", value: "3XL" },
+    { label: "3-4 Years (Chest: 26\", Length: 18\")", value: "3-4 Years" },
+    { label: "5-6 Years (Chest: 28\", Length: 19\")", value: "5-6 Years" },
+    { label: "7-8 Years (Chest: 30\", Length: 20\")", value: "7-8 Years" },
+    { label: "9-10 Years (Chest: 32\", Length: 22\")", value: "9-10 Years" },
+    { label: "11-12 Years (Chest: 34\", Length: 24\")", value: "11-12 Years" },
+  ];
 
+  // 2. Exact fields requested
+  const fields = [
+    { name: "name", type: "text", required: true },
+    { name: "email", type: "email", required: false },
+    { name: "contactNumber", type: "tel", required: true },
+    { 
+      name: "ageCategory", 
+      type: "select", 
+      options: ["General", "Veteran (50+)"], 
+      required: true 
+    },
+    {
+      name: "tshirtSize",
+      type: "select",
+      required: true,
+      options: tshirtOptions,
+    },
+    {
+      name: "gender",
+      type: "select",
+      options: ["Male", "Female", "Other"],
+      required: true,
+    },
+    { name: "dateOfBirth", type: "date", required: true },
+    { name: "bloodGroup", type: "text", required: false },
+    { name: "emergencyContactName", type: "text", required: false },
+    { name: "emergencyContactNumber", type: "tel", required: false },
+    { name: "communityName", type: "text", required: false },
+    { 
+      name: "runnerCategory", 
+      type: "select", 
+      options: ["Amateur", "Elite"], 
+      required: true 
+    },
+  ];
+
+  const initialState = fields.reduce(
+    (acc, field) => ({ ...acc, [field.name]: "" }),
+    {},
+  );
+
+  const [formData, setFormData] = useState(initialState);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    const formattedValue = type === "number" ? (value === "" ? "" : Number(value)) : value;
+    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Basic required validation
-    if (!formData.name || !formData.phone || !formData.age || !formData.gender || !formData.dob) {
-      alert("Please fill all required fields.");
+
+    const emptyField = fields.find((f) => f.required && !formData[f.name]);
+    if (emptyField) {
+      alert(`Please fill the required field: ${emptyField.name.replace(/([A-Z])/g, " $1")}`);
       return;
     }
 
     setLoading(true);
-    if (onAddToCart) onAddToCart(formData);
+
+    const payload = {
+      eventTicketId,
+      quantity: 1,
+      participant: { 
+        ...formData,
+        distanceCategory: pak?.distance // Injected from pak
+      },
+    };
+
+    if (onAddToCart) {
+      onAddToCart(payload);
+    }
+
     setTimeout(() => {
       setLoading(false);
-      onOpenChange(false); // close modal after submission
-    }, 1000);
+      onOpenChange(false);
+      setFormData(initialState);
+    }, 500);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-full">
-        <DialogHeader>
-          <DialogTitle>Purchase Ticket</DialogTitle>
+      <DialogContent className="max-w-3xl w-full max-h-[90vh] flex flex-col">
+        <DialogHeader className="shrink-0 border-b pb-4">
+          <DialogTitle className="text-xl font-bold text-[#001819]">{pak?.name}</DialogTitle>
+          <p className="text-sm text-[#00a19a] font-medium">Distance: {pak?.distance}</p>
         </DialogHeader>
 
-        <form className="flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
-          {/* Name */}
-          <div className="flex flex-col">
-            <label className="mb-1 font-medium">Name *</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter your name"
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
-              required
-            />
-          </div>
+        <form 
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mt-4 overflow-y-auto px-1 py-2" 
+          onSubmit={handleSubmit}
+        >
+          {fields.map((field) => {
+            const label = field.name
+              .replace(/([A-Z])/g, " $1")
+              .replace(/^./, (str) => str.toUpperCase());
 
-          {/* Email */}
-          <div className="flex flex-col">
-            <label className="mb-1 font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email (optional)"
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
-            />
-          </div>
+            return (
+              <div key={field.name} className="flex flex-col">
+                <label className="mb-1 text-sm font-semibold text-gray-700">
+                  {label} {field.required && <span className="text-red-500">*</span>}
+                </label>
+                
+                {field.type === "select" ? (
+                  <select
+                    name={field.name}
+                    value={formData[field.name]}
+                    onChange={handleChange}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00a19a] bg-white text-sm"
+                    required={field.required}
+                  >
+                    <option value="">Select {label}</option>
+                    {field.options.map((option) => {
+                      const isObj = typeof option === 'object';
+                      const val = isObj ? option.value : option;
+                      const text = isObj ? option.label : option;
+                      return (
+                        <option key={val} value={val}>{text}</option>
+                      );
+                    })}
+                  </select>
+                ) : (
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    value={formData[field.name]}
+                    onChange={handleChange}
+                    placeholder={`Enter ${label.toLowerCase()}`}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00a19a] text-sm"
+                    required={field.required}
+                  />
+                )}
+              </div>
+            );
+          })}
 
-          {/* Phone */}
-          <div className="flex flex-col">
-            <label className="mb-1 font-medium">Phone *</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="Enter your phone"
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
-              required
-            />
-          </div>
-
-          {/* Age */}
-          <div className="flex flex-col">
-            <label className="mb-1 font-medium">Age *</label>
-            <input
-              type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              placeholder="Enter your age"
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
-              required
-            />
-          </div>
-
-          {/* Blood Group */}
-          <div className="flex flex-col">
-            <label className="mb-1 font-medium">Blood Group</label>
-            <input
-              type="text"
-              name="bloodGroup"
-              value={formData.bloodGroup}
-              onChange={handleChange}
-              placeholder="Enter your blood group (optional)"
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
-            />
-          </div>
-
-          {/* Gender */}
-          <div className="flex flex-col">
-            <label className="mb-1 font-medium">Gender *</label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
-              required
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          {/* Date of Birth */}
-          <div className="flex flex-col">
-            <label className="mb-1 font-medium">Date of Birth *</label>
-            <input
-              type="date"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
-              required
-            />
-          </div>
-
-          {/* Buttons */}
-          <div className="mt-4 flex justify-end gap-2">
+          <div className="md:col-span-2 flex justify-end gap-3 mt-6 sticky bottom-0 bg-white py-4 border-t">
             <DialogClose asChild>
-              <button
-                type="button"
-                className="px-4 py-2 rounded-lg border hover:bg-gray-100"
-              >
+              <button type="button" className="px-6 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition-colors text-sm">
                 Cancel
               </button>
             </DialogClose>
-
-            <FillButton
-              type="submit"
-              loading={loading}
-              bgColor="#00a19a"
-              hoverBg="#007d6e"
-              textColor="#fff"
-              hoverText="#fff"
-            >
-              Add to Cart
-            </FillButton>
+            <Button type="submit" disabled={loading} className="bg-[#00a19a] hover:bg-[#008c86] text-white px-8 text-sm">
+              {loading ? "Adding..." : "Add to Cart"}
+            </Button>
           </div>
         </form>
       </DialogContent>

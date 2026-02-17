@@ -7,7 +7,16 @@ export default function FeaturedCardLeft({
   bgColor,
   overlayColor = "#00a19a",
   organizer,
+  event,
 }) {
+  const formatDate = (dateString) => {
+    const d = new Date(dateString);
+    return d.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  };
   return (
     <div
       className="relative p-6 sm:p-8 lg:p-10 overflow-hidden"
@@ -30,7 +39,7 @@ export default function FeaturedCardLeft({
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[70%_30%] gap-6">
         <div>
           <h4 className="text-white text-3xl sm:text-4xl lg:text-5xl mb-2">
-            Marathon Race
+            {event?.name}
           </h4>
 
           <h1 className="text-brand text-6xl sm:text-7xl lg:text-[120px] leading-none">
@@ -39,10 +48,10 @@ export default function FeaturedCardLeft({
 
           <ul className="mt-5 space-y-2 text-light lg:flex items-center gap-4">
             <li className="flex mb-0 items-center gap-2.5 text-sm sm:text-base">
-              <MapPin size={18} /> 456 Progoti Sharini Road
+              <MapPin size={18} /> {event?.address}
             </li>
             <li className="flex mb-0 items-center gap-2.5 text-sm sm:text-base">
-              <Calendar size={18} /> 24 March, 2026
+              <Calendar size={18} /> {formatDate(event?.date)}
             </li>
           </ul>
         </div>
@@ -53,7 +62,7 @@ export default function FeaturedCardLeft({
             aenean
           </p>
 
-          <div className=" flex mt-4 justify-center lg:items-center flex-col " >
+          <div className=" flex mt-4 justify-center lg:items-center flex-col ">
             <Logo />
             <h6>Run Rise Nation</h6>
           </div>

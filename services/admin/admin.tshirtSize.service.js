@@ -16,5 +16,5 @@ export const getSizesById = (eventId) => {
 
 // Delete Ticket
 export const deleteSize = (ticketId) => {
-  return api.delete(`/admin/ticket/${ticketId}`);
+  return api.delete(`/admin/t-shirt-size/${ticketId}`);
 };

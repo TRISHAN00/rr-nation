@@ -7,8 +7,9 @@ export default function CartIcon({ count = 0 }) {
       <ShoppingBag size={16} color="white" className="w-full h-full" />
 
       {/* Count Badge */}
-      <div
-        className="
+      {count > 0 && (
+        <div
+          className="
         absolute -right-1 -bottom-1
         bg-[#F39200] text-white
         rounded-full
@@ -16,9 +17,10 @@ export default function CartIcon({ count = 0 }) {
         flex items-center justify-center
         text-xs font-bold
       "
-      >
-        {count}
-      </div>
+        >
+          {count}
+        </div>
+      )}
     </div>
   );
 }

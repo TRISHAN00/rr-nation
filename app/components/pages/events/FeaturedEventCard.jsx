@@ -6,7 +6,7 @@ export default function FeaturedEventCard({
   bgColor = "#003A3B",
   overlayColor = "#003A3B",
   organizer,
-  fontSize
+  event,
 }) {
   return (
     <div
@@ -19,6 +19,7 @@ export default function FeaturedEventCard({
           bgColor={bgColor}
           overlayColor={overlayColor}
           organizer={organizer}
+          event={event}
         />
 
         <FeaturedCardRight bgColor={bgColor} />

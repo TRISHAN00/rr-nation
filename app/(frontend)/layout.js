@@ -1,6 +1,7 @@
 import Footer from "@/app/components/common/footer/Footer.";
 import Header from "@/app/components/common/header/Header";
 import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 import { Albert_Sans, Anta } from "next/font/google";
 import { Toaster } from "sonner";
 import "../globals.css";
@@ -62,10 +63,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
         <AuthProvider>
-          <Toaster position="top-right" />
-          <Header />
-          {children}
-          <Footer />
+          <CartProvider>
+            <Toaster position="top-right" />
+            <Header />
+            {children}
+            <Footer />
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

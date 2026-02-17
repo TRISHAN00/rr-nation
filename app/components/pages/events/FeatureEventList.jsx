@@ -1,6 +1,27 @@
+"use client";
+import { getAllEvent } from "@/services/user.service";
+import { useEffect, useState } from "react";
 import FeaturedEventCard from "./FeaturedEventCard";
 
 export default function FeatureEventList() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchEvents = async () => {
+    try {
+      const res = await getAllEvent();
+      setEvents(res?.data?.items || []);
+    } catch (err) {
+      console.error("Failed to load events", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   return (
     <section className="featured-event bg-[#E0F7F6] lg:py-35 py-20 ">
       <div className="container m-auto px-7.5">
@@ -14,14 +35,23 @@ export default function FeatureEventList() {
           </h2>
         </div>
 
-        <FeaturedEventCard
-          bgImage="/dynamic/home/banner/banner-01.jpg"
-          bgColor="#003A3B"
-          overlayColor="#003A3B"
-        />
+        {events?.map((event) => {
+          return (
+            <FeaturedEventCard
+              key={event.id}
+              bgColor="#003A3B"
+              overlayColor="#003A3B"
+              event={event}
+            />
+          );
+        })}
 
-        <FeaturedEventCard bgColor="#004C0B" overlayColor="#004C0B" bgImage="/dynamic/home/banner/banner-01.jpg" />
-        <FeaturedEventCard bgColor="#03726D" />
+        {/* <FeaturedEventCard
+          bgColor="#004C0B"
+          overlayColor="#004C0B"
+          bgImage="/dynamic/home/banner/banner-01.jpg"
+        />
+        <FeaturedEventCard bgColor="#03726D" /> */}
       </div>
     </section>
   );

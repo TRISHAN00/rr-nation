@@ -1,20 +1,17 @@
 import { ProfileDropdown } from "@/app/components/pages/profile/ProfileDropdown";
 import { useAuthContext } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import { useState } from "react";
-import BorderButton from "../BorderButton";
 import CartIcon from "../CartIcon";
 import FillButton from "../FillButton";
 import MainMenu from "./NavigationMenuDemo";
-import SearchInput from "./SearchInput";
 
 export default function HeaderBottom() {
-  const [isCartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [loggedIn, setLoggedIn] = useState(true);
   const { isAuthenticated, user } = useAuthContext();
-
-  console.log(user)
+  const { setIsCartOpen, cartData } = useCart();
+  console.log(cartData);
 
   const handleAddTicket = (ticket) => {
     setCartItems([...cartItems, ticket]);
@@ -34,19 +31,19 @@ export default function HeaderBottom() {
 
         {/* Add to cart and search  */}
         <div className=" flex gap-7">
-          <div onClick={() => setCartOpen(true)}>
-            <CartIcon count={12} />
+          <div onClick={() => setIsCartOpen(true)}>
+            <CartIcon count={cartData?.items?.length} />
           </div>
-          <SearchInput />
+          {/* <SearchInput /> */}
         </div>
 
         {/* Button Group */}
         <div className=" flex gap-5">
           {!isAuthenticated ? (
             <>
-              <Link href="/member-register">
+              {/* <Link href="/member-register">
                 <BorderButton>Become a Member</BorderButton>
-              </Link>
+              </Link> */}
               <Link href="/accounts/login">
                 <FillButton>Login</FillButton>
               </Link>

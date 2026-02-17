@@ -4,13 +4,13 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import CartDetailModal from "../../modal/CartDetailModal";
 import Logo from "../Logo";
 import MobileSidebar from "../MobileSidebar";
 import HeaderBottom from "./HeaderBottom";
 import HeaderTop from "./HeaderTop";
 
 export default function Header() {
-
   // Prevents the "Login" button from showing while we check the token
   const isDesktop = useMediaQuery("(min-width: 1280px)");
   const pathname = usePathname();
@@ -25,6 +25,7 @@ export default function Header() {
   const [hide, setHide] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mounted, setMounted] = useState(false);
+ 
 
   useEffect(() => {
     setMounted(true);
@@ -67,6 +68,7 @@ export default function Header() {
       <div className="container mx-auto px-7.5 py-4 flex items-center gap-x-20">
         <Logo />
 
+       
         {isDesktop ? (
           <div className="flex flex-col flex-1">
             <HeaderTop />

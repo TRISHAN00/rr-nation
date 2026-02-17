@@ -31,8 +31,8 @@ export default function MobileSidebar() {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 h-full w-[280px] sm:w-[320px]
-          bg-[#001819] text-white z-50
+          fixed top-0 left-0 h-full w-70 sm:w-[320px]
+          bg-dark text-white z-50
           transform transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}
      
@@ -48,24 +48,18 @@ export default function MobileSidebar() {
 
         {/* Navigation */}
         <nav className="px-5 py-6 space-y-4">
-          {[
-            "Home",
-            "About",
-            "Event",
-            "Blog",
-            "Gallery",
-            "Team",
-            "Contact",
-          ].map((item) => (
-            <Link
-              key={item}
-              href={`/${item.toLowerCase()}`}
-              onClick={closeSidebar}
-              className="block text-[16px] font-medium hover:text-[#00a19a] transition"
-            >
-              {item}
-            </Link>
-          ))}
+          {["Home", "About", "Event", "Blog", "Gallery", "Team", "Contact"].map(
+            (item) => (
+              <Link
+                key={item}
+                href={`/${item.toLowerCase()}`}
+                onClick={closeSidebar}
+                className="block text-[16px] font-medium hover:text-brand transition"
+              >
+                {item}
+              </Link>
+            ),
+          )}
         </nav>
 
         {/* Divider */}
@@ -84,7 +78,7 @@ export default function MobileSidebar() {
           <Link
             href="/membership"
             onClick={closeSidebar}
-            className="block w-full text-center py-2 rounded-full bg-[#00a19a] text-black font-semibold hover:bg-[#009088] transition"
+            className="block w-full text-center py-2 rounded-full bg-brand text-black font-semibold hover:bg-[#009088] transition"
           >
             Become a Member
           </Link>

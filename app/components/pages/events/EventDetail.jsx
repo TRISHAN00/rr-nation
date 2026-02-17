@@ -43,7 +43,6 @@ export default function EventDetail() {
       />
       <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-12 sm:py-20">
         {/* Banner */}
-        {/* Banner */}
         {event?.bannerImage && (
           <div className="rounded-3xl overflow-hidden relative">
             <Image
@@ -74,12 +73,10 @@ export default function EventDetail() {
         </div>
 
         {/* Event Tickets / Feature Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-1 xl:grid-cols-2 xl:grid-cols-2 gap-6 mt-12">
-          {event?.packages?.map((pak, index) => {
-            console.log(pak); // logs each package
-            return (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-12">
+          {event?.packages?.map((pak, index) => (
+            <div key={pak.id || index} className="w-full min-w-0">
               <SMFeatureEventCard
-                key={pak.id || index} // always provide a key
                 bgImage="/dynamic/home/banner/banner-01.jpg"
                 bgColor="#003A3B"
                 overlayColor="#003A3B"
@@ -88,8 +85,8 @@ export default function EventDetail() {
                 pak={pak}
                 event={event}
               />
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </>

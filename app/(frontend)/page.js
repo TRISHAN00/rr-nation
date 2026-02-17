@@ -3,7 +3,6 @@ import TestimonialSec from "@/app/components/common/testimonial/TestimonialSec";
 import OurMission from "@/app/components/pages/about/OurMission";
 import FeaturedBlogSlide from "@/app/components/pages/blogs/FeaturedBlogSlide";
 import FeatureEventList from "@/app/components/pages/events/FeatureEventList";
-import SuccessfulEvents from "@/app/components/pages/events/SuccessfulEvents";
 import PhotoGallery from "@/app/components/pages/gallery/PhotoGallery";
 import AutoSlideLogo from "@/app/components/pages/home/AutoSlide/AutoSlideLogo";
 import Banner from "@/app/components/pages/home/banner/Banner";
@@ -57,7 +56,7 @@ export default function Home() {
       <Banner />
       <AutoSlideLogo />
       <OurMission hideTopImage />
-      <SuccessfulEvents />
+      {/* <SuccessfulEvents /> */}
       <Counter />
       <ServiceSlide />
       <JourneySection />

@@ -1,13 +1,18 @@
 "use client";
 import FillButton from "@/app/components/common/FillButton";
 import TicketModal from "@/app/components/modal/TicketModal";
+import { useCart } from "@/context/CartContext";
+import { eventAddToCart } from "@/services/cart.service";
 import { useState } from "react";
 
-export default function SMFeaturedCardRight({ bgColor, price, event }) {
+export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
   const [open, setOpen] = useState(false);
+  const { fetchCart } = useCart();
 
-  const handleAddToCart = (ticketData) => {
-    console.log("Ticket added:", ticketData);
+  const handleAddToCart = async (ticketData) => {
+    const response = await eventAddToCart(ticketData);
+    console.log(response);
+    await fetchCart();
   };
   return (
     <>
@@ -16,6 +21,8 @@ export default function SMFeaturedCardRight({ bgColor, price, event }) {
         isOpen={open}
         onOpenChange={setOpen}
         onAddToCart={handleAddToCart}
+        eventTicketId={pak?.id}
+        pak={pak}
       />
       <div
         className="relative p-5 sm:p-6 lg:p-4.5 flex flex-col justify-between rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none"

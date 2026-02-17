@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { Textarea } from "@/app/components/ui/textarea";
-import { createEvent } from "@/services/admin/admin.event.service";
 import {
   CalendarClock,
   ClipboardList,
@@ -27,18 +26,9 @@ import {
   Trophy,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
-/* ---------- DATE FORMATTER ---------- */
-const formatDateForInput = (date) => {
-  if (!date) return "";
-  return new Date(date).toISOString().split("T")[0];
-};
-
-export default function EventInfoForm({ event, onEventCreated }) {
-  const [loading, setLoading] = useState(false);
-
-  const [form, setForm] = useState({
+export default function UpdateEventForm({ event }) {
+  const [formData, setFormData] = useState({
     name: "",
     organizerName: "",
     description: "",
@@ -46,61 +36,60 @@ export default function EventInfoForm({ event, onEventCreated }) {
     time: "",
     address: "",
     eventType: "",
-    bannerImage: "",
-    thumbImage: "",
+    bannerImage: null,
+    thumbImage: null,
   });
 
-  const [bannerImage, setBannerImage] = useState(null);
-  const [thumbImage, setThumbImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  /* ---------- PREFILL FORM (EDIT MODE) ---------- */
+  /* Populate form when event loads */
   useEffect(() => {
     if (event) {
-      setForm({
-        name: event?.name || "",
-        organizerName: event?.organizerName || "",
-        description: event?.description || "",
-        date: formatDateForInput(event?.date),
-        time: event?.time || "",
-        address: event?.address || "",
-        eventType: event?.eventType || "",
-        bannerImage: bannerImage || "",
-        thumbImage: thumbImage || "",
+      setFormData({
+        name: event.name || "",
+        organizerName: event.organizerName || "",
+        description: event.description || "",
+        date: event.date || "",
+        time: event.time || "",
+        address: event.address || "",
+        eventType: event.eventType || "",
+        bannerImage: null,
+        thumbImage: null,
       });
     }
   }, [event]);
 
-  const handleChange = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+  /* Generic input handler */
+  const handleChange = (field, value) => {
+    console.log(field, value)
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
-  /* ---------- SUBMIT ---------- */
+  /* Submit handler */
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("name", form.name);
-    formData.append("organizerName", form.organizerName);
-    formData.append("description", form.description);
-    formData.append("date", form.date);
-    formData.append("time", form.time);
-    formData.append("address", form.address);
-    formData.append("eventType", form.eventType);
-    formData.append("status", "active");
-
-    if (bannerImage) formData.append("bannerImage", bannerImage);
-    if (thumbImage) formData.append("thumbImage", thumbImage);
+    setLoading(true);
 
     try {
-      setLoading(true);
-      const response = await createEvent(formData);
+      const payload = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null) payload.append(key, value);
+      });
 
-      if (response?.status === 201) {
-        toast.success("Event created successfully");
-      }
+      console.log(payload)
+
+      // const response = await updateEvent(event?.id, payload);
+      // console.log(response);
+
+      // Example API call
+      // await api.put(`/events/${event.id}`, payload);
+
+      console.log("Submitted Data:", Object.fromEntries(payload));
     } catch (error) {
-      console.error(error);
-      toast.error("Please try again!");
+      console.error("Update failed:", error);
     } finally {
       setLoading(false);
     }
@@ -121,7 +110,8 @@ export default function EventInfoForm({ event, onEventCreated }) {
           <div className="grid gap-2">
             <Label>Event Name *</Label>
             <Input
-              value={form.name}
+              name="name"
+              value={formData.name}
               onChange={(e) => handleChange("name", e.target.value)}
               placeholder="Enter event name"
               required
@@ -134,7 +124,7 @@ export default function EventInfoForm({ event, onEventCreated }) {
               <Label>Date *</Label>
               <Input
                 type="date"
-                value={form.date}
+                value={formData.date}
                 onChange={(e) => handleChange("date", e.target.value)}
                 required
               />
@@ -144,7 +134,7 @@ export default function EventInfoForm({ event, onEventCreated }) {
               <Label>Time *</Label>
               <Input
                 type="time"
-                value={form.time}
+                value={formData.time}
                 onChange={(e) => handleChange("time", e.target.value)}
                 required
               />
@@ -156,7 +146,7 @@ export default function EventInfoForm({ event, onEventCreated }) {
             <div className="grid gap-2">
               <Label>Venue / Address *</Label>
               <Input
-                value={form.address}
+                value={formData.address}
                 onChange={(e) => handleChange("address", e.target.value)}
                 placeholder="Event location"
                 required
@@ -166,7 +156,7 @@ export default function EventInfoForm({ event, onEventCreated }) {
             <div className="grid gap-2">
               <Label>Event Type *</Label>
               <Select
-                value={form.eventType}
+                value={formData.eventType}
                 onValueChange={(val) => handleChange("eventType", val)}
               >
                 <SelectTrigger>
@@ -206,7 +196,7 @@ export default function EventInfoForm({ event, onEventCreated }) {
           <div className="grid gap-2">
             <Label>Organizer Name *</Label>
             <Input
-              value={form.organizerName}
+              value={formData.organizerName}
               onChange={(e) => handleChange("organizerName", e.target.value)}
               placeholder="e.g., Dhaka Marathon"
               required
@@ -218,7 +208,7 @@ export default function EventInfoForm({ event, onEventCreated }) {
             <Label>Description</Label>
             <Textarea
               rows={4}
-              value={form.description}
+              value={formData.description}
               onChange={(e) => handleChange("description", e.target.value)}
               placeholder="Write event details..."
             />
@@ -234,7 +224,7 @@ export default function EventInfoForm({ event, onEventCreated }) {
               <Input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setBannerImage(e.target.files[0])}
+                onChange={(e) => handleChange("bannerImage", e.target.files[0])}
               />
             </div>
 
@@ -246,15 +236,15 @@ export default function EventInfoForm({ event, onEventCreated }) {
               <Input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setThumbImage(e.target.files[0])}
+                onChange={(e) => handleChange("thumbImage", e.target.files[0])}
               />
             </div>
           </div>
 
           {/* Submit */}
           <div className="flex justify-end pt-4">
-            <Button disabled={loading} className="px-8">
-              {loading ? "Saving..." : "Save Event"}
+            <Button disabled={loading} className="px-8" type="submit">
+              {loading ? "Updating..." : "Update Event"}
             </Button>
           </div>
         </form>
