@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { Textarea } from "@/app/components/ui/textarea";
+import { updateEvent } from "@/services/admin/admin.event.service";
 import {
   CalendarClock,
   ClipboardList,
@@ -81,8 +82,8 @@ export default function UpdateEventForm({ event }) {
 
       console.log(payload)
 
-      // const response = await updateEvent(event?.id, payload);
-      // console.log(response);
+      const response = await updateEvent(event?.id, payload);
+      console.log(response);
 
       // Example API call
       // await api.put(`/events/${event.id}`, payload);

@@ -9,7 +9,6 @@ import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { loginAdmin } from "@/services/admin/admin.auth.service";
 import { Eye, EyeOffIcon } from "lucide-react";
-import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -101,24 +100,7 @@ export default function AdminLoginPage() {
 
             {error && <p className="text-sm text-red-500">{error}</p>}
 
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={false}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300"
-                />
-                Remember me
-              </label>
-
-              <Link
-                href="/accounts/password/reset"
-                className="text-brand hover:underline font-medium"
-              >
-                Forgot password?
-              </Link>
-            </div>
+           
 
             <Button
               className="w-full"
@@ -129,25 +111,6 @@ export default function AdminLoginPage() {
             </Button>
           </form>
 
-          {/* Divider */}
-          <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400">OR</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
-          {/* Register */}
-          <div className="text-center mt-6">
-            <p className="text-sm text-gray-400">
-              Don’t have an account?
-              <Link
-                href="/accounts/register"
-                className="ml-1 font-medium text-brand hover:underline hover:text-brand/90 transition-colors"
-              >
-                Register now
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </>

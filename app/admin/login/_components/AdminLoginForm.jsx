@@ -100,16 +100,7 @@ export default function AdminLoginPage() {
             {error && <p className="text-sm text-red-500">{error}</p>}
 
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={false}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300"
-                />
-                Remember me
-              </label>
-
+             
               <Link
                 href="/accounts/password/reset"
                 className="text-brand hover:underline font-medium"

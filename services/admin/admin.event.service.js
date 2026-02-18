@@ -13,16 +13,20 @@ export const createEvent = (data) => {
 
 // Update Event
 export const updateEvent = (eventId, data) => {
-  console.log(eventId, data)
-  return api.patch(`/admin/event/${eventId}`, data); // safer than PATCH for multipart
+  // Some APIs allow a header to override the method
+  return api.post(`/admin/event/${eventId}`, data, {
+    headers: {
+      'X-HTTP-Method-Override': 'PATCH' 
+    }
+  });
 };
 
 // Get Event By Id
-export const getEventById = (eventId) => {
+export const getDashboardEventById = (eventId) => {
   return api.get(`/admin/event/${eventId}`);
 };
 
 // Delete Event
-export const deleteEvent = (eventId) => {
+export const deleteDashboardEvent = (eventId) => {
   return api.delete(`/admin/event/${eventId}`);
 };

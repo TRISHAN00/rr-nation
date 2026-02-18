@@ -16,27 +16,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
-import { Textarea } from "@/app/components/ui/textarea";
-import { createEvent } from "@/services/admin/admin.event.service";
-import {
-  CalendarClock,
-  ClipboardList,
-  ImageIcon,
-  Monitor,
-  Radio,
-  Trophy,
-} from "lucide-react";
+import { Textarea } from "@/app/components/ui/textarea"; // Added Textarea for description
+import { useDashboardEvents } from "@/app/dashboard/context/EventContext";
+import { ClipboardList, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
-/* ---------- DATE FORMATTER ---------- */
-const formatDateForInput = (date) => {
-  if (!date) return "";
-  return new Date(date).toISOString().split("T")[0];
-};
+const formatDateForInput = (date) =>
+  date ? new Date(date).toISOString().split("T")[0] : "";
 
-export default function EventInfoForm({ event, onEventCreated }) {
-  const [loading, setLoading] = useState(false);
+export default function EventInfoForm({ eventId, onEventCreated, event }) {
+  const { handleCreateEvent, handleUpdateEvent, loading } =
+    useDashboardEvents();
+
+  // Changed: Check for event existence OR eventId to determine edit mode
+  const isEditMode = !!eventId || !!event?.id;
 
   const [form, setForm] = useState({
     name: "",
@@ -46,215 +39,195 @@ export default function EventInfoForm({ event, onEventCreated }) {
     time: "",
     address: "",
     eventType: "",
-    bannerImage: "",
-    thumbImage: "",
   });
 
   const [bannerImage, setBannerImage] = useState(null);
   const [thumbImage, setThumbImage] = useState(null);
 
-  /* ---------- PREFILL FORM (EDIT MODE) ---------- */
+  // Sync internal form state when the 'event' prop changes
   useEffect(() => {
     if (event) {
       setForm({
-        name: event?.name || "",
-        organizerName: event?.organizerName || "",
-        description: event?.description || "",
-        date: formatDateForInput(event?.date),
-        time: event?.time || "",
-        address: event?.address || "",
-        eventType: event?.eventType || "",
-        bannerImage: bannerImage || "",
-        thumbImage: thumbImage || "",
+        name: event.name || "",
+        organizerName: event.organizerName || "",
+        description: event.description || "",
+        date: formatDateForInput(event.date),
+        time: event.time || "",
+        address: event.address || "",
+        eventType: event.eventType || "",
       });
     }
-  }, [event]);
+  }, [event]); // Triggers whenever the event data is fetched and passed in
 
-  const handleChange = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
-
-  /* ---------- SUBMIT ---------- */
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
-    formData.append("name", form.name);
-    formData.append("organizerName", form.organizerName);
-    formData.append("description", form.description);
-    formData.append("date", form.date);
-    formData.append("time", form.time);
-    formData.append("address", form.address);
-    formData.append("eventType", form.eventType);
+
+    Object.keys(form).forEach((key) => {
+      // Important: Check for value existence before appending
+      if (form[key] !== null && form[key] !== undefined) {
+        formData.append(key, form[key]);
+      }
+    });
+
     formData.append("status", "active");
 
     if (bannerImage) formData.append("bannerImage", bannerImage);
     if (thumbImage) formData.append("thumbImage", thumbImage);
 
-    try {
-      setLoading(true);
-      const response = await createEvent(formData);
-
-      if (response?.status === 201) {
-        toast.success("Event created successfully");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Please try again!");
-    } finally {
-      setLoading(false);
+    if (isEditMode) {
+      // Use eventId from params or the event object
+      const targetId = eventId || event?.id;
+      await handleUpdateEvent(targetId, formData);
+    } else {
+      const newId = await handleCreateEvent(formData);
+      if (onEventCreated && newId) onEventCreated(newId);
     }
   };
 
   return (
     <Card className="w-full shadow-md">
-      <CardHeader className="border-b">
+      <CardHeader className="border-b bg-muted/20">
         <CardTitle className="flex items-center gap-2 text-lg">
           <ClipboardList className="h-5 w-5 text-primary" />
-          Event Information
+          {isEditMode ? "Edit Event Information" : "Create New Event"}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="pt-6">
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Event Name */}
+          {/* Row 1: Name and Organizer */}
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Event Name *</Label>
+              <Input
+                id="name"
+                disabled={loading}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="organizer">Organizer Name</Label>
+              <Input
+                id="organizer"
+                disabled={loading}
+                value={form.organizerName}
+                onChange={(e) =>
+                  setForm({ ...form, organizerName: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          {/* Row 2: Description (Full Width) */}
           <div className="grid gap-2">
-            <Label>Event Name *</Label>
-            <Input
-              value={form.name}
-              onChange={(e) => handleChange("name", e.target.value)}
-              placeholder="Enter event name"
-              required
+            <Label htmlFor="description">Event Description</Label>
+            <Textarea
+              id="description"
+              placeholder="Tell us more about the event..."
+              className="min-h-[120px] resize-none"
+              disabled={loading}
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
             />
           </div>
 
-          {/* Date & Time */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Row 3: Date and Time */}
+          <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label>Date *</Label>
+              <Label htmlFor="date">Date *</Label>
               <Input
+                id="date"
                 type="date"
+                disabled={loading}
                 value={form.date}
-                onChange={(e) => handleChange("date", e.target.value)}
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
                 required
               />
             </div>
-
             <div className="grid gap-2">
-              <Label>Time *</Label>
+              <Label htmlFor="time">Time *</Label>
               <Input
+                id="time"
                 type="time"
+                disabled={loading}
                 value={form.time}
-                onChange={(e) => handleChange("time", e.target.value)}
+                onChange={(e) => setForm({ ...form, time: e.target.value })}
                 required
               />
             </div>
           </div>
 
-          {/* Venue & Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Row 4: Venue and Type */}
+          <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label>Venue / Address *</Label>
+              <Label htmlFor="venue">Venue *</Label>
               <Input
+                id="venue"
+                disabled={loading}
                 value={form.address}
-                onChange={(e) => handleChange("address", e.target.value)}
-                placeholder="Event location"
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
                 required
               />
             </div>
-
             <div className="grid gap-2">
               <Label>Event Type *</Label>
               <Select
+                disabled={loading}
                 value={form.eventType}
-                onValueChange={(val) => handleChange("eventType", val)}
+                onValueChange={(val) => setForm({ ...form, eventType: val })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select event type" />
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="live">
-                    <div className="flex items-center gap-2">
-                      <Radio className="h-4 w-4 text-red-500" />
-                      Live
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="virtual">
-                    <div className="flex items-center gap-2">
-                      <Monitor className="h-4 w-4 text-blue-500" />
-                      Virtual
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="upcoming">
-                    <div className="flex items-center gap-2">
-                      <CalendarClock className="h-4 w-4 text-yellow-500" />
-                      Upcoming
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="successful">
-                    <div className="flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-green-500" />
-                      Successful
-                    </div>
-                  </SelectItem>
+                  <SelectItem value="live">Live</SelectItem>
+                  <SelectItem value="virtual">Virtual</SelectItem>
+                  <SelectItem value="upcoming">Upcoming</SelectItem>
+                  <SelectItem value="successful">Successful</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          {/* Organizer */}
-          <div className="grid gap-2">
-            <Label>Organizer Name *</Label>
-            <Input
-              value={form.organizerName}
-              onChange={(e) => handleChange("organizerName", e.target.value)}
-              placeholder="e.g., Dhaka Marathon"
-              required
-            />
-          </div>
-
-          {/* Description */}
-          <div className="grid gap-2">
-            <Label>Description</Label>
-            <Textarea
-              rows={4}
-              value={form.description}
-              onChange={(e) => handleChange("description", e.target.value)}
-              placeholder="Write event details..."
-            />
-          </div>
-
-          {/* Images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Row 5: Images */}
+          <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2">
-                <ImageIcon className="h-4 w-4" />
-                Banner Image
-              </Label>
+              <Label>Banner Image</Label>
               <Input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setBannerImage(e.target.files[0])}
+                disabled={loading}
               />
             </div>
-
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2">
-                <ImageIcon className="h-4 w-4" />
-                Thumbnail Image
-              </Label>
+              <Label>Thumbnail Image</Label>
               <Input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setThumbImage(e.target.files[0])}
+                disabled={loading}
               />
             </div>
           </div>
 
-          {/* Submit */}
-          <div className="flex justify-end pt-4">
-            <Button disabled={loading} className="px-8">
-              {loading ? "Saving..." : "Save Event"}
+          <div className="flex justify-end pt-4 border-t">
+            <Button type="submit" disabled={loading} className="min-w-[150px]">
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : isEditMode ? (
+                "Update Event"
+              ) : (
+                "Create Event"
+              )}
             </Button>
           </div>
         </form>

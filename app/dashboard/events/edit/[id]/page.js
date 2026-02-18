@@ -1,40 +1,38 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
-import { getEventById } from "@/services/admin/admin.event.service";
-import EventInfoFormSkeleton from "../../create/_components/EventInfoFormSkeleton";
+import { useDashboardEvents } from "@/app/dashboard/context/EventContext";
+import { useEffect } from "react";
+import EventCouponManager from "../../_components/EventCouponManager";
+import EventInfoForm from "../../create/_components/EventInfoForm";
 import EventTickets from "../../create/_components/EventTickets";
 import EventTshirt from "../../create/_components/EventTshirt";
-import UpdateEventForm from "../../create/_components/UpdateEventForm";
 
 export default function DashboardEventEdit() {
   const { id } = useParams();
-  const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const res = await getEventById(id);
-        setEvent(res?.data?.data);
-      } catch {
-        toast.error("Failed to load event");
-      } finally {
-        setLoading(false);
-      }
-    };
+   const {
+     handleGetEventById,
+     event,
+   } = useDashboardEvents();
+ 
+   useEffect(() => {
+     if (id) {
+       handleGetEventById(id);
+     }
+   }, [id, handleGetEventById]);
 
-    fetchEvent();
-  }, [id]);
-
-  if (loading) return <EventInfoFormSkeleton />;
 
   return (
     <div className="space-y-6">
-      <UpdateEventForm event={event} />
+      {/* 4. Pass the event data to the form */}
+      <EventInfoForm event={event} />
+
+      {/* Couponse */}
+      <EventCouponManager event={event} />
+
+      {/* 5. Pass the ID to the sub-components */}
       <EventTickets eventId={id} />
       <EventTshirt eventId={id} />
     </div>

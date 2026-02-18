@@ -23,7 +23,7 @@ export function middleware(request) {
 
   /* ---------- LOGGED IN ---------- */
 
-  // 🚫 Block ALL login pages after login
+  // Block ALL login pages after login
   if (isUserLogin || isAdminLogin) {
     if (role === "admin") {
       return NextResponse.redirect(
@@ -36,7 +36,7 @@ export function middleware(request) {
     );
   }
 
-  // 🚫 User trying to access admin dashboard
+  // User trying to access admin dashboard
   if (role === "user" && isDashboard) {
     return NextResponse.redirect(
       new URL("/profile", request.url)

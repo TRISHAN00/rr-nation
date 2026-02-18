@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
-     {children}
+        {children}
       </body>
     </html>
   );

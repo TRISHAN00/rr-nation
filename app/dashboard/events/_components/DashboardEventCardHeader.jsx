@@ -18,6 +18,7 @@ import {
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import DashboardEventBadges from "./DashboardEventCardBadge";
 
 export default function DashboardEventCardHeader({
@@ -26,20 +27,20 @@ export default function DashboardEventCardHeader({
   expandedEvent,
   event,
   onDelete,
+  loading,
 }) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   return (
     <CardHeader className="pb-3">
       <div className="flex items-start justify-between">
         <div className="flex-1 space-y-2">
-          {/* ✅ Badges extracted */}
           <DashboardEventBadges
             TypeIcon={TypeIcon}
             typeConfig={typeConfig}
             event={event}
           />
-
           <CardTitle className="font-display text-xl">{event.name}</CardTitle>
-
           <p className="text-sm text-muted-foreground line-clamp-1">
             {event.description}
           </p>
@@ -49,16 +50,11 @@ export default function DashboardEventCardHeader({
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="sm" className="gap-1">
               {expandedEvent === event.id ? (
-                <>
-                  <ChevronUp className="h-4 w-4" />
-                  Hide Packages
-                </>
+                <ChevronUp className="h-4 w-4" />
               ) : (
-                <>
-                  <ChevronDown className="h-4 w-4" />
-                  View Packages
-                </>
+                <ChevronDown className="h-4 w-4" />
               )}
+              {expandedEvent === event.id ? "Hide Packages" : "View Packages"}
             </Button>
           </CollapsibleTrigger>
 
@@ -69,35 +65,37 @@ export default function DashboardEventCardHeader({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link
-                  className=" flex items-center"
-                  href={`/dashboard/events/${event?.id}`}
-                >
-                  <Eye className="mr-2 h-4 w-4" />
-                  View Details
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/events/${event?.id}`}>
+                  <Eye className="mr-2 h-4 w-4" /> View Details
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link
-                  className=" flex items-center w-full"
-                  href={`/dashboard/events/edit/${event.id}`}
-                >
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/events/edit/${event.id}`}>
+                  <Edit className="mr-2 h-4 w-4" /> Edit
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={onDelete}
                 className="text-destructive"
-                onClick={() => onDelete(event.id)}
+                onSelect={() => setShowDeleteModal(true)} // Open modal on select
               >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
+                <Trash2 className="mr-2 h-4 w-4" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {/* <ConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={onDelete}
+        title={`Delete ${event.name}?`}
+        description="This will permanently remove the event and all associated ticket packages. This action cannot be undone."
+        loading={loading}
+      /> */}
     </CardHeader>
   );
 }

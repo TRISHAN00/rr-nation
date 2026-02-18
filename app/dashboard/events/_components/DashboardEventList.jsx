@@ -2,11 +2,10 @@
 
 import { Card, CardContent } from "@/app/components/ui/card";
 import { Collapsible } from "@/app/components/ui/collapsible";
-import { deleteEvent } from "@/services/admin/admin.event.service";
 import { CalendarClock, Monitor, Radio, Trophy } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 
+import { useDashboardEvents } from "../../context/EventContext";
 import DashboardEventCardHeader from "./DashboardEventCardHeader";
 import DashboardTicketContent from "./DashboardTicketContent";
 import EventMeta from "./EventMeta";
@@ -18,22 +17,13 @@ const eventTypes = {
   successful: { label: "Successful", icon: Trophy },
 };
 
-export default function DashboardEventList({ events, fetchEvent }) {
+export default function DashboardEventList({ events }) {
   const [expandedEvent, setExpandedEvent] = useState(null);
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteEvent(id);
-      toast.success("Event deleted successfully");
-      await fetchEvent(); 
-    } catch (err) {
-      toast.error("Failed to delete event");
-    }
-  };
+  const { handleDeleteDashboardEvent, loading } = useDashboardEvents();
 
   return (
     <div className="space-y-4">
-      {events.map((event) => {
+      {events?.map((event) => {
         const typeConfig = eventTypes[event.eventType];
         const TypeIcon = typeConfig.icon;
 
@@ -52,8 +42,9 @@ export default function DashboardEventList({ events, fetchEvent }) {
                 TypeIcon={TypeIcon}
                 typeConfig={typeConfig}
                 expandedEvent={expandedEvent}
-                onDelete={handleDelete} // ✅ delete handler
+                onDelete={() => handleDeleteDashboardEvent(event.id)}
                 event={event}
+                loading={loading}
               />
 
               <CardContent className="pt-0">

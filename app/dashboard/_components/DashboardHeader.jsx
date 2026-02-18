@@ -23,7 +23,6 @@ import { useTheme } from "../context/ThemeContext";
 export function DashboardHeader() {
   const { theme, setTheme } = useTheme();
   const { isAuthenticated, user } = useAuthContext();
-  console.log(isAuthenticated, user);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card px-6">
