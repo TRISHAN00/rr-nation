@@ -374,7 +374,7 @@ export function UserProfileTabs({ user }) {
         {/* Profile Settings Tab */}
         <TabsContent value="profile" className="mt-6 space-y-6">
           {/* Profile Photo */}
-          <Card className="border-gray-200">
+          <Card className="border-gray-200 text-center md:text-left lg:text-left">
             <CardHeader>
               <CardTitle className="text-base sm:text-lg">
                 Profile Photo

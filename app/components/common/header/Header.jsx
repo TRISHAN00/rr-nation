@@ -4,7 +4,6 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import CartDetailModal from "../../modal/CartDetailModal";
 import Logo from "../Logo";
 import MobileSidebar from "../MobileSidebar";
 import HeaderBottom from "./HeaderBottom";
@@ -19,7 +18,10 @@ export default function Header() {
     pathname === "/accounts/login" ||
     pathname === "/accounts/register" ||
     pathname === "/accounts/password/reset" ||
-    pathname === "/policies";
+    pathname === "/policies" ||
+    pathname === "/payment/fail" ||
+    pathname === "/payment/cancel" ||
+    pathname === "/payment/success";
 
   const [scrolled, setScrolled] = useState(false);
   const [hide, setHide] = useState(false);

@@ -22,7 +22,7 @@ export default function FeaturedEventCard({
           event={event}
         />
 
-        <FeaturedCardRight bgColor={bgColor} />
+        <FeaturedCardRight bgColor={bgColor} event={event} />
       </div>
     </div>
   );

@@ -2,11 +2,13 @@
 
 import { useCart } from "@/context/CartContext";
 import { ShoppingCart, Trash2, X } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function CartDetailModal({ open, onClose, cartData }) {
   if (!open) return null;
+
+  const router = useRouter();
 
   const { handleDeleteCartItem } = useCart();
 
@@ -19,6 +21,11 @@ export default function CartDetailModal({ open, onClose, cartData }) {
   }, []);
 
   const hasItems = cartData?.items?.length > 0;
+
+  const handleCheckout = () => {
+    onClose();
+    router.push("/events/checkout"); // ✅ navigate
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -207,14 +214,13 @@ export default function CartDetailModal({ open, onClose, cartData }) {
             >
               Back to Events
             </button>
-            <Link href={"/events/checkout"}>
-              <button
-                disabled={!hasItems}
-                className="rounded-lg bg-[#00a19a] cursor-pointer px-8 py-2 text-sm font-semibold text-white hover:bg-[#009088] transition-all shadow-md active:scale-95 disabled:bg-gray-300 disabled:scale-100"
-              >
-                Proceed to Checkout
-              </button>
-            </Link>
+            <button
+              onClick={handleCheckout}
+              disabled={!hasItems}
+              className="rounded-lg bg-[#00a19a] px-8 py-2 text-sm font-semibold text-white disabled:bg-gray-300"
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       </div>

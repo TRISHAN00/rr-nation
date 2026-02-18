@@ -1,22 +1,21 @@
 "use client";
 import FillButton from "@/app/components/common/FillButton";
-import TicketModal from "@/app/components/modal/TicketModal";
-import { useState } from "react";
-export default function FeaturedCardRight({ bgColor }) {
-  const [open, setOpen] = useState(false);
+import Link from "next/link";
+export default function FeaturedCardRight({ bgColor, event }) {
+  // const [open, setOpen] = useState(false);
 
-  const handleAddToCart = (ticketData) => {
-    console.log("Ticket added:", ticketData);
-  };
+  // const handleAddToCart = (ticketData) => {
+  //   console.log("Ticket added:", ticketData);
+  // };
 
   return (
     <>
       {/* Ticket Purchase form Modal */}
-      <TicketModal
+      {/* <TicketModal
         isOpen={open}
         onOpenChange={setOpen}
         onAddToCart={handleAddToCart}
-      />
+      /> */}
       <div
         className="relative p-6 sm:p-8 lg:p-10 flex flex-col justify-between"
         style={{ backgroundColor: bgColor }}
@@ -40,12 +39,14 @@ export default function FeaturedCardRight({ bgColor }) {
 
         {/* Button */}
         <div className="mt-6 lg:mt-0">
-          <FillButton
-            onClick={() => setOpen(true)}
-            className="w-full lg:w-auto"
-          >
-            Add to Ticket
-          </FillButton>
+          <Link href={`/events/${event?.id}`}>
+            <FillButton
+              onClick={() => setOpen(true)}
+              className="w-full lg:w-auto"
+            >
+              Get Ticket
+            </FillButton>
+          </Link>
         </div>
       </div>
     </>

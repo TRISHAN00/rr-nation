@@ -17,6 +17,7 @@ export default function TicketModal({
   onAddToCart,
   eventTicketId,
   pak,
+  handleTicketClick,
 }) {
   // 1. Defined T-Shirt options with labels for UI and clean values for Backend
   const tshirtOptions = [
@@ -77,7 +78,7 @@ export default function TicketModal({
 
   const [formData, setFormData] = useState(initialState);
   const [loading, setLoading] = useState(false);
-  const {handleAddToCart} = useCart()
+  const { handleAddToCart } = useCart();
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -86,14 +87,13 @@ export default function TicketModal({
     setFormData((prev) => ({ ...prev, [name]: formattedValue }));
   };
 
+  // Inside TicketModal.jsx - Simplified handleSubmit logic
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const emptyField = fields.find((f) => f.required && !formData[f.name]);
     if (emptyField) {
-      alert(
-        `Please fill the required field: ${emptyField.name.replace(/([A-Z])/g, " $1")}`,
-      );
+      alert(`Please fill the required field: ${emptyField.name}`);
       return;
     }
 
@@ -104,20 +104,18 @@ export default function TicketModal({
       quantity: 1,
       participant: {
         ...formData,
-        distanceCategory: pak?.distance, // Injected from pak
+        distanceCategory: pak?.distance,
       },
     };
-    
 
+    // Use the prop function passed from SMFeaturedCardRight
     if (onAddToCart) {
-      onAddToCart(payload);
+      onAddToCart(payload).then(() => {
+        setLoading(false);
+        onOpenChange(false);
+        setFormData(initialState);
+      });
     }
-
-    setTimeout(() => {
-      setLoading(false);
-      onOpenChange(false);
-      setFormData(initialState);
-    }, 500);
   };
 
   return (
