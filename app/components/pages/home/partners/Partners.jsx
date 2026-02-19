@@ -5,8 +5,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Partner from "./Partner";
 
 const partners = [
-  "/dynamic/partners/1.png",
-  "/dynamic/partners/2.png",
+  "/dynamic/partners/1.PNG",
+  "/dynamic/partners/2.PNG",
   "/dynamic/partners/3.jpg",
   "/dynamic/partners/4.png",
   "/dynamic/partners/5.jpg",

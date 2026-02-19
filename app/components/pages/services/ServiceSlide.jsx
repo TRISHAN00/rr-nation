@@ -25,7 +25,7 @@ const services = [
     id: 3,
     title: "Multi Vendor Management",
     desc: "We bridge the gap between events and top-tier suppliers, handling logistics, hydration, and technical support for a seamless experience.",
-    image: "/dynamic/service/Vendor _Management.jpg",
+    image: "/dynamic/service/Vendor_Management.jpg",
   },
 ];
 

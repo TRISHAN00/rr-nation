@@ -21,7 +21,7 @@ const succEvents = [
     vanue: 'Chandrima Udyan',
     Organizer: 'ICAB',
     partner: 'RunRise Nation',
-    thumb: '/dynamic/successful-ev/4.jpeg'
+    thumb: '/dynamic/successful-ev/4.jpg'
   },
   {
     id: 3,
