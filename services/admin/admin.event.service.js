@@ -30,3 +30,11 @@ export const getDashboardEventById = (eventId) => {
 export const deleteDashboardEvent = (eventId) => {
   return api.delete(`/admin/event/${eventId}`);
 };
+
+// GET EVENT ORDERS
+
+export const getAllOrders = async () => {
+  const { data } = await api.get("/admin/order-history");
+  return data;
+};
+

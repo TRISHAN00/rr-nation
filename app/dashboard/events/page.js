@@ -11,6 +11,8 @@ import DashboardEventTab from "./_components/DashboardEventTab";
 export default function DashboardEventsPage() {
   const { events, loading } = useDashboardEvents();
 
+  console.log(events)
+
   return (
     <div className="space-y-6 animate-fade-in">
       <DashboardEventPageHeader />

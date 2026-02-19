@@ -30,8 +30,18 @@ export function CouponProvider({ children, eventId }) {
   const handleCreateCoupon = async (couponData) => {
     try {
       setIsProcessing(true);
-      // Ensure eventId is attached from the provider prop
-      await createCoupon({ ...couponData, eventId });
+
+      // FIX: If couponData is an array, map through it to ensure eventId is present
+      // If it's a single object, just attach the eventId.
+      const dataToSend = Array.isArray(couponData)
+        ? couponData.map((c) => ({
+            ...c,
+            eventId: Number(eventId || c.eventId),
+          }))
+        : { ...couponData, eventId: Number(eventId || couponData.eventId) };
+
+      await createCoupon(dataToSend);
+
       toast.success("Coupon created");
       await fetchCoupons();
       return true;

@@ -38,7 +38,7 @@ import {
 import { useEffect, useState } from "react";
 import { useCoupons } from "../../context/CouponContext";
 
-export default function EventCouponManager() {
+export default function EventCouponManager({ event }) {
   const {
     coupons,
     loading,
@@ -55,18 +55,30 @@ export default function EventCouponManager() {
     usageLimit: "",
   });
 
-  // Initial fetch on mount
+  // 1. Sync eventId when event data finally loads from the parent
   useEffect(() => {
     fetchCoupons();
   }, [fetchCoupons]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await handleCreateCoupon({
-      ...form,
+
+    if (!event?.id) {
+      toast.error("Event ID missing");
+      return;
+    }
+
+    // Create one clean object
+    const cleanCoupon = {
+      eventId: Number(event.id),
+      code: form.code.trim(),
+      discountType: form.discountType,
       value: Number(form.value),
       usageLimit: Number(form.usageLimit),
-    });
+    };
+
+    // Send the object. The Context and API helper will wrap it in [ ] for you.
+    const success = await handleCreateCoupon(cleanCoupon);
 
     if (success) {
       setForm({
@@ -85,7 +97,7 @@ export default function EventCouponManager() {
           <div className="space-y-1">
             <CardTitle className="flex items-center gap-2 text-xl font-semibold">
               <Ticket className="h-5 w-5 text-primary" />
-              Promotion Coupons
+              Promotion Coupons (Event ID: {event?.id || "..."})
             </CardTitle>
             <CardDescription>
               Manage discount codes for this event.
@@ -153,6 +165,7 @@ export default function EventCouponManager() {
                 )}
                 <Input
                   type="number"
+                  step="any"
                   value={form.value}
                   onChange={(e) => setForm({ ...form, value: e.target.value })}
                   className="pr-10"
