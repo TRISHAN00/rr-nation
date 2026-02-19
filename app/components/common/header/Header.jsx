@@ -18,7 +18,7 @@ export default function Header() {
     pathname === "/accounts/login" ||
     pathname === "/accounts/register" ||
     pathname === "/accounts/password/reset" ||
-    pathname === "/policies" ||
+    pathname === "/privacy-policy" ||
     pathname === "/payment/fail" ||
     pathname === "/payment/cancel" ||
     pathname === "/payment/success";

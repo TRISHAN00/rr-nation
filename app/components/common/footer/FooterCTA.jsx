@@ -1,7 +1,7 @@
 import { NotebookPen } from "lucide-react";
 import Image from "next/image";
-import FillButton from "../FillButton";
 import Link from "next/link";
+import FillButton from "../FillButton";
 
 export default function FooterCTA() {
   return (
@@ -28,7 +28,7 @@ export default function FooterCTA() {
 
       {/* Registration Button */}
       <div className="flex justify-center md:ml-auto z-10">
-        <Link href={"/member-register"}>
+        <Link href={"/events"}>
           <FillButton
             icon={NotebookPen}
             bgColor="#fafafa "
@@ -37,7 +37,7 @@ export default function FooterCTA() {
             hoverText="#fafafa"
             iconPosition="right"
           >
-            Registration
+            Get Ticket
           </FillButton>
         </Link>
       </div>

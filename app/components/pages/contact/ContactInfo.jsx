@@ -23,7 +23,8 @@ export default function ContactInfo() {
               Office Address
             </h6>
             <p className="text-[#80D9D4] text-sm sm:text-[16px] leading-6 font-medium max-w-xs">
-              H-1, R-6, S-12, B-E, Extended Rupnagar R/A, Pallabi, Mirpur
+              House No. 1, Road No. 6, Section - 12, Block E, Extended Rupnagar
+              R/A, Pallabi, Mirpur, Dhaka-1216.
             </p>
           </div>
 
@@ -36,7 +37,7 @@ export default function ContactInfo() {
               Make A Call
             </h6>
             <p className="text-[#80D9D4] text-sm sm:text-[16px] leading-6 font-medium">
-              +880 1889 996700
+              +8801889996700
             </p>
           </div>
 

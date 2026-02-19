@@ -2,6 +2,7 @@
 
 import { processCheckout } from "@/services/cart.service"; // Adjust path
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import CouponInput from "./CouponInput";
@@ -78,7 +79,7 @@ export default function CheckoutSidebar({ cartData, discount, agree, setAgree, s
             />
             <span className="text-xs text-gray-600 leading-tight">
               I have read and agree to the website{" "}
-              <a href="#" className="text-[#00a19a] font-bold underline">terms and conditions</a>.
+              <Link href="/privacy-policy" className="text-[#00a19a] font-bold underline">terms and conditions</Link>.
             </span>
           </label>
         </div>

@@ -57,7 +57,9 @@ export default function CallUsCard() {
 
           {/* Button */}
           <div>
+            <Link href={'/contact'} >
             <FillButton className="w-full sm:w-auto">Contact Us</FillButton>
+          </Link>
           </div>
         </div>
       </div>

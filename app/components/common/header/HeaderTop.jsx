@@ -5,7 +5,7 @@ import HeaderSocial from "./HeaderSocial";
 const leftItems = [
   {
     icon: MapPin,
-    text: "102/B New Market, Sandigo-USA",
+    text: "Pallabi, Mirpur, Dhaka-1216.",
     href: "#",
   },
   {
@@ -18,8 +18,8 @@ const leftItems = [
 const rightItems = [
   {
     icon: Phone,
-    text: "09666 735 765",
-    href: "tel:09666735765",
+    text: "+8801889996700",
+    href: "tel:+8801889996700",
   },
 ];
 

@@ -9,8 +9,8 @@ const leftItems = [
   },
   {
     icon: Phone,
-    text: "09666 735 765",
-    href: "tel:09666735765",
+    text: "+8801889996700",
+    href: "tel:+8801889996700",
   },
   {
     icon: Mail,

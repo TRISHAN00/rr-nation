@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/app/components/ui/dialog";
-import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import { Button } from "../ui/button";
 
@@ -17,9 +16,7 @@ export default function TicketModal({
   onAddToCart,
   eventTicketId,
   pak,
-  handleTicketClick,
 }) {
-  // 1. Defined T-Shirt options with labels for UI and clean values for Backend
   const tshirtOptions = [
     { label: 'XS (Chest: 36", Length: 25")', value: "XS" },
     { label: 'S (Chest: 38", Length: 26")', value: "S" },
@@ -35,7 +32,6 @@ export default function TicketModal({
     { label: '11-12 Years (Chest: 34", Length: 24")', value: "11-12 Years" },
   ];
 
-  // 2. Exact fields requested
   const fields = [
     { name: "name", type: "text", required: true },
     { name: "email", type: "email", required: false },
@@ -78,19 +74,17 @@ export default function TicketModal({
 
   const [formData, setFormData] = useState(initialState);
   const [loading, setLoading] = useState(false);
-  const { handleAddToCart } = useCart();
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    const formattedValue =
-      type === "number" ? (value === "" ? "" : Number(value)) : value;
-    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "number" ? (value === "" ? "" : Number(value)) : value,
+    }));
   };
 
-  // Inside TicketModal.jsx - Simplified handleSubmit logic
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const emptyField = fields.find((f) => f.required && !formData[f.name]);
     if (emptyField) {
       alert(`Please fill the required field: ${emptyField.name}`);
@@ -98,7 +92,6 @@ export default function TicketModal({
     }
 
     setLoading(true);
-
     const payload = {
       eventTicketId,
       quantity: 1,
@@ -108,7 +101,6 @@ export default function TicketModal({
       },
     };
 
-    // Use the prop function passed from SMFeaturedCardRight
     if (onAddToCart) {
       onAddToCart(payload).then(() => {
         setLoading(false);
@@ -120,72 +112,79 @@ export default function TicketModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl w-full max-h-[90vh] flex flex-col">
-        <DialogHeader className="shrink-0 border-b pb-4">
-          <DialogTitle className="text-xl font-bold text-dark">
+      {/* max-h-[90dvh] handles the dynamic height on mobile browsers */}
+      <DialogContent className="max-w-3xl w-[95%] sm:w-full max-h-[90dvh] flex flex-col p-0 overflow-hidden gap-0">
+        
+        {/* Fixed Header */}
+        <DialogHeader className="shrink-0 border-b p-5 bg-white z-10">
+          <DialogTitle className="text-lg sm:text-xl font-bold text-[#001819]">
             {pak?.name}
           </DialogTitle>
-          <p className="text-sm text-brand font-medium">
+          <p className="text-sm text-brand font-semibold">
             Distance: {pak?.distance}
           </p>
         </DialogHeader>
 
+        {/* Scrollable Form Area */}
         <form
-          className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mt-4 overflow-y-auto px-1 py-2"
+          className="flex-1 overflow-y-auto"
           onSubmit={handleSubmit}
         >
-          {fields.map((field) => {
-            const label = field.name
-              .replace(/([A-Z])/g, " $1")
-              .replace(/^./, (str) => str.toUpperCase());
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-5 sm:p-6 pb-24 md:pb-6">
+            {fields.map((field) => {
+              const label = field.name
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase());
 
-            return (
-              <div key={field.name} className="flex flex-col">
-                <label className="mb-1 text-sm font-semibold text-gray-700">
-                  {label}{" "}
-                  {field.required && <span className="text-red-500">*</span>}
-                </label>
+              return (
+                <div key={field.name} className="flex flex-col">
+                  <label className="mb-1.5 text-xs sm:text-sm font-bold text-gray-700 uppercase tracking-tight">
+                    {label}{" "}
+                    {field.required && <span className="text-red-500">*</span>}
+                  </label>
 
-                {field.type === "select" ? (
-                  <select
-                    name={field.name}
-                    value={formData[field.name]}
-                    onChange={handleChange}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-white text-sm"
-                    required={field.required}
-                  >
-                    <option value="">Select {label}</option>
-                    {field.options.map((option) => {
-                      const isObj = typeof option === "object";
-                      const val = isObj ? option.value : option;
-                      const text = isObj ? option.label : option;
-                      return (
-                        <option key={val} value={val}>
-                          {text}
-                        </option>
-                      );
-                    })}
-                  </select>
-                ) : (
-                  <input
-                    type={field.type}
-                    name={field.name}
-                    value={formData[field.name]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${label.toLowerCase()}`}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-sm"
-                    required={field.required}
-                  />
-                )}
-              </div>
-            );
-          })}
+                  {field.type === "select" ? (
+                    <select
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      className="h-11 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-white text-sm appearance-none border-gray-200"
+                      required={field.required}
+                    >
+                      <option value="">Select {label}</option>
+                      {field.options.map((option) => {
+                        const isObj = typeof option === "object";
+                        const val = isObj ? option.value : option;
+                        const text = isObj ? option.label : option;
+                        return (
+                          <option key={val} value={val}>
+                            {text}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  ) : (
+                    <input
+                      type={field.type}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      placeholder={`Enter ${label.toLowerCase()}`}
+                      className="h-11 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-sm border-gray-200 placeholder:text-gray-400"
+                      required={field.required}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
 
-          <div className="md:col-span-2 flex justify-end gap-3 mt-6 sticky bottom-0 bg-white py-4 border-t">
+          {/* Sticky Footer for Form Actions */}
+          <div className="absolute bottom-0 left-0 right-0 md:relative flex flex-col-reverse sm:flex-row justify-end gap-3 p-4 sm:p-6 bg-white border-t border-gray-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] md:shadow-none">
             <DialogClose asChild>
               <button
                 type="button"
-                className="px-6 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 font-medium transition-colors text-sm"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 font-bold transition-all text-sm uppercase tracking-wide"
               >
                 Cancel
               </button>
@@ -193,7 +192,7 @@ export default function TicketModal({
             <Button
               type="submit"
               disabled={loading}
-              className="bg-brand hover:bg-[#008c86] text-white px-8 text-sm"
+              className="w-full sm:w-auto bg-brand hover:bg-[#008c86] text-white px-10 py-2.5 text-sm font-bold rounded-xl transition-all shadow-md active:scale-[0.98]"
             >
               {loading ? "Adding..." : "Add to Cart"}
             </Button>

@@ -11,7 +11,6 @@ export default function HeaderBottom() {
   const [cartItems, setCartItems] = useState([]);
   const { isAuthenticated, user } = useAuthContext();
   const { setIsCartOpen, cartData } = useCart();
-  console.log(cartData);
 
   const handleAddTicket = (ticket) => {
     setCartItems([...cartItems, ticket]);

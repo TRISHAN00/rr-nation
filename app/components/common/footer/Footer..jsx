@@ -52,29 +52,23 @@ export default function Footer() {
               { label: "Home", href: "/" },
               { label: "About Us", href: "/about" },
               { label: "Our Services", href: "/services" },
-              { label: "Team", href: "/team" },
-              { label: "Blog", href: "/blog" },
+              { label: "Blogs", href: "/blogs" },
             ]}
           />
 
           <FooterList
-            title="Our Events"
+            title="Quick Links"
             hoverColor="#00a19a"
             links={[
-              { label: "5K Fun Run", href: "/events/5k-fun-run" },
-              { label: "10K Marathon", href: "/events/10k-marathon" },
-              { label: "Half Marathon", href: "/events/half-marathon" },
-              { label: "Charity Run", href: "/events/charity-run" },
-              { label: "Night Run", href: "/events/night-run" },
+              { label: "Gallery", href: "/gallery" },
+              { label: "Team", href: "/team" },
+              { label: "Contact", href: "/contact" },
             ]}
           />
 
           <FooterSocial gap={5} />
-
-          
         </div>
       </div>
-      
     </footer>
   );
 }

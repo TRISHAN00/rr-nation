@@ -17,6 +17,8 @@ export default function FeaturedCardLeft({
       year: "numeric",
     });
   };
+
+  console.log(event)
   return (
     <div
       className="relative p-6 sm:p-8 lg:p-10 overflow-hidden"
@@ -57,14 +59,11 @@ export default function FeaturedCardLeft({
         </div>
 
         <div className="text-[#B3E9E7] text-sm sm:text-base flex justify-between flex-col">
-          <p>
-            Lorem ipsum dolor sit amet consectetur. Massa feugiat ac aliquam
-            aenean
-          </p>
+         
 
           <div className=" flex mt-4 justify-center lg:items-center flex-col ">
             <Logo />
-            <h6>Run Rise Nation</h6>
+            <h6>{event?.organizerName}</h6>
           </div>
         </div>
       </div>

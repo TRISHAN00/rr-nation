@@ -36,12 +36,8 @@ export default function EventDetail() {
       <InnerBanner
         title={event?.name}
         background="/dynamic/about/inner-banner.jpg"
-        breadcrumbs={[
-          { label: "Events", href: "/events" },
-          { label: event?.name },
-        ]}
       />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-12 sm:py-20">
+      <div className="container mx-auto px-4  py-12 sm:py-20">
         {/* Banner */}
         {event?.bannerImage && (
           <div className="rounded-3xl overflow-hidden relative">
