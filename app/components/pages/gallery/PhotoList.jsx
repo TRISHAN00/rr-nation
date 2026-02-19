@@ -1,17 +1,21 @@
 import PhotoGalleryList from "./PhotoGalleryList";
-import SearchSelect from "./SearchSelect";
 
 export default function PhotoList() {
-  const images = [
-    "/dynamic/home/banner/banner-01.jpg",
-    "/dynamic/event/event-01.jpg",
-    "/dynamic/home/banner/banner-01.jpg",
-    "/dynamic/home/banner/banner.jpg",
-    "/dynamic/home/banner/banner-01.jpg",
-    "/dynamic/home/banner/banner.jpg",
-    "/dynamic/home/banner/banner-01.jpg",
-    "/dynamic/home/banner/banner-01.jpg",
-  ];
+const images = [
+  "/dynamic/gallery/1.jpg",
+  "/dynamic/gallery/2.jpg",
+  "/dynamic/gallery/3.jpg",
+  "/dynamic/gallery/4.jpg",
+  "/dynamic/gallery/5.jpg",
+  "/dynamic/gallery/6.jpg",
+  "/dynamic/gallery/7.jpg",
+  "/dynamic/gallery/8.jpg",
+  "/dynamic/gallery/9.jpg",
+  "/dynamic/gallery/10.jpg",
+  "/dynamic/gallery/11.jpg",
+  "/dynamic/gallery/12.jpg",
+  "/dynamic/gallery/13.jpg",
+];
 
   return (
     <section className="pt-24 sm:pt-28 lg:pt-36 pb-24 sm:pb-32 lg:pb-40">
@@ -26,9 +30,9 @@ export default function PhotoList() {
             Latest Training Tips & Community Stories
           </h3>
 
-          <div className="w-full sm:w-auto">
+          {/* <div className="w-full sm:w-auto">
             <SearchSelect />
-          </div>
+          </div> */}
         </div>
 
         {/* Gallery */}
