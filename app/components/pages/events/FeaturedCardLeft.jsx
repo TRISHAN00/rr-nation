@@ -8,6 +8,7 @@ export default function FeaturedCardLeft({
   overlayColor = "#00a19a",
   organizer,
   event,
+  minDistance
 }) {
   const formatDate = (dateString) => {
     const d = new Date(dateString);
@@ -18,7 +19,6 @@ export default function FeaturedCardLeft({
     });
   };
 
-  console.log(event)
   return (
     <div
       className="relative p-6 sm:p-8 lg:p-10 overflow-hidden"
@@ -45,7 +45,7 @@ export default function FeaturedCardLeft({
           </h4>
 
           <h1 className="text-brand text-6xl sm:text-7xl lg:text-[120px] leading-none">
-            35K
+            {minDistance}KM
           </h1>
 
           <ul className="mt-5 space-y-2 text-light lg:flex items-center gap-4">

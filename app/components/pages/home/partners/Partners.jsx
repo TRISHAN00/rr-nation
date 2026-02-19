@@ -5,13 +5,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Partner from "./Partner";
 
 const partners = [
-  "/dynamic/partners/logo-01.svg",
-  "/dynamic/partners/logo-02.svg",
-  "/dynamic/partners/logo-03.svg",
-  "/dynamic/partners/logo-04.svg",
-  "/dynamic/partners/logo-05.svg",
-  "/dynamic/partners/logo-06.svg",
-  "/dynamic/partners/logo-01.svg",
+  "/dynamic/partners/1.png",
+  "/dynamic/partners/2.png",
+  "/dynamic/partners/3.jpg",
+  "/dynamic/partners/4.png",
+  "/dynamic/partners/5.jpg",
+  "/dynamic/partners/6.jpg",
+  "/dynamic/partners/7.jpg",
+  "/dynamic/partners/8.png",
+
 ];
 
 export default function Partners() {

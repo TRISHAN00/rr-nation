@@ -1,21 +1,12 @@
 "use client";
 import FillButton from "@/app/components/common/FillButton";
 import Link from "next/link";
-export default function FeaturedCardRight({ bgColor, event }) {
-  // const [open, setOpen] = useState(false);
+export default function FeaturedCardRight({ bgColor, event, minPrice }) {
 
-  // const handleAddToCart = (ticketData) => {
-  //   console.log("Ticket added:", ticketData);
-  // };
 
   return (
     <>
-      {/* Ticket Purchase form Modal */}
-      {/* <TicketModal
-        isOpen={open}
-        onOpenChange={setOpen}
-        onAddToCart={handleAddToCart}
-      /> */}
+     
       <div
         className="relative p-6 sm:p-8 lg:p-10 flex flex-col justify-between"
         style={{ backgroundColor: bgColor }}
@@ -31,7 +22,7 @@ export default function FeaturedCardRight({ bgColor, event }) {
           <span className="text-white text-sm sm:text-base">BDT</span>
           <div className="flex items-end gap-2 mt-2">
             <h3 className="text-white text-4xl sm:text-5xl lg:text-6xl leading-none">
-              1000
+              {minPrice}
             </h3>
             <span className="text-white text-xs sm:text-sm">/Person</span>
           </div>

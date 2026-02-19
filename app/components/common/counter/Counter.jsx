@@ -5,26 +5,26 @@ export default function Counter() {
   const counters = [
     {
       imageSrc: "/static/succ-event.svg",
-      count: 100,
+      count: 10,
       label: "Successful Events",
       showPlus: true,
     },
     {
       imageSrc: "/static/runner-rating.svg",
-      count: 4.7,
+      count: 5,
       label: "Runner Rating",
       showPlus: false, // ✅ no plus
     },
     {
       imageSrc: "/static/active-member.svg",
-      count: 960,
+      count: 250,
       label: "Active Members",
       showPlus: true,
     },
     {
       imageSrc: "/static/global-partner.svg",
-      count: 20,
-      label: "Global Partner",
+      count: 100,
+      label: "Partners",
       showPlus: true,
     },
   ];

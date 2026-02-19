@@ -22,7 +22,6 @@ export default function FeatureEventList() {
     fetchEvents();
   }, []);
 
-  console.log(events)
 
   return (
     <section className="featured-event bg-[#E0F7F6] lg:py-35 py-20 ">

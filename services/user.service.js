@@ -34,3 +34,8 @@ export const getAllEvent = async () => {
 export const getEventById = (eventId) => {
   return api.get(`/auth/user/event/${eventId}`);
 };
+
+export const getAllUserOrders = async () => {
+  const { data } = await api.get("/auth/user/order-history");
+  return data;
+};

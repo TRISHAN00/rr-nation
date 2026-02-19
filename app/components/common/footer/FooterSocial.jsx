@@ -22,6 +22,9 @@ export default function FooterSocial({ gap }) {
           className="w-full h-full"
         />
       </div>
+      <h4 className="text-[#FAFAFA] text-[14px] mt-4 opacity-80">
+        Trade License Number: TRAD/DNCC/023534/2025
+      </h4>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -16,28 +18,74 @@ import {
   Calendar,
   Clock,
   DollarSign,
+  Loader2,
   Lock,
-  Mail,
   MapPinned,
   ShoppingBag,
-  User,
+  User
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+// Assuming your API service is in this path
+
+import { getAllUserOrders } from "@/services/user.service";
 import ChangePasswordForm from "../profile/ChangePasswordForm";
 import EmergencyContactForm from "../profile/EmergencyContactForm";
 import PersonalInformationForm from "../profile/PersonalInformationForm";
 import UpdateProfilePhoto from "../profile/UpdateProfilePhoto";
 
-export function UserProfileTabs({ user }) {
-  const [profileImage, setProfileImage] = useState(null);
-  const fileInputRef = useState(null);
+export default function UserProfileTabs({ user }) {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const res = await getAllUserOrders();
+        // Accessing the 'data' array from your response body
+        setOrders(res.data || []);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOrders();
+  }, []);
+
+  // --- Data Transformation ---
+  
+  // 1. Flatten items because one order can have multiple tickets
+  const allTickets = orders.flatMap((payment) =>
+    payment.order.items.map((item) => ({
+      ...item,
+      transactionId: payment.transactionId,
+      paymentStatus: payment.status,
+      paymentDate: payment.paymentDate,
+    }))
+  );
+
+  // 2. Calculations
+  const totalSpent = orders.reduce((acc, curr) => acc + parseFloat(curr.afterDiscountAmount || 0), 0);
+  
+  const upcomingEvents = allTickets.filter(item => 
+    new Date(item.eventTicket.event.date) >= new Date()
+  );
+  
+  const pastEvents = allTickets.filter(item => 
+    new Date(item.eventTicket.event.date) < new Date()
+  );
+
+  if (loading) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-brand" />
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full  mx-auto p-4 sm:p-6 pt-16 sm:pt-20">
+    <div className="w-full mx-auto p-4 sm:p-6 pt-16 sm:pt-20">
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">My Profile</h1>
         <p className="text-gray-600 text-sm mt-1">
@@ -46,439 +94,167 @@ export function UserProfileTabs({ user }) {
       </div>
 
       <Tabs defaultValue="my-events" className="w-full">
-        {/* Horizontal Tab List */}
         <TabsList className="w-full justify-start border-b bg-transparent p-0 h-auto overflow-x-auto flex-nowrap">
-          <TabsTrigger
-            value="my-events"
-            className="px-4 sm:px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none cursor-pointer whitespace-nowrap text-sm sm:text-base"
-          >
+          <TabsTrigger value="my-events" className="tab-style">
             <Calendar className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">My Events</span>
-            <span className="sm:hidden">Events</span>
+            <span>My Events</span>
           </TabsTrigger>
-          <TabsTrigger
-            value="profile"
-            className="px-4 sm:px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none cursor-pointer whitespace-nowrap text-sm sm:text-base"
-          >
+          <TabsTrigger value="profile" className="tab-style">
             <User className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Profile Settings</span>
-            <span className="sm:hidden">Profile</span>
+            <span>Profile Settings</span>
           </TabsTrigger>
-          <TabsTrigger
-            value="security"
-            className="px-4 sm:px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:bg-transparent data-[state=active]:shadow-none cursor-pointer whitespace-nowrap text-sm sm:text-base"
-          >
+          <TabsTrigger value="security" className="tab-style">
             <Lock className="h-4 w-4 mr-2" />
             Security
           </TabsTrigger>
         </TabsList>
 
-        {/* My Events Tab */}
+        {/* --- My Events Tab --- */}
         <TabsContent value="my-events" className="mt-6 space-y-6">
-          {/* Stats Cards */}
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            <Card className="border-gray-200">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Events Joined
-                  </CardTitle>
-                  <Calendar className="h-4 w-4" color="#00a19a" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">12</div>
-                <p className="text-xs text-gray-600 mt-1">3 upcoming events</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-gray-200">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Orders
-                  </CardTitle>
-                  <ShoppingBag
-                    className="h-4 w-4 text-gray-400"
-                    color="#00a19a"
-                  />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">12</div>
-                <p className="text-xs text-gray-600 mt-1">
-                  All time registrations
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-gray-200">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Spent
-                  </CardTitle>
-                  <DollarSign
-                    className="h-4 w-4 text-gray-400"
-                    color="#00a19a"
-                  />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">$450</div>
-                <p className="text-xs text-gray-600 mt-1">
-                  Registration fees paid
-                </p>
-              </CardContent>
-            </Card>
+            <StatCard 
+              title="Total Events" 
+              value={allTickets.length} 
+              sub={`${upcomingEvents.length} upcoming`} 
+              icon={Calendar} 
+            />
+            <StatCard 
+              title="Total Orders" 
+              value={orders.length} 
+              sub="Transactions" 
+              icon={ShoppingBag} 
+            />
+            <StatCard 
+              title="Total Spent" 
+              value={`৳${totalSpent.toLocaleString()}`} 
+              sub="Paid Amount" 
+              icon={DollarSign} 
+            />
           </div>
 
-          {/* Events List */}
           <Card className="border-gray-200">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                All Registered Events
-              </CardTitle>
-              <CardDescription className="text-sm">
-                Complete list of events you've joined and participated in
-              </CardDescription>
+              <CardTitle className="text-lg">All Registered Events</CardTitle>
+              <CardDescription>Complete list of events you've joined</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Upcoming Events */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">
-                  Upcoming Events
-                </h3>
-                {[
-                  {
-                    name: "City Marathon 2026",
-                    date: "12 Feb 2026",
-                    time: "6:00 AM",
-                    location: "Central Park, New York",
-                    distance: "10 KM",
-                    registrationDate: "15 Jan 2026",
-                    orderNumber: "#ORD-2026-001",
-                    amount: "$45",
-                    status: "Confirmed",
-                  },
-                  {
-                    name: "Night Run Challenge",
-                    date: "28 Mar 2026",
-                    time: "8:00 PM",
-                    location: "Brooklyn Bridge",
-                    distance: "5 KM",
-                    registrationDate: "20 Jan 2026",
-                    orderNumber: "#ORD-2026-002",
-                    amount: "$30",
-                    status: "Confirmed",
-                  },
-                  {
-                    name: "Beach Trail Run",
-                    date: "15 Apr 2026",
-                    time: "7:00 AM",
-                    location: "Santa Monica Beach",
-                    distance: "7 KM",
-                    registrationDate: "28 Jan 2026",
-                    orderNumber: "#ORD-2026-003",
-                    amount: "$35",
-                    status: "Confirmed",
-                  },
-                ].map((event, index) => (
-                  <div
-                    key={index}
-                    className="p-3 sm:p-4 border rounded-lg mb-3 hover:bg-gray-50 transition"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2">
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-sm sm:text-base">
-                          {event.name}
-                        </h4>
-                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs sm:text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-                            {event.date}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-                            {event.time}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Award className="h-3 w-3 sm:h-4 sm:w-4" />
-                            {event.distance}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1 mt-1 text-xs sm:text-sm text-gray-600">
-                          <MapPinned className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                          <span className="break-words">{event.location}</span>
-                        </div>
-                      </div>
-                      <span className="px-3 py-1 bg-[#F39200] text-light rounded text-xs font-medium self-start">
-                        {event.status}
-                      </span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-3 border-t gap-3">
-                      <div className="flex flex-col sm:flex-row sm:gap-6 gap-1 text-xs text-gray-600">
-                        <div>
-                          <span className="text-gray-500">Order:</span>{" "}
-                          <span className="font-medium text-gray-900">
-                            {event.orderNumber}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Registered:</span>{" "}
-                          <span className="font-medium text-gray-900">
-                            {event.registrationDate}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Amount:</span>{" "}
-                          <span className="font-medium text-gray-900">
-                            {event.amount}
-                          </span>
-                        </div>
-                      </div>
-                      <button className="text-xs sm:text-sm font-medium hover:underline text-left sm:text-right">
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Past Events */}
-              <div className="pt-4">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">
-                  Past Events
-                </h3>
-                {[
-                  {
-                    name: "Charity Fun Run",
-                    date: "05 Jan 2026",
-                    time: "7:30 AM",
-                    location: "Golden Gate Park",
-                    distance: "3 KM",
-                    registrationDate: "10 Dec 2025",
-                    orderNumber: "#ORD-2025-045",
-                    amount: "$25",
-                    status: "Completed",
-                  },
-                  {
-                    name: "Winter Marathon",
-                    date: "15 Dec 2025",
-                    time: "6:00 AM",
-                    location: "Chicago Downtown",
-                    distance: "10 KM",
-                    registrationDate: "01 Nov 2025",
-                    orderNumber: "#ORD-2025-032",
-                    amount: "$50",
-                    status: "Completed",
-                  },
-                  {
-                    name: "Thanksgiving Turkey Trot",
-                    date: "28 Nov 2025",
-                    time: "8:00 AM",
-                    location: "Boston Common",
-                    distance: "5 KM",
-                    registrationDate: "15 Oct 2025",
-                    orderNumber: "#ORD-2025-021",
-                    amount: "$30",
-                    status: "Completed",
-                  },
-                  {
-                    name: "Halloween Night Run",
-                    date: "31 Oct 2025",
-                    time: "7:00 PM",
-                    location: "Portland City Center",
-                    distance: "5 KM",
-                    registrationDate: "05 Oct 2025",
-                    orderNumber: "#ORD-2025-018",
-                    amount: "$35",
-                    status: "Completed",
-                  },
-                  {
-                    name: "Fall Colors Trail Run",
-                    date: "20 Oct 2025",
-                    time: "9:00 AM",
-                    location: "Vermont Mountains",
-                    distance: "7 KM",
-                    registrationDate: "25 Sep 2025",
-                    orderNumber: "#ORD-2025-012",
-                    amount: "$40",
-                    status: "Completed",
-                  },
-                ].map((event, index) => (
-                  <div
-                    key={index}
-                    className="p-3 sm:p-4 border rounded-lg mb-3 hover:bg-gray-50 transition opacity-75"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2">
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-sm sm:text-base">
-                          {event.name}
-                        </h4>
-                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs sm:text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-                            {event.date}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-                            {event.time}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Award className="h-3 w-3 sm:h-4 sm:w-4" />
-                            {event.distance}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1 mt-1 text-xs sm:text-sm text-gray-600">
-                          <MapPinned className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                          <span className="break-words">{event.location}</span>
-                        </div>
-                      </div>
-                      <span className="px-3 py-1 bg-brand text-light rounded text-xs font-medium self-start">
-                        {event.status}
-                      </span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-3 border-t gap-3">
-                      <div className="flex flex-col sm:flex-row sm:gap-6 gap-1 text-xs text-gray-600">
-                        <div>
-                          <span className="text-gray-500">Order:</span>{" "}
-                          <span className="font-medium text-gray-900">
-                            {event.orderNumber}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Registered:</span>{" "}
-                          <span className="font-medium text-gray-900">
-                            {event.registrationDate}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Amount:</span>{" "}
-                          <span className="font-medium text-gray-900">
-                            {event.amount}
-                          </span>
-                        </div>
-                      </div>
-                      <button className="text-xs sm:text-sm font-medium hover:underline text-left sm:text-right">
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                ))}
+            <CardContent className="space-y-6">
+              <EventListSection title="Upcoming Events" events={upcomingEvents} />
+              <div className="border-t pt-6">
+                <EventListSection title="Past Events" events={pastEvents} isPast />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* Profile Settings Tab */}
+        {/* --- Profile Settings Tab --- */}
         <TabsContent value="profile" className="mt-6 space-y-6">
-          {/* Profile Photo */}
-          <Card className="border-gray-200 text-center md:text-left lg:text-left">
-            <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                Profile Photo
-              </CardTitle>
-              <CardDescription className="text-sm">
-                Upload a profile picture to personalize your account
-              </CardDescription>
-            </CardHeader>
+          <Card className="border-gray-200">
+            <CardHeader><CardTitle>Profile Photo</CardTitle></CardHeader>
             <CardContent>
-              <UpdateProfilePhoto
-                profileImage={profileImage}
-                triggerFileInput={triggerFileInput}
-                fileInputRef={fileInputRef}
-                initialImage={user?.image}
-              />
+              <UpdateProfilePhoto initialImage={user?.image} />
             </CardContent>
           </Card>
 
-          {/* Personal Information */}
           <Card className="border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                Personal Information
-              </CardTitle>
-              <CardDescription className="text-sm">
-                Update your personal details and contact information
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <PersonalInformationForm user={user} />
-            </CardContent>
+            <CardHeader><CardTitle>Personal Information</CardTitle></CardHeader>
+            <CardContent><PersonalInformationForm user={user} /></CardContent>
           </Card>
 
-          {/* Emergency Contact */}
           <Card className="border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                Emergency Contact
-              </CardTitle>
-              <CardDescription className="text-sm">
-                Add an emergency contact for safety purposes
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <EmergencyContactForm />
-            </CardContent>
+            <CardHeader><CardTitle>Emergency Contact</CardTitle></CardHeader>
+            <CardContent><EmergencyContactForm /></CardContent>
           </Card>
         </TabsContent>
 
-        {/* Security Tab */}
+        {/* --- Security Tab --- */}
         <TabsContent value="security" className="mt-6 space-y-6">
-          {/* Change Password */}
           <Card className="border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                Change Password
-              </CardTitle>
-              <CardDescription className="text-sm">
-                Update your password to keep your account secure
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-             
-
-              <ChangePasswordForm />
-            </CardContent>
+            <CardHeader><CardTitle>Change Password</CardTitle></CardHeader>
+            <CardContent><ChangePasswordForm /></CardContent>
           </Card>
-
-          {/* Forgot Password */}
+          
           <Card className="border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                Forgot Password
-              </CardTitle>
-              <CardDescription className="text-sm">
-                Reset your password if you've forgotten it
-              </CardDescription>
-            </CardHeader>
+            <CardHeader><CardTitle>Forgot Password</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-700">
-                If you've forgotten your password, we'll send you a password
-                reset link to your registered email address.
-              </p>
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="email"
-                    defaultValue="john.doe@example.com"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                    disabled
-                  />
-                </div>
-              </div>
-              <button className="w-full sm:w-auto px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 font-medium text-sm">
-                Send Reset Link
-              </button>
+               <p className="text-sm text-gray-700">Send a reset link to <strong>{user?.email}</strong></p>
+               <button className="px-6 py-2 bg-black text-white rounded-md text-sm">Send Reset Link</button>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+    </div>
+  );
+}
+
+// --- Internal Helper Components ---
+
+function StatCard({ title, value, sub, icon: Icon }) {
+  return (
+    <Card className="border-gray-200">
+      <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
+        <Icon className="h-4 w-4 text-brand" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-3xl font-bold">{value}</div>
+        <p className="text-xs text-gray-600 mt-1">{sub}</p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function EventListSection({ title, events, isPast }) {
+  if (events.length === 0) return null;
+
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-gray-900 mb-4">{title}</h3>
+      {events.map((item, index) => {
+        const eventData = item.eventTicket.event;
+        return (
+          <div
+            key={index}
+            className={`p-4 border rounded-lg mb-3 hover:bg-gray-50 transition ${isPast ? "opacity-70" : ""}`}
+          >
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2">
+              <div className="flex-1">
+                <h4 className="font-bold text-base text-dark">
+                  {eventData.name} <span className="text-brand text-sm ml-2">[{item.eventTicket.name}]</span>
+                </h4>
+                <div className="flex flex-wrap items-center gap-4 mt-2 text-xs text-gray-600">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" /> {new Date(eventData.date).toDateString()}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" /> {eventData.time}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Award className="h-3 w-3" /> {item.eventTicket.distance}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1 text-xs text-gray-600">
+                  <MapPinned className="h-3 w-3 shrink-0" />
+                  <span>{eventData.address}</span>
+                </div>
+              </div>
+              <span className={`px-3 py-1 rounded text-[10px] font-bold uppercase self-start ${isPast ? 'bg-gray-200' : 'bg-[#F39200] text-white'}`}>
+                {item.paymentStatus}
+              </span>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-3 border-t gap-3 text-[11px]">
+              <div className="flex flex-wrap gap-x-6 gap-y-1 text-gray-500">
+                <p>ORDER: <span className="text-dark font-medium">{item.transactionId.substring(0, 12)}...</span></p>
+                <p>PARTICIPANT: <span className="text-dark font-medium">{item.participant.name}</span></p>
+                <p>AMOUNT: <span className="text-dark font-medium">৳{item.totalPrice}</span></p>
+              </div>
+              <button className="text-brand font-bold hover:underline text-right">
+                VIEW RECEIPT
+              </button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

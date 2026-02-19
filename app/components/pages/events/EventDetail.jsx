@@ -27,6 +27,8 @@ export default function EventDetail() {
     }
   };
 
+  console.log(event)
+
   useEffect(() => {
     if (slug) fetchEvent();
   }, [slug]);

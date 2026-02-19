@@ -1,7 +1,7 @@
 "use client";
 
 import InnerBanner from "@/app/components/common/InnerBanner";
-import { UserProfileTabs } from "@/app/components/tabs/UserProfileTabs";
+import UserProfileTabs from "@/app/components/tabs/UserProfileTabs";
 import { getProfileData } from "@/services/user.service";
 import { useEffect, useState } from "react";
 

@@ -9,6 +9,7 @@ import Banner from "@/app/components/pages/home/banner/Banner";
 import JourneySection from "@/app/components/pages/home/journey/JourneySection";
 import Partners from "@/app/components/pages/home/partners/Partners";
 import ServiceSlide from "@/app/components/pages/services/ServiceSlide";
+import SuccessfulEvents from "../components/pages/events/SuccessfulEvents";
 
 export const metadata = {
   title: "RunRise Nation | Bangladesh's Leading Running Community",
@@ -56,7 +57,7 @@ export default function Home() {
       <Banner />
       <AutoSlideLogo />
       <OurMission hideTopImage />
-      {/* <SuccessfulEvents /> */}
+      <SuccessfulEvents />
       <Counter />
       <ServiceSlide />
       <JourneySection />

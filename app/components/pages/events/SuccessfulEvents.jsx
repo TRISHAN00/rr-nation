@@ -5,6 +5,51 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import EventCard from "./EventCard";
 
+const succEvents = [
+  {
+    id: 1,
+    name: 'Accounting Day Run 2025',
+    date: 'November 07, 2025 ',
+    Organizer: 'ICAB',
+    partner: 'RunRise Nation',
+    thumb: '/dynamic/successful-ev/1.jpeg'
+  },
+  {
+    id: 2,
+    name: 'Community Fun Run 2025 ',
+    date: 'January 25, 2025  ',
+    vanue: 'Chandrima Udyan',
+    Organizer: 'ICAB',
+    partner: 'RunRise Nation',
+    thumb: '/dynamic/successful-ev/4.jpeg'
+  },
+  {
+    id: 3,
+    name: 'Noboborsho Run 1432 ',
+    date: 'April 12, 2025 ',
+    vanue: 'Chandrima Udyan',
+    Organizer: 'ICAB',
+    partner: 'RunRise Nation',
+    thumb: '/dynamic/successful-ev/2.jpeg'
+  },
+  {
+    id: 4,
+    name: 'RunRise Nation 15K 2025',
+    date: 'August 29, 2025 ',
+    vanue: 'Hatirjheel, Dhaka ',
+    Organizer: '(AIMS Certified)',
+    thumb: '/dynamic/successful-ev/3.jpg'
+  },
+  {
+    id: 5,
+    name: 'RunRise Nation Badminton Tournament & BBQ Night 2026',
+    date: 'JAN 10 2026',
+    vanue: 'Mirpur, Dhaka ',
+    Organizer: '(AIMS Certified)',
+    thumb: '/dynamic/successful-ev/5.jpeg'
+  },
+]
+
 export default function SuccessfulEvents() {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
@@ -24,8 +69,7 @@ export default function SuccessfulEvents() {
         />
 
         <Swiper
-          spaceBetween={30} // spacing between slides
-          slidesPerView={3} // default for mobile
+          spaceBetween={30}
           onSlideChange={(swiper) => {
             setIsBeginning(swiper.isBeginning);
             setIsEnd(swiper.isEnd);
@@ -36,19 +80,15 @@ export default function SuccessfulEvents() {
             setIsEnd(swiper.isEnd);
           }}
           breakpoints={{
-            150: { slidesPerView: 1 }, // small screens
-            250: { slidesPerView: 1 }, // small screens
-            320: { slidesPerView: 1 }, // small screens
-            480: { slidesPerView: 1 }, // small screens
-            640: { slidesPerView: 2 }, // small screens
-            768: { slidesPerView: 2 }, // tablets
-            1024: { slidesPerView: 3 }, // laptops/desktops
-            1280: { slidesPerView: 3 }, // large screens
+            320: { slidesPerView: 1 },
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
           }}
         >
-          {[...Array(5)].map((_, i) => (
-            <SwiperSlide key={i}>
-              <EventCard />
+          {/* ✅ Map through your real data here */}
+          {succEvents.map((event) => (
+            <SwiperSlide key={event.id}>
+              <EventCard event={event} />
             </SwiperSlide>
           ))}
         </Swiper>

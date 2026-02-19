@@ -14,12 +14,12 @@ export default function BannerCTA() {
   return (
     <div className=" w-2xl">
       <span className="block font-bold text-[14px] sm:text-[16px] leading-5 uppercase text-brand mb-4 sm:mb-5">
-        Run Rise Nation
+        RunRise Nation
       </span>
 
       {/* Heading */}
       <h1 className="font-['Albert_Sans'] font-black text-[34px] sm:text-[44px] lg:text-[62px] leading-10.5 sm:leading-13.5 lg:leading-18 tracking-[-0.02em] text-[#FAFAFA]">
-        Stride Together for a Better Tomorrow
+        Run & Rise Together for a Better Tomorrow.
       </h1>
       {/* Description */}
       <p className="font-semibold text-[15px] sm:text-[16px] lg:text-[18px] leading-6 sm:leading-6.5 lg:leading-7 mt-4 sm:mt-5 mb-8 sm:mb-10 text-light">

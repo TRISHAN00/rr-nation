@@ -9,7 +9,6 @@ export default function HeaderSocial({
   size = 36,
   gap = 12,
 }) {
-  // 1. Move data inside or define it clearly with URLs
   const socialData = [
     {
       Icon: Facebook,
@@ -26,24 +25,27 @@ export default function HeaderSocial({
       fill: true, 
       url: "https://twitter.com/runrise" 
     },
+    { 
+      // This is now a string path
+      Icon: '/static/social/strava.svg', 
+      fill: false, 
+      url: "https://www.strava.com/clubs/runrise" 
+    },
   ];
 
   return (
     <ul
-      className={`flex ${
-        direction === "column" ? "flex-col" : "flex-row"
-      } items-center`}
+      className={`flex ${direction === "column" ? "flex-col" : "flex-row"} items-center`}
       style={{ gap }}
     >
-      {/* 2. Destructure 'url' here alongside Icon and fill */}
       {socialData.map(({ Icon, fill, url }, index) => {
-        const fillColor =
-          fill === true ? iconColor : typeof fill === "string" ? fill : "none";
+        const fillColor = fill === true ? iconColor : typeof fill === "string" ? fill : "none";
+        const isImage = typeof Icon === "string";
 
         return (
           <li key={index}>
             <Link
-              href={url} // ✅ Now 'url' is defined
+              href={url}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative flex items-center justify-center rounded-full transition-transform duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-lg will-change-transform transform-gpu"
@@ -56,17 +58,30 @@ export default function HeaderSocial({
               {/* Glow */}
               <span
                 className="absolute inset-0 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-60"
-                style={{ backgroundColor: bgColor || fillColor }}
+                style={{ backgroundColor: bgColor || (isImage ? iconColor : fillColor) }}
               />
 
-              {/* Icon */}
-              <Icon
-                size={size * 0.5}
-                fill={fillColor}
-                stroke={strokeColor}
-                strokeWidth={2}
-                className="relative z-10"
-              />
+              {/* Conditional Rendering: Image vs Lucide Component */}
+              {isImage ? (
+                <img
+                  src={Icon}
+                  alt="Social Icon"
+                  style={{ 
+                    width: size * 1, 
+                    height: size * 1,
+                    objectFit: 'contain' 
+                  }}
+                  className="relative z-10"
+                />
+              ) : (
+                <Icon
+                  size={size * 0.5}
+                  fill={fillColor}
+                  stroke={strokeColor}
+                  strokeWidth={2}
+                  className="relative z-10"
+                />
+              )}
             </Link>
           </li>
         );

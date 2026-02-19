@@ -23,7 +23,7 @@ export default function FooterInfo() {
   return (
     <div>
       <p className="text-[15px] sm:text-[16px] lg:text-[18px] leading-relaxed mb-8 text-[#fafafa]">
-        Run Rise Nation is a global running community dedicated to promoting
+        RunRise Nation is a global running community dedicated to promoting
         fitness, sustainability, and environmental responsibility through
         impactful running events.
       </p>

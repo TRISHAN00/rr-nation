@@ -8,7 +8,14 @@ export default function FeaturedEventCard({
   organizer,
   event,
 }) {
+   const packages = event?.packages;
+
+   const minPrice = Math.min(...packages.map(item => item.price));
+const minDistance = Math.min(...packages.map(item => parseFloat(item.distance)));
+
+console.log(`Min Price: ${minPrice}, Min Distance: ${minDistance} KM`);
   return (
+   
     <div
       className="font-anta rounded-3xl mb-7.5 overflow-hidden"
       style={{ backgroundColor: bgColor }}
@@ -20,9 +27,11 @@ export default function FeaturedEventCard({
           overlayColor={overlayColor}
           organizer={organizer}
           event={event}
+          minDistance={minDistance}
+         
         />
 
-        <FeaturedCardRight bgColor={bgColor} event={event} />
+        <FeaturedCardRight bgColor={bgColor} event={event}  minPrice={minPrice} />
       </div>
     </div>
   );

@@ -63,6 +63,7 @@ export default function Footer() {
               { label: "Gallery", href: "/gallery" },
               { label: "Team", href: "/team" },
               { label: "Contact", href: "/contact" },
+              { label: "Privacy Policy", href: "/privacy-policy" },
             ]}
           />
 
