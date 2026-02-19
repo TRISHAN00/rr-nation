@@ -16,7 +16,7 @@ const succEvents = [
   },
   {
     id: 2,
-    name: 'Community Fun Run 2025 ',
+    name: 'RunRise Nation Community Fun Run 2025 (Edition 1)',
     date: 'January 25, 2025  ',
     vanue: 'Chandrima Udyan',
     Organizer: 'ICAB',
@@ -25,7 +25,7 @@ const succEvents = [
   },
   {
     id: 3,
-    name: 'Noboborsho Run 1432 ',
+    name: 'Gigabyte Presents RunRise Nation Noboborhso Run 1432',
     date: 'April 12, 2025 ',
     vanue: 'Chandrima Udyan',
     Organizer: 'ICAB',
@@ -34,7 +34,7 @@ const succEvents = [
   },
   {
     id: 4,
-    name: 'RunRise Nation 15K 2025',
+    name: 'RunRise Nation 15K 2025 Powered by Gigabyte',
     date: 'August 29, 2025 ',
     vanue: 'Hatirjheel, Dhaka ',
     Organizer: '(AIMS Certified)',
@@ -42,7 +42,7 @@ const succEvents = [
   },
   {
     id: 5,
-    name: 'RunRise Nation Badminton Tournament & BBQ Night 2026',
+    name: 'RunRise Nation Badminton Tournament 2026',
     date: 'JAN 10 2026',
     vanue: 'Mirpur, Dhaka ',
     Organizer: '(AIMS Certified)',

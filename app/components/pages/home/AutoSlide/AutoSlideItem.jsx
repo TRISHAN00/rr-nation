@@ -12,7 +12,7 @@ export default function AutoSlideItem() {
           xl:text-3xl
         "
       >
-        RunRise Nation
+        RunRise Nation | Let’s Run, Rise & Celebrate Together
       </h1>
 
       <Image

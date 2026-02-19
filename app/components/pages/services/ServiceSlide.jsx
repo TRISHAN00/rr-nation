@@ -43,8 +43,8 @@ export default function ServiceSlide() {
       <div className="pt-20 lg:pt-35 bg-[#E0F7F6] ">
         <div className="container m-auto px-7.5 overflow-hidden">
           <SubtitleWithArrow
-            label="Our Services"
-            title="Latest Training Tips & Community Stories"
+            label="Services"
+            title="In what we are the best"
             onPrev={() => swiperInstance?.slidePrev()}
             onNext={() => swiperInstance?.slideNext()}
             isBeginning={isBeginning}

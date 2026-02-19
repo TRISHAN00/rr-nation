@@ -40,7 +40,7 @@ export default function EventCard({ event, href }) {
           className="bg-muted rounded-t-4xl overflow-hidden"
         >
           <Image
-            src={event?.thumb || event?.thumbImage || "/images/placeholder.jpg"}
+            src={event?.thumb || "/images/placeholder.jpg"}
             alt={event?.name || "Event Thumbnail"}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -51,7 +51,7 @@ export default function EventCard({ event, href }) {
         {/* Content */}
         <div className="px-5 sm:px-6 py-5 flex flex-col gap-4">
           <div className="overflow-hidden relative">
-            <h5 className={`text-dark text-lg sm:text-xl lg:text-2xl font-bold leading-snug truncate transition-colors duration-300 ${href ? "group-hover:text-white" : ""}`}>
+            <h5 className={`text-dark text-md sm:text-xl lg:text-1xl font-bold leading-snug truncate transition-colors duration-300 ${href ? "group-hover:text-white" : ""}`}>
               {event?.name}
             </h5>
           </div>

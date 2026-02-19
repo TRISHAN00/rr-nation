@@ -1,4 +1,6 @@
-import { Facebook, Instagram, Twitter } from "lucide-react";
+"use client";
+
+import { Facebook, Instagram, Twitter, Users, Youtube } from "lucide-react";
 import Link from "next/link";
 
 export default function HeaderSocial({
@@ -11,25 +13,41 @@ export default function HeaderSocial({
 }) {
   const socialData = [
     {
+      name: "Facebook",
       Icon: Facebook,
       fill: true,
       url: "https://www.facebook.com/runrise.nation",
     },
-    { 
-      Icon: Instagram, 
-      fill: "#00a19a", 
-      url: "https://instagram.com/runrise.nation" 
+    {
+      name: "Facebook Group",
+      Icon: Users, // 'Users' is the standard Lucide icon for groups
+      fill: true,
+      url: "https://www.facebook.com/groups/runrisenation",
     },
-    { 
-      Icon: Twitter, 
-      fill: true, 
-      url: "https://twitter.com/runrise" 
+    {
+      name: "Instagram",
+      Icon: Instagram,
+      fill: false,
+      url: "https://www.instagram.com/runrise_nation",
     },
-    { 
-      // This is now a string path
-      Icon: '/static/social/strava.svg', 
-      fill: false, 
-      url: "https://www.strava.com/clubs/runrise" 
+    {
+      name: "YouTube",
+      Icon: Youtube,
+      fill: false,
+      url: "https://www.youtube.com/@RunRiseNation",
+    },
+    {
+      name: "Twitter",
+      Icon: Twitter,
+      fill: true,
+      url: "https://twitter.com/runrise",
+    },
+    {
+      name: "Strava",
+      Icon: "/static/social/strava.svg", // Path to your default SVG
+      fill: false,
+      url: "https://www.strava.com/clubs/RunRiseNation",
+      isOriginalColor: true, // Flag to prevent color overriding
     },
   ];
 
@@ -38,9 +56,9 @@ export default function HeaderSocial({
       className={`flex ${direction === "column" ? "flex-col" : "flex-row"} items-center`}
       style={{ gap }}
     >
-      {socialData.map(({ Icon, fill, url }, index) => {
-        const fillColor = fill === true ? iconColor : typeof fill === "string" ? fill : "none";
+      {socialData.map(({ Icon, fill, url, isOriginalColor, name }, index) => {
         const isImage = typeof Icon === "string";
+        const fillColor = fill === true ? iconColor : typeof fill === "string" ? fill : "none";
 
         return (
           <li key={index}>
@@ -48,6 +66,7 @@ export default function HeaderSocial({
               href={url}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={name}
               className="group relative flex items-center justify-center rounded-full transition-transform duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-lg will-change-transform transform-gpu"
               style={{
                 backgroundColor: bgColor,
@@ -55,23 +74,26 @@ export default function HeaderSocial({
                 height: size,
               }}
             >
-              {/* Glow */}
+              {/* Glow Effect - Uses brand orange for Strava, otherwise uses iconColor */}
               <span
-                className="absolute inset-0 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-60"
-                style={{ backgroundColor: bgColor || (isImage ? iconColor : fillColor) }}
+                className="absolute inset-0 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-40"
+                style={{
+                  backgroundColor: isOriginalColor ? "#fc4c02" : (bgColor || iconColor),
+                }}
               />
 
-              {/* Conditional Rendering: Image vs Lucide Component */}
+              {/* Icon Rendering */}
               {isImage ? (
                 <img
                   src={Icon}
-                  alt="Social Icon"
-                  style={{ 
-                    width: size * 1, 
-                    height: size * 1,
-                    objectFit: 'contain' 
+                  alt={`${name} icon`}
+                  style={{
+                    width: size * 0.65, // Slightly larger for better visibility
+                    height: size * 0.65,
+                    objectFit: "contain",
                   }}
-                  className="relative z-10"
+                  // No 'invert' or 'brightness' filters here so it stays default
+                  className="relative z-10" 
                 />
               ) : (
                 <Icon

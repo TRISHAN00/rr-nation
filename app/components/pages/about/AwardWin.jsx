@@ -36,7 +36,7 @@ export default function AwardWin({ hideShape, hideRound, hideTopImage }) {
             height={43}
             className="object-cover"
           />{" "}
-          <span>AWARD WINING</span>
+          <span className=" uppercase" >Award Winning</span>
         </div>
       )}
 

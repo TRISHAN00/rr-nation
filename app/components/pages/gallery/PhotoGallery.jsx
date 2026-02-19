@@ -44,7 +44,7 @@ export default function PhotoGallery() {
           Gallery
         </span>
         <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold text-dark">
-          Moments from Our Running Community
+          Moments we Cherish
         </h2>
       </div>
 

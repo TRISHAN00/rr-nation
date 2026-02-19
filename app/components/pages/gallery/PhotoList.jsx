@@ -27,7 +27,7 @@ const images = [
             text-xl sm:text-2xl md:text-3xl lg:text-4xl 
             leading-snug lg:leading-tight max-w-2xl"
           >
-            Latest Training Tips & Community Stories
+            Moments we Cherish
           </h3>
 
           {/* <div className="w-full sm:w-auto">

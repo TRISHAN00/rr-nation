@@ -11,7 +11,7 @@ import HeaderTop from "./HeaderTop";
 
 export default function Header() {
   // Prevents the "Login" button from showing while we check the token
-  const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const isDesktop = useMediaQuery("(min-width: 1200px)");
   const pathname = usePathname();
 
   const isAuthPage =

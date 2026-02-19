@@ -61,7 +61,7 @@ export default function Blogs({ hideBtnArrow }) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">
         <div className=" mb-10">
           <Title
-            label="Our Services"
+            label="Blogs"
             title="Latest Training Tips & Community Stories"
             onPrev={() => swiperInstance?.slidePrev()}
             onNext={() => swiperInstance?.slideNext()}
