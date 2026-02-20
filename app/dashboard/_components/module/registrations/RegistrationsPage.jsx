@@ -30,8 +30,11 @@ import { getAllOrders } from "@/services/admin/admin.event.service";
 import {
   Calendar,
   CheckCircle,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   CreditCard,
+  Download,
   Eye,
   Hash,
   HeartPulse,
@@ -45,7 +48,7 @@ import {
   Users,
   XCircle
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const paymentStatusConfig = {
   completed: { 
@@ -73,130 +76,156 @@ export default function RegistrationsPage() {
   const [selectedReg, setSelectedReg] = useState(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await getAllOrders();
-        const items = res?.data?.items || [];
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-        const mappedData = items.map((item) => {
-          const firstTicket = item.order?.items?.[0];
-          const participant = firstTicket?.participant;
-          
-          return {
-            id: item.id,
-            transactionId: item.transactionId,
-            name: participant?.name || `${item.user?.firstName} ${item.user?.lastName}`,
-            email: participant?.email || item.user?.email,
-            phone: participant?.contactNumber || "N/A",
-            event: firstTicket?.eventTicket?.event?.name || "N/A",
-            package: firstTicket?.eventTicket?.name || "Ticket",
-            amount: parseFloat(item.afterDiscountAmount || item.orginalAmount || 0),
-            status: item.status,
-            method: item.paymentGateway,
-            date: item.paymentDate || item.createdAt,
-            image: item.user?.image,
-            initials: (item.user?.firstName?.[0] || "U").toUpperCase(),
-            bloodGroup: participant?.bloodGroup || "N/A",
-            tshirtSize: participant?.tshirtSize || "N/A",
-            gender: participant?.gender || "N/A",
-            ageCategory: participant?.ageCategory || "N/A",
-            distance: participant?.distanceCategory || "N/A",
-            emergencyContact: participant?.emergencyContactName || "N/A",
-            emergencyPhone: participant?.emergencyContactNumber || "N/A",
-            address: item.user?.address || "N/A",
-            community: participant?.communityName || "None"
-          };
-        });
-
-        setRegistrations(mappedData);
-      } catch (error) {
-        console.error("Error fetching order history:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  // Filter Logic
-  const events = [...new Set(registrations.map((r) => r.event))];
-  const filteredData = registrations.filter((reg) => {
-    const matchesSearch = 
-      reg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      reg.phone.includes(searchQuery);
-    const matchesEvent = filterEvent === "all" || reg.event === filterEvent;
-    return matchesSearch && matchesEvent;
+  // Global Aggregate States (For stats across all pages)
+  const [globalStats, setGlobalStats] = useState({
+    totalRevenue: 0,
+    paidCount: 0,
   });
 
-  // Stats Calculations
-  const totalRevenue = registrations
-    .filter(r => r.status === "completed")
-    .reduce((sum, r) => sum + r.amount, 0);
-  const paidCount = registrations.filter(r => r.status === 'completed').length;
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      // Fetching current page data
+      const res = await getAllOrders(currentPage, 10);
+      const items = res?.data?.items || [];
+      
+      setTotalPages(res?.data?.totalPages || 1);
+      setTotalCount(res?.data?.count || 0);
+
+      // If your API returns global aggregates in the metadata, use them.
+      // Otherwise, we calculate based on the full count and current response.
+      // Note: For true "Global Revenue", the API should ideally return the sum.
+      setGlobalStats({
+        totalRevenue: res?.data?.totalRevenue || 0, // Fallback to 0 if API doesn't provide sum
+        paidCount: res?.data?.paidCount || 0,
+      });
+
+      const mappedData = items.map((item) => {
+        const firstTicket = item.order?.items?.[0];
+        const participant = firstTicket?.participant;
+        
+        return {
+          id: item.id,
+          transactionId: item.transactionId,
+          name: participant?.name || `${item.user?.firstName} ${item.user?.lastName}`,
+          email: participant?.email || item.user?.email,
+          phone: participant?.contactNumber || "N/A",
+          event: firstTicket?.eventTicket?.event?.name || "N/A",
+          package: firstTicket?.eventTicket?.name || "Ticket",
+          amount: parseFloat(item.afterDiscountAmount || item.orginalAmount || 0),
+          status: item.status,
+          method: item.paymentGateway,
+          date: item.paymentDate || item.createdAt,
+          image: item.user?.image,
+          initials: (item.user?.firstName?.[0] || "U").toUpperCase(),
+          bloodGroup: participant?.bloodGroup || "N/A",
+          tshirtSize: participant?.tshirtSize || "N/A",
+          gender: participant?.gender || "N/A",
+          ageCategory: participant?.ageCategory || "N/A",
+          distance: participant?.distanceCategory || "N/A",
+          emergencyContact: participant?.emergencyContactName || "N/A",
+          emergencyPhone: participant?.emergencyContactNumber || "N/A",
+          address: item.user?.address || "N/A",
+          community: participant?.communityName || "None"
+        };
+      });
+
+      setRegistrations(mappedData);
+    } catch (error) {
+      console.error("Error fetching order history:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // UI Filter Logic (Filters only the currently loaded page)
+  const filteredData = useMemo(() => {
+    return registrations.filter((reg) => {
+      const matchesSearch = 
+        reg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reg.phone.includes(searchQuery);
+      const matchesEvent = filterEvent === "all" || reg.event === filterEvent;
+      return matchesSearch && matchesEvent;
+    });
+  }, [registrations, searchQuery, filterEvent]);
+
+  const uniqueEvents = [...new Set(registrations.map((r) => r.event))];
 
   const handleViewDetails = (reg) => {
     setSelectedReg(reg);
     setIsSheetOpen(true);
   };
 
-  if (loading) return (
-    <div className="flex h-[60vh] items-center justify-center">
-      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-    </div>
-  );
+  const handleExportCSV = () => {
+    const headers = ["Name", "Email", "Phone", "Event", "Package", "Status", "Amount", "Transaction ID", "T-Shirt", "Blood Group"];
+    const csvData = filteredData.map(reg => [
+      `"${reg.name}"`,
+      reg.email,
+      reg.phone,
+      `"${reg.event}"`,
+      reg.package,
+      reg.status,
+      reg.amount,
+      reg.transactionId,
+      reg.tshirtSize,
+      reg.bloodGroup
+    ]);
+
+    const csvContent = [headers, ...csvData].map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Registrations_Page_${currentPage}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="p-6 space-y-6 animate-in fade-in duration-500 bg-background text-foreground">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Order History</h1>
-        <p className="text-muted-foreground text-sm">Real-time overview of event registrations.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Order History</h1>
+          <p className="text-muted-foreground text-sm">Real-time aggregate totals across all pages.</p>
+        </div>
+        <Button onClick={handleExportCSV} variant="outline" className="w-fit gap-2 border-primary/20 hover:bg-primary/5">
+          <Download className="h-4 w-4" /> Export Current View
+        </Button>
       </div>
 
-      {/* Stats Section */}
+      {/* Stats Section - Aggregate Global Totals */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-border bg-card shadow-sm">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Registered</p>
-                <p className="text-2xl font-bold text-foreground">{registrations.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-border bg-card shadow-sm">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-emerald-500/10 rounded-lg">
-                <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Paid Orders</p>
-                <p className="text-2xl font-bold text-foreground">{paidCount}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-border bg-card shadow-sm">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-amber-500/10 rounded-lg">
-                <CreditCard className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
-                <p className="text-2xl font-bold text-foreground">৳{totalRevenue.toLocaleString()}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard 
+          icon={<Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />} 
+          label="Total Registrations" 
+          value={totalCount} 
+          subText="All pages combined"
+          color="bg-blue-500/10" 
+        />
+        <StatCard 
+          icon={<CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />} 
+          label="Paid Orders" 
+          value={globalStats.paidCount || "-"} 
+          subText="System wide"
+          color="bg-emerald-500/10" 
+        />
+        <StatCard 
+          icon={<CreditCard className="h-5 w-5 text-amber-600 dark:text-amber-400" />} 
+          label="Total Revenue" 
+          value={`৳${globalStats.totalRevenue.toLocaleString()}`} 
+          subText="System wide"
+          color="bg-amber-500/10" 
+        />
       </div>
 
       {/* Filter Bar */}
@@ -204,7 +233,7 @@ export default function RegistrationsPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input 
-            placeholder="Search by name or phone..." 
+            placeholder="Search current page..." 
             className="pl-10 border-border bg-background" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -213,11 +242,11 @@ export default function RegistrationsPage() {
         <Select value={filterEvent} onValueChange={setFilterEvent}>
           <SelectTrigger className="w-[200px] border-border bg-background">
             <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-            <SelectValue placeholder="All Events" />
+            <SelectValue placeholder="Filter current page" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Events</SelectItem>
-            {events.map(event => (
+            {uniqueEvents.map(event => (
               <SelectItem key={event} value={event}>{event}</SelectItem>
             ))}
           </SelectContent>
@@ -225,7 +254,7 @@ export default function RegistrationsPage() {
       </div>
 
       {/* Table Section */}
-      <Card className="border-border bg-card shadow-sm">
+      <Card className="border-border bg-card shadow-sm overflow-hidden">
         <CardContent className="p-0">
           <Table>
             <TableHeader className="bg-muted/50">
@@ -237,7 +266,13 @@ export default function RegistrationsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredData.map((reg) => {
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="h-48 text-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+                  </TableCell>
+                </TableRow>
+              ) : filteredData.map((reg) => {
                 const status = paymentStatusConfig[reg.status] || paymentStatusConfig.pending;
                 return (
                   <TableRow key={reg.id} className="hover:bg-muted/30 border-border">
@@ -257,7 +292,7 @@ export default function RegistrationsPage() {
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <p className="text-xs font-bold uppercase tracking-tight">{reg.event}</p>
+                        <p className="text-xs font-bold uppercase tracking-tight line-clamp-1">{reg.event}</p>
                         <Badge variant="secondary" className="text-[10px] font-medium bg-muted text-muted-foreground border-none">
                           {reg.package}
                         </Badge>
@@ -279,13 +314,42 @@ export default function RegistrationsPage() {
               })}
             </TableBody>
           </Table>
-          {filteredData.length === 0 && (
+          {!loading && filteredData.length === 0 && (
             <div className="py-12 text-center text-muted-foreground">
-              No registrations found matching your criteria.
+              No registrations found on this page.
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Pagination Footer */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-2">
+        <p className="text-sm text-muted-foreground">
+          Showing page <span className="font-medium text-foreground">{currentPage}</span> of{" "}
+          <span className="font-medium text-foreground">{totalPages}</span> ({totalCount} total records)
+        </p>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === 1 || loading}
+            onClick={() => setCurrentPage(prev => prev - 1)}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" /> Previous
+          </Button>
+          <div className="flex items-center px-4 text-sm font-medium">
+            {currentPage}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === totalPages || loading}
+            onClick={() => setCurrentPage(prev => prev + 1)}
+          >
+            Next <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
+      </div>
 
       {/* DETAILED INFORMATION SHEET */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -296,7 +360,6 @@ export default function RegistrationsPage() {
           
           {selectedReg && (
             <div className="space-y-6 mx-4">
-              {/* Profile Card */}
               <div className="flex items-center gap-4 p-4 rounded-xl border border-border bg-muted/30">
                 <Avatar className="h-14 w-14 border border-border shadow-sm">
                   <AvatarImage src={selectedReg.image} />
@@ -310,7 +373,6 @@ export default function RegistrationsPage() {
                 </div>
               </div>
 
-              {/* Contact Information */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Info className="h-4 w-4" />
@@ -323,7 +385,6 @@ export default function RegistrationsPage() {
                 </div>
               </div>
 
-              {/* Vital Stats Grid */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 border border-border rounded-xl bg-background shadow-sm">
                   <div className="flex items-center gap-2 mb-1 text-muted-foreground">
@@ -341,7 +402,6 @@ export default function RegistrationsPage() {
                 </div>
               </div>
 
-              {/* Event Metadata */}
               <div className="divide-y divide-border border-y border-border py-2">
                 {[
                   { label: "Category", val: selectedReg.ageCategory },
@@ -355,7 +415,6 @@ export default function RegistrationsPage() {
                 ))}
               </div>
 
-              {/* Emergency Contact */}
               <div className="p-4 border border-amber-500/20 bg-amber-500/5 rounded-xl">
                 <h4 className="text-[10px] font-bold uppercase text-amber-600 dark:text-amber-500 mb-2 tracking-widest">Emergency Contact</h4>
                 <div className="flex flex-col">
@@ -364,7 +423,6 @@ export default function RegistrationsPage() {
                 </div>
               </div>
 
-              {/* Transaction Footnote */}
               <div className="pt-4 border-t border-border">
                  <div className="flex items-center gap-2 mb-2 text-muted-foreground">
                     <Hash className="h-3.5 w-3.5" />
@@ -383,5 +441,26 @@ export default function RegistrationsPage() {
         </SheetContent>
       </Sheet>
     </div>
+  );
+}
+
+function StatCard({ icon, label, value, subText, color }) {
+  return (
+    <Card className="border-border bg-card shadow-sm">
+      <CardContent className="pt-6">
+        <div className="flex items-center gap-4">
+          <div className={`p-2 rounded-lg ${color}`}>
+            {icon}
+          </div>
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">{label}</p>
+            <div className="flex items-baseline gap-2">
+              <p className="text-2xl font-bold text-foreground">{value}</p>
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">{subText}</p>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

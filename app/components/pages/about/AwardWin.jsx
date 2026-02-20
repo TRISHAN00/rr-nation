@@ -16,7 +16,7 @@ export default function AwardWin({ hideShape, hideRound, hideTopImage }) {
 
       <div className="relative w-full max-w-[470] h-[360] sm:h-[480] md:h-[636] rounded-4xl overflow-hidden md:ml-10">
         <Image
-          src="/dynamic/about/about-us.jpg"
+          src="/dynamic/about/Vision-Photo_Award_Winning.jpg"
           alt="Run Rise About and Mission"
           fill
           className="object-fill h-full w-full "

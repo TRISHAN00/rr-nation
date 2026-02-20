@@ -6,19 +6,19 @@ const services = [
     id: 1,
     title: "Event Management",
     desc: "From route planning to race-day execution, we deliver world-class athletic events that inspire and engage the community.",
-    image: "/dynamic/service/Event_Management.jpg",
+    image: "/dynamic/service/Service_Event Management.jpg",
   },
   {
     id: 2,
     title: "Merchandising",
     desc: "We design and produce premium, performance-ready athletic gear and high-quality finisher collectibles for every milestone.",
-    image: "/dynamic/service/Merchandising.jpg",
+    image: "/dynamic/service/Service_Merchandising.png",
   },
   {
     id: 3,
     title: "MVendor Managementg",
     desc: "We bridge the gap between events and top-tier suppliers, handling logistics, hydration, and technical support for a seamless experience.",
-    image: "/dynamic/service/Vendor _Management.jpg",
+    image: "/dynamic/service/Service_MultiVendor.png",
   },
 ];
 

@@ -3,7 +3,7 @@ import SubtitleWithArrow from "@/app/components/common/SubtitleWithArrow";
 import { useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import EventCard from "./EventCard";
+import SuccessEventCard from "./SuccessEventCard";
 
 const succEvents = [
   {
@@ -88,7 +88,7 @@ export default function SuccessfulEvents() {
           {/* ✅ Map through your real data here */}
           {succEvents.map((event) => (
             <SwiperSlide key={event.id}>
-              <EventCard event={event} />
+              <SuccessEventCard event={event} />
             </SwiperSlide>
           ))}
         </Swiper>
