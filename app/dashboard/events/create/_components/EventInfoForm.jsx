@@ -48,6 +48,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
   useEffect(() => {
     if (event) {
       setForm({
+        eventId: event?.id,
         name: event.name || "",
         organizerName: event.organizerName || "",
         description: event.description || "",
@@ -77,7 +78,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
 
     if (isEditMode) {
       // Use eventId from params or the event object
-      const targetId = eventId || event?.id;
+      const targetId = event?.id;
       await handleUpdateEvent(targetId, formData);
     } else {
       const newId = await handleCreateEvent(formData);

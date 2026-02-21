@@ -63,6 +63,7 @@ export default function EventProvider({ children }) {
 
   // --- UPDATE EVENT ---
   const handleUpdateEvent = useCallback(async (eventId, formData) => {
+    console.log('clicked...', formData)
     try {
       setLoading(true);
       await updateEvent(eventId, formData);

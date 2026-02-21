@@ -69,6 +69,25 @@ export default function Footer() {
 
           <FooterSocial gap={5} />
         </div>
+
+        {/* --- Copyright & Developer Section --- */}
+        <div className="border-t border-white/10 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-white/70 text-sm">
+            <p>© {new Date().getFullYear()} Run Rise Nation. All Rights Reserved.</p>
+
+            <p>
+              Designed and Developed By{" "}
+              <a
+                href="https://codemanbd.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-[#00a19a] transition-colors duration-300 font-medium"
+              >
+                Codemanbd
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </footer>
   );
