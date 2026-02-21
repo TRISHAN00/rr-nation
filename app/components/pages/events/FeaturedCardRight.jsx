@@ -30,7 +30,7 @@ export default function FeaturedCardRight({ bgColor, event, minPrice }) {
 
         {/* Button */}
         <div className="mt-6 lg:mt-0">
-          <Link href={`/events/${event?.id}`}>
+          <Link href={`/events/${event?.slug}`}>
             <FillButton
               onClick={() => setOpen(true)}
               className="w-full lg:w-auto"
