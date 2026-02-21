@@ -1,5 +1,5 @@
 "use client";
-import { getEventById } from "@/services/user.service";
+import { getEventBySlug } from "@/services/user.service";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ export default function EventDetail() {
 
   const fetchEvent = async () => {
     try {
-      const res = await getEventById(slug);
+      const res = await getEventBySlug(slug);
 
       setEvent(res?.data?.data || null);
     } catch (err) {

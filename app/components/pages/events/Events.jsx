@@ -9,7 +9,6 @@ export default function Events({ hideTab }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(events)
 
   const fetchEvents = async () => {
     try {

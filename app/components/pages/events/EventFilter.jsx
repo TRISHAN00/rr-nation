@@ -49,7 +49,7 @@ export default function EventFilter({ onChange, events = [], loading }) {
           ? Array.from({ length: events?.length || 0 }).map((_, i) => (
               <EventCardSkeleton key={i} />
             ))
-          : events.map((item) => <EventCard key={item?.id} event={item} href={`/events/${item?.id}`} />)}
+          : events.map((item) => <EventCard key={item?.id} event={item} href={`/events/${item?.slug}`} />)}
       </div>
     </div>
   );
