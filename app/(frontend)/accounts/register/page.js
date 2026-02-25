@@ -11,6 +11,7 @@ import SendOTPForm from "@/app/components/form/SendOTPForm";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
+import { Eye, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -20,8 +21,7 @@ export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [registerData, setRegisterData] = useState({});
   const [loading, setLoading] = useState(false);
-
-  console.log(registerData)
+  const [showPassword, setShowPassword] = useState(false);
 
   /* ---------------- VERIFY OTP ---------------- */
   async function handleVerifyOtp(e) {
@@ -106,8 +106,13 @@ export default function RegisterPage() {
 
         {step === 2 && (
           <form className="space-y-4" onSubmit={handleVerifyOtp}>
+            {/* ✅ INFO MESSAGE */}
+            <p className="text-sm text-green-600 bg-green-50 border border-green-200 p-2 rounded">
+              OTP sent to {registerData?.email}. Check your inbox or spam.
+            </p>
+
             <div>
-              <Label className={"mb-1"}>OTP</Label>
+              <Label className="mb-1">OTP</Label>
               <Input name="otp" placeholder="Enter OTP" required />
             </div>
 
@@ -116,17 +121,39 @@ export default function RegisterPage() {
             </Button>
           </form>
         )}
-
         {step === 3 && (
           <form className="space-y-4" onSubmit={handleRegister}>
             <div>
-              <Label className={"mb-1"} >Password</Label>
-              <Input
-                name="password"
-                type="password"
-                placeholder="Create password"
-                required
-              />
+              <Label className={"mb-1"}>Password</Label>
+              <div className="relative">
+                <Input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Create password"
+                  required
+                  className="pr-10"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    // Eye Off Icon
+                    <EyeOffIcon size={16} />
+                  ) : (
+                    // Eye Icon
+                    <Eye size={16} />
+                  )}
+                </button>
+              </div>
+
+              {/* ✅ PASSWORD RULE MESSAGE */}
+              <p className="mt-1 text-xs text-gray-500">
+                Password must be at least 8 characters and include uppercase,
+                lowercase, a number, and a special character.
+              </p>
             </div>
 
             <Button className="w-full" disabled={loading}>
