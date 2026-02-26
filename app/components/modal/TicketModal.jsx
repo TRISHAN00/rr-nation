@@ -127,10 +127,10 @@ export default function TicketModal({
 
         {/* Scrollable Form Area */}
         <form
-          className="flex-1 overflow-y-auto"
+          className="flex-1 overflow-y-auto pb-32 md:pb-4"
           onSubmit={handleSubmit}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-5 sm:p-6 pb-24 md:pb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-5 ">
             {fields.map((field) => {
               const label = field.name
                 .replace(/([A-Z])/g, " $1")
