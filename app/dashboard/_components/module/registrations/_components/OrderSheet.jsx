@@ -1,0 +1,202 @@
+"use client";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/app/components/ui/accordion";
+import { CreditCard, Ticket, User } from "lucide-react";
+import OrderDataField from "./OrderDataField";
+
+export default function OrderSheet({ selectedReg, setTotalPages }) {
+  return (
+    <div className="p-6 space-y-8">
+      {/* Section 1: Buyer Information (The Account Holder) */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 text-primary">
+          <User className="h-4 w-4" />
+          <h4 className="text-xs font-bold uppercase tracking-widest">
+            User Information
+          </h4>
+        </div>
+        <div className="grid gap-3 p-4 rounded-xl border border-border bg-muted/30">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase text-muted-foreground font-bold">
+              Account Name
+            </span>
+            <span className="text-sm font-semibold">
+              {selectedReg?.user?.firstName} {selectedReg?.user?.lastName}
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase text-muted-foreground font-bold">
+                Email
+              </span>
+              <span className="text-sm truncate">
+                {selectedReg?.user?.email || "N/A"}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase text-muted-foreground font-bold">
+                Phone
+              </span>
+              <span className="text-sm">
+                {selectedReg?.user?.phone || "N/A"}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase text-muted-foreground font-bold">
+                Address
+              </span>
+              <span className="text-sm">
+                {selectedReg?.user?.address || "N/A"}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase text-muted-foreground font-bold">
+                Gender
+              </span>
+              <span className="text-sm">
+                {selectedReg?.user?.gender || "N/A"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 2: Participants (The Core Data) */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 text-primary">
+          <Ticket className="h-4 w-4" />
+          <h4 className="text-xs font-bold uppercase tracking-widest">
+            Participants ({selectedReg?.order?.items?.length})
+          </h4>
+        </div>
+
+        <Accordion type="single" collapsible className="space-y-3">
+          {selectedReg?.order?.items.map((item, idx) => (
+            <AccordionItem
+              key={idx}
+              value={`item-${idx}`}
+              className="border border-border rounded-xl px-4 bg-background shadow-sm overflow-hidden"
+            >
+              <AccordionTrigger className="hover:no-underline py-4">
+                <div className="flex items-center gap-3 text-left">
+                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                    {item?.participant?.name?.charAt(0)}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold">
+                      {item?.participant?.name}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground font-medium">
+                      {item?.eventTicket?.name} •{" "}
+                      {item?.participant?.distanceCategory}KM
+                    </span>
+                  </div>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="border-t border-border/50 pt-4 pb-4">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                  <OrderDataField
+                    label="T-Shirt Size"
+                    value={item.participant?.tshirtSize}
+                    highlight
+                  />
+                  <OrderDataField
+                    label="Blood Group"
+                    value={item.participant?.bloodGroup}
+                    color="text-destructive"
+                  />
+                  <OrderDataField
+                    label="Gender"
+                    value={item.participant?.gender}
+                  />
+                  <OrderDataField
+                    label="Runner Cat."
+                    value={item.participant?.runnerCategory}
+                  />
+                  <OrderDataField
+                    label="mail"
+                    value={item.participant?.email}
+                  />
+
+                  <div className="col-span-2">
+                    <OrderDataField
+                      label="Community"
+                      value={item.participant?.communityName || "Individual"}
+                    />
+                  </div>
+
+                  {/* Inner Emergency Contact */}
+                  {item.participant?.contactNumber && (
+                    <div className="col-span-2 mt-2 p-3 bg-amber-50 rounded-lg border border-amber-100 flex justify-between items-center">
+                      <div>
+                        <p className="text-[9px] font-bold text-amber-700 uppercase">
+                          Emergency Contact
+                        </p>
+                        <p className="text-xs font-bold">
+                          {item.participant?.emergencyContactName || "Guardian"}
+                        </p>
+                      </div>
+                      <p className="text-xs font-mono font-bold text-amber-700">
+                        {item.participant?.contactNumber}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
+
+      {/* Section 3: Payment & Transaction */}
+      <section className="pt-6 border-t border-border">
+        <div className="flex items-center gap-2 text-primary mb-4">
+          <CreditCard className="h-4 w-4" />
+          <h4 className="text-xs font-bold uppercase tracking-widest">
+            Payment Summary
+          </h4>
+        </div>
+
+        <div className="space-y-3 bg-muted/20 p-4 rounded-xl border border-border">
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Gateway</span>
+            <span className="font-bold uppercase">
+              {selectedReg?.paymentGateway}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Date</span>
+            <span className="font-medium">
+              {new Date(selectedReg?.paymentDate).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
+          </div>
+          <div className="space-y-1.5 pt-2">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase">
+              Transaction ID
+            </span>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 bg-background p-2 rounded border border-border text-[10px] font-mono truncate">
+                {selectedReg?.transactionId}
+              </code>
+            </div>
+          </div>
+          <div className="flex justify-between items-center pt-3 border-t border-border/50">
+            <span className="text-base font-bold">Total Paid</span>
+            <span className="text-2xl font-black text-primary">
+              ৳{Math.ceil(selectedReg?.afterDiscountAmount).toLocaleString()}
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
