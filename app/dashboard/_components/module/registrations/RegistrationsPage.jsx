@@ -7,10 +7,12 @@ import { CheckCircle, Clock, XCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import OrderHeader from "./_components/OrderHeader";
 import OrderList from "./_components/OrderList";
+import OrderPagination from "./_components/OrderPagination";
 import OrderSearch from "./_components/OrderSearch";
 import OrderSheet from "./_components/OrderSheet";
 import OrderSheetHeader from "./_components/OrderSheetHeader";
 import OrderStats from "./_components/OrderStats";
+import { OrderStatsSkeleton } from "./_components/Skeleton/OrderSkeleton";
 
 const paymentStatusConfig = {
   completed: {
@@ -41,22 +43,27 @@ export default function RegistrationsPage() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 50;
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await getAllOrders(currentPage, 50);
+      const res = await getAllOrders(currentPage, itemsPerPage);
       const resOverview = await getDashboardEventInfo();
+
       const items = res?.data?.items || [];
+      const total = res?.data?.totalPages || 1; // Assuming your API returns totalPages
 
       setStats(resOverview?.data);
       setRegisteredUsers(items);
+      setTotalPages(total);
     } catch (error) {
       console.error("Error fetching order history:", error);
     } finally {
       setLoading(false);
     }
-  }, [currentPage]);
+  }, [currentPage]); //
 
   useEffect(() => {
     fetchData();
@@ -139,7 +146,12 @@ export default function RegistrationsPage() {
     <div className="p-6 space-y-6 animate-in fade-in duration-500 bg-background text-foreground">
       <OrderHeader handleExportCSV={handleExportCSV} />
 
-      <OrderStats stats={stats} />
+
+      {loading && registeredUsers.length === 0 ? (
+        <OrderStatsSkeleton />
+      ) : (
+        <OrderStats stats={stats} />
+      )}
 
       <OrderSearch />
 
@@ -148,6 +160,15 @@ export default function RegistrationsPage() {
         handleViewDetails={handleViewDetails}
         loading={loading}
       />
+
+      {/* ADD PAGINATION HERE */}
+      {!loading && registeredUsers.length > 0 && (
+        <OrderPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
 
       {/* DETAILED INFORMATION SHEET */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>

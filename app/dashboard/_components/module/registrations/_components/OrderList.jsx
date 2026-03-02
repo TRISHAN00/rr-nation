@@ -1,53 +1,59 @@
 "use client";
 
 import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
 } from "@/app/components/ui/avatar";
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent } from "@/app/components/ui/card";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/app/components/ui/table";
-import {
-    Eye
-} from "lucide-react";
+import { Eye } from "lucide-react";
+import { OrderListSkeleton } from "./Skeleton/OrderSkeleton";
 
-export default function OrderList({registeredUsers, handleViewDetails, loading}) {
+export default function OrderList({
+  registeredUsers,
+  handleViewDetails,
+  loading,
+}) {
   return (
     <Card className="border-border bg-card shadow-sm overflow-hidden">
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader className="bg-muted/50">
-              <TableRow>
-                <TableHead className="font-semibold text-foreground text-left">
-                  ID
-                </TableHead>
+      <CardContent className="p-0">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            <TableRow>
+              <TableHead className="font-semibold text-foreground text-left">
+                ID
+              </TableHead>
 
-                <TableHead className="font-semibold text-foreground text-left">
-                  Name
-                </TableHead>
+              <TableHead className="font-semibold text-foreground text-left">
+                Name
+              </TableHead>
 
-                <TableHead className="font-semibold text-foreground text-left">
-                  Amount
-                </TableHead>
-                <TableHead className="font-semibold text-foreground text-left">
-                  Payment Date/Time
-                </TableHead>
+              <TableHead className="font-semibold text-foreground text-left">
+                Amount
+              </TableHead>
+              <TableHead className="font-semibold text-foreground text-left">
+                Payment Date/Time
+              </TableHead>
 
-                <TableHead className="text-right font-semibold text-foreground">
-                  Action
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {registeredUsers?.map((reg) => {
+              <TableHead className="text-right font-semibold text-foreground">
+                Action
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <OrderListSkeleton fieldCout={50} />
+            ) : (
+              registeredUsers?.map((reg) => {
                 const firstLetter = reg?.user?.firstName?.charAt(0) || "";
                 return (
                   <TableRow key={reg?.id}>
@@ -95,15 +101,16 @@ export default function OrderList({registeredUsers, handleViewDetails, loading})
                     </TableCell>
                   </TableRow>
                 );
-              })}
-            </TableBody>
-          </Table>
-          {!loading && registeredUsers.length === 0 && (
-            <div className="py-12 text-center text-muted-foreground">
-              No registrations found on this page.
-            </div>
-          )}
-        </CardContent>
-      </Card>
-  )
+              })
+            )}
+          </TableBody>
+        </Table>
+        {!loading && registeredUsers.length === 0 && (
+          <div className="py-12 text-center text-muted-foreground">
+            No registrations found on this page.
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
 }

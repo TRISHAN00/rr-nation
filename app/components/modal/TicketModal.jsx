@@ -25,6 +25,7 @@ export default function TicketModal({
     { label: 'XL (Chest: 44", Length: 29")', value: "XL" },
     { label: '2XL (Chest: 46", Length: 30")', value: "2XL" },
     { label: '3XL (Chest: 48", Length: 31")', value: "3XL" },
+    { label: '4XL (Chest: 50", Length: 32")', value: "4XL" },
     { label: '3-4 Years (Chest: 26", Length: 18")', value: "3-4 Years" },
     { label: '5-6 Years (Chest: 28", Length: 19")', value: "5-6 Years" },
     { label: '7-8 Years (Chest: 30", Length: 20")', value: "7-8 Years" },
