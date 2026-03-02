@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 
-export default function OrderHeader(handleExportCSV) {
+export default function OrderHeader({handleExportCSV}) {
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
@@ -11,7 +11,7 @@ export default function OrderHeader(handleExportCSV) {
         </p>
       </div>
       <Button
-        onClick={() => handleExportCSV}
+        onClick={handleExportCSV}
         variant="outline"
         className="w-fit gap-2 border-primary/20 hover:bg-primary/5"
       >
