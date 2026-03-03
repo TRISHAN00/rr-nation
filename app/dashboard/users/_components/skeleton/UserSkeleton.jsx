@@ -1,10 +1,10 @@
-import { Skeleton } from "@/app/components/ui/skeleton";
 import { TableCell, TableRow } from "@/app/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function UserListSkeleton() {
+export function UserListSkeleton({numberOfRow}) {
   return (
     <>
-      {[...Array(6)].map((_, i) => (
+      {[...Array(numberOfRow)].map((_, i) => (
         <TableRow key={i}>
           <TableCell>
             <div className="flex items-center gap-3">
