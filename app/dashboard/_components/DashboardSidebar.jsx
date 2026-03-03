@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Settings,
   Trophy,
+  User,
   UserCheck,
   Users,
 } from "lucide-react";
@@ -22,6 +23,7 @@ import { usePathname } from "next/navigation";
 
 const menuItems = [
   { title: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+  { title: "Users", icon: User, path: "/dashboard/users" },
   { title: "Events", icon: Calendar, path: "/dashboard/events" },
   { title: "Registrations", icon: UserCheck, path: "/dashboard/registrations" },
   { title: "Services", icon: Briefcase, path: "/dashboard/services" },

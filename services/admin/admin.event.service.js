@@ -32,7 +32,6 @@ export const deleteDashboardEvent = (eventId) => {
 };
 
 // GET EVENT ORDERS
-
 export const getAllOrders = async (page = 1, limit = 10) => {
   const { data } = await api.get(`/admin/order-history?page=${page}&limit=${limit}`);
   return data; 
