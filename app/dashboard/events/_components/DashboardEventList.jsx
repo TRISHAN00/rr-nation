@@ -21,12 +21,13 @@ export default function DashboardEventList({ events }) {
   const [expandedEvent, setExpandedEvent] = useState(null);
   const { handleDeleteDashboardEvent, loading } = useDashboardEvents();
 
-
   return (
     <div className="space-y-4">
       {events?.map((event) => {
         const typeConfig = eventTypes[event.eventType];
         const TypeIcon = typeConfig.icon;
+
+        console.log(typeConfig)
 
         return (
           <Collapsible

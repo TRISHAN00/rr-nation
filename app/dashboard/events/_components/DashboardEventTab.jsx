@@ -1,11 +1,11 @@
 import { Tabs, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
 import { CalendarClock, Monitor, Radio, Trophy } from "lucide-react";
 
-export default function DashboardEventTab() {
+export default function DashboardEventTab({ eventType, setEventType }) {
   return (
-    <Tabs className="w-auto">
+    <Tabs value={eventType} onValueChange={setEventType} className="w-auto">
       <TabsList>
-        <TabsTrigger value="all">All</TabsTrigger>
+        <TabsTrigger value="">All</TabsTrigger>
         <TabsTrigger value="live" className="gap-1">
           <Radio className="h-3 w-3" />
           Live

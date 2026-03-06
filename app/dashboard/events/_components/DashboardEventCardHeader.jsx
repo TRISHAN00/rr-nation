@@ -41,9 +41,6 @@ export default function DashboardEventCardHeader({
             event={event}
           />
           <CardTitle className="font-display text-xl">{event.name}</CardTitle>
-          <p className="text-sm text-muted-foreground line-clamp-1">
-            {event.description}
-          </p>
         </div>
 
         <div className="flex items-center gap-2">

@@ -23,6 +23,7 @@ export default function OrderList({
   handleViewDetails,
   loading,
 }) {
+  console.log(registeredUsers);
   return (
     <Card className="border-border bg-card shadow-sm overflow-hidden">
       <CardContent className="p-0">
@@ -36,7 +37,13 @@ export default function OrderList({
               <TableHead className="font-semibold text-foreground text-left">
                 Name
               </TableHead>
+              <TableHead className="font-semibold text-foreground text-left">
+                Event Name
+              </TableHead>
 
+              <TableHead className="font-semibold text-foreground text-left">
+                Coupon
+              </TableHead>
               <TableHead className="font-semibold text-foreground text-left">
                 Amount
               </TableHead>
@@ -55,6 +62,9 @@ export default function OrderList({
             ) : (
               registeredUsers?.map((reg) => {
                 const firstLetter = reg?.user?.firstName?.charAt(0) || "";
+                const eventName =
+                  reg?.order?.items?.[0]?.eventTicket?.event?.name;
+                console.log(reg?.order?.items?.length);
                 return (
                   <TableRow key={reg?.id}>
                     <TableCell>NR{reg?.user?.id}</TableCell>
@@ -75,6 +85,19 @@ export default function OrderList({
                           </p>
                         </div>
                       </div>
+                    </TableCell>
+
+                    <TableCell className="flex items-center gap-2">
+                      {eventName}
+                      <span className="text-xs px-2 py-1 rounded bg-brand text-white">
+                        {reg?.order?.items?.length || 0}
+                      </span>
+                    </TableCell>
+
+                    <TableCell>
+                      {reg?.dicountCoupon?.code
+                        ? reg?.dicountCoupon?.code
+                        : "N/A"}
                     </TableCell>
 
                     <TableCell>

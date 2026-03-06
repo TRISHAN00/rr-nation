@@ -10,6 +10,7 @@ import { CreditCard, Ticket, User } from "lucide-react";
 import OrderDataField from "./OrderDataField";
 
 export default function OrderSheet({ selectedReg, setTotalPages }) {
+
   return (
     <div className="p-6 space-y-8">
       {/* Section 1: Buyer Information (The Account Holder) */}

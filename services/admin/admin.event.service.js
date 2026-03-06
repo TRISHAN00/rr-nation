@@ -1,8 +1,17 @@
 import api from "@/lib/api";
 
 // Admin Dashboard Event List
-export const getAllDashbaordEvents = async () => {
-  const { data } = await api.get("/admin/event/all");
+export const getAllDashbaordEvents = async (
+  page,
+  limit,
+  isRunRiseNation,
+  search,
+  eventType, 
+  date
+) => {
+  const { data } = await api.get(
+    `/admin/event/all?page=${page}&limit=${limit}&isRunRiseNation=${isRunRiseNation}&search=${search}&eventType=${eventType}&date=${date}`
+  );
   return data;
 };
 
@@ -16,8 +25,8 @@ export const updateEvent = (eventId, data) => {
   // Some APIs allow a header to override the method
   return api.post(`/admin/event/${eventId}`, data, {
     headers: {
-      'X-HTTP-Method-Override': 'PATCH' 
-    }
+      "X-HTTP-Method-Override": "PATCH",
+    },
   });
 };
 
@@ -33,6 +42,8 @@ export const deleteDashboardEvent = (eventId) => {
 
 // GET EVENT ORDERS
 export const getAllOrders = async (page = 1, limit = 10) => {
-  const { data } = await api.get(`/admin/order-history?page=${page}&limit=${limit}`);
-  return data; 
+  const { data } = await api.get(
+    `/admin/order-history?page=${page}&limit=${limit}`,
+  );
+  return data;
 };

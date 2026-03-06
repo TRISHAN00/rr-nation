@@ -44,7 +44,8 @@ export default function RegistrationsPage() {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 50;
+  const [showRegItem, setShowRegItem] = useState(0)
+  const itemsPerPage = showRegItem || 50;
 
   const fetchData = useCallback(async () => {
     try {
@@ -63,7 +64,7 @@ export default function RegistrationsPage() {
     } finally {
       setLoading(false);
     }
-  }, [currentPage]); //
+  }, [currentPage, showRegItem]); //
 
   useEffect(() => {
     fetchData();
@@ -153,7 +154,7 @@ export default function RegistrationsPage() {
         <OrderStats stats={stats} />
       )}
 
-      <OrderSearch />
+      <OrderSearch setShowRegItem={setShowRegItem} showRegItem={showRegItem} />
 
       <OrderList
         registeredUsers={registeredUsers}
