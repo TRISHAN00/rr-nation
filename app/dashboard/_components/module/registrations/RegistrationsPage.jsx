@@ -80,7 +80,7 @@ export default function RegistrationsPage() {
     const headers = [
       "Participant Name",
       "Participant Email",
-      "Phone",
+      "Participant Phone",
       "Event Name",
       "Ticket Category",
       "Distance",

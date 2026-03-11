@@ -48,7 +48,7 @@ export default function SendOTPForm({loading, setLoading, setRegisterData, setRe
 
       <div className="flex flex-col gap-1.5">
         <Label>Phone</Label>
-        <Input name="phone" placeholder="Phone number" />
+        <Input name="phone" placeholder="Phone number" required />
       </div>
 
       <Button

@@ -3,10 +3,11 @@
 import { Badge } from "@/app/components/ui/badge";
 
 export default function DashboardPackageCard({ pkg }) {
-  // 1. Correct Progress Logic: (used / available) * 100
-  // Added a fallback to ensure we don't divide by zero
   const used = pkg?.usedSlots || 0;
   const total = pkg?.availableSlots || 0;
+  
+  // Calculate total revenue for this specific package
+  const totalSale = used * (pkg?.price || 0);
   
   const progress = total > 0 
     ? Math.min((used / total) * 100, 100) 
@@ -18,7 +19,6 @@ export default function DashboardPackageCard({ pkg }) {
     <div className="p-4 rounded-lg border border-border bg-card hover:border-primary/50 transition-colors">
       <div className="flex items-center justify-between mb-2">
         <span className="font-display font-bold text-lg text-primary">
-          {/* 2. Formatting: Ensure 'KM' is shown if not in the string */}
           {pkg.distance.toString().includes("KM") ? pkg.distance : `${pkg.distance} KM`}
         </span>
 
@@ -27,11 +27,11 @@ export default function DashboardPackageCard({ pkg }) {
         </Badge>
       </div>
 
-      <div className="space-y-1 text-sm">
+      <div className="space-y-3 text-sm">
         <div className="flex justify-between text-muted-foreground">
           <span>Registered</span>
           <span className="font-medium text-foreground">
-            {used}/{total}
+            {used.toLocaleString()} / {total.toLocaleString()}
           </span>
         </div>
 
@@ -43,10 +43,22 @@ export default function DashboardPackageCard({ pkg }) {
           />
         </div>
 
-        <div className="text-xs text-muted-foreground text-right italic">
-          {remainingSlots > 0
-            ? `${remainingSlots.toLocaleString()} slots left`
-            : "Fully booked"}
+        {/* Improved Revenue Display */}
+        <div className="flex justify-between items-end pt-1">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Total Revenue
+            </span>
+            <h5 className="font-bold text-foreground">
+              BDT {totalSale.toLocaleString()}
+            </h5>
+          </div>
+
+          <div className="text-xs text-muted-foreground italic">
+            {remainingSlots > 0
+              ? `${remainingSlots.toLocaleString()} left`
+              : "Fully booked"}
+          </div>
         </div>
       </div>
     </div>

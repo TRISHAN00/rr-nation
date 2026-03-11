@@ -10,7 +10,6 @@ import { CreditCard, Ticket, User } from "lucide-react";
 import OrderDataField from "./OrderDataField";
 
 export default function OrderSheet({ selectedReg, setTotalPages }) {
-
   return (
     <div className="p-6 space-y-8">
       {/* Section 1: Buyer Information (The Account Holder) */}
@@ -101,6 +100,7 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
               </AccordionTrigger>
               <AccordionContent className="border-t border-border/50 pt-4 pb-4">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                  {/* Key Stats */}
                   <OrderDataField
                     label="T-Shirt Size"
                     value={item.participant?.tshirtSize}
@@ -112,18 +112,45 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
                     color="text-destructive"
                   />
                   <OrderDataField
-                    label="Gender"
-                    value={item.participant?.gender}
+                    label="Distance"
+                    value={item.participant?.distanceCategory}
                   />
                   <OrderDataField
                     label="Runner Cat."
                     value={item.participant?.runnerCategory}
                   />
+
+                  {/* Identity & Personal */}
                   <OrderDataField
-                    label="mail"
-                    value={item.participant?.email}
+                    label="Gender"
+                    value={item.participant?.gender}
+                  />
+                  <OrderDataField
+                    label="Age Category"
+                    value={item.participant?.ageCategory}
+                  />
+                  <OrderDataField
+                    label="DOB"
+                    value={item.participant?.dateOfBirth}
+                  />
+                  <OrderDataField
+                    label="Religion"
+                    value={item.participant?.religion || "N/A"}
                   />
 
+                  {/* Contact Info */}
+                  <div className="col-span-2 grid grid-cols-2 gap-4 border-t border-b border-border/30 py-3 my-1">
+                    <OrderDataField
+                      label="Email"
+                      value={item.participant?.email}
+                    />
+                    <OrderDataField
+                      label="Phone"
+                      value={item.participant?.contactNumber}
+                    />
+                  </div>
+
+                  {/* Affiliation */}
                   <div className="col-span-2">
                     <OrderDataField
                       label="Community"
@@ -131,22 +158,53 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
                     />
                   </div>
 
-                  {/* Inner Emergency Contact */}
-                  {item.participant?.contactNumber && (
-                    <div className="col-span-2 mt-2 p-3 bg-amber-50 rounded-lg border border-amber-100 flex justify-between items-center">
-                      <div>
-                        <p className="text-[9px] font-bold text-amber-700 uppercase">
-                          Emergency Contact
-                        </p>
-                        <p className="text-xs font-bold">
-                          {item.participant?.emergencyContactName || "Guardian"}
-                        </p>
-                      </div>
-                      <p className="text-xs font-mono font-bold text-amber-700">
-                        {item.participant?.contactNumber}
-                      </p>
+                  {/* Cycle Info (Conditional Rendering) */}
+                  {(item.participant?.cycleBrandName ||
+                    item.participant?.cycleFrameSize) && (
+                    <div className="col-span-2 grid grid-cols-2 gap-4 bg-muted/30 p-2 rounded">
+                      <OrderDataField
+                        label="Cycle Brand"
+                        value={item.participant?.cycleBrandName}
+                      />
+                      <OrderDataField
+                        label="Frame Size"
+                        value={item.participant?.cycleFrameSize}
+                      />
                     </div>
                   )}
+
+                  {/* Location Info */}
+                  <div className="col-span-2">
+                    <OrderDataField
+                      label="Delivery Address"
+                      value={
+                        item.participant?.deliveryAddress ||
+                        item.participant?.district ||
+                        "No address provided"
+                      }
+                    />
+                  </div>
+
+                  {/* Emergency Contact Section */}
+                  <div className="col-span-2 mt-2 p-3 bg-amber-50 rounded-lg border border-amber-100 flex justify-between items-center">
+                    <div>
+                      <p className="text-[9px] font-bold text-amber-700 uppercase tracking-tighter">
+                        Emergency Contact (
+                        {item.participant?.emergencyContactName || "Guardian"})
+                      </p>
+                      <p className="text-xs font-bold text-amber-900">
+                        {item.participant?.emergencyContactNumber}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[9px] font-bold text-amber-700 uppercase tracking-tighter">
+                        Past Events
+                      </p>
+                      <p className="text-xs font-bold text-amber-900">
+                        {item.participant?.participatedEventNumbers || "0"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </AccordionContent>
             </AccordionItem>

@@ -118,7 +118,7 @@ export default function TicketModal({
         
         {/* Fixed Header */}
         <DialogHeader className="shrink-0 border-b p-5 bg-white z-10">
-          <DialogTitle className="text-lg sm:text-xl font-bold text-[#001819]">
+          <DialogTitle className="text-lg sm:text-xl font-bold text-dark">
             {pak?.name}
           </DialogTitle>
           <p className="text-sm text-brand font-semibold">

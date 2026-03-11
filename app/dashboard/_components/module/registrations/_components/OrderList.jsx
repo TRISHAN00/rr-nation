@@ -64,7 +64,23 @@ export default function OrderList({
                 const firstLetter = reg?.user?.firstName?.charAt(0) || "";
                 const eventName =
                   reg?.order?.items?.[0]?.eventTicket?.event?.name;
-                console.log(reg?.order?.items?.length);
+                const itemCount = reg?.order?.items?.length || 0;
+
+                // Define colors for 1, 2, 3, and 4+
+                const getBadgeColor = (count) => {
+                  switch (count) {
+                    case 1:
+                      return "bg-blue-500";
+                    case 2:
+                      return "bg-emerald-500";
+                    case 3:
+                      return "bg-amber-500";
+                    case 4:
+                      return "bg-rose-500";
+                    default:
+                      return "bg-brand"; // Fallback for 0 or 5+
+                  }
+                };
                 return (
                   <TableRow key={reg?.id}>
                     <TableCell>NR{reg?.user?.id}</TableCell>
@@ -89,8 +105,10 @@ export default function OrderList({
 
                     <TableCell className="flex items-center gap-2">
                       {eventName}
-                      <span className="text-xs px-2 py-1 rounded bg-brand text-white">
-                        {reg?.order?.items?.length || 0}
+                      <span
+                        className={`text-xs px-2 py-1 rounded text-white ${getBadgeColor(itemCount)}`}
+                      >
+                        {itemCount}
                       </span>
                     </TableCell>
 

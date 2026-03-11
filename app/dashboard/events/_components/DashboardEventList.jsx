@@ -27,8 +27,6 @@ export default function DashboardEventList({ events }) {
         const typeConfig = eventTypes[event.eventType];
         const TypeIcon = typeConfig.icon;
 
-        console.log(typeConfig)
-
         return (
           <Collapsible
             key={event.id}
