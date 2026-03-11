@@ -27,6 +27,10 @@ import {
   TableRow,
 } from "@/app/components/ui/table";
 import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   Hash,
   Loader2,
   Percent,
@@ -36,6 +40,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner"; // Assuming sonner for consistency
 import { useCoupons } from "../../context/CouponContext";
 
 export default function EventCouponManager({ event }) {
@@ -46,6 +51,11 @@ export default function EventCouponManager({ event }) {
     fetchCoupons,
     handleCreateCoupon,
     handleDeleteCoupon,
+    currentPage,
+    setCurrentPage,
+    itemsPerPage,
+    setItemsPerPage,
+    totalPages,
   } = useCoupons();
 
   const [form, setForm] = useState({
@@ -55,10 +65,10 @@ export default function EventCouponManager({ event }) {
     usageLimit: "",
   });
 
-  // 1. Sync eventId when event data finally loads from the parent
+  // Sync when the component mounts or pagination changes
   useEffect(() => {
     fetchCoupons();
-  }, [fetchCoupons]);
+  }, [fetchCoupons, currentPage, itemsPerPage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,7 +78,6 @@ export default function EventCouponManager({ event }) {
       return;
     }
 
-    // Create one clean object
     const cleanCoupon = {
       eventId: Number(event.id),
       code: form.code.trim(),
@@ -77,7 +86,6 @@ export default function EventCouponManager({ event }) {
       usageLimit: Number(form.usageLimit),
     };
 
-    // Send the object. The Context and API helper will wrap it in [ ] for you.
     const success = await handleCreateCoupon(cleanCoupon);
 
     if (success) {
@@ -104,7 +112,7 @@ export default function EventCouponManager({ event }) {
             </CardDescription>
           </div>
           <Badge variant="outline" className="font-mono">
-            {coupons?.length || 0} Active
+            {coupons?.length || 0} Showing
           </Badge>
         </div>
       </CardHeader>
@@ -133,15 +141,16 @@ export default function EventCouponManager({ event }) {
               </div>
             </div>
 
-            <div className="flex-1 w-full space-y-2">
+            <div className="flex-1 w-full space-y-2 ">
               <Label className="text-xs uppercase tracking-wider text-muted-foreground">
                 Type
               </Label>
               <Select
+         
                 value={form.discountType}
                 onValueChange={(val) => setForm({ ...form, discountType: val })}
               >
-                <SelectTrigger className="bg-background">
+                <SelectTrigger className="bg-background mb-0">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -212,58 +221,143 @@ export default function EventCouponManager({ event }) {
               </p>
             </div>
           ) : (
-            <Table>
-              <TableHeader className="bg-muted/30">
-                <TableRow>
-                  <TableHead className="w-[200px] pl-6">Coupon Code</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Value</TableHead>
-                  <TableHead>Usage Limit</TableHead>
-                  <TableHead className="text-right pr-6">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {coupons?.map((coupon) => (
-                  <TableRow key={coupon.id} className="hover:bg-muted/5">
-                    <TableCell className="pl-6">
-                      <code className="rounded bg-primary/5 px-2 py-1 font-mono text-sm font-bold text-primary border border-primary/10">
-                        {coupon.code}
-                      </code>
-                    </TableCell>
-                    <TableCell className="capitalize text-muted-foreground">
-                      {coupon.discountType}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          coupon.discountType === "percentage"
-                            ? "default"
-                            : "secondary"
-                        }
-                      >
-                        {coupon.discountType === "percentage"
-                          ? `${coupon.value}%`
-                          : `${coupon.value} BDT`}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {coupon.usageLimit} uses
-                    </TableCell>
-                    <TableCell className="text-right pr-6">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        disabled={isProcessing}
-                        className="hover:text-destructive"
-                        onClick={() => handleDeleteCoupon(coupon.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
+            <>
+              <Table>
+                <TableHeader className="bg-muted/30">
+                  <TableRow>
+                    <TableHead className="w-[200px] pl-6">Coupon Code</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead>Used Coupon</TableHead>
+                    <TableHead>Usage Limit</TableHead>
+                    <TableHead className="text-right pr-6">Action</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {coupons?.length > 0 ? (
+                    coupons.map((coupon) => (
+                      <TableRow key={coupon.id} className="hover:bg-muted/5">
+                        <TableCell className="pl-6">
+                          <code className="rounded bg-primary/5 px-2 py-1 font-mono text-sm font-bold text-primary border border-primary/10">
+                            {coupon.code}
+                          </code>
+                        </TableCell>
+                        <TableCell className="capitalize text-muted-foreground">
+                          {coupon.discountType}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              coupon.discountType === "percentage"
+                                ? "default"
+                                : "secondary"
+                            }
+                          >
+                            {coupon.discountType === "percentage"
+                              ? `${coupon.value}%`
+                              : `${coupon.value} BDT`}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {coupon.usedCount}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {coupon.usageLimit} uses
+                        </TableCell>
+                        <TableCell className="text-right pr-6">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={isProcessing}
+                            className="hover:text-destructive"
+                            onClick={() => handleDeleteCoupon(coupon.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                        No coupons found.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+
+              {/* Pagination Footer */}
+              <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t bg-muted/20 gap-4">
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Rows
+                    </p>
+                    <Select
+                      value={itemsPerPage.toString()}
+                      onValueChange={(val) => {
+                        setItemsPerPage(Number(val));
+                        setCurrentPage(1); // Reset to first page on size change
+                      }}
+                    >
+                      <SelectTrigger className="h-8 w-[70px] bg-background">
+                        <SelectValue placeholder={itemsPerPage} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[5, 10, 20, 50].map((size) => (
+                          <SelectItem key={size} value={size.toString()}>
+                            {size}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <p className="text-sm text-muted-foreground font-medium">
+                    Page {currentPage} of {totalPages || 1}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setCurrentPage(1)}
+                    disabled={currentPage === 1 || loading}
+                  >
+                    <ChevronsLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1 || loading}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage >= totalPages || loading}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setCurrentPage(totalPages)}
+                    disabled={currentPage >= totalPages || loading}
+                  >
+                    <ChevronsRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </CardContent>

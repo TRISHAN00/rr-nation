@@ -15,24 +15,29 @@ export function CouponProvider({ children, eventId }) {
   const [loading, setLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [totalPages, setTotalPages] = useState(1); // Added totalPages state
+
   const fetchCoupons = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await getAllDashboardCoupons();
-      setCoupons(res?.data?.items);
+      const res = await getAllDashboardCoupons(currentPage, itemsPerPage);
+      
+      // Assuming your API returns items and total pages/count
+      setCoupons(res?.data?.items || []);
+      setTotalPages(res?.data?.totalPages || 1); 
     } catch (err) {
       toast.error("Failed to load coupons");
     } finally {
       setLoading(false);
     }
-  }, [eventId]);
+  }, [currentPage, itemsPerPage]); // Removed eventId from deps if not used in API call
 
   const handleCreateCoupon = async (couponData) => {
     try {
       setIsProcessing(true);
-
-      // FIX: If couponData is an array, map through it to ensure eventId is present
-      // If it's a single object, just attach the eventId.
       const dataToSend = Array.isArray(couponData)
         ? couponData.map((c) => ({
             ...c,
@@ -41,7 +46,6 @@ export function CouponProvider({ children, eventId }) {
         : { ...couponData, eventId: Number(eventId || couponData.eventId) };
 
       await createCoupon(dataToSend);
-
       toast.success("Coupon created");
       await fetchCoupons();
       return true;
@@ -75,6 +79,12 @@ export function CouponProvider({ children, eventId }) {
         fetchCoupons,
         handleCreateCoupon,
         handleDeleteCoupon,
+        // Added these to the provider value:
+        currentPage,
+        setCurrentPage,
+        itemsPerPage,
+        setItemsPerPage,
+        totalPages
       }}
     >
       {children}
