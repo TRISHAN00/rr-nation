@@ -3,19 +3,14 @@ import api from "@/lib/api";
 export const getAllDashboardMembers = async (
   page = 1,
   limit = 10,
-  adminApproval = "pending",
-  memberType = "member",
+  adminApproval = "approved",
+  memberType = "admin",
   paymentStatus = "pending",
 ) => {
-  const { data } = await api.get("/admin/member", {
-    params: {
-      page,
-      limit,
-      adminApproval,
-      memberType,
-      paymentStatus,
-    },
-  });
+  const { data } = await api.get(
+    `/admin/member?page=${page}&limit=${limit}&adminApproval=${adminApproval}&memberType=${memberType}&paymentStatus=${paymentStatus}`,
+    
+  );
 
   return data;
 };

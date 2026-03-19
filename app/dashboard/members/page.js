@@ -3,6 +3,7 @@ import OrderHeader from "../_components/module/registrations/_components/OrderHe
 import { useDashboardMembers } from "../context/MemberContext";
 import MemberActions from "./_components/MemberActions";
 import MemberList from "./_components/MemberList";
+import { MemberPaginationFooter } from "./_components/MemberPaginationFooter";
 
 export default function DashboardMemberPage() {
   const { members, loading } = useDashboardMembers();
@@ -12,6 +13,7 @@ export default function DashboardMemberPage() {
       <OrderHeader title="Member Order Histry" />
       <MemberActions/>
       <MemberList members={members} loading={loading} />
+      <MemberPaginationFooter/>
     </>
   );
 }
