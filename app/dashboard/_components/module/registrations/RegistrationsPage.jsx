@@ -44,7 +44,7 @@ export default function RegistrationsPage() {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [showRegItem, setShowRegItem] = useState(0)
+  const [showRegItem, setShowRegItem] = useState(0);
   const itemsPerPage = showRegItem || 50;
 
   const fetchData = useCallback(async () => {
@@ -145,8 +145,11 @@ export default function RegistrationsPage() {
 
   return (
     <div className="p-6 space-y-6 animate-in fade-in duration-500 bg-background text-foreground">
-      <OrderHeader handleExportCSV={handleExportCSV} />
-
+      <OrderHeader
+        handleExportCSV={handleExportCSV}
+        title={"Order History"}
+        desc={`Real-time aggregate totals across all pages.`}
+      />
 
       {loading && registeredUsers.length === 0 ? (
         <OrderStatsSkeleton />
