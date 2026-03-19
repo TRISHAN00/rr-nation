@@ -9,7 +9,10 @@ import {
 } from "@/app/components/ui/select";
 import MemberSearch from "./MemberSearch";
 
-export default function MemberActions() {
+export default function MemberActions({ 
+  setAdminApproval, 
+  setMemberType, 
+}) {
   return (
     <div className="p-4 bg-card border rounded-xl space-y-4 my-4">
       {/* Filter Grid */}
@@ -17,13 +20,17 @@ export default function MemberActions() {
         {/* 1. Search Box */}
         <MemberSearch />
 
-        <div className=" flex gap-x-2">
+        <div className="flex gap-x-2">
           {/* 2. Admin Approval Select */}
-          <Select defaultValue="pending">
-            <SelectTrigger className="h-10 bg-muted/20 border-muted">
+          <Select 
+            defaultValue="all" 
+            onValueChange={(value) => setAdminApproval(value === "all" ? "" : value)}
+          >
+            <SelectTrigger className="h-10 w-40 bg-muted/20 border-muted">
               <SelectValue placeholder="Approval Status" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All Approvals</SelectItem>
               <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
               <SelectItem value="rejected">Rejected</SelectItem>
@@ -31,11 +38,15 @@ export default function MemberActions() {
           </Select>
 
           {/* 3. Member Type Select */}
-          <Select defaultValue="member">
-            <SelectTrigger className="h-10 bg-muted/20 border-muted">
+          <Select 
+            defaultValue="all"
+            onValueChange={(value) => setMemberType(value === "all" ? "" : value)}
+          >
+            <SelectTrigger className="h-10 w-40 bg-muted/20 border-muted">
               <SelectValue placeholder="Member Type" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
               <SelectItem value="member">Member</SelectItem>
               <SelectItem value="admin">Admin</SelectItem>
               <SelectItem value="advisor">Advisor</SelectItem>
@@ -44,17 +55,21 @@ export default function MemberActions() {
           </Select>
 
           {/* 4. Payment Status Select */}
-          <Select defaultValue="pending">
-            <SelectTrigger className="h-10 bg-muted/20 border-muted">
+          {/* <Select 
+            defaultValue="all"
+            onValueChange={(value) => setPaymentStatus(value === "all" ? "" : value)}
+          >
+            <SelectTrigger className="h-10 w-40 bg-muted/20 border-muted">
               <SelectValue placeholder="Payment Status" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All Payments</SelectItem>
               <SelectItem value="pending">Pending Payment</SelectItem>
               <SelectItem value="paid">Paid</SelectItem>
               <SelectItem value="failed">Failed</SelectItem>
               <SelectItem value="refunded">Refunded</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </div>
     </div>

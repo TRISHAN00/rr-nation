@@ -6,14 +6,18 @@ import MemberList from "./_components/MemberList";
 import { MemberPaginationFooter } from "./_components/MemberPaginationFooter";
 
 export default function DashboardMemberPage() {
-  const { members, loading } = useDashboardMembers();
+  const { members, loading, setAdminApproval, setMemberType } =
+    useDashboardMembers();
 
   return (
     <>
-      <OrderHeader title="Member Order Histry" />
-      <MemberActions/>
+      <OrderHeader title="Member Order History" />
+      <MemberActions
+        setAdminApproval={setAdminApproval}
+        setMemberType={setMemberType}
+      />
       <MemberList members={members} loading={loading} />
-      <MemberPaginationFooter/>
+      <MemberPaginationFooter />
     </>
   );
 }

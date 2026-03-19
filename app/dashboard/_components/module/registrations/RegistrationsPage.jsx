@@ -54,7 +54,7 @@ export default function RegistrationsPage() {
       const resOverview = await getDashboardEventInfo();
 
       const items = res?.data?.items || [];
-      const total = res?.data?.totalPages || 1; // Assuming your API returns totalPages
+      const total = res?.data?.totalPages || 1; 
 
       setStats(resOverview?.data);
       setRegisteredUsers(items);

@@ -9,59 +9,65 @@ export default function MemberProvider({children}) {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [adminApproval, setAdminApproval] = useState("pending");
-  const [eventType, setEventType] = useState("");
-
+  const [totalItems, setTotalItems] = useState(0); // Added to track total for pagination
+  const [adminApproval, setAdminApproval] = useState("");
+  const [memberType, setMemberType] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState(""); // Added
 
   const fetchMembers = useCallback(async () => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
     if (!token) return;
 
     try {
       setLoading(true);
-      const formattedDateForAPI =
-        date instanceof Date ? format(date, "MM/dd/yyyy") : "";
-      const encodedDate = encodeURIComponent(formattedDateForAPI);
-
       const response = await getAllDashboardMembers(
         page,
         limit,
         adminApproval,
-        search,
-        eventType === "all" ? "" : eventType,
-        encodedDate,
+        memberType,
+        paymentStatus, // Now passing this
+        search         // Pass search term if your API supports it
       );
 
+      // Adjust these keys based on your actual API response structure
       setMembers(response?.data?.items || response?.items || []);
+      setTotalItems(response?.data?.total || response?.total || 0);
     } catch (err) {
       console.error("Fetch Error:", err);
-      toast.error("Failed to fetch events");
+      toast.error("Failed to fetch members");
     } finally {
       setLoading(false);
     }
-  }, [page, limit, adminApproval, search, eventType, date]);
+  }, [page, limit, adminApproval, memberType, paymentStatus, search]);
 
   useEffect(() => {
     fetchMembers();
   }, [fetchMembers]);
 
-  return <MemberContext.Provider
+  return (
+    <MemberContext.Provider
       value={{
         members,
-        loading
+        loading,
+        page,
+        setPage,
+        limit,
+        totalItems,
+        setAdminApproval,
+        setMemberType,
+        setPaymentStatus,
+        setSearch,
       }}
     >
       {children}
-    </MemberContext.Provider>;
+    </MemberContext.Provider>
+  );
 }
 
 export const useDashboardMembers = () => {
   const context = useContext(MemberContext);
-  if (!context)
-    throw new Error("useDashboardMembers must be used inside MemberProvider");
+  if (!context) throw new Error("useDashboardMembers must be used inside MemberProvider");
   return context;
 };

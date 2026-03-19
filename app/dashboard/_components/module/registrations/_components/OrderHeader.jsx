@@ -10,7 +10,7 @@ export default function OrderHeader({
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         {title && (
-          <h1 className="text-2xl font-bold tracking-tight">{title}y</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
         )}
         {desc && <p className="text-muted-foreground text-sm">{desc}</p>}
       </div>

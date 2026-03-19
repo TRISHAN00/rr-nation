@@ -35,6 +35,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
+import ActionConfirmationModal from "./ActionConfirmationModal";
 import { MemberListSkeleton } from "./MemberSkeleton";
 
 export default function MemberList({
@@ -43,6 +44,17 @@ export default function MemberList({
   loading,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [actionType, setActionType] = useState("approve");
+  const [selectedMember, setSelectedMember] = useState(null);
+
+  console.log(selectedMember);
+
+  const handleOpenModal = (member, type) => {
+    setSelectedMember(member);
+    setActionType(type);
+    setIsModalOpen(true);
+  };
 
   const getPaymentBadge = (status) => {
     const styles = {
@@ -55,6 +67,16 @@ export default function MemberList({
 
   return (
     <Card className="border-border bg-card shadow-sm overflow-hidden">
+      <ActionConfirmationModal
+        selectedMember={selectedMember}
+        isOpen={isModalOpen}
+        type={actionType}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={() => {
+          console.log(`Performing ${actionType} for:`, selectedMember);
+          setIsModalOpen(false);
+        }}
+      />
       <CardContent className="p-0">
         <Table>
           <TableHeader className="bg-muted/50">
@@ -170,7 +192,7 @@ export default function MemberList({
                         {item.district}
                       </p>
                       <p
-                        className="text-[10px] text-muted-foreground truncate max-w-[120px]"
+                        className="text-[10px] text-muted-foreground truncate max-w-30"
                         title={item.deliveryAddress}
                       >
                         {item.deliveryAddress}
@@ -196,19 +218,33 @@ export default function MemberList({
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-40">
+                      <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuLabel>Manage Member</DropdownMenuLabel>
+
                         <DropdownMenuItem
                           onClick={() => handleViewDetails(item)}
                         >
-                          <Eye className="mr-2 h-4 w-4" /> View Details
+                          <Eye className="mr-2 h-4 w-4 text-muted-foreground" />{" "}
+                          View Details
                         </DropdownMenuItem>
+
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-emerald-600">
+
+                        {/* Approve Action */}
+                        <DropdownMenuItem
+                          onClick={() => handleOpenModal(item, "approve")}
+                          className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50 cursor-pointer"
+                        >
                           <CheckCircle className="mr-2 h-4 w-4" /> Approve
+                          Member
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-rose-600">
-                          <XCircle className="mr-2 h-4 w-4" /> Cancel
+
+                        {/* Reject Action */}
+                        <DropdownMenuItem
+                          onClick={() => handleOpenModal(item, "reject")}
+                          className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 cursor-pointer"
+                        >
+                          <XCircle className="mr-2 h-4 w-4" /> Reject Member
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
