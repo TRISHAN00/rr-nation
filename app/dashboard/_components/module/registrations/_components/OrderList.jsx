@@ -23,7 +23,6 @@ export default function OrderList({
   handleViewDetails,
   loading,
 }) {
-  console.log(registeredUsers);
   return (
     <Card className="border-border bg-card shadow-sm overflow-hidden">
       <CardContent className="p-0">

@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import { logoutUser } from "@/services/auth.service";
-import { LayoutDashboard, LogOut, User } from "lucide-react";
+import { Building2, LayoutDashboard, LogOut, User, UserPlus } from "lucide-react";
 import Link from "next/link";
 
 export function ProfileDropdown({ user }) {
@@ -25,7 +25,7 @@ export function ProfileDropdown({ user }) {
         >
           <Avatar className="h-8 w-8">
             <AvatarImage
-              className={" object-cover"}
+              className={"object-cover"}
               src={user?.image || "/main-logo.png"}
               alt={name}
             />
@@ -45,7 +45,7 @@ export function ProfileDropdown({ user }) {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-44 rounded-md p-1">
+      <DropdownMenuContent align="end" className="w-52 rounded-md p-1">
         {/* Dashboard */}
         {user?.role?.id === 2 && (
           <DropdownMenuItem asChild>
@@ -66,15 +66,31 @@ export function ProfileDropdown({ user }) {
 
         <DropdownMenuSeparator />
 
+        {/* --- NEW ROUTES --- */}
+        <DropdownMenuItem asChild>
+          <Link href="/member-register" className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-cyan-500" />
+            Become a Member
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/become-organization" className="flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-cyan-500" />
+            Become an Organization
+          </Link>
+        </DropdownMenuItem>
+        {/* ------------------ */}
+
+        <DropdownMenuSeparator />
+
         {/* Logout */}
-        <DropdownMenuItem className="flex gap-2 text-red-500 focus:text-red-500">
-          <button
-            onClick={logoutUser}
-            className=" flex w-full items-center gap-1"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </button>
+        <DropdownMenuItem 
+          className="flex gap-2 text-red-500 focus:text-red-500 cursor-pointer"
+          onSelect={() => logoutUser()}
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

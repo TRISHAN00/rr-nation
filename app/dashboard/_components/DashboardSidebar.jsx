@@ -24,6 +24,7 @@ import { usePathname } from "next/navigation";
 const menuItems = [
   { title: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { title: "Users", icon: User, path: "/dashboard/users" },
+  { title: "Members", icon: User, path: "/dashboard/members" },
   { title: "Events", icon: Calendar, path: "/dashboard/events" },
   { title: "Registrations", icon: UserCheck, path: "/dashboard/registrations" },
   { title: "Services", icon: Briefcase, path: "/dashboard/services" },
@@ -68,7 +69,7 @@ export function DashboardSidebar({ collapsed, onToggle }) {
 
       {/* Navigation */}
       <nav className="flex flex-col gap-1 p-3">
-        {menuItems.map((item) => {
+        {menuItems?.map((item) => {
           const isActive = pathname === item.path;
 
           return (

@@ -7,7 +7,7 @@ import {
   getDashboardEventById,
   updateEvent,
 } from "@/services/admin/admin.event.service";
-import { format } from "date-fns"; // এই ইমপোর্টটি মিসিং ছিল
+import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import {
   createContext,
@@ -30,39 +30,38 @@ export default function EventProvider({ children }) {
   const [limit, setLimit] = useState(10);
   const [isRunRiseNation, setIsRunRiseNation] = useState(true);
   const [eventType, setEventType] = useState("");
-  const [date, setDate] = useState(null); 
+  const [date, setDate] = useState(null);
 
   const router = useRouter();
 
-  // --- FETCH ALL EVENTS ---
   const fetchEvents = useCallback(async () => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
-  if (!token) return;
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+    if (!token) return;
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
+      const formattedDateForAPI =
+        date instanceof Date ? format(date, "MM/dd/yyyy") : "";
+      const encodedDate = encodeURIComponent(formattedDateForAPI);
 
+      const response = await getAllDashbaordEvents(
+        page,
+        limit,
+        isRunRiseNation,
+        search,
+        eventType === "all" ? "" : eventType,
+        encodedDate,
+      );
 
-    const formattedDateForAPI = date instanceof Date ? format(date, "MM/dd/yyyy") : "";
-    const encodedDate = encodeURIComponent(formattedDateForAPI);
-
-    const response = await getAllDashbaordEvents(
-      page,
-      limit,
-      isRunRiseNation,
-      search,
-      eventType === "all" ? "" : eventType, // 'all' হলে খালি স্ট্রিং পাঠানো সেফ
-      encodedDate
-    );
-    
-    setEvents(response?.data?.items || response?.items || []);
-  } catch (err) {
-    console.error("Fetch Error:", err);
-    toast.error("Failed to fetch events");
-  } finally {
-    setLoading(false);
-  }
-}, [page, limit, isRunRiseNation, search, eventType, date]);
+      setEvents(response?.data?.items || response?.items || []);
+    } catch (err) {
+      console.error("Fetch Error:", err);
+      toast.error("Failed to fetch events");
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit, isRunRiseNation, search, eventType, date]);
 
   useEffect(() => {
     fetchEvents();
@@ -76,7 +75,7 @@ export default function EventProvider({ children }) {
         const res = await createEvent(formData);
         toast.success("Event created successfully!");
         await fetchEvents();
-        return res?.data?.data?.id || res?.data?.id; // Return ID for step progression
+        return res?.data?.data?.id || res?.data?.id;
       } catch (err) {
         toast.error(err?.response?.data?.message || "Failed to create event");
         return null;
@@ -149,8 +148,8 @@ export default function EventProvider({ children }) {
         setSearch,
         loading,
         eventType,
-        date,        
-      setDate,       
+        date,
+        setDate,
         setEventType,
         fetchEvents,
         handleCreateEvent,
