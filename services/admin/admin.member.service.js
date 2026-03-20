@@ -18,3 +18,9 @@ export const getAllDashboardMembers = async (
   });
   return data;
 };
+
+
+export const updateMemberStatus = async (payload) => {
+  const { data } = await api.patch("/admin/member", payload);
+  return data;
+};

@@ -1,11 +1,17 @@
 "use client";
 import { getAllDashboardMembers } from "@/services/admin/admin.member.service";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "sonner";
 
 const MemberContext = createContext(null);
 
-export default function MemberProvider({children}) {
+export default function MemberProvider({ children }) {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
@@ -17,7 +23,8 @@ export default function MemberProvider({children}) {
   const [paymentStatus, setPaymentStatus] = useState(""); // Added
 
   const fetchMembers = useCallback(async () => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
     if (!token) return;
 
     try {
@@ -27,7 +34,7 @@ export default function MemberProvider({children}) {
         limit,
         adminApproval,
         memberType,
-        paymentStatus, 
+        paymentStatus,
       );
 
       // Adjust these keys based on your actual API response structure
@@ -40,6 +47,23 @@ export default function MemberProvider({children}) {
       setLoading(false);
     }
   }, [page, limit, adminApproval, memberType, paymentStatus, search]);
+
+  const updateMember = async (memberId, newStatus, currentType) => {
+    try {
+      const payload = {
+        memberId,
+        adminApproval: newStatus,
+        memberType: currentType,
+      };
+      await updateMemberStatus(payload);
+      toast.success(`Member ${newStatus} successfully`);
+      fetchMembers(); // Refresh list after update
+      return { success: true };
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Update failed");
+      return { success: false };
+    }
+  };
 
   useEffect(() => {
     fetchMembers();
@@ -57,6 +81,7 @@ export default function MemberProvider({children}) {
         setAdminApproval,
         setMemberType,
         setPaymentStatus,
+        updateMember
       }}
     >
       {children}
@@ -66,6 +91,7 @@ export default function MemberProvider({children}) {
 
 export const useDashboardMembers = () => {
   const context = useContext(MemberContext);
-  if (!context) throw new Error("useDashboardMembers must be used inside MemberProvider");
+  if (!context)
+    throw new Error("useDashboardMembers must be used inside MemberProvider");
   return context;
 };
