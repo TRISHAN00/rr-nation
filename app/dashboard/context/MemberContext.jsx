@@ -27,8 +27,7 @@ export default function MemberProvider({children}) {
         limit,
         adminApproval,
         memberType,
-        paymentStatus, // Now passing this
-        search         // Pass search term if your API supports it
+        paymentStatus, 
       );
 
       // Adjust these keys based on your actual API response structure
@@ -58,7 +57,6 @@ export default function MemberProvider({children}) {
         setAdminApproval,
         setMemberType,
         setPaymentStatus,
-        setSearch,
       }}
     >
       {children}

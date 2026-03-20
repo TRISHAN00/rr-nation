@@ -6,8 +6,13 @@ import MemberList from "./_components/MemberList";
 import { MemberPaginationFooter } from "./_components/MemberPaginationFooter";
 
 export default function DashboardMemberPage() {
-  const { members, loading, setAdminApproval, setMemberType } =
-    useDashboardMembers();
+  const {
+    members,
+    loading,
+    setAdminApproval,
+    setMemberType,
+    setPaymentStatus,
+  } = useDashboardMembers();
 
   return (
     <>
@@ -15,6 +20,7 @@ export default function DashboardMemberPage() {
       <MemberActions
         setAdminApproval={setAdminApproval}
         setMemberType={setMemberType}
+        setPaymentStatus={setPaymentStatus}
       />
       <MemberList members={members} loading={loading} />
       <MemberPaginationFooter />

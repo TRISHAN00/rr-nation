@@ -9,10 +9,7 @@ import {
 } from "@/app/components/ui/select";
 import MemberSearch from "./MemberSearch";
 
-export default function MemberActions({ 
-  setAdminApproval, 
-  setMemberType, 
-}) {
+export default function MemberActions({ setAdminApproval, setMemberType, setPaymentStatus }) {
   return (
     <div className="p-4 bg-card border rounded-xl space-y-4 my-4">
       {/* Filter Grid */}
@@ -22,9 +19,11 @@ export default function MemberActions({
 
         <div className="flex gap-x-2">
           {/* 2. Admin Approval Select */}
-          <Select 
-            defaultValue="all" 
-            onValueChange={(value) => setAdminApproval(value === "all" ? "" : value)}
+          <Select
+            defaultValue="all"
+            onValueChange={(value) =>
+              setAdminApproval(value === "all" ? "" : value)
+            }
           >
             <SelectTrigger className="h-10 w-40 bg-muted/20 border-muted">
               <SelectValue placeholder="Approval Status" />
@@ -38,9 +37,11 @@ export default function MemberActions({
           </Select>
 
           {/* 3. Member Type Select */}
-          <Select 
+          <Select
             defaultValue="all"
-            onValueChange={(value) => setMemberType(value === "all" ? "" : value)}
+            onValueChange={(value) =>
+              setMemberType(value === "all" ? "" : value)
+            }
           >
             <SelectTrigger className="h-10 w-40 bg-muted/20 border-muted">
               <SelectValue placeholder="Member Type" />
@@ -55,7 +56,7 @@ export default function MemberActions({
           </Select>
 
           {/* 4. Payment Status Select */}
-          {/* <Select 
+          <Select 
             defaultValue="all"
             onValueChange={(value) => setPaymentStatus(value === "all" ? "" : value)}
           >
@@ -69,7 +70,7 @@ export default function MemberActions({
               <SelectItem value="failed">Failed</SelectItem>
               <SelectItem value="refunded">Refunded</SelectItem>
             </SelectContent>
-          </Select> */}
+          </Select>
         </div>
       </div>
     </div>
