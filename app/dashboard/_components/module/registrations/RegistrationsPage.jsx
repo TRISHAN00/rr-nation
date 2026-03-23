@@ -75,6 +75,7 @@ export default function RegistrationsPage() {
     setIsSheetOpen(true);
   };
 
+
   const handleExportCSV = () => {
     // 1. Define Headers
     const headers = [
@@ -82,6 +83,7 @@ export default function RegistrationsPage() {
       "Participant Email",
       "Participant Phone",
       "Event Name",
+      "Coupon",
       "Ticket Category",
       "Distance",
       "T-Shirt Size",
@@ -99,15 +101,18 @@ export default function RegistrationsPage() {
     // 2. Map and Flatten Data
     // We use flatMap because one order (reg) can have multiple participants (items)
     const csvData = registeredUsers.flatMap((reg) => {
+      console.log(reg?.dicountCoupon?.code)
       return reg.order.items.map((item) => {
         const p = item.participant;
         const u = reg.user;
+
 
         return [
           `"${p?.name || "N/A"}"`,
           `"${p?.email || "N/A"}"`,
           `"${p?.contactNumber || "N/A"}"`,
           `"${item.eventTicket?.event?.name || "N/A"}"`,
+          `"${reg?.dicountCoupon?.code || "N/A"}"`,
           `"${item.eventTicket?.name || "N/A"}"`,
           `"${p?.distanceCategory || "N/A"}"`,
           `"${p?.tshirtSize || "N/A"}"`,

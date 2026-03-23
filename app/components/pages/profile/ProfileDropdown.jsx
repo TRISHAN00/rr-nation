@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import { logoutUser } from "@/services/auth.service";
-import { Building2, LayoutDashboard, LogOut, User, UserPlus } from "lucide-react";
+import { LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 
 export function ProfileDropdown({ user }) {
@@ -67,7 +67,7 @@ export function ProfileDropdown({ user }) {
         <DropdownMenuSeparator />
 
         {/* --- NEW ROUTES --- */}
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuItem asChild>
           <Link href="/member-register" className="flex items-center gap-2">
             <UserPlus className="h-4 w-4 text-cyan-500" />
             Become a Member
@@ -79,10 +79,10 @@ export function ProfileDropdown({ user }) {
             <Building2 className="h-4 w-4 text-cyan-500" />
             Become an Organization
           </Link>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         {/* ------------------ */}
 
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
 
         {/* Logout */}
         <DropdownMenuItem 

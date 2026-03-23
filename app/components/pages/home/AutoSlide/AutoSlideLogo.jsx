@@ -6,7 +6,7 @@ export default function AutoSlideLogo() {
       <div
         className="flex w-max gap-10"
         style={{
-          animation: "marquee 20s linear infinite",
+          animation: "marquee 100s linear infinite",
         }}
       >
         <AutoSlideItem />
