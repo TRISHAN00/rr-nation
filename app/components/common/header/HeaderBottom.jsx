@@ -29,8 +29,8 @@ export default function HeaderBottom() {
         <MainMenu />
 
         {/* Add to cart and search  */}
-        {isAuthenticated && (
-          <div className=" flex gap-7">
+        {isAuthenticated && cartData?.items?.length > 0 && (
+          <div className="flex gap-7">
             <div onClick={() => setIsCartOpen(true)}>
               <CartIcon count={cartData?.items?.length} />
             </div>

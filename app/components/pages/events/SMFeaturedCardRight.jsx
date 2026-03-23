@@ -9,15 +9,16 @@ import { useState } from "react";
 
 export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
   const [open, setOpen] = useState(false);
-  const { fetchCart } = useCart();
+  const { fetchCart, setIsCartOpen } = useCart();
   const { isAuthenticated } = useAuthContext();
-  const router = useRouter(); // Initialize router
-  const pathname = usePathname(); // Get current path
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleAddToCart = async (ticketData) => {
     try {
       await eventAddToCart(ticketData);
       await fetchCart();
+      setIsCartOpen(true);
     } catch (error) {
       console.error("Cart error:", error);
     }
@@ -41,7 +42,7 @@ export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
         eventTicketId={pak?.id}
         pak={pak}
       />
-      
+
       <div
         className="relative p-5 sm:p-6 lg:p-4.5 flex flex-col justify-between rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none"
         style={{ backgroundColor: bgColor }}

@@ -146,8 +146,9 @@ export default function MobileSidebar() {
                     View Cart
                   </span>
                 </div>
+
                 <span className="bg-brand text-black px-2 py-0.5 rounded text-[10px] font-bold">
-                  {cartData?.items?.length || 0}
+                  {cartData?.items?.length ?? 0}
                 </span>
               </button>
             </div>
