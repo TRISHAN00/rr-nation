@@ -3,7 +3,12 @@ import { Label } from "@/app/components/ui/label";
 import { sendOtp } from "@/services/otp.service";
 import { Button } from "../ui/button";
 
-export default function SendOTPForm({loading, setLoading, setRegisterData, setRegisterStep}) {
+export default function SendOTPForm({
+  loading,
+  setLoading,
+  setRegisterData,
+  setRegisterStep,
+}) {
   /* ---------------- SEND OTP ---------------- */
   async function handleSendOtp(e) {
     e.preventDefault();
@@ -33,7 +38,7 @@ export default function SendOTPForm({loading, setLoading, setRegisterData, setRe
     <form className="space-y-4" onSubmit={handleSendOtp}>
       <div className="flex flex-col gap-1.5">
         <Label>First Name</Label>
-        <Input name="firstName" placeholder="Full name" required />
+        <Input name="firstName" placeholder="First name" required />
       </div>
 
       <div className="flex flex-col gap-1.5">
