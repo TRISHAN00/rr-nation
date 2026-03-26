@@ -6,11 +6,11 @@ export const getAllDashbaordEvents = async (
   limit,
   isRunRiseNation,
   search,
-  eventType, 
-  date
+  eventType,
+  date,
 ) => {
   const { data } = await api.get(
-    `/admin/event/all?page=${page}&limit=${limit}&isRunRiseNation=${isRunRiseNation}&search=${search}&eventType=${eventType}&date=${date}`
+    `/admin/event/all?page=${page}&limit=${limit}&isRunRiseNation=${isRunRiseNation}&search=${search}&eventType=${eventType}&date=${date}`,
   );
   return data;
 };
@@ -21,13 +21,9 @@ export const createEvent = (data) => {
 };
 
 // Update Event
-export const updateEvent = (eventId, data) => {
+export const updateEvent = (data) => {
   // Some APIs allow a header to override the method
-  return api.post(`/admin/event/${eventId}`, data, {
-    headers: {
-      "X-HTTP-Method-Override": "PATCH",
-    },
-  });
+  return api.patch(`/admin/event`, data);
 };
 
 // Get Event By Id

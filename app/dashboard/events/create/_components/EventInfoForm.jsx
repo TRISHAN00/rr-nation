@@ -79,7 +79,8 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
     if (isEditMode) {
       // Use eventId from params or the event object
       const targetId = event?.id;
-      await handleUpdateEvent(targetId, formData);
+      console.log(typeof targetId)
+      await handleUpdateEvent(Number(targetId), formData);
     } else {
       const newId = await handleCreateEvent(formData);
       if (onEventCreated && newId) onEventCreated(newId);
@@ -147,7 +148,6 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
                 disabled={loading}
                 value={form.date}
                 onChange={(e) => setForm({ ...form, date: e.target.value })}
-                required
               />
             </div>
             <div className="grid gap-2">

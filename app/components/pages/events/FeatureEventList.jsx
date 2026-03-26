@@ -22,7 +22,6 @@ export default function FeatureEventList() {
     fetchEvents();
   }, []);
 
-
   return (
     <section className="featured-event bg-[#E0F7F6] lg:py-35 py-20 ">
       <div className="container m-auto px-7.5">
@@ -37,14 +36,14 @@ export default function FeatureEventList() {
         </div>
 
         {events?.map((event) => {
-          return (
+          return event?.packages?.length > 0 ? (
             <FeaturedEventCard
               key={event.id}
               bgColor="#003A3B"
               overlayColor="#003A3B"
               event={event}
             />
-          );
+          ) : null;
         })}
 
         {/* <FeaturedEventCard

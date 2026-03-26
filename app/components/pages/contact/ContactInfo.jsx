@@ -23,8 +23,8 @@ export default function ContactInfo() {
               Office Address
             </h6>
             <p className="text-[#80D9D4] text-sm sm:text-[16px] leading-6 font-medium max-w-xs">
-              House No. 1, Road No. 6, Section - 12, Block E, Extended Rupnagar
-              R/A, Pallabi, Mirpur, Dhaka-1216.
+              House 91/B, Fulkoli Mor, Section-12, Block B, Road 1, Kalshi Road,
+              Pallabi, Dhaka-1216
             </p>
           </div>
 

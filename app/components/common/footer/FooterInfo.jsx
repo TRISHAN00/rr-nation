@@ -4,7 +4,7 @@ import HeaderListItem from "../header/HeaderListItem";
 const leftItems = [
   {
     icon: MapPin,
-    text: "House No. 1, Road No. 6, Section - 12, Block E, Extended Rupnagar R/A, Pallabi, Mirpur, Dhaka-1216.",
+    text: "House 91/B, Fulkoli Mor, Section-12, Block B, Road 1, Kalshi Road, Pallabi, Dhaka-1216",
     href: "#",
   },
   {

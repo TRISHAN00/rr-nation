@@ -10,6 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   ChevronDown,
   ChevronUp,
   Edit,
@@ -73,9 +83,11 @@ export default function DashboardEventCardHeader({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={onDelete}
                 className="text-destructive"
-                onSelect={() => setShowDeleteModal(true)} // Open modal on select
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setShowDeleteModal(true);
+                }}
               >
                 <Trash2 className="mr-2 h-4 w-4" /> Delete
               </DropdownMenuItem>
@@ -84,15 +96,29 @@ export default function DashboardEventCardHeader({
         </div>
       </div>
 
-      {/* Confirmation Modal */}
-      {/* <ConfirmModal
-        isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        onConfirm={onDelete}
-        title={`Delete ${event.name}?`}
-        description="This will permanently remove the event and all associated ticket packages. This action cannot be undone."
-        loading={loading}
-      /> */}
+      {/* Confirmation Dialog */}
+      <AlertDialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              event <strong>{event.name}</strong> and remove all associated
+              data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={onDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={loading}
+            >
+              {loading ? "Deleting..." : "Delete Event"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </CardHeader>
   );
 }
