@@ -64,6 +64,9 @@ export default function Footer() {
               { label: "Team", href: "/team" },
               { label: "Contact", href: "/contact" },
               { label: "Privacy Policy", href: "/privacy-policy" },
+              { label: "Terms and Conditions", href: "/terms" },
+              { label: "Return & Refund Policy", href: "/refund-policy" },
+              { label: "FAQs", href: "/faqs" },
             ]}
           />
 
@@ -73,7 +76,9 @@ export default function Footer() {
         {/* --- Copyright & Developer Section --- */}
         <div className="border-t border-white/10 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-white/70 text-sm">
-            <p>© {new Date().getFullYear()} Run Rise Nation. All Rights Reserved.</p>
+            <p>
+              © {new Date().getFullYear()} Run Rise Nation. All Rights Reserved.
+            </p>
 
             <p>
               Designed and Developed By{" "}

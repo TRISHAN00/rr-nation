@@ -21,7 +21,10 @@ export default function Header() {
     pathname === "/privacy-policy" ||
     pathname === "/payment/fail" ||
     pathname === "/payment/cancel" ||
-    pathname === "/payment/success";
+    pathname === "/payment/success" ||
+    pathname === "/terms" ||
+    pathname === "/faqs"  ||
+    pathname === "/refund-policy"  
 
   const [scrolled, setScrolled] = useState(false);
   const [hide, setHide] = useState(false);
