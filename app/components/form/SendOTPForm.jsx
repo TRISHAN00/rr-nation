@@ -18,7 +18,6 @@ export default function SendOTPForm({
       firstName: e.target.firstName.value,
       lastName: e.target.lastName.value,
       email: e.target.email.value,
-      phone: e.target.phone.value,
       otpType: "REGISTRATION",
       type: "EMAIL",
     };
@@ -49,11 +48,6 @@ export default function SendOTPForm({
       <div className="flex flex-col gap-1.5">
         <Label>Email</Label>
         <Input name="email" type="email" placeholder="Email address" required />
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <Label>Phone</Label>
-        <Input name="phone" placeholder="Phone number" required />
       </div>
 
       <Button

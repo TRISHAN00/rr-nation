@@ -1,19 +1,19 @@
 "use client";
 
+import { Eye, EyeOffIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { registerUser } from "@/services/auth.service";
 import { verifyOtp } from "@/services/otp.service";
-import { updateProfile } from "@/services/user.service";
 
 import SendOTPForm from "@/app/components/form/SendOTPForm";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
-import { Eye, EyeOffIcon } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -22,15 +22,18 @@ export default function RegisterPage() {
   const [registerData, setRegisterData] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { refreshProfile } = useAuthContext();
 
   /* ---------------- VERIFY OTP ---------------- */
   async function handleVerifyOtp(e) {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const otp = formData.get("otp")?.toString().trim();
+
+    if (!otp) return toast.error("Please enter the OTP");
+
     setLoading(true);
-
     try {
-      const otp = e.target.otp.value.trim();
-
       await verifyOtp({
         email: registerData.email,
         otp,
@@ -38,6 +41,7 @@ export default function RegisterPage() {
         type: "EMAIL",
       });
 
+      // Update state and move to password step
       setRegisterData((prev) => ({ ...prev, otp }));
       setStep(3);
     } catch (err) {
@@ -47,38 +51,39 @@ export default function RegisterPage() {
     }
   }
 
-  /* ---------------- REGISTER & UPDATE PROFILE ---------------- */
+  /* ---------------- REGISTER ---------------- */
   async function handleRegister(e) {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const password = formData.get("password");
+
     setLoading(true);
-
-    const password = e.target.password.value;
-
     try {
-      // 1️⃣ Register the user
-      const registrationResponse = await registerUser({
-        firstName: registerData.firstName,
-        lastName: registerData.lastName,
-        email: registerData.email,
+      const response = await registerUser({
+        ...registerData, // Spread existing email, otp, names
         password,
         roleId: 1,
-        otp: registerData.otp,
       });
 
-      // 2️⃣ If registration succeeds, update profile
-      const profilePayload = {
-        firstName: registerData.firstName,
-        lastName: registerData.lastName,
-        email: registerData.email,
-        phone: registerData.phone || "", // optional
-      };
+      const { token, refreshToken, userData } = response.data.data;
 
-      await updateProfile(profilePayload);
+      // 1. Client Storage
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("refresh_token", refreshToken);
+      localStorage.setItem("userData", JSON.stringify(userData));
 
-      toast.success("Registration and profile update successful!");
-      router.replace("/login");
+      // 2. Cookies (Standardizing the max-age to 7 days)
+      const cookieConfig = "path=/; max-age=604800; SameSite=Lax";
+      document.cookie = `authToken=${token}; ${cookieConfig}`;
+      document.cookie = `userRole=user; ${cookieConfig}`;
+
+      toast.success("Account created successfully!");
+
+      await refreshProfile();
+
+      router.refresh();
+      router.push("/");
     } catch (err) {
-      console.error("Registration Error:", err);
       toast.error(err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
@@ -88,13 +93,13 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-sm text-gray-500 mt-1">Register to get started</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {step === 3 ? "Set your password" : "Register to get started"}
+          </p>
         </div>
 
-        {/* REGISTER FLOW */}
         {step === 1 && (
           <SendOTPForm
             loading={loading}
@@ -106,69 +111,61 @@ export default function RegisterPage() {
 
         {step === 2 && (
           <form className="space-y-4" onSubmit={handleVerifyOtp}>
-            {/* ✅ INFO MESSAGE */}
             <p className="text-sm text-green-600 bg-green-50 border border-green-200 p-2 rounded">
-              OTP sent to {registerData?.email}. Check your inbox or spam.
+              OTP sent to <strong>{registerData?.email}</strong>.
             </p>
-
             <div>
-              <Label className="mb-1">OTP</Label>
-              <Input name="otp" placeholder="Enter OTP" required />
+              <Label htmlFor="otp">OTP</Label>
+              <Input
+                id="otp"
+                name="otp"
+                placeholder="Enter 6-digit code"
+                required
+              />
             </div>
-
-            <Button className="w-full" disabled={loading}>
+            <Button className="w-full" disabled={loading} type="submit">
               {loading ? "Verifying..." : "Verify OTP"}
             </Button>
           </form>
         )}
+
         {step === 3 && (
           <form className="space-y-4" onSubmit={handleRegister}>
             <div>
-              <Label className={"mb-1"}>Password</Label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
+                  id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Create password"
                   required
                   className="pr-10"
                 />
-
                 <button
                   type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                 >
-                  {showPassword ? (
-                    // Eye Off Icon
-                    <EyeOffIcon size={16} />
-                  ) : (
-                    // Eye Icon
-                    <Eye size={16} />
-                  )}
+                  {showPassword ? <EyeOffIcon size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-
-              {/* ✅ PASSWORD RULE MESSAGE */}
-              <p className="mt-1 text-xs text-gray-500">
-                Password must be at least 8 characters and include uppercase,
-                lowercase, a number, and a special character.
+              <p className="mt-2 text-xs text-gray-400">
+                Minimum 8 characters with mixed case, numbers, and symbols.
               </p>
             </div>
-
-            <Button className="w-full" disabled={loading}>
-              {loading ? "Registering..." : "Register"}
+            <Button className="w-full" disabled={loading} type="submit">
+              {loading ? "Creating Account..." : "Complete Registration"}
             </Button>
           </form>
         )}
 
-        {/* Login Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <Link
               href="/accounts/login"
-              className="ml-1 font-medium text-brand hover:underline transition"
+              className="font-medium text-blue-600 hover:underline"
             >
               Login
             </Link>

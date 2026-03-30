@@ -1,48 +1,56 @@
 "use client";
 
-import { getProfileData } from "@/services/user.service"; // your API to get user data
-import { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { getProfileData } from "@/services/user.service";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // overall loading state
-  const [user, setUser] = useState(null); // store global user data
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
-  /* -------- FETCH PROFILE DATA -------- */
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const token = localStorage.getItem("authToken");
-        if (!token) return;
-
-        setIsAuthenticated(true);
-
-        const res = await getProfileData(); // fetch user data
-        setUser(res); // save to context
-      } catch (err) {
-        console.error("Failed to load profile", err);
-        toast.error("Failed to load profile data");
+  // Define fetchProfile as a reusable function
+  const fetchProfile = useCallback(async () => {
+    try {
+      const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+      if (!token) {
         setIsAuthenticated(false);
         setUser(null);
-      } finally {
         setLoading(false);
+        return;
       }
-    }
 
-    fetchProfile();
+      const res = await getProfileData();
+      setUser(res);
+      setIsAuthenticated(true);
+    } catch (err) {
+      console.error("Failed to load profile", err);
+      setIsAuthenticated(false);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, user, setUser, loading }}
+      value={{ 
+        isAuthenticated, 
+        setIsAuthenticated, 
+        user, 
+        setUser, 
+        loading,
+        refreshProfile: fetchProfile // Export this function
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use AuthContext
 export const useAuthContext = () => useContext(AuthContext);
