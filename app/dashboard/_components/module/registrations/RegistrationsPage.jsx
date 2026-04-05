@@ -79,23 +79,26 @@ export default function RegistrationsPage() {
   const handleExportCSV = () => {
     // 1. Define Headers
     const headers = [
-      "Participant Name",
-      "Participant Email",
-      "Participant Phone",
-      "Event Name",
-      "Coupon",
-      "Ticket Category",
-      "Distance",
-      "T-Shirt Size",
-      "Blood Group",
-      "Gender",
-      "Community",
-      "Amount Paid",
-      "Status",
-      "Transaction ID",
-      "Payment Date",
-      "Account Holder",
-      "Account Holder Email",
+      "Participant Name", /* 1 */
+      "Participant Email", /* 2 */
+      "Participant Phone", /* 3 */
+      "Event Name", /* 4 */
+      "Coupon", /* 5 */
+      "Ticket Category", /* 6 */
+      "Runner Category", /* 6 */
+      "Age Category", /* 6 */
+      "DOB", /* 6 */
+      "Distance", /* 7 */
+      "T-Shirt Size", /* 8 */
+      "Blood Group", /* 9 */
+      "Gender", /* 10 */
+      "Community", /* 11 */
+      "Amount Paid", /* 12 */
+      "Status", /* 13 */
+      "Transaction ID", /* 14 */
+      "Payment Date", /* 15 */
+      "Account Holder", /* 16 */
+      "Account Holder Email", /* 17 */
     ];
 
     // 2. Map and Flatten Data
@@ -106,15 +109,20 @@ export default function RegistrationsPage() {
         const p = item.participant;
         const u = reg.user;
 
+        console.log(p)
+
 
         return [
-          `"${p?.name || "N/A"}"`,
-          `"${p?.email || "N/A"}"`,
-          `"${p?.contactNumber || "N/A"}"`,
-          `"${item.eventTicket?.event?.name || "N/A"}"`,
-          `"${reg?.dicountCoupon?.code || "N/A"}"`,
-          `"${item.eventTicket?.name || "N/A"}"`,
-          `"${p?.distanceCategory || "N/A"}"`,
+          `"${p?.name || "N/A"}"`, /* 1 */
+          `"${p?.email || "N/A"}"`, /* 2 */
+          `"${p?.contactNumber || "N/A"}"`, /* 3 */
+          `"${item.eventTicket?.event?.name || "N/A"}"`, /* 4 */
+          `"${reg?.dicountCoupon?.code || "N/A"}"`, /* 5 */
+          `"${item.eventTicket?.name || "N/A"}"`, /* 6 */
+          `"${p.runnerCategory || "N/A"}"`, /* 6 */
+          `"${p.dateOfBirth || "N/A"}"`, /* 6 */
+          `"${p.ageCategory || "N/A"}"`, /* 6 */
+          `"${p?.distanceCategory || "N/A"}"`, /* 7 */
           `"${p?.tshirtSize || "N/A"}"`,
           `"${p?.bloodGroup || "N/A"}"`,
           `"${p?.gender || "N/A"}"`,

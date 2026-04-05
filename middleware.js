@@ -31,9 +31,9 @@ export function middleware(request) {
       );
     }
 
-    return NextResponse.redirect(
-      new URL("/profile", request.url)
-    );
+    // return NextResponse.redirect(
+    //   new URL("/profile", request.url)
+    // );
   }
 
   // User trying to access admin dashboard

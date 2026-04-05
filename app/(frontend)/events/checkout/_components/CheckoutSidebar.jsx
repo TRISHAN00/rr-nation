@@ -1,6 +1,5 @@
 "use client";
 
-import { useCart } from "@/context/CartContext";
 import { processCheckout } from "@/services/cart.service"; // Adjust path
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -10,7 +9,6 @@ import CouponInput from "./CouponInput";
 
 export default function CheckoutSidebar({ cartData, discount, agree, setAgree, setDiscount, couponId, setCouponId }) {
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const { clearCart } = useCart();
 
   const subtotal = Number(cartData?.totalAmount || 0);
   const discountAmount = Number(discount || 0);
@@ -21,19 +19,18 @@ export default function CheckoutSidebar({ cartData, discount, agree, setAgree, s
 
     try {
       setIsRedirecting(true);
-
+      
       const payload = {
         discountCouponId: couponId ? String(couponId) : null, // Captured from CouponInput
         paymentGateway: "sslcommerz"
       };
 
       const response = await processCheckout(payload);
-
+      
       // Get the redirect URL from your JSON path: data.gateway.GatewayPageURL
       const paymentUrl = response?.data?.data?.gateway?.GatewayPageURL;
 
       if (paymentUrl) {
-        clearCart();
         toast.success("Redirecting to payment gateway...");
         window.location.replace(paymentUrl); // Redirects to SSLCommerz
       } else {
@@ -59,7 +56,7 @@ export default function CheckoutSidebar({ cartData, discount, agree, setAgree, s
           {discountAmount > 0 && (
             <div className="flex justify-between text-sm animate-in fade-in duration-300">
               <span className="text-gray-600">Discount Applied</span>
-              <span className="font-bold text-red-500">- ৳ {discountAmount?.toLocaleString()}</span>
+              <span className="font-bold text-red-500">- ৳ {discountAmount.toLocaleString()}</span>
             </div>
           )}
 
@@ -90,10 +87,11 @@ export default function CheckoutSidebar({ cartData, discount, agree, setAgree, s
         <button
           onClick={handleCheckout}
           disabled={cartData?.items?.length === 0 || !agree || isRedirecting}
-          className={`w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg flex items-center justify-center transition-all ${cartData?.items?.length === 0 || !agree || isRedirecting
+          className={`w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg flex items-center justify-center transition-all ${
+            cartData?.items?.length === 0 || !agree || isRedirecting
               ? "bg-gray-300 cursor-not-allowed"
               : "bg-[#00a19a] hover:bg-[#008c86] active:scale-[0.98]"
-            }`}
+          }`}
         >
           {isRedirecting ? (
             <>

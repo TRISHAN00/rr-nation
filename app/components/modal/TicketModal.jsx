@@ -57,7 +57,12 @@ export default function TicketModal({
       required: true,
     },
     { name: "dateOfBirth", type: "date", required: true },
-    { name: "bloodGroup", type: "text", required: false },
+    {
+      name: "bloodGroup",
+      type: "select",
+      required: false,
+      options: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+    },
     { name: "emergencyContactName", type: "text", required: false },
     { name: "emergencyContactNumber", type: "tel", required: false },
     { name: "communityName", type: "text", required: false },

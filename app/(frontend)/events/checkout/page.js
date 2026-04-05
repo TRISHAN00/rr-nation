@@ -13,6 +13,12 @@ export default function CheckoutPage() {
   const [agree, setAgree] = useState(false);
   const { cartData, handleDeleteCartItem } = useCart();
 
+  const totalSum = cartData?.items?.reduce((acc, item) => {
+    const price = parseFloat(item?.package?.price) || 0;
+    const qty = parseInt(item?.quantity) || 0;
+    return acc + (price * qty);
+  }, 0) || 0;
+
   return (
     <>
       <InnerBanner
@@ -115,6 +121,7 @@ export default function CheckoutPage() {
             setCouponId={setCouponId} // Pass down
             agree={agree}
             setAgree={setAgree}
+            totalSum={totalSum}
           />
         </div>
       </div>

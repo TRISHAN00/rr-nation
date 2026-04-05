@@ -11,6 +11,8 @@ export default function SMFeatureEventCard({
   event,
   pak
 }) {
+  const isSoldOut = pak?.availableSlots === pak?.usedSlots;
+  
   return (
     <div className="font-anta rounded-3xl  overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] relative">
@@ -25,7 +27,13 @@ export default function SMFeatureEventCard({
         />
 
         {/* Right card */}
-        <SMFeaturedCardRight bgColor={bgColor} price={price} event={event} pak={pak} />
+        <SMFeaturedCardRight
+          bgColor={bgColor}
+          price={price}
+          event={event}
+          pak={pak}
+          isSoldOut={isSoldOut}
+        />
       </div>
     </div>
   );

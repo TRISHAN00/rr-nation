@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { ShoppingCart, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -8,6 +9,7 @@ import { useEffect } from "react";
 export default function CartDetailModal({ open, onClose, cartData }) {
   const router = useRouter();
   const { handleDeleteCartItem } = useCart();
+  const { isAuthenticated } = useAuthContext();
 
   // Handle Scroll Lock
   useEffect(() => {
@@ -23,10 +25,26 @@ export default function CartDetailModal({ open, onClose, cartData }) {
 
   const hasItems = cartData?.items?.length > 0;
 
+  const totalSum = cartData?.items?.reduce((acc, item) => {
+    const price = parseFloat(item?.package?.price) || 0;
+    const qty = parseInt(item?.quantity) || 0;
+    return acc + (price * qty);
+  }, 0) || 0;
+
   const handleCheckout = () => {
     onClose();
-    router.push("/events/checkout");
+
+    // 2. Check for token
+    if (!isAuthenticated) {
+      // If no token, send to login with a return path
+      router.push("/accounts/login?redirectTo=/events/checkout");
+    } else {
+      // If token exists, go straight to checkout
+      router.push("/events/checkout");
+    }
   };
+
+  console.log(cartData?.totalAmount)
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
@@ -58,6 +76,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
             </div>
           ) : (
             cartData?.items?.map((item, index) => {
+              console.log(item)
               return (
                 <div
                   key={index}
@@ -75,7 +94,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
                     </div>
                     <div className="flex sm:flex-col justify-between items-center sm:items-end">
                       <p className="font-bold text-[#001819] text-lg sm:text-xl">
-                        ৳ {parseFloat(item?.package?.price).toLocaleString()}
+                        ৳ {(Number(item?.package?.price) || Number(item?.unitPrice) || 0).toLocaleString()}
                       </p>
                       <p className="text-[10px] sm:text-xs text-gray-400 font-medium">
                         Quantity: {item.quantity}
@@ -128,7 +147,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
               <span className="text-gray-500 text-sm font-semibold uppercase tracking-wide">Total Amount</span>
               <div className="text-right">
                 <span className="text-2xl sm:text-3xl font-black text-[#00a19a]">
-                  ৳ {parseFloat(cartData.totalAmount).toLocaleString()}
+                  ৳ {Math.round(totalSum || cartData?.totalAmount || 0).toLocaleString()}
                 </span>
                 <p className="text-[10px] text-gray-400 font-medium">Inclusive of all taxes</p>
               </div>

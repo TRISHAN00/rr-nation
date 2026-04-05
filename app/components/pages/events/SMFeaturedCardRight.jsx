@@ -1,20 +1,15 @@
 "use client";
 import FillButton from "@/app/components/common/FillButton";
 import TicketModal from "@/app/components/modal/TicketModal";
-import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { usePathname, useRouter } from "next/navigation"; // Added these
 import { useState } from "react";
 
-export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
+export default function SMFeaturedCardRight({ bgColor, price, event, pak, isSoldOut }) {
   const [open, setOpen] = useState(false);
   const { addToCart } = useCart();
-  const { isAuthenticated } = useAuthContext();
-  const router = useRouter();
-  const pathname = usePathname();
+
 
   const handleAddToCart = async (ticketData) => {
-    console.log(ticketData)
     try {
       // This now handles both Guest (localStorage) and User (API)
       await addToCart(ticketData);
@@ -60,10 +55,12 @@ export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
 
         <div className="mt-6 lg:mt-0">
           <FillButton
-            onClick={handleTicketClick} // FIX: Point to handler, not setOpen
-            className="w-full lg:w-auto"
+            onClick={!isSoldOut ? handleTicketClick : undefined}
+            disabled={isSoldOut}
+            className={`w-full lg:w-auto ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""
+              }`}
           >
-            Add to Ticket
+            {isSoldOut ? "Sold Out" : "Add to Ticket"}
           </FillButton>
         </div>
       </div>

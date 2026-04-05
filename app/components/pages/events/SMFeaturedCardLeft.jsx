@@ -18,6 +18,7 @@ export default function SMFeaturedCardLeft({
       year: "numeric",
     });
   };
+  
   return (
     <div
       className="relative p-6 sm:p-8 lg:p-10 overflow-hidden rounded-t-3xl lg:rounded-l-3xl lg:rounded-tr-none"
@@ -28,6 +29,7 @@ export default function SMFeaturedCardLeft({
         backgroundPosition: "center",
       }}
     >
+
       {/* Overlay */}
       {bgImage && (
         <div
