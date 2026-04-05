@@ -1,7 +1,7 @@
 "use client";
 
 import { loginUser } from "@/services/auth.service";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import Logo from "@/app/components/common/Logo";
@@ -9,15 +9,20 @@ import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useAuthContext } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 import { Eye, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { syncGuestCart } = useCart()
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { refreshProfile } = useAuthContext();
+
+  const redirectTo = searchParams.get("redirect") || "/";
 
   // 1. ADD REMEMBER ME STATE
   const [rememberMe, setRememberMe] = useState(false);
@@ -52,9 +57,10 @@ export default function LoginPage() {
       document.cookie = `userRole=user; ${cookieBase}`;
 
       await refreshProfile();
+      await syncGuestCart();
 
       router.refresh();
-      router.push("/");
+      router.push(redirectTo);
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {

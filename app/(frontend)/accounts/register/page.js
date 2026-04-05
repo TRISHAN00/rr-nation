@@ -82,7 +82,7 @@ export default function RegisterPage() {
       await refreshProfile();
 
       router.refresh();
-      router.push("/");
+      router.push("/events/checkout");
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed");
     } finally {

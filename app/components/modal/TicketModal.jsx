@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/app/components/ui/dialog";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 
 export default function TicketModal({
@@ -88,7 +89,7 @@ export default function TicketModal({
     e.preventDefault();
     const emptyField = fields.find((f) => f.required && !formData[f.name]);
     if (emptyField) {
-      alert(`Please fill the required field: ${emptyField.name}`);
+      toast.error(`Please fill the required field: ${emptyField.name}`);
       return;
     }
 
@@ -96,6 +97,8 @@ export default function TicketModal({
     const payload = {
       eventTicketId,
       quantity: 1,
+      // Add the full package details here for the guest cart display
+      package: { ...pak },
       participant: {
         ...formData,
         distanceCategory: pak?.distance,
@@ -115,7 +118,7 @@ export default function TicketModal({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       {/* max-h-[90dvh] handles the dynamic height on mobile browsers */}
       <DialogContent className="max-w-3xl w-[95%] sm:w-full max-h-[90dvh] flex flex-col p-0 overflow-hidden gap-0">
-        
+
         {/* Fixed Header */}
         <DialogHeader className="shrink-0 border-b p-5 bg-white z-10">
           <DialogTitle className="text-lg sm:text-xl font-bold text-dark">

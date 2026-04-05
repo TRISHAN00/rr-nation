@@ -1,51 +1,42 @@
+"use client";
+
 import { ProfileDropdown } from "@/app/components/pages/profile/ProfileDropdown";
 import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation"; // 1. Import usePathname
 import CartIcon from "../CartIcon";
 import FillButton from "../FillButton";
 import MainMenu from "./NavigationMenuDemo";
 
 export default function HeaderBottom() {
-  const [cartItems, setCartItems] = useState([]);
   const { isAuthenticated, user } = useAuthContext();
-  const { setIsCartOpen, cartData } = useCart();
+  const { setIsCartOpen, cartData, isCartOpen } = useCart();
+  const pathname = usePathname();
 
-  const handleAddTicket = (ticket) => {
-    setCartItems([...cartItems, ticket]);
-  };
 
-  const handleRemoveTicket = (index) => {
-    const newCart = [...cartItems];
-    newCart.splice(index, 1);
-    setCartItems(newCart);
-  };
+
 
   return (
     <>
-      <div className=" flex items-center justify-between">
-        {/* Navigation Items */}
+      <div className="flex items-center justify-between">
         <MainMenu />
 
-        {/* Add to cart and search  */}
-        {isAuthenticated && cartData?.items?.length > 0 && (
-          <div className="flex gap-7">
-            <div onClick={() => setIsCartOpen(true)}>
-              <CartIcon count={cartData?.items?.length} />
-            </div>
-            {/* <SearchInput /> */}
+        <div className="flex gap-7">
+          <div onClick={() => setIsCartOpen(true)} className="cursor-pointer">
+            <CartIcon
+              count={cartData?.items?.length || 0}
+              isAuthenticated={isAuthenticated}
+              cartData={cartData}
+            />
           </div>
-        )}
+        </div>
 
-        {/* Button Group */}
-        <div className=" flex gap-5">
+        <div className="flex gap-5">
           {!isAuthenticated ? (
             <>
-              {/* <Link href="/member-register">
-                <BorderButton>Become a Member</BorderButton>
-              </Link> */}
-              <Link href="/accounts/login">
+              {/* 3. Pass current pathname as a redirect query */}
+              <Link href={`/accounts/login?redirect=${pathname}`}>
                 <FillButton>Login</FillButton>
               </Link>
             </>
@@ -54,6 +45,7 @@ export default function HeaderBottom() {
           )}
         </div>
       </div>
+    
     </>
   );
 }

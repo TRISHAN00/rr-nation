@@ -1,11 +1,11 @@
 "use client";
 
 import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    navigationMenuTriggerStyle,
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
 } from "@/app/components/ui/navigation-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -47,7 +47,9 @@ export default function MainMenu() {
           <NavigationMenuLink
             asChild
             className={navigationMenuTriggerStyle({
-              className: pathname === "/events" ? activeClass : defaultClass,
+              className: pathname.startsWith("/events")
+                ? activeClass
+                : defaultClass,
             })}
           >
             <Link href="/events">Events</Link>

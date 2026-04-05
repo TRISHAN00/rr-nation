@@ -34,16 +34,16 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            {cartData?.items?.map((item) => (
+            {cartData?.items?.map((item, index) => (
               <div
-                key={item.id}
+                key={index}
                 className="border rounded-lg bg-white overflow-hidden shadow-sm"
               >
                 {/* Header: Ticket Type & Price */}
                 <div className="bg-[#f8f9fa] px-4 py-3 border-b flex justify-between items-center">
                   <div>
                     <p className="font-bold text-[#001819] text-lg">
-                      {item.eventTicket.name}
+                      {item?.eventTicket?.name}
                     </p>
                     <p className="text-sm font-semibold text-[#00a19a]">
                       Distance: {item.participant.distanceCategory}

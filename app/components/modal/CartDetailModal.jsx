@@ -32,7 +32,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
       {/* Container - Bottom sheet on mobile, centered modal on desktop */}
       <div className="w-full sm:max-w-3xl lg:max-w-4xl rounded-t-2xl sm:rounded-xl bg-[#fafafa] shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[90vh] animate-in slide-in-from-bottom sm:zoom-in-95 duration-300">
-        
+
         {/* Header - Fixed */}
         <div className="flex items-center justify-between rounded-t-2xl sm:rounded-t-xl bg-[#00a19a] px-5 py-4 sm:px-6 shrink-0">
           <div className="flex items-center gap-2">
@@ -57,65 +57,67 @@ export default function CartDetailModal({ open, onClose, cartData }) {
               <p className="text-gray-500 font-medium">Your cart is currently empty.</p>
             </div>
           ) : (
-            cartData?.items?.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 space-y-4 shadow-sm"
-              >
-                {/* Event & Price Row */}
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
-                  <div className="flex-1">
-                    <p className="font-bold text-[#001819] text-base sm:text-lg leading-tight">
-                      {item.eventTicket.name}
-                    </p>
-                    <p className="text-xs sm:text-sm font-semibold text-[#00a19a] mt-1">
-                      Distance: {item.eventTicket.distance}
-                    </p>
+            cartData?.items?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 space-y-4 shadow-sm"
+                >
+                  {/* Event & Price Row */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
+                    <div className="flex-1">
+                      <p className="font-bold text-[#001819] text-base sm:text-lg leading-tight">
+                        {item.package?.name}
+                      </p>
+                      <p className="text-xs sm:text-sm font-semibold text-[#00a19a] mt-1">
+                        Distance: {item.package?.distance}
+                      </p>
+                    </div>
+                    <div className="flex sm:flex-col justify-between items-center sm:items-end">
+                      <p className="font-bold text-[#001819] text-lg sm:text-xl">
+                        ৳ {parseFloat(item?.package?.price).toLocaleString()}
+                      </p>
+                      <p className="text-[10px] sm:text-xs text-gray-400 font-medium">
+                        Quantity: {item.quantity}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex sm:flex-col justify-between items-center sm:items-end">
-                    <p className="font-bold text-[#001819] text-lg sm:text-xl">
-                      ৳ {parseFloat(item.totalPrice).toLocaleString()}
-                    </p>
-                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium">
-                      Quantity: {item.quantity}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Participant Data Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-4 text-sm bg-gray-50 p-4 rounded-lg border border-gray-100">
-                  <DataField label="Name" value={item.participant.name} />
-                  <DataField label="Email" value={item.participant.email} isTruncated />
-                  <DataField label="Contact" value={item.participant.contactNumber} />
-                  <DataField label="Age Category" value={item.participant.ageCategory} />
-                  <DataField label="Runner Type" value={item.participant.runnerCategory} />
-                  <DataField label="Gender" value={item.participant.gender} />
-                  <DataField label="Date of Birth" value={item.participant.dateOfBirth} />
-                  <DataField label="Blood Group" value={item.participant.bloodGroup} />
-                  <DataField label="T-Shirt Size" value={item.participant.tshirtSize} />
-                  
-                  <div className="col-span-2 lg:col-span-1">
-                    <DataField label="Community" value={item.participant.communityName || "None"} />
-                  </div>
-                  <div className="col-span-2">
-                    <DataField 
-                      label="Emergency Contact" 
-                      value={`${item.participant.emergencyContactName} (${item.participant.emergencyContactNumber})`} 
-                    />
-                  </div>
-                </div>
+                  {/* Participant Data Grid */}
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-4 text-sm bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <DataField label="Name" value={item.participant.name} />
+                    <DataField label="Email" value={item.participant.email} isTruncated />
+                    <DataField label="Contact" value={item.participant.contactNumber} />
+                    <DataField label="Age Category" value={item.participant.ageCategory} />
+                    <DataField label="Runner Type" value={item.participant.runnerCategory} />
+                    <DataField label="Gender" value={item.participant.gender} />
+                    <DataField label="Date of Birth" value={item.participant.dateOfBirth} />
+                    <DataField label="Blood Group" value={item.participant.bloodGroup} />
+                    <DataField label="T-Shirt Size" value={item.participant.tshirtSize} />
 
-                {/* Card Footer Actions */}
-                <div className="flex justify-end pt-2">
-                  <button
-                    onClick={() => handleDeleteCartItem(item?.id)}
-                    className="flex items-center gap-2 rounded-lg border border-red-100 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50 hover:border-red-200 transition-all uppercase tracking-wider"
-                  >
-                    <Trash2 size={14} /> Remove Item
-                  </button>
+                    <div className="col-span-2 lg:col-span-1">
+                      <DataField label="Community" value={item.participant.communityName || "None"} />
+                    </div>
+                    <div className="col-span-2">
+                      <DataField
+                        label="Emergency Contact"
+                        value={`${item.participant.emergencyContactName} (${item.participant.emergencyContactNumber})`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Card Footer Actions */}
+                  <div className="flex justify-end pt-2">
+                    <button
+                      onClick={() => handleDeleteCartItem(item?.id)}
+                      className="flex items-center gap-2 rounded-lg border border-red-100 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50 hover:border-red-200 transition-all uppercase tracking-wider"
+                    >
+                      <Trash2 size={14} /> Remove Item
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              )
+            })
           )}
         </div>
 

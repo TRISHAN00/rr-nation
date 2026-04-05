@@ -3,34 +3,28 @@ import FillButton from "@/app/components/common/FillButton";
 import TicketModal from "@/app/components/modal/TicketModal";
 import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { eventAddToCart } from "@/services/cart.service";
 import { usePathname, useRouter } from "next/navigation"; // Added these
 import { useState } from "react";
 
 export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
   const [open, setOpen] = useState(false);
-  const { fetchCart, setIsCartOpen } = useCart();
+  const { addToCart } = useCart();
   const { isAuthenticated } = useAuthContext();
   const router = useRouter();
   const pathname = usePathname();
 
   const handleAddToCart = async (ticketData) => {
+    console.log(ticketData)
     try {
-      await eventAddToCart(ticketData);
-      await fetchCart();
-      setIsCartOpen(true);
+      // This now handles both Guest (localStorage) and User (API)
+      await addToCart(ticketData);
     } catch (error) {
       console.error("Cart error:", error);
     }
   };
 
   const handleTicketClick = () => {
-    if (isAuthenticated) {
-      setOpen(true);
-    } else {
-      // Redirect to login and save the current page URL
-      router.push(`/accounts/login?redirect=${encodeURIComponent(pathname)}`);
-    }
+    setOpen(true);
   };
 
   return (

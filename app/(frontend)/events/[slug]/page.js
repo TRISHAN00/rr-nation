@@ -11,7 +11,7 @@ export const metadata = {
   openGraph: {
     title: "RunRise Nation Noboborsho Run 1433",
     description: "RunRise Nation Noboborsho Run 1433",
-    type: "article", // Or 'website'
+    type: "article", 
     images: [
       {
         url: "/dynamic/about/inner-banner.jpg",
