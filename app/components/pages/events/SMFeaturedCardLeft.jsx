@@ -28,6 +28,11 @@ export default function SMFeaturedCardLeft({
         backgroundPosition: "center",
       }}
     >
+      {pak?.availableSlots === pak?.usedSlots && (
+        <div className="absolute top-4 left-4 bg-red-500 text-white text-xs px-3 py-1 rounded-full z-20">
+          Sold Out
+        </div>
+      )}
       {/* Overlay */}
       {bgImage && (
         <div

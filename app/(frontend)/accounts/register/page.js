@@ -132,7 +132,7 @@ export default function RegisterPage() {
         {step === 3 && (
           <form className="space-y-4" onSubmit={handleRegister}>
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label className={'mb-2'} htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -151,7 +151,7 @@ export default function RegisterPage() {
                 </button>
               </div>
               <p className="mt-2 text-xs text-gray-400">
-                Minimum 8 characters with mixed case, numbers, and symbols.
+                Example: <span className="text-dark">Abc@1234</span> or <span className="text-dark">MyPass#2024</span>
               </p>
             </div>
             <Button className="w-full" disabled={loading} type="submit">
@@ -161,15 +161,16 @@ export default function RegisterPage() {
         )}
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Already have an account?{" "}
-            <Link
-              href="/accounts/login"
-              className="font-medium text-blue-600 hover:underline"
-            >
-              Login
-            </Link>
+          <p className="text-sm text-gray-500">
+            Already have an account?
           </p>
+
+          <Link
+            href="/accounts/login"
+            className="inline-block mt-2 text-sm font-semibold text-brand hover:text-blue-700 transition-colors"
+          >
+            Login to your account →
+          </Link>
         </div>
       </div>
     </div>

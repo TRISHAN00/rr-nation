@@ -7,7 +7,7 @@ import { eventAddToCart } from "@/services/cart.service";
 import { usePathname, useRouter } from "next/navigation"; // Added these
 import { useState } from "react";
 
-export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
+export default function SMFeaturedCardRight({ bgColor, price, event, pak, isSoldOut  }) {
   const [open, setOpen] = useState(false);
   const { fetchCart, setIsCartOpen } = useCart();
   const { isAuthenticated } = useAuthContext();
@@ -66,11 +66,14 @@ export default function SMFeaturedCardRight({ bgColor, price, event, pak }) {
 
         <div className="mt-6 lg:mt-0">
           <FillButton
-            onClick={handleTicketClick} // FIX: Point to handler, not setOpen
-            className="w-full lg:w-auto"
-          >
-            Add to Ticket
-          </FillButton>
+  onClick={!isSoldOut ? handleTicketClick : undefined}
+  disabled={isSoldOut}
+  className={`w-full lg:w-auto ${
+    isSoldOut ? "opacity-50 cursor-not-allowed" : ""
+  }`}
+>
+  {isSoldOut ? "Sold Out" : "Add to Ticket"}
+</FillButton>
         </div>
       </div>
     </>
