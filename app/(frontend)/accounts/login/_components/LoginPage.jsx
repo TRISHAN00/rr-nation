@@ -14,7 +14,7 @@ import { Eye, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage({ redirectTo }) {
-  console.log(redirectTo)
+  
   const router = useRouter();
   const { syncGuestCart, fetchCart } = useCart();
   const { refreshProfile } = useAuthContext();
