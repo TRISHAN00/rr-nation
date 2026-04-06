@@ -156,7 +156,7 @@ export default function MobileSidebar() {
         </div>
 
         {/* Auth Section - Always at Bottom */}
-        <div className="p-6 bg-black/40 border-t border-white/10 mt-auto">
+        <div className="p-6  mt-auto mb-20">
           {isAuthenticated ? (
             <div className="space-y-3">
               {user?.role?.id === 2 && (
