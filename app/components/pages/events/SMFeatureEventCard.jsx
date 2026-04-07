@@ -11,7 +11,7 @@ export default function SMFeatureEventCard({
   event,
   pak
 }) {
-  const isSoldOut = pak?.availableSlots === pak?.usedSlots;
+  const isSoldOut =   pak?.usedSlots >= pak?.availableSlots;
   
   return (
     <div className="font-anta rounded-3xl  overflow-hidden">
