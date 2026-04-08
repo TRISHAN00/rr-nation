@@ -1,14 +1,11 @@
 "use client";
 import clsx from "clsx";
-import { useState } from "react";
 
-export default function EventSwitch() {
-  const [active, setActive] = useState("runrise");
-
+export default function EventSwitch({ active, onChange }) {
   return (
     <div className="inline-flex items-center bg-[#E6FAF8] p-1 rounded-full max-w-full">
       <button
-        onClick={() => setActive("runrise")}
+        onClick={() => onChange("runrise")}
         className={clsx(
           "px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-all duration-300 whitespace-nowrap",
           active === "runrise"
@@ -20,7 +17,7 @@ export default function EventSwitch() {
       </button>
 
       <button
-        onClick={() => setActive("other")}
+        onClick={() => onChange("other")}
         className={clsx(
           "px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-all duration-300 whitespace-nowrap",
           active === "other"

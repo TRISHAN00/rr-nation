@@ -35,7 +35,7 @@ export default function EventsPage() {
         background="/dynamic/event/inner-banner.jpg"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Events" }]}
       />
-      <Events hideTab />
+      <Events  />
     </>
   );
 }

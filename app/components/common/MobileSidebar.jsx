@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import CartIcon from "./CartIcon";
 
 export default function MobileSidebar() {
   const [open, setOpen] = useState(false);
@@ -46,17 +47,22 @@ export default function MobileSidebar() {
 
   return (
     <>
-      {/* Trigger Button */}
-      <button onClick={() => setOpen(true)} className="relative text-white p-1">
-        <Menu size={28} />
-        {cartData?.items?.length > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand text-[10px] font-bold text-black">
-            {cartData.items.length}
-          </span>
-        )}
-      </button>
+      {/* Trigger Button & Cart Icon */}
+      <div className="flex items-center gap-4">
+        
+        <div onClick={() => setIsCartOpen(true)} className="cursor-pointer">
+          <CartIcon
+            count={cartData?.items?.length || 0}
+            isAuthenticated={isAuthenticated}
+            cartData={cartData}
+          />
+        </div>
+        <button onClick={() => setOpen(true)} className="relative text-white p-1">
+          <Menu size={28} />
+        </button>
+      </div>
 
-      {/* Overlay - High Z-Index */}
+      {/* Overlay */}
       {open && (
         <div
           onClick={closeSidebar}
@@ -64,7 +70,7 @@ export default function MobileSidebar() {
         />
       )}
 
-      {/* Sidebar - Highest Z-Index */}
+      {/* Sidebar */}
       <aside
         className={`
           fixed top-0 left-0 h-full w-[280px]
@@ -110,7 +116,7 @@ export default function MobileSidebar() {
             </div>
           )}
 
-          {/* Navigation Menu (Visible to Everyone) */}
+          {/* Navigation Menu */}
           <nav className="px-4 py-6 space-y-1">
             {navLinks.map((link) => (
               <Link
@@ -130,8 +136,8 @@ export default function MobileSidebar() {
             ))}
           </nav>
 
-          {/* Cart Section (Sync with Desktop Drawer) */}
-          {isAuthenticated && (
+          {/* ✅ Cart Section - Now visible to EVERYONE if items exist */}
+          {cartData?.items?.length > 0 && (
             <div className="px-6 pb-8">
               <button
                 onClick={() => {
@@ -156,7 +162,7 @@ export default function MobileSidebar() {
         </div>
 
         {/* Auth Section - Always at Bottom */}
-        <div className="p-6  mt-auto mb-20">
+        <div className="p-6 mt-auto mb-10">
           {isAuthenticated ? (
             <div className="space-y-3">
               {user?.role?.id === 2 && (
@@ -192,7 +198,7 @@ export default function MobileSidebar() {
             <Link
               href="/accounts/login"
               onClick={closeSidebar}
-              className="block w-full text-center py-4 rounded-xl bg-brand text-black font-bold hover:brightness-110 transition-all"
+              className="block w-full text-center py-4 rounded-xl bg-brand text-black font-bold hover:brightness-110 transition-all shadow-lg"
             >
               Login / Sign Up
             </Link>

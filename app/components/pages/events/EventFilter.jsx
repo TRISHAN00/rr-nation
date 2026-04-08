@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import EventCard from "./EventCard";
 import EventCardSkeleton from "./skeleton/EventCardSkeleton";
 
@@ -12,20 +12,14 @@ const FILTERS = [
   { key: "successful", label: "Successful" },
 ];
 
-export default function EventFilter({ onChange, events = [], loading }) {
+export default function EventFilter({
+  onChange,
+  events = [],
+  loading,
+  lastRef,
+  page,
+}) {
   const [active, setActive] = useState("all");
-
-  // 🕒 Filter AND Sort events
-  const filteredAndSortedEvents = useMemo(() => {
-    // 1. Filter the events based on the active state
-    let result = events;
-    if (active !== "all") {
-      result = events.filter((event) => event.eventType === active);
-    }
-
-    // 2. Sort the filtered events by date (Soonest first)
-    return [...result].sort((a, b) => new Date(a.date) - new Date(b.date));
-  }, [events, active]); // Re-run when events or active filter changes
 
   const handleChange = (key) => {
     setActive(key);
@@ -34,7 +28,7 @@ export default function EventFilter({ onChange, events = [], loading }) {
 
   return (
     <div className="w-full">
-      {/* 🔘 Filter Buttons */}
+      {/* 🔘 Filters */}
       <div className="w-full overflow-x-auto pb-2">
         <div className="flex items-center justify-start sm:justify-center gap-3 min-w-max px-2">
           {FILTERS.map((item) => (
@@ -54,25 +48,42 @@ export default function EventFilter({ onChange, events = [], loading }) {
         </div>
       </div>
 
-      {/* 🧩 Event Grid */}
+      {/* 🧩 Grid */}
       <div className="grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {loading ? (
-          Array.from({ length: 6 }).map((_, i) => <EventCardSkeleton key={i} />)
-        ) : filteredAndSortedEvents.length > 0 ? (
-          filteredAndSortedEvents.map((item) => (
-            <EventCard
-              key={item?.id}
-              event={item}
-              href={`/events/${item?.slug}`}
-            />
+        {loading && page === 1 ? (
+          // 🔄 Initial load
+          Array.from({ length: 6 }).map((_, i) => (
+            <EventCardSkeleton key={i} />
           ))
+        ) : events.length > 0 ? (
+          events.map((item, index) => {
+            const isLast = index === events.length - 1;
+
+            return (
+              <div
+                ref={isLast ? lastRef : null}
+                key={item?.id}
+              >
+                <EventCard
+                  event={item}
+                  href={`/events/${item?.slug}`}
+                />
+              </div>
+            );
+          })
         ) : (
-          /* ℹ️ Empty State */
           <div className="col-span-full text-center py-20 text-gray-500">
             No {active !== "all" ? active : ""} events found.
           </div>
         )}
       </div>
+
+      {/* 🔄 Load more loader */}
+      {loading && page > 1 && (
+        <div className="text-center py-6 text-gray-500">
+          Loading more events...
+        </div>
+      )}
     </div>
   );
 }

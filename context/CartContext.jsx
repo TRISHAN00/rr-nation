@@ -10,6 +10,8 @@ export function CartProvider({ children }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartData, setCartData] = useState({ id: null, totalAmount: "0.00", items: [] });
 
+  console.log(cartData)
+
   // Helper to get guest items
   const getGuestItems = () => {
     if (typeof window === "undefined") return [];
@@ -19,13 +21,24 @@ export function CartProvider({ children }) {
   const fetchCart = useCallback(async () => {
     const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
-    // If NOT logged in, load from localStorage
     if (!token) {
       const items = getGuestItems();
       setCartData({
         id: "guest",
-        totalAmount: items.reduce((acc, curr) => acc + (curr.price || 0), 0).toFixed(2),
-        items: items
+        // Calculate total correctly from the package price
+        totalAmount: items.reduce((acc, curr) => acc + (Number(curr.package?.price) || 0), 0).toFixed(2),
+        items: items.map(item => ({
+          // CRITICAL: We map tempId to "id" so the Modal/UI sees a unique value
+          id: item.tempId || item.eventTicketId,
+          itemType: "ticket",
+          quantity: item.quantity,
+          unitPrice: item.package?.price,
+          participant: item.participant,
+          eventTicket: {
+            ...item.package,
+            event: item.package?.event // Ensure nested event data is preserved
+          }
+        }))
       });
       return;
     }
@@ -34,7 +47,7 @@ export function CartProvider({ children }) {
       const response = await getCartItems();
       if (response?.data) setCartData(response.data);
     } catch (err) {
-      console.error("Cart fetch error suppressed.");
+      console.error("Cart fetch error.");
     }
   }, []);
 
@@ -73,14 +86,14 @@ export function CartProvider({ children }) {
     const token = localStorage.getItem("authToken");
 
     if (token) {
-      // Logged in: Delete from Server
+      // Logged in: Delete from Server using API ID
       await deleteCartItem(cartItemId);
     } else {
-      // Guest: Delete from LocalStorage
-      const currentItems = JSON.parse(localStorage.getItem("guest_cart_items") || "[]");
-      // If you don't have unique IDs for guest items, you might need to add a temp UUID when adding to cart
-      const filteredItems = currentItems.filter(item => item.id !== cartItemId);
-      localStorage.setItem("guest_cart_items", JSON.stringify(filteredItems));
+      // Guest: Delete from LocalStorage using our tempId
+      const currentItems = getGuestItems();
+      // Filter specifically for the item that matches the tempId
+      const filteredItems = currentItems.filter(item => item.tempId !== cartItemId);
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify(filteredItems));
     }
 
     await fetchCart();

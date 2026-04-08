@@ -11,11 +11,8 @@ import MainMenu from "./NavigationMenuDemo";
 
 export default function HeaderBottom() {
   const { isAuthenticated, user } = useAuthContext();
-  const { setIsCartOpen, cartData, isCartOpen } = useCart();
+  const { setIsCartOpen, cartData } = useCart();
   const pathname = usePathname();
-
-
-
 
   return (
     <>

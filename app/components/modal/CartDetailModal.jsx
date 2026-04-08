@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function CartDetailModal({ open, onClose, cartData }) {
+  
   const router = useRouter();
   const { handleDeleteCartItem } = useCart();
   const { isAuthenticated } = useAuthContext();
@@ -43,8 +44,6 @@ export default function CartDetailModal({ open, onClose, cartData }) {
       router.push("/events/checkout");
     }
   };
-
-  console.log(cartData?.totalAmount)
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">

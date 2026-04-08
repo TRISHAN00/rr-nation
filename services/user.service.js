@@ -26,9 +26,31 @@ export const updatePassword = async (payload) => {
 };
 
 // GET ALL EVENT WITHOUT AUTH
-export const getAllEvent = async () => {
-  const { data } = await api.get(`/auth/user/event/all`);
-  return data;
+export const getAllEvent = async (
+  page = 1,
+  limit = 10,
+  isRunRiseNation = true,
+  search = "",
+  eventType = ""
+) => {
+  try {
+    const query = new URLSearchParams({
+      page,
+      limit,
+      isRunRiseNation: String(isRunRiseNation),
+      ...(eventType && eventType !== "all" && { eventType }),
+      ...(search && { search }),
+    }).toString();
+
+    const { data } = await api.get(
+      `/auth/user/event/all?${query}`
+    );
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    throw error;
+  }
 };
 
 

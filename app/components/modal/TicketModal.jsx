@@ -100,9 +100,9 @@ export default function TicketModal({
 
     setLoading(true);
     const payload = {
+      tempId: Date.now() + Math.random().toString(36).substr(2, 9),
       eventTicketId,
       quantity: 1,
-      // Add the full package details here for the guest cart display
       package: { ...pak },
       participant: {
         ...formData,

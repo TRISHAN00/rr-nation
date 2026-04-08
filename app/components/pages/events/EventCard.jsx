@@ -27,17 +27,31 @@ export default function EventCard({ event, href }) {
         href ? "cursor-pointer" : "cursor-default"
       }`}
     >
-      {/* Card Hover BG - Only show if clickable */}
-      {href && (
-        <span className="absolute inset-0 bg-[#F39200]/70 scale-y-0 origin-bottom transition-transform duration-500 ease-out group-hover:scale-y-100 z-0" />
-      )}
+      {/* 🌊 Flow Background Layer (Pure CSS Utility) */}
+      {href && <div className="event-card-flow" />}
+
+      {/* ✨ Shimmer Sweep Layer (Pure CSS Utility) */}
+      <div className="event-card-shimmer" />
 
       <div className="relative p-4 flex flex-col z-10">
         {/* Image */}
         <AspectRatio
           ratio={20 / 10}
-          className="bg-muted rounded-t-4xl overflow-hidden"
+          className="bg-muted rounded-t-4xl overflow-hidden relative"
         >
+          {/* 🔴 Live Status Pulse Indicator */}
+          {event?.eventType?.toLowerCase() === "live" && (
+            <div className="absolute top-3 left-3 z-30">
+              <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-brand backdrop-blur-md text-white text-[10px] font-bold tracking-widest shadow-lg">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                </span>
+                LIVE
+              </span>
+            </div>
+          )}
+
           <Image
             src={event?.thumbImage || "/images/placeholder.jpg"}
             alt={event?.name || "Event Thumbnail"}
@@ -51,14 +65,18 @@ export default function EventCard({ event, href }) {
         <div className="px-5 sm:px-6 py-5 flex flex-col gap-4">
           <div className="overflow-hidden relative">
             <h5
-              className={`text-dark text-md sm:text-xl lg:text-1xl font-bold leading-snug truncate transition-colors duration-300 ${href ? "group-hover:text-white" : ""}`}
+              className={`text-dark text-md sm:text-xl lg:text-1xl font-bold leading-snug truncate transition-colors duration-300 ${
+                href ? "group-hover:text-white" : ""
+              }`}
             >
               {event?.name}
             </h5>
           </div>
 
           <div
-            className={`bg-brand h-1 w-12 transition-colors duration-300 ${href ? "group-hover:bg-white" : ""}`}
+            className={`bg-brand h-1 w-12 transition-all duration-500 ${
+              href ? "group-hover:bg-white group-hover:w-20" : ""
+            }`}
           ></div>
 
           <div className="flex items-start gap-4 sm:gap-6">
@@ -70,7 +88,9 @@ export default function EventCard({ event, href }) {
               )}
 
               <div
-                className={`relative z-10 bg-[#090909] h-full w-full flex flex-col items-center justify-center transition-colors duration-300 ${href ? "group-hover:bg-transparent" : ""}`}
+                className={`relative z-10 bg-[#090909] h-full w-full flex flex-col items-center justify-center transition-colors duration-300 ${
+                  href ? "group-hover:bg-transparent" : ""
+                }`}
               >
                 <h4 className="text-[28px] font-bold text-white leading-none">
                   {day}
@@ -80,12 +100,16 @@ export default function EventCard({ event, href }) {
             </div>
 
             {/* Location */}
-            <div className="flex items-center gap-2 flex-1">
+            <div className="flex items-center gap-2 flex-1 pt-2">
               <MapPin
-                className={`text-gray transition-colors duration-300 shrink-0 ${href ? "group-hover:text-white" : ""}`}
+                className={`text-gray transition-colors duration-300 shrink-0 ${
+                  href ? "group-hover:text-white" : ""
+                }`}
               />
               <p
-                className={`text-gray text-sm sm:text-[16px] font-medium transition-colors duration-300 line-clamp-2 ${href ? "group-hover:text-white" : ""}`}
+                className={`text-gray text-sm sm:text-[16px] font-medium transition-colors duration-300 line-clamp-2 ${
+                  href ? "group-hover:text-white" : ""
+                }`}
               >
                 {event?.address || ""}
               </p>
