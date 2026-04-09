@@ -40,6 +40,7 @@ export default function DashboardEventCardHeader({
   loading,
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  console.log(event, 'event')
 
   return (
     <CardHeader className="pb-3">
