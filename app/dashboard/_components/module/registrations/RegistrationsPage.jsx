@@ -3,7 +3,6 @@
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getAllOrders } from "@/services/admin/admin.event.service";
 import { getDashboardEventInfo } from "@/services/admin/admin.overview.service";
-import { CheckCircle, Clock, XCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import OrderHeader from "./_components/OrderHeader";
 import OrderList from "./_components/OrderList";
@@ -13,26 +12,6 @@ import OrderSheet from "./_components/OrderSheet";
 import OrderSheetHeader from "./_components/OrderSheetHeader";
 import OrderStats from "./_components/OrderStats";
 import { OrderStatsSkeleton } from "./_components/Skeleton/OrderSkeleton";
-
-const paymentStatusConfig = {
-  completed: {
-    label: "Paid",
-    icon: CheckCircle,
-    className:
-      "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-  },
-  pending: {
-    label: "Pending",
-    icon: Clock,
-    className:
-      "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20",
-  },
-  failed: {
-    label: "Failed",
-    icon: XCircle,
-    className: "bg-destructive/15 text-destructive border-destructive/20",
-  },
-};
 
 export default function RegistrationsPage() {
   const [loading, setLoading] = useState(true);
@@ -47,9 +26,6 @@ export default function RegistrationsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [showRegItem, setShowRegItem] = useState(0);
   const itemsPerPage = showRegItem || 50;
-
-  console.log(itemsPerPage)
-
 
   const fetchData = useCallback(async () => {
     try {

@@ -8,6 +8,7 @@ import ActionConfirmationModal from "./_components/ActionConfirmationModal";
 import MemberActions from "./_components/MemberActions";
 import MemberList from "./_components/MemberList";
 import { MemberPaginationFooter } from "./_components/MemberPaginationFooter";
+import MemberStats from "./_components/MemberStats";
 
 export default function DashboardMemberPage() {
   const {
@@ -153,8 +154,12 @@ export default function DashboardMemberPage() {
     <>
       <OrderHeader
         handleExportCSV={handleExportCSV}
-        title="Member Order History"
+        title="Member Registration History"
+        desc={`Real-time aggregate totals across all pages.`}
       />
+
+      <MemberStats />
+
       <MemberActions
         setAdminApproval={setAdminApproval}
         setMemberType={setMemberType}

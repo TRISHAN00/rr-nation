@@ -24,3 +24,8 @@ export const updateMemberStatus = async (payload) => {
   const { data } = await api.patch("/admin/member", payload);
   return data;
 };
+
+export const getMemberOverviewData = async () => {
+  const { data } = await api.get(`/admin/member/overview`);
+  return data;
+}
