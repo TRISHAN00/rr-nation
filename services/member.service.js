@@ -19,3 +19,9 @@ export const getMemberRegInfo = async () => {
   const { data } = await api.get(`/member/registration`)
   return data;
 }
+
+// GET Member Registration Fee
+export const getMemRegFee = async () => {
+  const { data } = await api.get(`/member/registration/fee`);
+  return data;
+}

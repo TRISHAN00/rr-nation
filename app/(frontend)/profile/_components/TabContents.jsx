@@ -16,7 +16,6 @@ export default function TabContents({
 }) {
     return (
         <div className="tabs-content-transition">
-
             <TabsContent value="me" className="mt-6 space-y-6">
                 <MeTab
                     allTickets={allTickets}

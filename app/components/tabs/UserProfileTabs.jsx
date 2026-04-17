@@ -81,7 +81,14 @@ export default function UserProfileTabs({ user, memberInfo }) {
         className="w-full"
       >
         <TabActions />
-        <TabContents allTickets={allTickets} upcomingEvents={upcomingEvents} orders={orders} totalSpent={totalSpent} pastEvents={pastEvents} user={user} memberInfo={memberInfo} />
+        <TabContents 
+          allTickets={allTickets} 
+          upcomingEvents={upcomingEvents} 
+          orders={orders} 
+          totalSpent={totalSpent} 
+          pastEvents={pastEvents} 
+          user={user} 
+          memberInfo={memberInfo} />
       </Tabs>
     </div>
   );
