@@ -4,16 +4,13 @@ import FillButton from "@/app/components/common/FillButton";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/app/components/ui/select";
 import { Textarea } from "@/app/components/ui/textarea";
-import { registerMember } from "@/services/member.service";
-import { useState } from "react";
-import { toast } from "sonner"; // Import Sonner
 
 const tshirtOptions = [
   { label: 'XS (Chest: 36", Length: 25")', value: "XS" },
@@ -31,51 +28,9 @@ const tshirtOptions = [
   { label: '11-12 Years (Chest: 34", Length: 24")', value: "11-12 Years" },
 ];
 
-export default function MemberForm() {
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    isEventStaff: false,
-    eventsParticipatedNumber: 0,
-    preferableRunningDistance: 0,
-  });
-
-  const handleMemberSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    setLoading(true);
-
-    try {
-      const payload = new FormData();
-
-      // Append all fields to FormData
-      for (const key in formData) {
-        const value = formData[key];
-        if (value !== undefined && value !== null) {
-          payload.append(key, value instanceof File ? value : value);
-        }
-      }
-
-      const response = await registerMember(payload);
-      
-      if (response) {
-        toast.success("Success!", {
-          description: "Your membership registration has been submitted.",
-        });
-        form.reset(); // Clears text inputs
-        setFormData({ isEventStaff: false }); // Resets state
-      }
-    } catch (error) {
-      console.error("Registration failed:", error);
-      toast.error("Registration Failed", {
-        description: error?.response?.data?.message || "Something went wrong. Please try again.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function MemberForm({onSubmit, formData, setFormData, loading}) {
   return (
-    <form onSubmit={handleMemberSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <h3 className="md:col-span-2 text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2">
         Member Registration
       </h3>
@@ -85,6 +40,8 @@ export default function MemberForm() {
         <Label>Facebook Profile Link</Label>
         <Input
           required
+          name="facebookLink"
+          val={formData.facebookLink}
           placeholder="https://facebook.com/..."
           onChange={(e) => setFormData({ ...formData, facebookLink: e.target.value })}
           className="w-full bg-gray-50 dark:bg-gray-800"

@@ -1,6 +1,9 @@
-import RegistrationForm from "@/app/components/common/RegistrationForm";
+"use client"
+import RegistrationForm from "@/app/components/pages/register/components/RegistrationForm";
+import { useState } from "react";
 
 export default function RegisterMemberContent() {
+  const [agree, setAgree] = useState(false);
   return (
     <section className="py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">
@@ -124,6 +127,8 @@ export default function RegisterMemberContent() {
             <input
               type="checkbox"
               id="terms"
+              onChange={(e) => setAgree(e.target.checked)}
+              checked={agree}
               className="accent-brand cursor-pointer"
             />
             <label htmlFor="terms" className="text-sm text-gray cursor-pointer">
@@ -132,7 +137,7 @@ export default function RegisterMemberContent() {
           </div>
 
           {/* CTA */}
-          <RegistrationForm/>
+          <RegistrationForm agree={agree} />
         </div>
       </div>
     </section>

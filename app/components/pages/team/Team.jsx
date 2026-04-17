@@ -1,4 +1,7 @@
+"use client"
 import Title from "@/app/components/common/Title";
+import { getAllMembers } from "@/services/member.service";
+import { useEffect, useState } from "react";
 import TeamFilter from "./TeamFilter";
 
 const admin = [
@@ -223,6 +226,30 @@ const coreTeam = [
 const allMembers = { admin, advisor, coreTeam };
 
 export default function Team() {
+  const [loading, setLoading] = useState(false)
+  const [members, setMembers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [memberType, setMemberType] = useState("")
+
+  const fetchMember = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllMembers(page, limit, memberType);
+      setMembers(res?.data?.items)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchMember()
+  }, [page, limit, memberType])
+
+
+
   return (
     <section>
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5 py-14 sm:py-20 lg:py-30">

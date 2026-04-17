@@ -4,7 +4,7 @@ const nextConfig = {
   reactCompiler: true,
 
   experimental: {
-    turbo: false, 
+    turbo: false,
   },
 
   images: {

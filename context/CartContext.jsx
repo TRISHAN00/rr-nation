@@ -10,8 +10,6 @@ export function CartProvider({ children }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartData, setCartData] = useState({ id: null, totalAmount: "0.00", items: [] });
 
-  console.log(cartData)
-
   // Helper to get guest items
   const getGuestItems = () => {
     if (typeof window === "undefined") return [];

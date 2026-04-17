@@ -33,9 +33,7 @@ export default function OrderList({
                 ID
               </TableHead>
 
-              <TableHead className="font-semibold text-foreground text-left">
-                Name
-              </TableHead>
+              <TableHead className="font-semibold text-foreground text-left">Event / BIB Status</TableHead>
               <TableHead className="font-semibold text-foreground text-left">
                 Event Name
               </TableHead>

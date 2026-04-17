@@ -40,6 +40,7 @@ export default function RegistrationsPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [registeredUsers, setRegisteredUsers] = useState([]);
   const [stats, setStats] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,14 +48,17 @@ export default function RegistrationsPage() {
   const [showRegItem, setShowRegItem] = useState(0);
   const itemsPerPage = showRegItem || 50;
 
+  console.log(itemsPerPage)
+
+
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await getAllOrders(currentPage, itemsPerPage);
+      const res = await getAllOrders(currentPage, itemsPerPage, searchQuery);
       const resOverview = await getDashboardEventInfo();
 
       const items = res?.data?.items || [];
-      const total = res?.data?.totalPages || 1; 
+      const total = res?.data?.totalPages || 1;
 
       setStats(resOverview?.data);
       setRegisteredUsers(items);
@@ -64,11 +68,15 @@ export default function RegistrationsPage() {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, showRegItem]); //
+  }, [currentPage, itemsPerPage, searchQuery, showRegItem]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    const delayDebounce = setTimeout(() => {
+      fetchData();
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery, currentPage, showRegItem]);
 
   const handleViewDetails = (reg) => {
     setSelectedReg(reg);
@@ -108,9 +116,6 @@ export default function RegistrationsPage() {
       return reg.order.items.map((item) => {
         const p = item.participant;
         const u = reg.user;
-
-        console.log(p)
-
 
         return [
           `"${p?.name || "N/A"}"`, /* 1 */
@@ -170,7 +175,7 @@ export default function RegistrationsPage() {
         <OrderStats stats={stats} />
       )}
 
-      <OrderSearch setShowRegItem={setShowRegItem} showRegItem={showRegItem} />
+      <OrderSearch setShowRegItem={setShowRegItem} showRegItem={showRegItem} setSearchQuery={setSearchQuery} />
 
       <OrderList
         registeredUsers={registeredUsers}

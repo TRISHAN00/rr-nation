@@ -111,6 +111,10 @@ body {
   display: none;
 } */
 
+.tabs-content-transition {
+  transition: opacity 0.2s ease-in-out;
+}
+
 .font-anta {
   font-family: var(--font-anta);
 }

@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/app/components/ui/accordion";
 import { CreditCard, Ticket, User } from "lucide-react";
+import BIBInput from "./BIBInput";
 import OrderDataField from "./OrderDataField";
 
 export default function OrderSheet({ selectedReg, setTotalPages }) {
@@ -99,6 +100,7 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="border-t border-border/50 pt-4 pb-4">
+                <BIBInput item={item} />
                 <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                   {/* Key Stats */}
                   <OrderDataField
@@ -133,10 +135,10 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
                     label="DOB"
                     value={item.participant?.dateOfBirth}
                   />
-                  <OrderDataField
+                  {/* <OrderDataField
                     label="Religion"
                     value={item.participant?.religion || "N/A"}
-                  />
+                  /> */}
 
                   {/* Contact Info */}
                   <div className="col-span-2 grid grid-cols-2 gap-4 border-t border-b border-border/30 py-3 my-1">
@@ -161,20 +163,20 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
                   {/* Cycle Info (Conditional Rendering) */}
                   {(item.participant?.cycleBrandName ||
                     item.participant?.cycleFrameSize) && (
-                    <div className="col-span-2 grid grid-cols-2 gap-4 bg-muted/30 p-2 rounded">
-                      <OrderDataField
-                        label="Cycle Brand"
-                        value={item.participant?.cycleBrandName}
-                      />
-                      <OrderDataField
-                        label="Frame Size"
-                        value={item.participant?.cycleFrameSize}
-                      />
-                    </div>
-                  )}
+                      <div className="col-span-2 grid grid-cols-2 gap-4 bg-muted/30 p-2 rounded">
+                        <OrderDataField
+                          label="Cycle Brand"
+                          value={item.participant?.cycleBrandName}
+                        />
+                        <OrderDataField
+                          label="Frame Size"
+                          value={item.participant?.cycleFrameSize}
+                        />
+                      </div>
+                    )}
 
                   {/* Location Info */}
-                  <div className="col-span-2">
+                  {/* <div className="col-span-2">
                     <OrderDataField
                       label="Delivery Address"
                       value={
@@ -183,7 +185,7 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
                         "No address provided"
                       }
                     />
-                  </div>
+                  </div> */}
 
                   {/* Emergency Contact Section */}
                   <div className="col-span-2 mt-2 p-3 bg-amber-50 rounded-lg border border-amber-100 flex justify-between items-center">
