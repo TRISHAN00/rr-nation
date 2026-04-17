@@ -1,12 +1,12 @@
 import api from "@/lib/api";
 
-// Get Coupon List
+// GET Coupon List
 export const getMemberCoupons = async () => {
     const { data } = await api.get(`/admin/member/coupon`);
     return data;
 }
 
-// Create a coupon
+// POST Create a coupon
 export const createMemberCoupons = async (payload) => {
     const { data } = await api.post("/admin/member/coupon", payload);
     return data;
@@ -14,6 +14,11 @@ export const createMemberCoupons = async (payload) => {
 
 // PATCH Member Coupon
 export const updateMemberCoupon = async (payload) => {
-  const { data } = await api.patch("/admin/member/coupon", payload);
-  return data;
+    const { data } = await api.patch("/admin/member/coupon", payload);
+    return data;
 };
+
+// DELETE Member Coupon
+export const deleteMemberCoupon = async (couponId) => {
+    return api.delete(`/admin/member/coupon/${couponId}`)
+}
