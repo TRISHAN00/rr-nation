@@ -19,8 +19,6 @@ export default function DashboardMemberPage() {
     fetchMembers,
   } = useDashboardMembers();
 
-  console.log(members);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [actionType, setActionType] = useState("approve");
   const [selectedMember, setSelectedMember] = useState(null);

@@ -35,6 +35,8 @@ export default function ActionConfirmationModal({
   const [selectedType, setSelectedType] = useState("");
   const isApprove = type === "approve";
 
+  console.log(selectedMember)
+
   // Sync internal state with the selected member when modal opens
   useEffect(() => {
     if (selectedMember) {
@@ -107,7 +109,7 @@ export default function ActionConfirmationModal({
             }}
             disabled={isLoading}
             className={`w-full sm:w-auto shadow-lg ${
-              isApprove ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-rose-600 hover:bg-rose-700 text-white"
+              isApprove ? "bg-emerald-600 hover:bg-emerald-700 text-dark" : "bg-rose-600 hover:bg-rose-700 text-white"
             }`}
           >
             {isLoading ? "Updating..." : isApprove ? "Yes, Approve Member" : "Yes, Reject Member"}

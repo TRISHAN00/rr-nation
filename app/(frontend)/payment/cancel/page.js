@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ShoppingCart, XCircle } from "lucide-react";
+import { ArrowLeft, XCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function PaymentCancel() {
@@ -21,13 +21,13 @@ export default function PaymentCancel() {
 
         <div className="space-y-3">
           {/* Primary Action: Go back to Checkout */}
-          <Link 
+          {/* <Link 
             href="/events/checkout" 
             className="flex items-center justify-center w-full py-3 bg-[#00a19a] text-white rounded-xl font-bold hover:bg-[#008c86] transition-all active:scale-95"
           >
             <ShoppingCart className="mr-2 h-5 w-5" />
             Return to Checkout
-          </Link>
+          </Link> */}
 
           {/* Secondary Action: Go Home */}
           <Link 
