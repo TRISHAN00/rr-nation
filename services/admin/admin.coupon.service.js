@@ -11,3 +11,9 @@ export const createMemberCoupons = async (payload) => {
     const { data } = await api.post("/admin/member/coupon", payload);
     return data;
 };
+
+// PATCH Member Coupon
+export const updateMemberCoupon = async (payload) => {
+  const { data } = await api.patch("/admin/member/coupon", payload);
+  return data;
+};

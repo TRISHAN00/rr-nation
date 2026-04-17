@@ -2,24 +2,24 @@
 
 import { Button } from "@/app/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/app/components/ui/dialog";
 import { Input } from "@/app/components/ui/input";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/app/components/ui/select";
 import { createMemberCoupons } from "@/services/admin/admin.coupon.service";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-export default function CreateCouponModal({ open, setOpen }) {
+export default function CreateCouponModal({ open, setOpen, onCoupons }) {
   const [coupons, setCoupons] = useState([
     {
       code: "",
@@ -85,6 +85,7 @@ export default function CreateCouponModal({ open, setOpen }) {
 
       resetForm();
       setOpen(false);
+      onCoupons()
     } catch (error) {
       console.error("Coupon create failed:", error);
     } finally {
@@ -100,7 +101,7 @@ export default function CreateCouponModal({ open, setOpen }) {
         if (!val) resetForm();
       }}
     >
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>Create Coupons</DialogTitle>
         </DialogHeader>
@@ -122,6 +123,7 @@ export default function CreateCouponModal({ open, setOpen }) {
 
               {/* Type */}
               <Select
+                className="w-full"
                 value={coupon.discountType}
                 onValueChange={(value) =>
                   handleChange(index, "discountType", value)

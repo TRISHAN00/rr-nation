@@ -4,7 +4,7 @@ import { Button } from "@/app/components/ui/button";
 import { useState } from "react";
 import CreateCouponModal from "./CreateCouponModal";
 
-export default function CouponPageHeader() {
+export default function CouponPageHeader({onCoupons}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ export default function CouponPageHeader() {
         + Create Coupon
       </Button>
 
-      <CreateCouponModal open={open} setOpen={setOpen} />
+      <CreateCouponModal open={open} setOpen={setOpen} onCoupons={onCoupons} />
     </div>
   );
 }

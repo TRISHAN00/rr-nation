@@ -10,6 +10,7 @@ import {
 import { getMemberCoupons } from "@/services/admin/admin.coupon.service";
 import CouponMemberTableBody from "./CouponMemberTableBody";
 import CouponMemberTableHeader from "./CouponMemberTableHeader";
+import CouponPageHeader from "./CouponPageHeader";
 
 export default function CouponList() {
     const [coupons, setCoupons] = useState([]);
@@ -32,23 +33,30 @@ export default function CouponList() {
     }, []);
 
     return (
-        <Card className="border-border bg-card shadow-sm overflow-hidden">
-            <CardContent className="p-0">
-                <Table>
-                    {/* HEADER */}
-                    <CouponMemberTableHeader />
+        <>
+            <CouponPageHeader onCoupons={fetchCoupons} />
+            <Card className="border-border bg-card shadow-sm overflow-hidden">
+                <CardContent className="p-0">
+                    <Table>
+                        {/* HEADER */}
+                        <CouponMemberTableHeader />
 
-                    {/* BODY */}
-                    <CouponMemberTableBody loading={loading} coupons={coupons} />
-                </Table>
+                        {/* BODY */}
+                        <CouponMemberTableBody
+                            loading={loading}
+                            coupons={coupons}
+                            onRefresh={fetchCoupons}
+                        />
+                    </Table>
 
-                {/* EMPTY STATE */}
-                {!loading && coupons.length === 0 && (
-                    <div className="py-12 text-center text-muted-foreground">
-                        No coupons found.
-                    </div>
-                )}
-            </CardContent>
-        </Card>
+                    {/* EMPTY STATE */}
+                    {!loading && coupons.length === 0 && (
+                        <div className="py-12 text-center text-muted-foreground">
+                            No coupons found.
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </>
     );
 }
