@@ -25,3 +25,21 @@ export const getMemRegFee = async () => {
   const { data } = await api.get(`/member/registration/fee`);
   return data;
 }
+
+// /member/registration/coupon/apply
+export const applyMemberCoupon = async (coupon) => {
+  const { data } = await api.post(`/member/registration/coupon/apply`, {
+    coupon,
+  });
+
+  return data;
+};
+
+export const createMemberPayment = async (payload) => {
+  const { data } = await api.post(
+    `/member/registration/payment`,
+    payload
+  );
+
+  return data;
+};
