@@ -47,7 +47,6 @@ export default function RegistrationForm({ agree }) {
       }
     });
 
-    console.log(payload)
 
     try {
       // 2. Send the FormData instance, NOT the state object

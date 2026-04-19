@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function RegisterMemberContent() {
   const [agree, setAgree] = useState(false);
+  
   return (
     <section className="py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-7.5">

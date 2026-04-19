@@ -75,7 +75,7 @@ export function ProfileDropdown({ user }) {
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link href="/become-organization" className="flex items-center gap-2">
+          <Link href="/organizer-register" className="flex items-center gap-2">
             <Building2 className="h-4 w-4 text-cyan-500" />
             Become an Organization
           </Link>
