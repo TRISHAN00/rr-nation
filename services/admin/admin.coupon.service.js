@@ -22,3 +22,8 @@ export const updateMemberCoupon = async (payload) => {
 export const deleteMemberCoupon = async (couponId) => {
     return api.delete(`/admin/member/coupon/${couponId}`)
 }
+
+// PATCH Active / Inactive Coupon
+export const toggleActiveInactive = async (couponId) => {
+    const { data } = await api.patch(`/admin/member/coupon/active-deactive/${couponId}`)
+}

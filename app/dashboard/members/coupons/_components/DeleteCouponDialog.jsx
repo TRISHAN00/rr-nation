@@ -1,22 +1,19 @@
 "use client";
 
+import { Button } from "@/app/components/ui/button";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/app/components/ui/dialog";
 import { deleteMemberCoupon } from "@/services/admin/admin.coupon.service";
 import { useState } from "react";
 
 export default function DeleteCouponDialog({
   open,
   setOpen,
-  coupon,
+  couponId,
   onSuccess,
 }) {
   const [loading, setLoading] = useState(false);
@@ -25,9 +22,9 @@ export default function DeleteCouponDialog({
     try {
       setLoading(true);
 
-      await deleteMemberCoupon(coupon?.id);
+      await deleteMemberCoupon(couponId);
 
-      onSuccess(); // refresh list
+      onSuccess();
       setOpen(false);
     } catch (error) {
       console.error("Delete failed:", error);
@@ -37,35 +34,30 @@ export default function DeleteCouponDialog({
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Delete Coupon
-          </AlertDialogTitle>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Delete Coupon</DialogTitle>
+        </DialogHeader>
 
-          <AlertDialogDescription>
-            Are you sure you want to delete{" "}
-            <span className="font-semibold">{coupon?.code}</span>?
-            <br />
-            This action cannot be undone.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+        <p className="text-sm text-gray-500">
+          Are you sure you want to delete this coupon? This action cannot be undone.
+        </p>
 
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>
+        <div className="flex justify-end gap-2 mt-4">
+          <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
-          </AlertDialogCancel>
+          </Button>
 
-          <AlertDialogAction
+          <Button
+            variant="destructive"
             onClick={handleDelete}
             disabled={loading}
-            className="bg-red-600 hover:bg-red-700"
           >
-            {loading ? "Deleting..." : "Yes, Delete"}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+            {loading ? "Deleting..." : "Delete"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
