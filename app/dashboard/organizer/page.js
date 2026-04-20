@@ -10,19 +10,17 @@ export default function DashboardOrganizerPage() {
     const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
-        setLoading(true); // Start loading
+        setLoading(true); 
         try {
             const res = await getAllDashboardOrganizers();
 
-            // res.statusCode is based on your JSON structure
             if (res?.statusCode === 200) {
-                // Mapping to res.data.items based on your data structure
                 setOrganizers(res?.data?.items || []);
             }
         } catch (error) {
             console.error("Error fetching organizers:", error);
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false); 
         }
     }
 
