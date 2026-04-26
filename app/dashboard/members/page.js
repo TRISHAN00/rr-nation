@@ -169,7 +169,7 @@ export default function DashboardMemberPage() {
       <MemberList
         members={members}
         loading={loading}
-        onAction={handleOpenModal} // Pass the opener to the list
+        onAction={handleOpenModal} 
       />
 
       <MemberPaginationFooter />

@@ -5,15 +5,6 @@ import {
   AvatarImage,
 } from "@/app/components/ui/avatar";
 import { Badge } from "@/app/components/ui/badge";
-import { Button } from "@/app/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/app/components/ui/dropdown-menu";
 import {
   TableBody,
   TableCell,
@@ -22,14 +13,11 @@ import {
 import { formatDate } from "@/lib/dateFormat";
 import {
   Building2,
-  CheckCircle,
-  Edit,
-  Eye,
-  Globe,
-  MoreHorizontal,
-  XCircle
+  SplinePointer
 } from "lucide-react";
+import NoFound from "../../_components/NoFound";
 import SwitchStatusBadge from "./SwitchStatusBadge";
+import TableItemActionDrop from "./TableItemActionDrop";
 
 
 export default function TableBodyPart({ loading, data }) {
@@ -37,9 +25,13 @@ export default function TableBodyPart({ loading, data }) {
     <TableBody>
       {loading ? (
         // You can replace this with your MemberListSkeleton if imported
-        <TableRow><TableCell colSpan={9} className="text-center py-10">Loading organizers...</TableCell></TableRow>
+        <TableRow>
+          <TableCell colSpan={9} className="text-center py-10">
+            <SplinePointer />
+          </TableCell>
+        </TableRow>
       ) : data.length === 0 ? (
-        <TableRow><TableCell colSpan={9} className="text-center py-10">No organizers found.</TableCell></TableRow>
+        <NoFound text={'No organizers found.'} />
       ) : (
         data.map((item) => (
           <TableRow
@@ -114,54 +106,7 @@ export default function TableBodyPart({ loading, data }) {
             </TableCell>
 
             {/* Actions */}
-            <TableCell className="text-right">
-              <div className="flex items-center justify-end gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 w-7 p-0 text-muted-foreground hover:text-primary"
-                  onClick={() => onAction(item, "edit")}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-
-                {/* Action Management  */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="text-xs">
-                    <DropdownMenuLabel className="text-[10px] text-muted-foreground">
-                      Management
-                    </DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => onAction(item, "view")}>
-                      <Eye className="mr-2 h-3.5 w-3.5" /> Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => window.open(item.socialMediaLink, '_blank')}>
-                      <Globe className="mr-2 h-3.5 w-3.5" /> Social Link
-                    </DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem
-                      onClick={() => onAction(item, "approve")}
-                      className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50"
-                    >
-                      <CheckCircle className="mr-2 h-3.5 w-3.5" /> Approve
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                      onClick={() => onAction(item, "reject")}
-                      className="text-rose-600 focus:text-rose-600 focus:bg-rose-50"
-                    >
-                      <XCircle className="mr-2 h-3.5 w-3.5" /> Reject
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </TableCell>
+            <TableItemActionDrop />
           </TableRow>
         ))
       )}

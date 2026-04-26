@@ -17,13 +17,22 @@ export const getAllDashbaordEvents = async (
 
 // Create Event
 export const createEvent = (data) => {
-  return api.post("/admin/event", data);
+  return api.post("/admin/event", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // Update Event
-export const updateEvent = (data) => {
-  // Some APIs allow a header to override the method
-  return api.patch(`/admin/event`, data);
+export const updateEvent = async (payload) => {
+  // Use PATCH as shown in your screenshot
+  const { data } = await api.patch(`/admin/event`, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return data;
 };
 
 // Get Event By Id

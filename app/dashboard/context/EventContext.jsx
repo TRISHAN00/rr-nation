@@ -88,17 +88,20 @@ export default function EventProvider({ children }) {
 
   // --- UPDATE EVENT ---
   const handleUpdateEvent = useCallback(
-    async (eventId, formData) => {
-      console.log(eventId, formData)
+    async (formData, eventId) => { // Accept eventId as second param
       try {
         setLoading(true);
-        await updateEvent(eventId, formData);
+        await updateEvent(formData);
         toast.success("Event updated successfully!");
 
-        // Refresh list and individual event state
+        // Refresh list
         await fetchEvents();
-        const res = await getDashboardEventById(eventId);
-        setEvent(res?.data?.data || null);
+
+        // Refresh the single event state if we are in a detail view
+        if (eventId) {
+          const res = await getDashboardEventById(eventId);
+          setEvent(res?.data?.data || res?.data || null);
+        }
 
         router.push("/dashboard/events");
       } catch (err) {

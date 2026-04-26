@@ -10,7 +10,7 @@ export default function DashboardEventSearch({search, setSearch}) {
         placeholder="Search events..." 
         className="pl-10" 
         value={search} 
-        onChange={(e) => setSearch(e.target.value)} // This triggers the fetchEvents in context
+        onChange={(e) => setSearch(e.target.value)} 
       />
     </div>
   );

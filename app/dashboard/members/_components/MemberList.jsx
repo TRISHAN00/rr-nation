@@ -101,7 +101,7 @@ export default function MemberList({
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Avatar className="h-7 w-7 border shadow-sm">
-                        <AvatarImage src={item.user?.image} />
+                        <AvatarImage src={item.memberImage} />
                         <AvatarFallback className="text-[10px]">
                           <User className="h-3 w-3" />
                         </AvatarFallback>

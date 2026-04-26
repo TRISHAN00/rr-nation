@@ -38,19 +38,19 @@ export default function RegistrationForm({ agree }) {
     // 1. Transform state object into FormData for multipart/form-data
     const payload = new FormData();
     Object.keys(formData).forEach((key) => {
-      console.log(key)
       const value = formData[key];
-      console.log(value)
       // Only append fields that are not null/undefined
       if (value !== null && value !== undefined) {
         payload.append(key, value);
       }
     });
+    console.log(payload)
 
 
     try {
       // 2. Send the FormData instance, NOT the state object
       const response = await registerMember(payload);
+      console.log(response)
 
       // 3. Keep your requested logic pattern
       if (response?.statusCode !== 201) {

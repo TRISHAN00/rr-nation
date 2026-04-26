@@ -18,7 +18,7 @@ import {
   Trophy,
   User,
   UserCheck,
-  Users,
+  Users
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -51,6 +51,7 @@ const menuItems = [
       },
     ],
   },
+ 
   { title: "Events", icon: Calendar, path: "/dashboard/events" },
   { title: "Registrations", icon: UserCheck, path: "/dashboard/registrations" },
   { title: "Services", icon: Briefcase, path: "/dashboard/services" },
@@ -105,7 +106,7 @@ export function DashboardSidebar({ collapsed, onToggle }) {
 
       {/* Navigation */}
       <nav className="flex flex-col gap-1 p-3 overflow-y-auto h-[calc(100vh-64px)] scrollbar-hide">
-        {menuItems.map((item) => {
+        {menuItems?.map((item) => {
           const hasChildren = item.children?.length > 0;
           const isActive = pathname === item.path || (hasChildren && item.children.some(c => c.path === pathname));
           const isOpen = openMenu === item.title;
