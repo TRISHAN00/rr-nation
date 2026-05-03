@@ -8,7 +8,7 @@ export default function CouponEventTableHeader() {
     return (
         <TableHeader className="bg-muted/50">
             <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>Serial No.</TableHead>
                 <TableHead>Coupon Code</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Value</TableHead>

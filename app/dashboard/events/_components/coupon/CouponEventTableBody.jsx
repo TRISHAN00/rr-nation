@@ -41,9 +41,9 @@ export default function CouponEventTableBody({
                 {loading ? (
                     <CouponListSkeleton rows={6} />
                 ) : (
-                    coupons?.map((coupon) => (
+                    coupons?.map((coupon, index) => (
                         <TableRow key={coupon.id}>
-                            <TableCell>#{coupon.id}</TableCell>
+                            <TableCell >{index + 1}</TableCell>
 
                             <TableCell className="font-semibold">
                                 {coupon.code}
