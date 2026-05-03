@@ -15,7 +15,7 @@ export default function EventCreatePage() {
       {/* 1. Base Event Info */}
       <EventInfoForm onEventCreated={(id) => setEventId(id)} />
       <CouponList eventId={eventId} />
-      <EvRegFormFieldList />
+      <EvRegFormFieldList eventId={eventId}  />
 
       {/* Event Coupons */}
 

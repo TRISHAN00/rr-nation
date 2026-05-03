@@ -31,7 +31,7 @@ export default function DashboardEventEdit() {
       {/* Coupone List */}
       <CouponList eventId={id} />
 
-      <EvRegFormFieldList />
+      <EvRegFormFieldList eventId={id} />
 
       {/* Pass the ID to the sub-components */}
       <EventTickets eventId={id} />
