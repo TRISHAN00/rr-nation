@@ -21,5 +21,5 @@ export const updateRegistrationField = async (field) => {
 
 // DELETE Registration Form Field by ID
 export const deleteRegistrationField = async (registrationFormFieldId) => {
-    return await api.delete(`/admin/registration-form-field/$${registrationFormFieldId}`);
+    return await api.delete(`/admin/registration-form-field/${registrationFormFieldId}`);
 };

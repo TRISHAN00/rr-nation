@@ -5,6 +5,7 @@ import { Button } from "@/app/components/ui/button";
 import { TableBody, TableCell, TableRow } from "@/app/components/ui/table";
 import { Asterisk, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import DeleteEvRegFormFieldModal from "./DeleteEvRegFormFieldModal";
 import UpdateEvRegFormFieldModal from "./UpdateEvRegFormFieldModal";
 
 export default function EvRegFormFieldTableBody({
@@ -14,15 +15,15 @@ export default function EvRegFormFieldTableBody({
 }) {
     const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [selectedCoupon, setSelectedCoupon] = useState(null);
+    const [selectedField, setSelectedField] = useState(null);
 
-    const handleEdit = (coupon) => {
-        setSelectedCoupon(coupon);
+    const handleEdit = (field) => {
+        setSelectedField(field);
         setEditOpen(true);
     };
 
-    const handleDeleteClick = (coupon) => {
-        setSelectedCoupon(coupon);
+    const handleDeleteClick = (field) => {
+        setSelectedField(field);
         setDeleteOpen(true);
     };
 
@@ -114,11 +115,17 @@ export default function EvRegFormFieldTableBody({
             <UpdateEvRegFormFieldModal
                 open={editOpen}
                 setOpen={setEditOpen}
-                fieldData={selectedCoupon}
+                fieldData={selectedField}
                 onRefresh={onRefresh}
             />
 
             {/* Delete Confirmation Modal */}
+            <DeleteEvRegFormFieldModal
+                open={deleteOpen}
+                setOpen={setDeleteOpen}
+                registrationFormFieldId={selectedField?.id}
+                onRefresh={onRefresh}
+            />
         </>
     );
 }
