@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  createCoupon,
+  createEventCoupon,
   deleteCoupon,
   getAllDashboardCoupons,
-} from "@/services/admin/coupon.service";
+} from "@/services/admin/admin.event.coupon.service";
 import { createContext, useCallback, useContext, useState } from "react";
 import { toast } from "sonner";
 
@@ -45,7 +45,7 @@ export function CouponProvider({ children, eventId }) {
           }))
         : { ...couponData, eventId: Number(eventId || couponData.eventId) };
 
-      await createCoupon(dataToSend);
+      await createEventCoupon(dataToSend);
       toast.success("Coupon created");
       await fetchCoupons();
       return true;

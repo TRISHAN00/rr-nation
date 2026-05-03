@@ -7,7 +7,7 @@ import {
     Table
 } from "@/app/components/ui/table";
 
-import { getMemberCoupons } from "@/services/admin/admin.coupon.service";
+import { getMemberCoupons } from "@/services/admin/admin.member.coupon.service";
 import CouponMemberTableBody from "./CouponMemberTableBody";
 import CouponMemberTableHeader from "./CouponMemberTableHeader";
 import CouponPageHeader from "./CouponPageHeader";

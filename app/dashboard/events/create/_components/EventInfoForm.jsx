@@ -35,8 +35,6 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
     status: "active",
   });
 
-  console.log(form)
-
   const [bannerImage, setBannerImage] = useState(null);
   const [thumbImage, setThumbImage] = useState(null);
 
@@ -158,6 +156,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
               <Input
                 id="time"
                 placeholder="08:00 AM"
+                type="time"
                 disabled={loading}
                 value={form.time}
                 onChange={(e) => setForm({ ...form, time: e.target.value })}

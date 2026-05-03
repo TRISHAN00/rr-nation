@@ -15,13 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
-import { createMemberCoupons } from "@/services/admin/admin.member.coupon.service";
+import { createEventCoupon } from "@/services/admin/admin.event.coupon.service";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-export default function CreateCouponModal({ open, setOpen, onCoupons }) {
+export default function CreateEventCouponModal({ open, setOpen, onCoupons, eventId }) {
   const [coupons, setCoupons] = useState([
     {
+      eventId: eventId,
       code: "",
       discountType: "fixed",
       value: "",
@@ -43,6 +44,7 @@ export default function CreateCouponModal({ open, setOpen, onCoupons }) {
     setCoupons([
       ...coupons,
       {
+        eventId: eventId,
         code: "",
         discountType: "fixed",
         value: "",
@@ -61,6 +63,7 @@ export default function CreateCouponModal({ open, setOpen, onCoupons }) {
   const resetForm = () => {
     setCoupons([
       {
+        eventId: eventId,
         code: "",
         discountType: "fixed",
         value: "",
@@ -79,9 +82,10 @@ export default function CreateCouponModal({ open, setOpen, onCoupons }) {
         discountType: c.discountType,
         value: Number(c.value),
         usageLimit: Number(c.usageLimit),
+        eventId: eventId,
       }));
 
-      await createMemberCoupons(payload);
+      await createEventCoupon(payload);
 
       resetForm();
       setOpen(false);

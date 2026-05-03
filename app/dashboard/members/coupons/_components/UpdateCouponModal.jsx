@@ -21,7 +21,7 @@ import { Switch } from "@/app/components/ui/switch";
 import {
   toggleActiveInactive,
   updateMemberCoupon,
-} from "@/services/admin/admin.coupon.service";
+} from "@/services/admin/admin.member.coupon.service";
 
 import { useEffect, useState } from "react";
 

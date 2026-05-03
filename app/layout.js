@@ -16,7 +16,7 @@ const anta = Anta({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
         {children}
       </body>

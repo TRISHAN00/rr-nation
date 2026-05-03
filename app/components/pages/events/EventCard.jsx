@@ -3,8 +3,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { AspectRatio } from "../../ui/aspect-ratio";
 
+const EVENT_STATUS_CONFIG = {
+  live: { 
+    label: "LIVE", 
+    color: "bg-[#e11d48]", // Vibrant red for urgency
+    pulse: true 
+  },
+  virtual: { 
+    label: "VIRTUAL", 
+    color: "bg-[#00a19a]", // Your Brand Teal
+    pulse: false 
+  },
+  upcoming: { 
+    label: "UPCOMING", 
+    color: "bg-[#f39200]", // Your Flow Orange
+    pulse: false 
+  },
+  successful: { 
+    label: "SUCCESSFUL", 
+    color: "bg-[#001819]", // Your Dark Color
+    pulse: false 
+  },
+};
+
 export default function EventCard({ event, href }) {
+  console.log(event, href)
   if (!event) return null;
+
+  const statusKey = event?.eventType?.toLowerCase();
+  const status = EVENT_STATUS_CONFIG[statusKey] || EVENT_STATUS_CONFIG.upcoming;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -40,17 +67,17 @@ export default function EventCard({ event, href }) {
           className="bg-muted rounded-t-4xl overflow-hidden relative"
         >
           {/* 🔴 Live Status Pulse Indicator */}
-          {event?.eventType?.toLowerCase() === "live" && (
-            <div className="absolute top-3 left-3 z-30">
-              <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-brand backdrop-blur-md text-white text-[10px] font-bold tracking-widest shadow-lg">
+          <div className="absolute top-3 left-3 z-30">
+            <span className={`flex items-center gap-2 px-3 py-1 rounded-full ${status.color} backdrop-blur-md text-white text-[10px] font-bold tracking-widest shadow-lg`}>
+              {status.pulse && (
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                 </span>
-                LIVE
-              </span>
-            </div>
-          )}
+              )}
+              {status.label}
+            </span>
+          </div>
 
           <Image
             src={event?.thumbImage || "/images/placeholder.jpg"}

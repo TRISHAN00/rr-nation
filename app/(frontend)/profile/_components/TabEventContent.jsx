@@ -1,3 +1,4 @@
+import { Calendar } from "lucide-react";
 
 export default function TabEventContent() {
   return (

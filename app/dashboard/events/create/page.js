@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CouponList from "../_components/coupon/CouponList";
 import EventInfoForm from "./_components/EventInfoForm";
 import EventTickets from "./_components/EventTickets";
 import EventTshirt from "./_components/EventTshirt";
@@ -13,6 +14,9 @@ export default function EventCreatePage() {
     <div className=" space-y-8">
       {/* 1. Base Event Info */}
       <EventInfoForm onEventCreated={(id) => setEventId(id)} />
+
+      {/* Event Coupons */}
+      <CouponList eventId={eventId} />
 
       {/* 2. Successive Steps (Unlocked after ID exists) */}
       {eventId && (

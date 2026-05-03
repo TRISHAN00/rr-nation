@@ -58,19 +58,15 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function PublicLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${albertSans.variable} ${anta.variable} antialiased`}>
-        <AuthProvider>
-          <CartProvider>
-            <Toaster position="top-right" />
-            <Header />
-            {children}
-            <Footer />
-          </CartProvider>
-        </AuthProvider>
-      </body>
-    </html>
+    <AuthProvider>
+      <CartProvider>
+        <Toaster position="top-right" />
+        <Header />
+        {children}
+        <Footer />
+      </CartProvider>
+    </AuthProvider>
   );
 }

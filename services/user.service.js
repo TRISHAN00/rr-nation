@@ -5,8 +5,12 @@ export const updateProfile = async (payload) => {
   return data;
 };
 
-export const getProfileData = async () => {
-  const { data } = await api.get("/auth/user");
+export const getProfileData = async (token) => {
+  const { data } = await api.get("/auth/user", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return data.data.userData;
 };
 

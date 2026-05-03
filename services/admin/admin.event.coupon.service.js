@@ -1,5 +1,21 @@
 import api from "@/lib/api";
 
+// Get Coupons by Event ID
+export const getCouponsByEventId = async (eventId) => {
+  const { data } = await api.get(
+    `/admin/discount-coupon/${eventId}`
+  );
+  return data;
+};
+
+// Update Coupon by ID
+export const updateCouponById = (couponId, data) => {
+  return api.post(`/admin/discount-coupon/${couponId}`, data, {
+    headers: {  "X-HTTP-Method-Override": "PATCH" },
+  });
+}
+
+
 // Get ALL Coupons (Global List)
 export const getAllDashboardCoupons = async (page = 1, limit = 10) => {
   const { data } = await api.get(
@@ -8,7 +24,7 @@ export const getAllDashboardCoupons = async (page = 1, limit = 10) => {
   return data;
 };
 // Create Coupon (Note: API expects an array)
-export const createCoupon = (data) => {
+export const createEventCoupon = (data) => {
   return api.post(
     "/admin/discount-coupon",
     Array.isArray(data) ? data : [data],

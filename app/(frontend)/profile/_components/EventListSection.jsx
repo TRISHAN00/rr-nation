@@ -1,3 +1,5 @@
+import { Calendar, Clock } from "lucide-react";
+
 export default function EventListSection({ title, events, isPast }) {
   if (events.length === 0) return null;
   return (

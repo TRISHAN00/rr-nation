@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/app/components/ui/dialog";
+import { registerMember } from "@/services/member.service";
 import { useState } from "react";
 import { toast } from "sonner";
 import FillButton from "../../../common/FillButton";
@@ -29,6 +30,8 @@ export default function RegistrationForm({ agree }) {
     recommendationMessage: "",
     memberImage: null
   });
+
+  console.log(formData)
 
 
   const handleMemberSubmit = async (e) => {

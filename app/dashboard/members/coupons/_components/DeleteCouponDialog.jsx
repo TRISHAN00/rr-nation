@@ -2,12 +2,12 @@
 
 import { Button } from "@/app/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
 } from "@/app/components/ui/dialog";
-import { deleteMemberCoupon } from "@/services/admin/admin.coupon.service";
+import { deleteMemberCoupon } from "@/services/admin/admin.member.coupon.service";
 import { useState } from "react";
 
 export default function DeleteCouponDialog({

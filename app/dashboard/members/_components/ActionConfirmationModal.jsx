@@ -35,8 +35,6 @@ export default function ActionConfirmationModal({
   const [selectedType, setSelectedType] = useState("");
   const isApprove = type === "approve";
 
-  console.log(selectedMember)
-
   // Sync internal state with the selected member when modal opens
   useEffect(() => {
     if (selectedMember) {
@@ -45,9 +43,6 @@ export default function ActionConfirmationModal({
   }, [selectedMember, isOpen]);
 
   if (!selectedMember) return null;
-
-    console.log(selectedMember)
-
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
