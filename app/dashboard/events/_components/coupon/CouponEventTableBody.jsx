@@ -30,7 +30,6 @@ export default function CouponEventTableBody({
     };
 
     const handleDeleteClick = (coupon) => {
-        console.log("Delete clicked for coupon:", coupon);
         setSelectedCoupon(coupon);
         setDeleteOpen(true);
     };

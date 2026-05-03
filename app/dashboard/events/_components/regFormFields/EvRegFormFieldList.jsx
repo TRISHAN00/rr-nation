@@ -16,6 +16,8 @@ export default function EvRegFormFieldList({ eventId }) {
       setLoading(true);
       const res = await getRegistrationFormFields(eventId);
 
+      console.log("Fetched registration form fields:", res);
+
       setFields(res?.data || []);
     } catch (error) {
       console.log(error);
@@ -31,7 +33,7 @@ export default function EvRegFormFieldList({ eventId }) {
 
   return (
     <>
-      <EvRegPageHeader />
+      <EvRegPageHeader  eventId={eventId} onRefresh={fetchFields}  />
 
       <Card className={`border-border bg-card shadow-sm overflow-hidden`} >
         <CardContent className="p-0">
@@ -44,6 +46,7 @@ export default function EvRegFormFieldList({ eventId }) {
             <EvRegFormFieldTableBody
               loading={loading}
               fields={fields}
+              onRefresh={fetchFields}
             />
           </Table>
         </CardContent>

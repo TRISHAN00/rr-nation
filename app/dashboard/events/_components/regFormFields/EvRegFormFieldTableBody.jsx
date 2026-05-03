@@ -8,8 +8,7 @@ import { Asterisk, Pencil, Trash2 } from "lucide-react";
 export default function EvRegFormFieldTableBody({ 
     loading, 
     fields, // This is the 'data' array from your JSON
-    onEdit, 
-    onDelete 
+    onRefresh,
 }) {
     return (
         <TableBody>

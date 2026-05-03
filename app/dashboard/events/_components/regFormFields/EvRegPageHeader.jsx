@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import CreateEvRegFormFieldsModal from "./CreateEvRegFormFieldsModal";
 
-export default function EvRegPageHeader() {
+export default function EvRegPageHeader({ eventId, onRefresh }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="flex justify-between items-center mb-4">
@@ -12,6 +13,8 @@ export default function EvRegPageHeader() {
         <Plus />
         Add Field
       </Button>
+
+      <CreateEvRegFormFieldsModal open={open} setOpen={setOpen} eventId={eventId} onRefresh={onRefresh} />
     </div>
   )
 }
