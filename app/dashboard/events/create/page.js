@@ -4,7 +4,6 @@ import { useState } from "react";
 import CouponList from "../_components/coupon/CouponList";
 import EventInfoForm from "./_components/EventInfoForm";
 import EventTickets from "./_components/EventTickets";
-import EventTshirt from "./_components/EventTshirt";
 import { RegistrationFormSettings } from "./_components/RegistrationFormSettings";
 
 export default function EventCreatePage() {
@@ -16,13 +15,13 @@ export default function EventCreatePage() {
       <EventInfoForm onEventCreated={(id) => setEventId(id)} />
 
       {/* Event Coupons */}
-      <CouponList eventId={eventId} />
 
       {/* 2. Successive Steps (Unlocked after ID exists) */}
       {eventId && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+          <CouponList eventId={eventId} />
           <EventTickets eventId={eventId} />
-          <EventTshirt eventId={eventId} />
+          {/* <EventTshirt eventId={eventId} /> */}
           <RegistrationFormSettings eventId={eventId} />
         </div>
       )}

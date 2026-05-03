@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import CouponList from "../../_components/coupon/CouponList";
 import EventInfoForm from "../../create/_components/EventInfoForm";
 import EventTickets from "../../create/_components/EventTickets";
-import EventTshirt from "../../create/_components/EventTshirt";
 
 export default function DashboardEventEdit() {
   const { id } = useParams();
@@ -33,7 +32,7 @@ export default function DashboardEventEdit() {
 
       {/* Pass the ID to the sub-components */}
       <EventTickets eventId={id} />
-      <EventTshirt eventId={id} />
+      {/* <EventTshirt eventId={id} /> */}
     </div>
   );
 }
