@@ -15,9 +15,6 @@ export default function EvRegFormFieldList({ eventId }) {
     try {
       setLoading(true);
       const res = await getRegistrationFormFields(eventId);
-
-      console.log("Fetched registration form fields:", res);
-
       setFields(res?.data || []);
     } catch (error) {
       console.log(error);
@@ -33,7 +30,7 @@ export default function EvRegFormFieldList({ eventId }) {
 
   return (
     <>
-      <EvRegPageHeader  eventId={eventId} onRefresh={fetchFields}  />
+      <EvRegPageHeader eventId={eventId} onRefresh={fetchFields} />
 
       <Card className={`border-border bg-card shadow-sm overflow-hidden`} >
         <CardContent className="p-0">
@@ -48,6 +45,18 @@ export default function EvRegFormFieldList({ eventId }) {
               fields={fields}
               onRefresh={fetchFields}
             />
+
+            {/* EMPTY STATE - FIXED NESTING */}
+            {!loading && fields.length === 0 && (
+              <tbody>
+                <tr>
+                  <td colSpan={100} className="py-12 text-center text-muted-foreground">
+                    No fields found.
+                  </td>
+                </tr>
+              </tbody>
+            )}
+
           </Table>
         </CardContent>
       </Card>

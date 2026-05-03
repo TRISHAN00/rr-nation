@@ -44,11 +44,15 @@ export default function CouponList({ eventId }) {
                             onRefresh={fetchCoupons}
                         />
 
-                        {/* EMPTY STATE */}
+                        {/* EMPTY STATE - FIXED NESTING */}
                         {!loading && coupons.length === 0 && (
-                            <div className="py-12 text-center text-muted-foreground">
-                                No coupons found.
-                            </div>
+                            <tbody>
+                                <tr>
+                                    <td colSpan={100} className="py-12 text-center text-muted-foreground">
+                                        No coupons found.
+                                    </td>
+                                </tr>
+                            </tbody>
                         )}
                     </Table>
                 </CardContent>
