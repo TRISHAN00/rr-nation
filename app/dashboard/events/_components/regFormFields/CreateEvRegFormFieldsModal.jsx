@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/app/components/ui/button";
-import { Checkbox } from "@/app/components/ui/checkbox"; // Added for 'required' and 'enabled'
+import { Checkbox } from "@/app/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -17,9 +17,8 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { createRegistrationFields } from "@/services/admin/admin.regFormField.service";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
-// Import your actual registration field service here
 
 export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, eventId }) {
   const [fields, setFields] = useState([
@@ -28,7 +27,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
       label: "",
       type: "text",
       placeholder: "",
-      options: [], // Handled as empty for now or can be expanded
+      options: [],
       order: 0,
       required: true,
       enabled: true,
@@ -37,9 +36,14 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
 
   const [loading, setLoading] = useState(false);
 
+  // --- Core Field Logic ---
   const handleChange = (index, field, value) => {
     const updated = [...fields];
     updated[index][field] = value;
+    // If user switches away from 'select', clear the options
+    if (field === "type" && value !== "select") {
+      updated[index].options = [];
+    }
     setFields(updated);
   };
 
@@ -64,6 +68,33 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
     setFields(updated);
   };
 
+  // --- Options Management Logic ---
+  const addOption = (fieldIndex) => {
+    const updated = [...fields];
+    updated[fieldIndex].options.push({ label: "", value: "" });
+    setFields(updated);
+  };
+
+  const updateOption = (fieldIndex, optionIndex, key, value) => {
+    const updated = [...fields];
+    updated[fieldIndex].options[optionIndex][key] = value;
+    
+    // Auto-generate 'value' if label is typed and value is empty
+    if (key === "label" && !updated[fieldIndex].options[optionIndex].value) {
+      updated[fieldIndex].options[optionIndex].value = value
+        .toLowerCase()
+        .replace(/\s+/g, "_")
+        .replace(/[^a-z0-9_]/g, "");
+    }
+    setFields(updated);
+  };
+
+  const removeOption = (fieldIndex, optionIndex) => {
+    const updated = [...fields];
+    updated[fieldIndex].options = updated[fieldIndex].options.filter((_, i) => i !== optionIndex);
+    setFields(updated);
+  };
+
   const resetForm = () => {
     setFields([
       {
@@ -82,19 +113,22 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
   const handleSubmit = async () => {
     try {
       setLoading(true);
- 
+
       const payload = fields.map((f) => ({
         eventId: Number(eventId),
         label: f.label.trim(),
         type: f.type,
         placeholder: f.placeholder.trim(),
-        options: f.options, 
+        // Clean options: only send if type is select and label isn't empty
+        options: f.type === "select" 
+          ? f.options.filter(opt => opt.label.trim() !== "") 
+          : [],
         order: Number(f.order),
         required: Boolean(f.required),
         enabled: Boolean(f.enabled),
       }));
 
-      await createRegistrationFields (payload);
+      await createRegistrationFields(payload);
 
       resetForm();
       setOpen(false);
@@ -114,7 +148,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
         if (!val) resetForm();
       }}
     >
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl bg-[#0a0a0a] text-white border-zinc-800">
         <DialogHeader>
           <DialogTitle>Add Registration Form Fields</DialogTitle>
         </DialogHeader>
@@ -123,30 +157,29 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
           {fields.map((field, index) => (
             <div
               key={index}
-              className="flex flex-col gap-4 border p-4 rounded-lg bg-muted/20"
+              className="flex flex-col gap-4 border border-zinc-800 p-4 rounded-lg bg-zinc-900/50"
             >
               <div className="grid md:grid-cols-4 gap-3">
-                {/* Label */}
                 <div className="space-y-1">
-                  <label className="text-xs font-medium">Label</label>
+                  <label className="text-xs font-medium text-zinc-400">Label</label>
                   <Input
                     placeholder="e.g. Full Name"
                     value={field.label}
+                    className="bg-zinc-950 border-zinc-800"
                     onChange={(e) => handleChange(index, "label", e.target.value)}
                   />
                 </div>
 
-                {/* Type */}
                 <div className="space-y-1">
-                  <label className="text-xs font-medium">Type</label>
+                  <label className="text-xs font-medium text-zinc-400">Type</label>
                   <Select
                     value={field.type}
                     onValueChange={(val) => handleChange(index, "type", val)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-zinc-950 border-zinc-800">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-zinc-950 border-zinc-800 text-white">
                       <SelectItem value="text">Text</SelectItem>
                       <SelectItem value="email">Email</SelectItem>
                       <SelectItem value="number">Number</SelectItem>
@@ -156,28 +189,77 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
                   </Select>
                 </div>
 
-                {/* Placeholder */}
                 <div className="space-y-1">
-                  <label className="text-xs font-medium">Placeholder</label>
+                  <label className="text-xs font-medium text-zinc-400">Placeholder</label>
                   <Input
                     placeholder="Enter your..."
                     value={field.placeholder}
+                    className="bg-zinc-950 border-zinc-800"
                     onChange={(e) => handleChange(index, "placeholder", e.target.value)}
                   />
                 </div>
 
-                {/* Order */}
                 <div className="space-y-1">
-                  <label className="text-xs font-medium">Sort Order</label>
+                  <label className="text-xs font-medium text-zinc-400">Sort Order</label>
                   <Input
                     type="number"
                     value={field.order}
+                    className="bg-zinc-950 border-zinc-800"
                     onChange={(e) => handleChange(index, "order", e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t pt-3">
+              {/* Options UI - Triggered by Select type */}
+              {field.type === "select" && (
+                <div className="bg-zinc-950/50 p-4 rounded-md border border-dashed border-zinc-700 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-zinc-300">Dropdown Options</span>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => addOption(index)}
+                      className="h-8 border-zinc-700 hover:bg-zinc-800"
+                    >
+                      <Plus className="h-4 w-4 mr-1" /> Add Option
+                    </Button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {field.options.map((opt, optIndex) => (
+                      <div key={optIndex} className="flex gap-2 items-center">
+                        <Input
+                          placeholder="Label (Option A)"
+                          value={opt.label}
+                          className="bg-zinc-900 border-zinc-800 h-9"
+                          onChange={(e) => updateOption(index, optIndex, "label", e.target.value)}
+                        />
+                        <Input
+                          placeholder="Value (option_a)"
+                          value={opt.value}
+                          className="bg-zinc-900 border-zinc-800 h-9"
+                          onChange={(e) => updateOption(index, optIndex, "value", e.target.value)}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeOption(index, optIndex)}
+                          className="text-zinc-500 hover:text-red-500 hover:bg-red-500/10"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    {field.options.length === 0 && (
+                      <p className="text-xs text-zinc-500 italic text-center py-2">
+                        No options added yet.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between border-t border-zinc-800 pt-3">
                 <div className="flex gap-6">
                   <div className="flex items-center space-x-2">
                     <Checkbox
@@ -185,7 +267,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
                       checked={field.required}
                       onCheckedChange={(val) => handleChange(index, "required", val)}
                     />
-                    <label htmlFor={`req-${index}`} className="text-sm cursor-pointer">Required</label>
+                    <label htmlFor={`req-${index}`} className="text-sm text-zinc-300 cursor-pointer">Required</label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox
@@ -193,14 +275,14 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
                       checked={field.enabled}
                       onCheckedChange={(val) => handleChange(index, "enabled", val)}
                     />
-                    <label htmlFor={`en-${index}`} className="text-sm cursor-pointer">Enabled</label>
+                    <label htmlFor={`en-${index}`} className="text-sm text-zinc-300 cursor-pointer">Enabled</label>
                   </div>
                 </div>
 
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
                   onClick={() => removeField(index)}
                   disabled={fields.length === 1}
                 >
@@ -211,14 +293,18 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
           ))}
         </div>
 
-        <div className="flex justify-between pt-4 border-t">
-          <Button variant="outline" onClick={addField}>
+        <div className="flex justify-between pt-4 border-t border-zinc-800">
+          <Button variant="outline" className="border-zinc-700" onClick={addField}>
             <Plus className="h-4 w-4 mr-1" /> Add Another Field
           </Button>
 
           <div className="flex gap-3">
             <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={handleSubmit} disabled={loading}>
+            <Button 
+              onClick={handleSubmit} 
+              className="bg-white text-black hover:bg-zinc-200" 
+              disabled={loading}
+            >
               {loading ? "Saving..." : "Save All Fields"}
             </Button>
           </div>
