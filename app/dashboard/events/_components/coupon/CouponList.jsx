@@ -1,10 +1,10 @@
 import { Card, CardContent } from "@/app/components/ui/card";
 import { Table } from "@/app/components/ui/table";
-import CouponMemberTableBody from "@/app/dashboard/members/coupons/_components/CouponMemberTableBody";
-import CouponMemberTableHeader from "@/app/dashboard/members/coupons/_components/CouponMemberTableHeader";
 import { getCouponsByEventId } from "@/services/admin/admin.event.coupon.service";
 import { useEffect, useState } from "react";
 import CouponEventPageHeader from "./CouponEventPageHeader";
+import CouponEventTableBody from "./CouponEventTableBody";
+import CouponEventTableHeader from "./CouponEventTableHeader";
 
 export default function CouponList({ eventId }) {
     const [coupons, setCoupons] = useState([]);
@@ -29,16 +29,18 @@ export default function CouponList({ eventId }) {
     return (
         <>
             <CouponEventPageHeader onCoupons={fetchCoupons} eventId={eventId} />
+
             <Card className={`border-border bg-card shadow-sm overflow-hidden`} >
                 <CardContent className="p-0">
                     <Table>
                         {/* HEADER */}
-                        <CouponMemberTableHeader />
+                        <CouponEventTableHeader />
 
                         {/* BODY */}
-                        <CouponMemberTableBody
+                        <CouponEventTableBody
                             loading={loading}
                             coupons={coupons}
+                            eventId={eventId}
                             onRefresh={fetchCoupons}
                         />
 

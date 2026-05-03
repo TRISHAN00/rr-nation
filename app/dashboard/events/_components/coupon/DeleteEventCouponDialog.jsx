@@ -2,15 +2,15 @@
 
 import { Button } from "@/app/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
 } from "@/app/components/ui/dialog";
-import { deleteMemberCoupon } from "@/services/admin/admin.member.coupon.service";
+import { deleteEventCoupon } from "@/services/admin/admin.event.coupon.service";
 import { useState } from "react";
 
-export default function DeleteCouponDialog({
+export default function DeleteEventCouponDialog({
   open,
   setOpen,
   couponId,
@@ -22,7 +22,7 @@ export default function DeleteCouponDialog({
     try {
       setLoading(true);
 
-      await deleteMemberCoupon(couponId);
+      await deleteEventCoupon(couponId);
 
       onSuccess();
       setOpen(false);

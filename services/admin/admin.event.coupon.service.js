@@ -9,10 +9,18 @@ export const getCouponsByEventId = async (eventId) => {
 };
 
 // Update Coupon by ID
-export const updateCouponById = (couponId, data) => {
-  return api.post(`/admin/discount-coupon/${couponId}`, data, {
-    headers: {  "X-HTTP-Method-Override": "PATCH" },
-  });
+export const updateCouponById = (eventId, payload) => {
+  return api.patch(`/admin/discount-coupon/${eventId}`, payload);
+}
+
+// PATCH Active / Inactive Coupon
+export const toggleEventCouponActiveInactive = async (couponId) => {
+  const { data } = await api.patch(`/admin/discount-coupon/active-deactive/${couponId}`)
+}
+
+// DELETE Coupon
+export const deleteEventCoupon = async (discountCouponId) => {
+  return await api.delete(`/admin/discount-coupon/${discountCouponId}`)
 }
 
 
