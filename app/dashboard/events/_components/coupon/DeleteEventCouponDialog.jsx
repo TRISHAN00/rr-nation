@@ -2,10 +2,10 @@
 
 import { Button } from "@/app/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/app/components/ui/dialog";
 import { deleteEventCoupon } from "@/services/admin/admin.event.coupon.service";
 import { useState } from "react";
