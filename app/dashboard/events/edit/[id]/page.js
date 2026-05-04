@@ -8,7 +8,6 @@ import CouponList from "../../_components/coupon/CouponList";
 import EvRegFormFieldList from "../../_components/regFormFields/EvRegFormFieldList";
 import EvTicketList from "../../_components/ticket/EvTicketList";
 import EventInfoForm from "../../create/_components/EventInfoForm";
-import EventTickets from "../../create/_components/EventTickets";
 
 export default function DashboardEventEdit() {
   const { id } = useParams();
@@ -38,7 +37,6 @@ export default function DashboardEventEdit() {
       {/* Event Tickets */}
       <EvTicketList eventId={id} />
 
-      <EventTickets eventId={id} />
     </div>
   );
 }
