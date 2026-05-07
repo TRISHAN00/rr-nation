@@ -11,7 +11,9 @@ import { Label } from "@/app/components/ui/label";
 import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { getProfileData } from "@/services/user.service";
-import { Chrome, Eye, EyeOffIcon } from "lucide-react";
+import clsx from "clsx";
+import { Eye, EyeOffIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function LoginPage({ redirectTo = "/" }) {
@@ -178,7 +180,15 @@ export default function LoginPage({ redirectTo = "/" }) {
           onClick={onGoogleLogin}
           className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-2.5 rounded-xl font-medium hover:bg-gray-50 transition-all disabled:opacity-50 shadow-sm"
         >
-          <Chrome className="w-5 h-5 text-[#4285F4]" />
+         
+          <Image
+                  src="/static/GOOGLE_LOGO.png"
+                  alt="Run Rise Nation"
+                  priority
+                  className={clsx("w-[20px] h-auto sm:w-[20px] md:w-[20px] xl:w-[20px]")}
+                  width={20}
+                  height={20}
+                />
           <span>Continue with Google</span>
         </button>
 
