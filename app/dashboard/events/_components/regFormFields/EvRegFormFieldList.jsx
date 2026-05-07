@@ -23,7 +23,6 @@ export default function EvRegFormFieldList({ eventId }) {
     }
   };
 
-
   useEffect(() => {
     fetchFields();
   }, []);

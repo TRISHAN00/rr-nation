@@ -1,6 +1,6 @@
 "use client";
 import CartDetailModal from "@/app/components/modal/CartDetailModal";
-import { deleteCartItem, eventAddToCart, getCartItems } from "@/services/cart.service";
+import { deleteCartItem, eventAddToCartV2 } from "@/services/cart.service";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext(null);
@@ -23,30 +23,19 @@ export function CartProvider({ children }) {
       const items = getGuestItems();
       setCartData({
         id: "guest",
-        // Calculate total correctly from the package price
         totalAmount: items.reduce((acc, curr) => acc + (Number(curr.package?.price) || 0), 0).toFixed(2),
         items: items.map(item => ({
-          // CRITICAL: We map tempId to "id" so the Modal/UI sees a unique value
-          id: item.tempId || item.eventTicketId,
+          id: item.tempId, // Used for deletion
           itemType: "ticket",
           quantity: item.quantity,
           unitPrice: item.package?.price,
-          participant: item.participant,
-          eventTicket: {
-            ...item.package,
-            event: item.package?.event // Ensure nested event data is preserved
-          }
+          participant: item.participant, // This is the object with dynamic fields
+          package: item.package
         }))
       });
       return;
     }
-
-    try {
-      const response = await getCartItems();
-      if (response?.data) setCartData(response.data);
-    } catch (err) {
-      console.error("Cart fetch error.");
-    }
+    // ... authenticated fetch logic
   }, []);
 
   // Professional Sync Function
@@ -55,25 +44,54 @@ export function CartProvider({ children }) {
     if (items.length === 0) return;
 
     try {
-      // Loop through guest items and call your API
       for (const item of items) {
-        await eventAddToCart(item);
+        // Re-construct FormData from guest items for the API
+        const data = new FormData();
+        data.append("eventTicketId", item.eventTicketId);
+        data.append("quantity", item.quantity);
+
+        const formattedFields = Object.entries(item.participant).map(([key, value]) => ({
+          name: key,
+          value: value,
+        }));
+        data.append("formData", JSON.stringify(formattedFields));
+
+        await eventAddToCartV2(data);
       }
       localStorage.removeItem(GUEST_CART_KEY);
       await fetchCart();
     } catch (error) {
-      console.error("Sync error:", error);
+      console.error("Failed to sync guest cart:", error);
     }
   };
 
-  const addToCart = async (payload) => {
-    const token = localStorage.getItem("authToken");
+  const addToCart = async (payload, rawDataForGuest) => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+
     if (token) {
-      await eventAddToCart(payload);
+      // Logged in: API expects FormData
+      await eventAddToCartV2(payload);
     } else {
-      const currentItems = getGuestItems();
-      localStorage.setItem(GUEST_CART_KEY, JSON.stringify([...currentItems, payload]));
+      // Guest: LocalStorage needs a plain Object
+      // Check if rawDataForGuest exists to avoid the 'tempId' error
+      if (!rawDataForGuest) {
+        console.error("Guest data is missing!");
+        return;
+      }
+
+      const currentItems = JSON.parse(localStorage.getItem(GUEST_CART_KEY) || "[]");
+
+      const newGuestItem = {
+        tempId: rawDataForGuest.tempId, // This line caused your error
+        eventTicketId: rawDataForGuest.eventTicketId || payload.get("eventTicketId"),
+        quantity: 1,
+        formData: rawDataForGuest,
+        package: rawDataForGuest.pak
+      };
+
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify([...currentItems, newGuestItem]));
     }
+
     await fetchCart();
     setIsCartOpen(true);
   };

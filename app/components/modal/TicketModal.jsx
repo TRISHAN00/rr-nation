@@ -7,8 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/app/components/ui/dialog";
-import { useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 export default function TicketModal({
@@ -17,114 +16,65 @@ export default function TicketModal({
   onAddToCart,
   eventTicketId,
   pak,
+  regFields = [],
 }) {
-  const tshirtOptions = [
-    { label: 'XS (Chest: 36", Length: 25")', value: "XS" },
-    { label: 'S (Chest: 38", Length: 26")', value: "S" },
-    { label: 'M (Chest: 40", Length: 27")', value: "M" },
-    { label: 'L (Chest: 42", Length: 28")', value: "L" },
-    { label: 'XL (Chest: 44", Length: 29")', value: "XL" },
-    { label: '2XL (Chest: 46", Length: 30")', value: "2XL" },
-    { label: '3XL (Chest: 48", Length: 31")', value: "3XL" },
-    { label: '4XL (Chest: 50", Length: 32")', value: "4XL" },
-    { label: '3-4 Years (Chest: 26", Length: 18")', value: "3-4 Years" },
-    { label: '5-6 Years (Chest: 28", Length: 19")', value: "5-6 Years" },
-    { label: '7-8 Years (Chest: 30", Length: 20")', value: "7-8 Years" },
-    { label: '9-10 Years (Chest: 32", Length: 22")', value: "9-10 Years" },
-    { label: '11-12 Years (Chest: 34", Length: 24")', value: "11-12 Years" },
-  ];
 
-  const fields = [
-    { name: "name", type: "text", required: true },
-    { name: "email", type: "email", required: false },
-    { name: "contactNumber", type: "tel", required: true },
-    {
-      name: "ageCategory",
-      type: "select",
-      options: ["General", "Veteran (50+)"],
-      required: true,
-    },
-    {
-      name: "tshirtSize",
-      type: "select",
-      required: true,
-      options: tshirtOptions,
-    },
-    {
-      name: "gender",
-      type: "select",
-      options: ["Male", "Female", "Other"],
-      required: true,
-    },
-    { name: "dateOfBirth", type: "date", required: true },
-    {
-      name: "bloodGroup",
-      type: "select",
-      required: false,
-      options: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
-    },
-    { name: "emergencyContactName", type: "text", required: false },
-    { name: "emergencyContactNumber", type: "tel", required: false },
-    { name: "communityName", type: "text", required: false },
-    {
-      name: "runnerCategory",
-      type: "select",
-      options: ["Amateur", "Elite"],
-      required: true,
-    },
-  ];
+  console.log("Received regFields in TicketModal:", regFields); // Debug log to check the regFields structure
 
-  const initialState = fields.reduce(
-    (acc, field) => ({ ...acc, [field.name]: "" }),
-    {},
+  const [formData, setFormData] = useState(
+    regFields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {})
   );
-
-  const [formData, setFormData] = useState(initialState);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (regFields.length > 0) {
+      const initialState = regFields.reduce((acc, field) => {
+        // Map the field "name" (from JSON) to the state key
+        acc[field.name] = "";
+        return acc;
+      }, {});
+      setFormData(initialState);
+    }
+  }, [regFields]);
+
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "number" ? (value === "" ? "" : Number(value)) : value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const emptyField = fields.find((f) => f.required && !formData[f.name]);
-    if (emptyField) {
-      toast.error(`Please fill the required field: ${emptyField.name}`);
-      return;
-    }
+  // Inside TicketModal.js - Update the handleSubmit function
 
-    setLoading(true);
-    const payload = {
-      tempId: Date.now() + Math.random().toString(36).substr(2, 9),
-      eventTicketId,
-      quantity: 1,
-      package: { ...pak },
-      participant: {
-        ...formData,
-        distanceCategory: pak?.distance,
-      },
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // 1. Format for API
+    const formattedFields = Object.entries(formData).map(([key, value]) => ({
+      name: key,
+      value: value,
+    }));
+
+    // 2. Prepare Multipart Payload
+    const data = new FormData();
+    data.append("eventTicketId", eventTicketId);
+    data.append("quantity", 1);
+    data.append("formData", JSON.stringify(formattedFields));
+
+    // This is the object that was "undefined" in your error
+    const rawDataForGuest = {
+      ...formData,
+      tempId: Date.now().toString(),
+      pak: pak // Include package info for price/name display
     };
 
-    if (onAddToCart) {
-      onAddToCart(payload).then(() => {
-        setLoading(false);
-        onOpenChange(false);
-        setFormData(initialState);
-      });
-    }
+    // Pass BOTH arguments
+    await onAddToCart(data, rawDataForGuest);
+    onOpenChange(false);
   };
+
+  if (!isOpen) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      {/* max-h-[90dvh] handles the dynamic height on mobile browsers */}
       <DialogContent className="max-w-3xl w-[95%] sm:w-full max-h-[90dvh] flex flex-col p-0 overflow-hidden gap-0">
-
-        {/* Fixed Header */}
         <DialogHeader className="shrink-0 border-b p-5 bg-white z-10">
           <DialogTitle className="text-lg sm:text-xl font-bold text-dark">
             {pak?.name}
@@ -134,61 +84,101 @@ export default function TicketModal({
           </p>
         </DialogHeader>
 
-        {/* Scrollable Form Area */}
-        <form
-          className="flex-1 overflow-y-auto pb-32 md:pb-4"
-          onSubmit={handleSubmit}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-5 ">
-            {fields.map((field) => {
-              const label = field.name
-                .replace(/([A-Z])/g, " $1")
-                .replace(/^./, (str) => str.toUpperCase());
-
-              return (
-                <div key={field.name} className="flex flex-col">
+        <form className="flex-1 overflow-y-auto pb-32 md:pb-4" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-5">
+            {/* 3. Map through the dynamic regFields from props */}
+            {regFields
+              .sort((a, b) => a.order - b.order)
+              .map((field) => (
+                <div
+                  key={field.id || field.name}
+                  className={`flex flex-col ${field.type === "checkbox" || field.type === "radio" ? "md:col-span-1" : ""}`}
+                >
                   <label className="mb-1.5 text-xs sm:text-sm font-bold text-gray-700 uppercase tracking-tight">
-                    {label}{" "}
-                    {field.required && <span className="text-red-500">*</span>}
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
                   </label>
 
+                  {/* 1. SELECT DROPDOWN */}
                   {field.type === "select" ? (
                     <select
                       name={field.name}
-                      value={formData[field.name]}
+                      value={formData[field.name] || ""}
                       onChange={handleChange}
-                      className="h-11 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-white text-sm appearance-none border-gray-200"
+                      className="h-11 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-white text-sm border-gray-200"
                       required={field.required}
                     >
-                      <option value="">Select {label}</option>
-                      {field.options.map((option) => {
-                        const isObj = typeof option === "object";
-                        const val = isObj ? option.value : option;
-                        const text = isObj ? option.label : option;
-                        return (
-                          <option key={val} value={val}>
-                            {text}
-                          </option>
-                        );
-                      })}
+                      <option value="">{field.placeholder || `Select ${field.label}`}</option>
+                      {field.options?.map((option, idx) => (
+                        <option key={idx} value={option.value}>{option.label}</option>
+                      ))}
                     </select>
-                  ) : (
-                    <input
-                      type={field.type}
-                      name={field.name}
-                      value={formData[field.name]}
-                      onChange={handleChange}
-                      placeholder={`Enter ${label.toLowerCase()}`}
-                      className="h-11 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-sm border-gray-200 placeholder:text-gray-400"
-                      required={field.required}
-                    />
-                  )}
+                  ) :
+
+                    /* 2. CHECKBOX */
+                    field.type === "checkbox" ? (
+                      <div className="flex items-center h-11 gap-3">
+                        <input
+                          type="checkbox"
+                          name={field.name}
+                          checked={!!formData[field.name]}
+                          onChange={(e) => setFormData({ ...formData, [field.name]: e.target.checked })}
+                          className="w-5 h-5 accent-brand border-gray-300 rounded"
+                          required={field.required}
+                        />
+                        <span className="text-sm text-gray-600">{field.placeholder || "I agree"}</span>
+                      </div>
+                    ) :
+
+                      /* 3. RADIO BUTTONS */
+                      field.type === "radio" ? (
+                        <div className="flex flex-wrap gap-4 h-11 items-center">
+                          {field.options?.map((option, idx) => (
+                            <label key={idx} className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name={field.name}
+                                value={option.value}
+                                checked={formData[field.name] === option.value}
+                                onChange={handleChange}
+                                className="w-4 h-4 accent-brand"
+                                required={field.required}
+                              />
+                              <span className="text-sm text-gray-600">{option.label}</span>
+                            </label>
+                          ))}
+                        </div>
+                      ) :
+
+                        /* 4. FILE UPLOAD */
+                        field.type === "file" ? (
+                          <input
+                            type="file"
+                            name={field.name}
+                            onChange={(e) => setFormData({ ...formData, [field.name]: e.target.files[0] })}
+                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand/10 file:text-brand hover:file:bg-brand/20 cursor-pointer"
+                            required={field.required}
+                          />
+                        ) :
+
+                          /* 5. STANDARD INPUTS (tel, date, text, email, number) */
+                          (
+                            <input
+                              type={field.type} // date, tel, email, number, etc.
+                              name={field.name}
+                              value={formData[field.name] || ""}
+                              onChange={handleChange}
+                              placeholder={field.placeholder}
+                              // Enhances mobile experience for phone/numbers
+                              inputMode={field.type === "tel" ? "tel" : field.type === "number" ? "numeric" : "text"}
+                              className="h-11 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-sm border-gray-200"
+                              required={field.required}
+                            />
+                          )}
                 </div>
-              );
-            })}
+              ))}
           </div>
 
-          {/* Sticky Footer for Form Actions */}
           <div className="absolute bottom-0 left-0 right-0 md:relative flex flex-col-reverse sm:flex-row justify-end gap-3 p-4 sm:p-6 bg-white border-t border-gray-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] md:shadow-none">
             <DialogClose asChild>
               <button
@@ -208,6 +198,6 @@ export default function TicketModal({
           </div>
         </form>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 }

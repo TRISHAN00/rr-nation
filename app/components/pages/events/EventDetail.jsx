@@ -1,4 +1,5 @@
 "use client";
+import { getRegFieldByEventId } from "@/services/regfield.service";
 import { getEventBySlug } from "@/services/user.service";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -13,13 +14,32 @@ export default function EventDetail() {
   const { slug } = useParams();
 
   const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [regFields, setRegFields] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRegFields = async (eventId) => {
+    try {
+      const res = await getRegFieldByEventId(eventId);
+      setRegFields(res?.data || []);
+
+    } catch (err) {
+      console.error("Failed to load registration fields", err);
+    }
+  };
+
 
   const fetchEvent = async () => {
     try {
+      setLoading(true);
       const res = await getEventBySlug(slug);
+      const eventData = res?.data?.data || null;
 
-      setEvent(res?.data?.data || null);
+      setEvent(eventData);
+
+      // Fetch registration fields immediately once we have the ID
+      if (eventData?.id) {
+        await fetchRegFields(eventData.id);
+      }
     } catch (err) {
       console.error("Failed to load event", err);
     } finally {
@@ -27,10 +47,13 @@ export default function EventDetail() {
     }
   };
 
-
   useEffect(() => {
-    if (slug) fetchEvent();
+    if (slug) {
+      fetchEvent();
+    }
   }, [slug]);
+
+  if (loading) return <div className="py-20 text-center">Loading event details...</div>;
 
   return (
     <>
@@ -81,6 +104,7 @@ export default function EventDetail() {
                 price={pak.price}
                 pak={pak}
                 event={event}
+                regFields={regFields}
               />
             </div>
           ))}

@@ -9,6 +9,12 @@ export const eventAddToCart = async (cartItem) => {
   return api.post(`/auth/user/cart/item/add-to-cart`, cartItem);
 };
 
+// POST Add to Cart V2
+export const eventAddToCartV2 = async (cartItem) => {
+  return api.post(`/auth/user/v2/cart/item/add-to-cart`, cartItem);
+};
+
+
 
 // Added Delete Function
 export const deleteCartItem = async (cartItemId) => {

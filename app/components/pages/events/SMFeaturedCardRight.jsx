@@ -3,20 +3,23 @@ import FillButton from "@/app/components/common/FillButton";
 import TicketModal from "@/app/components/modal/TicketModal";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
+import { toast } from "sonner";
 
-export default function SMFeaturedCardRight({ bgColor, price, event, pak, isSoldOut }) {
+export default function SMFeaturedCardRight({ bgColor, price, event, pak, isSoldOut, regFields }) {
   const [open, setOpen] = useState(false);
   const { addToCart } = useCart();
 
 
-  const handleAddToCart = async (ticketData) => {
-    try {
-      // This now handles both Guest (localStorage) and User (API)
-      await addToCart(ticketData);
-    } catch (error) {
-      console.error("Cart error:", error);
-    }
-  };
+const handleAddToCart = async (formDataPayload, rawDataForGuest) => {
+  try {
+    // Pass both the FormData and the Raw Object to the Context
+    await addToCart(formDataPayload, rawDataForGuest);
+    toast.success("Ticket added to cart!");
+  } catch (error) {
+    console.error("Cart error:", error);
+    toast.error("Failed to add ticket to cart.");
+  }
+};
 
   const handleTicketClick = () => {
     setOpen(true);
@@ -30,6 +33,7 @@ export default function SMFeaturedCardRight({ bgColor, price, event, pak, isSold
         onAddToCart={handleAddToCart}
         eventTicketId={pak?.id}
         pak={pak}
+        regFields={regFields}
       />
 
       <div
@@ -44,7 +48,7 @@ export default function SMFeaturedCardRight({ bgColor, price, event, pak, isSold
         </div>
 
         <div>
-          <span className="text-white text-[10px] leading-[11px]">BDT</span>
+          <span className="text-white text-[10px] leading-2.75">BDT</span>
           <div className="flex items-end gap-2 mt-2">
             <h3 className="text-white text-2xl sm:text-3xl lg:text-4xl leading-8">
               {price}

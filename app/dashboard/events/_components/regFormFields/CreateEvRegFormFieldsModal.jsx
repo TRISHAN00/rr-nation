@@ -78,7 +78,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
   const updateOption = (fieldIndex, optionIndex, key, value) => {
     const updated = [...fields];
     updated[fieldIndex].options[optionIndex][key] = value;
-    
+
     // Auto-generate 'value' if label is typed and value is empty
     if (key === "label" && !updated[fieldIndex].options[optionIndex].value) {
       updated[fieldIndex].options[optionIndex].value = value
@@ -119,9 +119,9 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
         label: f.label.trim(),
         type: f.type,
         placeholder: f.placeholder.trim(),
-        // Clean options: only send if type is select and label isn't empty
-        options: f.type === "select" 
-          ? f.options.filter(opt => opt.label.trim() !== "") 
+        // Clean options for Select, Radio, and Checkbox
+        options: ["select", "radio", "checkbox"].includes(f.type)
+          ? f.options.filter(opt => opt.label.trim() !== "")
           : [],
         order: Number(f.order),
         required: Boolean(f.required),
@@ -183,7 +183,11 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
                       <SelectItem value="text">Text</SelectItem>
                       <SelectItem value="email">Email</SelectItem>
                       <SelectItem value="number">Number</SelectItem>
+                      <SelectItem value="date">Date</SelectItem>
                       <SelectItem value="file">File</SelectItem>
+                      <SelectItem value="radio">Radio</SelectItem>
+                      <SelectItem value="checkbox">Checkbox</SelectItem>
+                      <SelectItem value="textarea">Textarea</SelectItem>
                       <SelectItem value="select">Select / Dropdown</SelectItem>
                     </SelectContent>
                   </Select>
@@ -210,14 +214,18 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
                 </div>
               </div>
 
-              {/* Options UI - Triggered by Select type */}
-              {field.type === "select" && (
+              {/* Options UI - Triggered by Select, Radio, or Checkbox types */}
+              {["select", "radio", "checkbox"].includes(field.type) && (
                 <div className="bg-zinc-950/50 p-4 rounded-md border border-dashed border-zinc-700 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-zinc-300">Dropdown Options</span>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <span className="text-sm font-medium text-zinc-300">
+                      {field.type === "select" ? "Dropdown Options" :
+                        field.type === "radio" ? "Radio Buttons" : "Multiple Checkboxes"}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      type="button" // Always specify type="button" in forms to prevent accidental submit
                       onClick={() => addOption(index)}
                       className="h-8 border-zinc-700 hover:bg-zinc-800"
                     >
@@ -229,13 +237,13 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
                     {field.options.map((opt, optIndex) => (
                       <div key={optIndex} className="flex gap-2 items-center">
                         <Input
-                          placeholder="Label (Option A)"
+                          placeholder="Display Label"
                           value={opt.label}
                           className="bg-zinc-900 border-zinc-800 h-9"
                           onChange={(e) => updateOption(index, optIndex, "label", e.target.value)}
                         />
                         <Input
-                          placeholder="Value (option_a)"
+                          placeholder="Database Value"
                           value={opt.value}
                           className="bg-zinc-900 border-zinc-800 h-9"
                           onChange={(e) => updateOption(index, optIndex, "value", e.target.value)}
@@ -250,11 +258,6 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
                         </Button>
                       </div>
                     ))}
-                    {field.options.length === 0 && (
-                      <p className="text-xs text-zinc-500 italic text-center py-2">
-                        No options added yet.
-                      </p>
-                    )}
                   </div>
                 </div>
               )}
@@ -300,9 +303,9 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
 
           <div className="flex gap-3">
             <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button 
-              onClick={handleSubmit} 
-              className="bg-white text-black hover:bg-zinc-200" 
+            <Button
+              onClick={handleSubmit}
+              className="bg-white text-black hover:bg-zinc-200"
               disabled={loading}
             >
               {loading ? "Saving..." : "Save All Fields"}

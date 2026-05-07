@@ -31,8 +31,8 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
     required: true,
     enabled: true,
   });
-  
-  console.log("Field data received for editing:", field); 
+
+  console.log("Field data received for editing:", field);
   const [loading, setLoading] = useState(false);
 
   // Sync state when fieldData is passed (e.g., when clicking "Edit")
@@ -52,12 +52,20 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
   }, [fieldData]);
 
   const handleChange = (key, value) => {
-    setField((prev) => ({
-      ...prev,
-      [key]: value,
-      // Clear options if switching away from select
-      options: key === "type" && value !== "select" ? [] : prev.options,
-    }));
+    setField((prev) => {
+      // List of types that use the options array
+      const typesWithOptions = ["select", "radio", "checkbox"];
+
+      return {
+        ...prev,
+        [key]: value,
+        // If switching to a type that doesn't use options, clear them.
+        // Otherwise, keep current options (or initialize if switching to a choice type)
+        options: key === "type" && !typesWithOptions.includes(value)
+          ? []
+          : prev.options,
+      };
+    });
   };
 
   // --- Options Management ---
@@ -91,8 +99,9 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
         label: field.label.trim(),
         type: field.type,
         placeholder: field.placeholder.trim(),
-        options: field.type === "select" 
-          ? field.options.filter(opt => opt.label.trim() !== "") 
+        // Send options for Select, Radio, and Checkbox
+        options: ["select", "radio", "checkbox"].includes(field.type)
+          ? field.options.filter(opt => opt.label.trim() !== "")
           : [],
         order: Number(field.order),
         required: Boolean(field.required),
@@ -100,7 +109,7 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
       };
 
       await updateRegistrationField(payload);
-      
+
       setOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
@@ -140,7 +149,11 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
                   <SelectItem value="text">Text</SelectItem>
                   <SelectItem value="email">Email</SelectItem>
                   <SelectItem value="number">Number</SelectItem>
+                  <SelectItem value="date">Date</SelectItem>
                   <SelectItem value="file">File</SelectItem>
+                  <SelectItem value="radio">Radio</SelectItem>
+                  <SelectItem value="checkbox">Checkbox</SelectItem>
+                  <SelectItem value="textarea">Textarea</SelectItem>
                   <SelectItem value="select">Select / Dropdown</SelectItem>
                 </SelectContent>
               </Select>
@@ -168,17 +181,20 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
             </div>
           </div>
 
-          {/* Options Section */}
-          {field.type === "select" && (
+          {/* Updated Options Section Condition */}
+          {["select", "radio", "checkbox"].includes(field.type) && (
             <div className="bg-zinc-950/50 p-4 rounded-md border border-dashed border-zinc-700 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-zinc-300">Dropdown Options</span>
+                <span className="text-sm font-medium text-zinc-300">
+                  {field.type === "select" ? "Dropdown Options" :
+                    field.type === "radio" ? "Radio Buttons" : "Checkbox Choices"}
+                </span>
                 <Button variant="outline" size="sm" onClick={addOption} className="h-8 border-zinc-700">
                   <Plus className="h-4 w-4 mr-1" /> Add Option
                 </Button>
               </div>
 
-              <div className="space-y-2">
+              <div className="max-h-40 overflow-y-auto space-y-2 pr-1">
                 {field.options.map((opt, optIndex) => (
                   <div key={optIndex} className="flex gap-2 items-center">
                     <Input
@@ -203,6 +219,9 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
                     </Button>
                   </div>
                 ))}
+                {field.options.length === 0 && (
+                  <p className="text-xs text-zinc-500 text-center py-2">Click "Add Option" to begin.</p>
+                )}
               </div>
             </div>
           )}
@@ -230,9 +249,9 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
 
         <div className="flex justify-end gap-3 border-t border-zinc-800 pt-4">
           <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button 
-            onClick={handleSubmit} 
-            className="bg-white text-black hover:bg-zinc-200" 
+          <Button
+            onClick={handleSubmit}
+            className="bg-white text-black hover:bg-zinc-200"
             disabled={loading}
           >
             {loading ? "Updating..." : "Update Field"}

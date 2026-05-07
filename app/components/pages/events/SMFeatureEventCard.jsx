@@ -9,7 +9,8 @@ export default function SMFeatureEventCard({
   title,
   price,
   event,
-  pak
+  pak,
+  regFields
 }) {
   const isSoldOut =   pak?.usedSlots >= pak?.availableSlots;
   
@@ -33,6 +34,7 @@ export default function SMFeatureEventCard({
           event={event}
           pak={pak}
           isSoldOut={isSoldOut}
+          regFields={regFields}
         />
       </div>
     </div>

@@ -69,6 +69,7 @@ export default function LoginPage({ redirectTo = "/" }) {
           const response = await getProfileData(token);
           const userData = response.data.data;
 
+
           await handleAuthSuccess(token, refreshToken, userData, true);
         } catch (err) {
           setError("Google login failed during synchronization.");
