@@ -32,6 +32,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
     address: "",
     eventType: "",
     minPackagePrice: 0,
+    packageType: "",
     status: "active",
   });
 
@@ -48,6 +49,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
         time: event.time || "",
         address: event.address || "",
         eventType: event?.eventType || "",
+        packageType: event?.packageType || "",
         minPackagePrice: event?.minPackagePrice || "",
         status: event?.status || "active",
       });
@@ -139,7 +141,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
           </div>
 
           {/* Row 3: Date, Time, Price */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="date">Date *</Label>
               <Input
@@ -171,6 +173,19 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
                 disabled={loading}
                 value={form.minPackagePrice}
                 onChange={(e) => setForm({ ...form, minPackagePrice: e.target.value })}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="packageType">Package Type *</Label>
+              <Input
+                id="packageType"
+                placeholder="Team / Person"
+                disabled={loading}
+                value={form.packageType}
+                onChange={(e) =>
+                  setForm({ ...form, packageType: e.target.value })
+                }
               />
             </div>
           </div>

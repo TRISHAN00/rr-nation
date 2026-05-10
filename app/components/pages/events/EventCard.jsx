@@ -27,7 +27,6 @@ const EVENT_STATUS_CONFIG = {
 };
 
 export default function EventCard({ event, href }) {
-  console.log(event, href)
   if (!event) return null;
 
   const statusKey = event?.eventType?.toLowerCase();

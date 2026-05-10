@@ -25,6 +25,8 @@ const handleAddToCart = async (formDataPayload, rawDataForGuest) => {
     setOpen(true);
   };
 
+  console.log("Pak and regFields in SMFeaturedCardRight:", event);
+
   return (
     <>
       <TicketModal
@@ -53,7 +55,7 @@ const handleAddToCart = async (formDataPayload, rawDataForGuest) => {
             <h3 className="text-white text-2xl sm:text-3xl lg:text-4xl leading-8">
               {price}
             </h3>
-            <span className="text-white text-xs sm:text-sm">/Person</span>
+            <span className="text-white text-xs sm:text-sm">/{event?.packageType || ""}</span>
           </div>
         </div>
 

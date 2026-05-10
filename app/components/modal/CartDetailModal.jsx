@@ -42,6 +42,10 @@ export default function CartDetailModal({ open, onClose, cartData }) {
 
   const hasItems = cartData?.items?.length > 0;
 
+  
+
+  
+
   console.log("CartDetailModal received cartData:", cartData); // Debug log to check cartData structure
 
   const handleCheckout = () => {
@@ -50,7 +54,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
+    <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
       <div className="w-full sm:max-w-3xl lg:max-w-4xl rounded-t-2xl sm:rounded-xl bg-[#fafafa] shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[90vh] animate-in slide-in-from-bottom sm:zoom-in-95 duration-300">
         
         {/* Header */}
@@ -72,10 +76,11 @@ export default function CartDetailModal({ open, onClose, cartData }) {
               <p className="text-gray-500 font-medium">Your cart is empty</p>
             </div>
           ) : (
-            cartData.items.map((item, index) => {
+            cartData?.items?.map((item, index) => {
               console.log("Rendering cart item:", item); // Debug log to check item structure
               // Extract participant data safely
               const pData = item.formData;
+            
 
               return (
                 <div key={item.id || index} className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
@@ -182,15 +187,58 @@ export default function CartDetailModal({ open, onClose, cartData }) {
  * Reusable component for displaying a label-value pair.
  */
 function DataField({ label, value }) {
-  if (!value) return null;
+  // 1. Safety check: If value is null, undefined, or empty object, don't render
+  if (!value || (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0)) return null;
+
+  // 2. Handle Checkbox/Multiple select arrays
+  if (Array.isArray(value)) {
+    return (
+      <div className="flex flex-col min-w-0">
+        <span className="text-[9px] uppercase tracking-tighter text-gray-400 font-extrabold truncate">
+          {label}
+        </span>
+        <span className="font-semibold text-[#001819] text-sm break-all">
+          {value.join(", ")}
+        </span>
+      </div>
+    );
+  }
+
+  // 3. IMPROVED IMAGE DETECTION:
+  // Check for Base64 (guest cart) OR standard HTTP URLs (server cart)
+  const isImage = typeof value === "string" && (
+    value.startsWith("data:image") || 
+    (value.startsWith("http") && (value.match(/\.(jpeg|jpg|gif|png|webp)$/i) || value.includes("/media/")))
+  );
+
   return (
     <div className="flex flex-col min-w-0">
       <span className="text-[9px] uppercase tracking-tighter text-gray-400 font-extrabold truncate">
         {label}
       </span>
-      <span className="font-semibold text-[#001819] text-sm break-words">
-        {value}
-      </span>
+      
+      {isImage ? (
+        <div className="mt-1 relative h-16 w-16 rounded-lg overflow-hidden border border-gray-200 group bg-gray-50">
+          <img 
+            src={value} 
+            alt={label} 
+            className="h-full w-full object-cover cursor-zoom-in hover:scale-110 transition-transform"
+            onClick={() => {
+              if (value.startsWith("http")) {
+                window.open(value, '_blank');
+              } else {
+                // For Base64, open in a new window with a simpler method
+                const newTab = window.open();
+                newTab.document.body.innerHTML = `<img src="${value}" style="max-width:100%">`;
+              }
+            }}
+          />
+        </div>
+      ) : (
+        <span className="font-semibold text-[#001819] text-sm break-all">
+          {value.toString()}
+        </span>
+      )}
     </div>
   );
 }

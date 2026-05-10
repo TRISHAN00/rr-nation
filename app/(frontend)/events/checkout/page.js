@@ -129,13 +129,41 @@ export default function CheckoutPage() {
 }
 
 function Detail({ label, value, fullWidth = false }) {
-  if (!value) return null;
+  // 1. Return null for empty values or empty objects
+  if (!value || (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0)) return null;
+
+  // 2. Handle Checkbox/Array values (join them with commas)
+  let displayValue = value;
+  if (Array.isArray(value)) {
+    displayValue = value.join(", ");
+  }
+
+  // 3. Check if the value is an Image URL
+  const isImage = typeof value === "string" && (
+    value.startsWith("http") && 
+    (value.match(/\.(jpeg|jpg|gif|png|webp)$/i) || value.includes("/media/"))
+  );
+
   return (
     <div className={`flex flex-col ${fullWidth ? "md:col-span-2 lg:col-span-3" : ""}`}>
       <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
-        {label}
+        {label.replace(/-/g, ' ')}
       </span>
-      <span className="text-gray-800 font-medium break-words">{value}</span>
+      
+      {isImage ? (
+        <div className="mt-1 relative h-14 w-14 rounded border border-gray-200 overflow-hidden bg-gray-50">
+          <img 
+            src={value} 
+            alt={label} 
+            className="h-full w-full object-cover cursor-zoom-in hover:scale-110 transition-transform"
+            onClick={() => window.open(value, '_blank')}
+          />
+        </div>
+      ) : (
+        <span className="text-gray-800 font-medium wrap-break-word">
+          {displayValue.toString()}
+        </span>
+      )}
     </div>
   );
 }

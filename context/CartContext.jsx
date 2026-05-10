@@ -1,6 +1,6 @@
 "use client";
 import CartDetailModal from "@/app/components/modal/CartDetailModal";
-import { deleteCartItem, eventAddToCartV2 } from "@/services/cart.service";
+import { deleteCartItem, eventAddToCartV2, getCartItems } from "@/services/cart.service";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext(null);
@@ -17,45 +17,90 @@ export function CartProvider({ children }) {
   };
 
   const fetchCart = useCallback(async () => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("authToken")
+        : null;
 
     if (!token) {
       const items = getGuestItems();
+
+      console.log("Fetched guest cart items from LocalStorage:", items); // Debug log to check structure
+
       setCartData({
         id: "guest",
-        totalAmount: items.reduce((acc, curr) => acc + (Number(curr.package?.price) || 0), 0).toFixed(2),
-        items: items.map(item => ({
-          id: item.tempId, // Used for deletion
+        totalAmount: items
+          .reduce(
+            (acc, curr) =>
+              acc + (Number(curr.package?.price) || 0) * (curr.quantity || 1),
+            0
+          )
+          .toFixed(2),
+        items: items.map((item) => ({
+          id: item.tempId,
           itemType: "ticket",
           quantity: item.quantity,
           unitPrice: item.package?.price,
-          participant: item.participant, // This is the object with dynamic fields
-          package: item.package
-        }))
+          formData: item.participantData,
+          package: item.package,
+        })),
       });
-      return;
+    } else {
+      try {
+        const cartItems = await getCartItems(); // ✅ FIXED
+
+        console.log("Fetched cart items from server:", cartItems); // Debug log to check structure
+
+        setCartData({
+          id: cartItems?.data?.id,
+          totalAmount: cartItems?.data?.totalAmount,
+          items: cartItems?.data?.items,
+        });
+      } catch (error) {
+        console.error("Failed to fetch cart:", error);
+      }
     }
-    // ... authenticated fetch logic
   }, []);
 
-  // Professional Sync Function
+  // Helper to convert Base64 back to a File object
+  const base64ToFile = (base64String, filename) => {
+    const arr = base64String.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  };
+
   const syncGuestCart = async () => {
     const items = getGuestItems();
     if (items.length === 0) return;
 
     try {
       for (const item of items) {
-        // Re-construct FormData from guest items for the API
         const data = new FormData();
         data.append("eventTicketId", item.eventTicketId);
         data.append("quantity", item.quantity);
 
-        const formattedFields = Object.entries(item.participant).map(([key, value]) => ({
-          name: key,
-          value: value,
-        }));
-        data.append("formData", JSON.stringify(formattedFields));
+        const textFields = [];
+        let fileIndex = 1;
 
+        for (const [key, value] of Object.entries(item.participantData)) {
+          if (typeof value === "string" && value.startsWith("data:image")) {
+            // Convert Base64 back to File for the API
+            const fileObj = base64ToFile(value, `${key}.png`);
+            data.append("files", fileObj);
+            textFields.push({ name: key, value: `file${fileIndex}` });
+            fileIndex++;
+          } else if (!["pak", "eventTicketId", "tempId"].includes(key)) {
+            textFields.push({ name: key, value: value });
+          }
+        }
+
+        data.append("formData", JSON.stringify(textFields));
         await eventAddToCartV2(data);
       }
       localStorage.removeItem(GUEST_CART_KEY);
@@ -69,23 +114,17 @@ export function CartProvider({ children }) {
     const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
     if (token) {
-      // Logged in: API expects FormData
+      // Logged in: payload is FormData (handles files natively)
       await eventAddToCartV2(payload);
     } else {
-      // Guest: LocalStorage needs a plain Object
-      // Check if rawDataForGuest exists to avoid the 'tempId' error
-      if (!rawDataForGuest) {
-        console.error("Guest data is missing!");
-        return;
-      }
-
+      // Guest: rawDataForGuest now contains Base64 strings for images
       const currentItems = JSON.parse(localStorage.getItem(GUEST_CART_KEY) || "[]");
 
       const newGuestItem = {
-        tempId: rawDataForGuest.tempId, // This line caused your error
-        eventTicketId: rawDataForGuest.eventTicketId || payload.get("eventTicketId"),
+        tempId: Date.now().toString(),
+        eventTicketId: rawDataForGuest.eventTicketId,
         quantity: 1,
-        formData: rawDataForGuest,
+        participantData: rawDataForGuest, // This now safely stringifies
         package: rawDataForGuest.pak
       };
 

@@ -75,39 +75,58 @@ export default function EventDetail() {
             />
           </div>
         )}
+        <div>
+          {/* Main Content */}
+          <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Content */}
+            <div className="lg:col-span-8">
+              <EventContent event={event} />
+            </div>
 
-        {/* Main Content */}
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Content */}
-          <div className="lg:col-span-8">
-            <EventContent event={event} />
-          </div>
+            {/* Event Tickets / Feature Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 lg:hidden">
+              {event?.packages?.map((pak, index) => (
+                <div key={pak.id || index} className="w-full min-w-0">
+                  <SMFeatureEventCard
+                    bgImage="/dynamic/home/banner/banner-01.jpg"
+                    bgColor="#003A3B"
+                    overlayColor="#003A3B"
+                    title={event.name}
+                    price={pak.price}
+                    pak={pak}
+                    event={event}
+                    regFields={regFields}
+                  />
+                </div>
+              ))}
+            </div>
 
-          {/* Right Sidebar */}
-          <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-24 space-y-6">
-              <EventInfoCard event={event} />
-              <CallUsCard />
+            {/* Right Sidebar */}
+            <div className="lg:col-span-4">
+              <div className="lg:sticky lg:top-24 space-y-6">
+                <EventInfoCard event={event} />
+                <CallUsCard />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Event Tickets / Feature Cards */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-12">
-          {event?.packages?.map((pak, index) => (
-            <div key={pak.id || index} className="w-full min-w-0">
-              <SMFeatureEventCard
-                bgImage="/dynamic/home/banner/banner-01.jpg"
-                bgColor="#003A3B"
-                overlayColor="#003A3B"
-                title={event.name}
-                price={pak.price}
-                pak={pak}
-                event={event}
-                regFields={regFields}
-              />
-            </div>
-          ))}
+          {/* Event Tickets / Feature Cards */}
+          <div className="hidden lg:grid grid-cols-1 xl:grid-cols-2 gap-6 mt-12">
+            {event?.packages?.map((pak, index) => (
+              <div key={pak.id || index} className="w-full min-w-0">
+                <SMFeatureEventCard
+                  bgImage="/dynamic/home/banner/banner-01.jpg"
+                  bgColor="#003A3B"
+                  overlayColor="#003A3B"
+                  title={event.name}
+                  price={pak.price}
+                  pak={pak}
+                  event={event}
+                  regFields={regFields}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

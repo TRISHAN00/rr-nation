@@ -180,15 +180,15 @@ export default function LoginPage({ redirectTo = "/" }) {
           onClick={onGoogleLogin}
           className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-2.5 rounded-xl font-medium hover:bg-gray-50 transition-all disabled:opacity-50 shadow-sm"
         >
-         
+
           <Image
-                  src="/static/GOOGLE_LOGO.png"
-                  alt="Run Rise Nation"
-                  priority
-                  className={clsx("w-[20px] h-auto sm:w-[20px] md:w-[20px] xl:w-[20px]")}
-                  width={20}
-                  height={20}
-                />
+            src="/static/GOOGLE_LOGO.png"
+            alt="Run Rise Nation"
+            priority
+            className={clsx("w-5 h-auto sm:w-5 md:w-5 xl:w-5")}
+            width={20}
+            height={20}
+          />
           <span>Continue with Google</span>
         </button>
 
