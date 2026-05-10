@@ -25,8 +25,6 @@ export function CartProvider({ children }) {
     if (!token) {
       const items = getGuestItems();
 
-      console.log("Fetched guest cart items from LocalStorage:", items); // Debug log to check structure
-
       setCartData({
         id: "guest",
         totalAmount: items
@@ -48,9 +46,6 @@ export function CartProvider({ children }) {
     } else {
       try {
         const cartItems = await getCartItems(); // ✅ FIXED
-
-        console.log("Fetched cart items from server:", cartItems); // Debug log to check structure
-
         setCartData({
           id: cartItems?.data?.id,
           totalAmount: cartItems?.data?.totalAmount,

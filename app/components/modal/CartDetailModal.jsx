@@ -13,13 +13,13 @@ import { useEffect } from "react";
  */
 const getDynamicValue = (participantData, fieldName) => {
   if (!participantData) return null;
-  
+
   // Handle API format: [{ name: "field_name", value: "value" }]
   if (Array.isArray(participantData)) {
     const field = participantData.find((f) => f.name === fieldName);
     return field ? field.value : null;
   }
-  
+
   // Handle Guest format: { field_name: "value" }
   return participantData[fieldName] || null;
 };
@@ -42,21 +42,33 @@ export default function CartDetailModal({ open, onClose, cartData }) {
 
   const hasItems = cartData?.items?.length > 0;
 
-  
 
-  
+
+
 
   console.log("CartDetailModal received cartData:", cartData); // Debug log to check cartData structure
 
   const handleCheckout = () => {
     onClose();
-    router.push(isAuthenticated ? "/events/checkout" : "/accounts/login?redirectTo=/events/checkout");
-  };
 
+    if (isAuthenticated) {
+      router.push("/events/checkout");
+    } else {
+      const targetPath = "/events/checkout";
+
+      // 1. Set in LocalStorage immediately
+      localStorage.setItem("postLoginRedirect", targetPath);
+
+      // 2. Also pass it in the URL as a fallback
+      const encodedPath = encodeURIComponent(targetPath);
+      router.push(`/accounts/login?redirectTo=${encodedPath}`);
+    }
+  };
+  
   return (
     <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
       <div className="w-full sm:max-w-3xl lg:max-w-4xl rounded-t-2xl sm:rounded-xl bg-[#fafafa] shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[90vh] animate-in slide-in-from-bottom sm:zoom-in-95 duration-300">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between rounded-t-2xl sm:rounded-t-xl bg-[#00a19a] px-5 py-4 sm:px-6 shrink-0">
           <div className="flex items-center gap-2">
@@ -80,7 +92,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
               console.log("Rendering cart item:", item); // Debug log to check item structure
               // Extract participant data safely
               const pData = item.formData;
-            
+
 
               return (
                 <div key={item.id || index} className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
@@ -105,7 +117,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
                       <User size={14} />
                       <span className="text-[10px] font-bold uppercase tracking-widest">Participant Information</span>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {/* 
                         If your API/LocalStorage saves the keys, we map them here.
@@ -116,11 +128,11 @@ export default function CartDetailModal({ open, onClose, cartData }) {
                         pData.map((field, fIdx) => {
                           console.log("Rendering field:", field.name, "with value:", field.value);
                           return (
-                             <DataField 
-                            key={fIdx} 
-                            label={field.name.replace(/_/g, ' ')} 
-                            value={field.value} 
-                          />
+                            <DataField
+                              key={fIdx}
+                              label={field.name.replace(/_/g, ' ')}
+                              value={field.value}
+                            />
                           )
                         })
                       ) : (
@@ -128,10 +140,10 @@ export default function CartDetailModal({ open, onClose, cartData }) {
                         Object.entries(pData || {}).map(([key, val], fIdx) => {
                           if (key === 'tempId' || key === 'pak') return null;
                           return (
-                            <DataField 
-                              key={fIdx} 
-                              label={key.replace(/_/g, ' ')} 
-                              value={val} 
+                            <DataField
+                              key={fIdx}
+                              label={key.replace(/_/g, ' ')}
+                              value={val}
                             />
                           );
                         })
@@ -207,7 +219,7 @@ function DataField({ label, value }) {
   // 3. IMPROVED IMAGE DETECTION:
   // Check for Base64 (guest cart) OR standard HTTP URLs (server cart)
   const isImage = typeof value === "string" && (
-    value.startsWith("data:image") || 
+    value.startsWith("data:image") ||
     (value.startsWith("http") && (value.match(/\.(jpeg|jpg|gif|png|webp)$/i) || value.includes("/media/")))
   );
 
@@ -216,12 +228,12 @@ function DataField({ label, value }) {
       <span className="text-[9px] uppercase tracking-tighter text-gray-400 font-extrabold truncate">
         {label}
       </span>
-      
+
       {isImage ? (
         <div className="mt-1 relative h-16 w-16 rounded-lg overflow-hidden border border-gray-200 group bg-gray-50">
-          <img 
-            src={value} 
-            alt={label} 
+          <img
+            src={value}
+            alt={label}
             className="h-full w-full object-cover cursor-zoom-in hover:scale-110 transition-transform"
             onClick={() => {
               if (value.startsWith("http")) {
