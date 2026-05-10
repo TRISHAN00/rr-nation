@@ -88,7 +88,6 @@ export default function RegistrationsPage() {
     // 2. Map and Flatten Data
     // We use flatMap because one order (reg) can have multiple participants (items)
     const csvData = registeredUsers.flatMap((reg) => {
-      console.log(reg?.dicountCoupon?.code);
       return reg.order.items.map((item) => {
         const p = item.participant;
         const u = reg.user;
