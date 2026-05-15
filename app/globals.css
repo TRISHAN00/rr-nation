@@ -96,6 +96,16 @@
   }
 }
 
+/* This adds vertical space between every block in the editor */
+.bn-block-content {
+  margin-bottom: 0.75rem; /* Adjust this value for more or less space */
+}
+
+/* Optional: Remove margin from the last block */
+.bn-block-group > .bn-block-outer:last-child .bn-block-content {
+  margin-bottom: 0;
+}
+
 /* For all browsers */
 /* html {
   scrollbar-gutter: stable;

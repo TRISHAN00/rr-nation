@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 
-import { mockEvents, mockStats } from "@/app/dashboard/data/mockData";
+import { mockEvents, mockStats } from "@/app/(admin)/dashboard/data/mockData";
 import { format, isAfter, parseISO } from "date-fns";
 import { Calendar, CheckCircle, ClipboardListIcon, CreditCard } from "lucide-react";
 import { StatCard } from "../../StatCard";

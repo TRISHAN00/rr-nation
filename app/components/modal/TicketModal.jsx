@@ -18,6 +18,7 @@ export default function TicketModal({
   pak,
   regFields = [],
 }) {
+  console.log("Opening TicketModal with regFields:", regFields);
   // Initialize state based on fields
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -128,8 +129,8 @@ export default function TicketModal({
                   className={`flex flex-col ${field.type === "checkbox" ? "md:col-span-2" : "md:col-span-1"
                     }`}
                 >
-                  <label className="mb-1.5 text-xs sm:text-sm font-bold text-gray-700 capitalize tracking-tight">
-                    {field.label}
+                  <label className="mb-1.5 text-xs sm:text-sm font-bold text-gray-700  tracking-tight">
+                    {field.labelText}
                     {field.required && <span className="text-red-500 ml-1">*</span>}
                   </label>
 

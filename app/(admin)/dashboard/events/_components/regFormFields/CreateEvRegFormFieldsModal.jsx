@@ -25,6 +25,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
     {
       eventId: eventId,
       label: "",
+      labelText: "",
       type: "text",
       placeholder: "",
       options: [],
@@ -53,6 +54,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
       {
         eventId: eventId,
         label: "",
+        labelText: "",
         type: "text",
         placeholder: "",
         options: [],
@@ -100,6 +102,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
       {
         eventId: eventId,
         label: "",
+        labelText: "",
         type: "text",
         placeholder: "",
         options: [],
@@ -117,6 +120,7 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
       const payload = fields.map((f) => ({
         eventId: Number(eventId),
         label: f.label.trim(),
+        labelText: f.labelText.trim(),
         type: f.type,
         placeholder: f.placeholder.trim(),
         // Clean options for Select, Radio, and Checkbox
@@ -161,12 +165,24 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
             >
               <div className="grid md:grid-cols-4 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-zinc-400">Label</label>
+                  <label className="text-xs font-medium text-zinc-400">Identifier</label>
                   <Input
-                    placeholder="e.g. Full Name"
+                    placeholder="e.g. full_name"
                     value={field.label}
                     className="bg-zinc-950 border-zinc-800"
                     onChange={(e) => handleChange(index, "label", e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-400">Label Text</label>
+                  <Input
+                    placeholder="e.g. Full Name"
+                    // Change field.label to field.labelText
+                    value={field.labelText}
+                    className="bg-zinc-950 border-zinc-800"
+                    // Change "label" to "labelText"
+                    onChange={(e) => handleChange(index, "labelText", e.target.value)}
                   />
                 </div>
 

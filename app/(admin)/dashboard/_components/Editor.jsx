@@ -10,18 +10,15 @@ export default function Editor({ initialContent, onChange, editable = true }) {
   const editor = useCreateBlockNote();
 
   useEffect(() => {
-    async function loadInitial() {
-      if (initialContent && editor) {
-        try {
-          const blocks = await editor.tryParseHTMLToBlocks(initialContent);
-          editor.replaceBlocks(editor.document, blocks);
-        } catch (error) {
-          console.error("Failed to parse initial HTML:", error);
-        }
+    if (initialContent && editor && editor.document.length === 1) {
+      // Check length === 1 ensures we only load once on mount
+      async function loadInitial() {
+        const blocks = await editor.tryParseHTMLToBlocks(initialContent);
+        editor.replaceBlocks(editor.document, blocks);
       }
+      loadInitial();
     }
-    loadInitial();
-  }, [editor]);
+  }, [editor, initialContent]);
 
   const handleChange = async () => {
     if (onChange && editor) {

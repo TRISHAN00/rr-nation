@@ -1,17 +1,17 @@
 "use client";
 
+import { useDashboardEvents } from "@/app/(admin)/dashboard/context/EventContext";
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
-import { useDashboardEvents } from "@/app/dashboard/context/EventContext";
 import { ClipboardList, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
 // Dynamically import the Editor to avoid SSR issues
-const Editor = dynamic(() => import("@/app/dashboard/_components/Editor"), {
+const Editor = dynamic(() => import("@/app/(admin)/dashboard/_components/Editor"), {
   ssr: false,
   loading: () => <div className="h-[200px] w-full animate-pulse bg-muted rounded-md" />
 });

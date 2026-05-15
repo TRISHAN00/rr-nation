@@ -6,7 +6,7 @@ import { createTshirtSizes, getSizesById } from "@/services/admin/admin.tshirtSi
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { deleteSize } from "../../../../../services/admin/admin.tshirtSize.service";
+import { deleteSize } from "../../../../../../services/admin/admin.tshirtSize.service";
 import AddTshirtSizeForm from "./AddTshirtSizeForm";
 
 export default function EventTshirt({ eventId }) {

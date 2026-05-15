@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 
-import { useDashboardEvents } from "@/app/dashboard/context/EventContext";
+import { useDashboardEvents } from "@/app/(admin)/dashboard/context/EventContext";
 import { useEffect } from "react";
 import CouponList from "../../_components/coupon/CouponList";
 import EvRegFormFieldList from "../../_components/regFormFields/EvRegFormFieldList";

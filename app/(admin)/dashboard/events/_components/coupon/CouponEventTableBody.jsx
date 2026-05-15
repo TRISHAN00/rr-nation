@@ -9,7 +9,7 @@ import {
 } from "@/app/components/ui/table";
 import { useState } from "react";
 
-import { CouponListSkeleton } from "@/app/dashboard/members/coupons/_components/CouponListSkeleton";
+import { CouponListSkeleton } from "@/app/(admin)/dashboard/members/coupons/_components/CouponListSkeleton";
 import { Pencil, Trash2 } from "lucide-react";
 import DeleteEventCouponDialog from "./DeleteEventCouponDialog";
 import UpdateEventCouponModal from "./UpdateEventCouponModal";
