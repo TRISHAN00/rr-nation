@@ -3,11 +3,10 @@ import { AuthProvider } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { DashboardHeader } from "../(admin)/dashboard/_components/DashboardHeader";
-import { DashboardSidebar } from "../(admin)/dashboard/_components/DashboardSidebar";
 import { CouponProvider } from "../(admin)/dashboard/context/CouponContext";
 import EventProvider from "../(admin)/dashboard/context/EventContext";
-import MemberProvider from "./context/MemberContext";
-import { ThemeProvider } from "./context/ThemeContext";
+import { ThemeProvider } from "../(admin)/dashboard/context/ThemeContext";
+import { SidebarOrg } from "./organizer/_components/SidebarOrg";
 
 const DashboardLayout = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -16,10 +15,9 @@ const DashboardLayout = ({ children }) => {
     <ThemeProvider>
       <AuthProvider>
         <EventProvider>
-          <MemberProvider>
             <CouponProvider>
               <div className="min-h-screen bg-background">
-                <DashboardSidebar
+                <SidebarOrg
                   collapsed={sidebarCollapsed}
                   onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
                 />
@@ -34,7 +32,6 @@ const DashboardLayout = ({ children }) => {
                 </div>
               </div>
             </CouponProvider>
-          </MemberProvider>
         </EventProvider>
       </AuthProvider>
     </ThemeProvider>
