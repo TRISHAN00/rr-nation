@@ -23,7 +23,6 @@ export default function OrderList({
   handleViewDetails,
   loading,
 }) {
-  console.log("Registered Users:", registeredUsers);
   return (
     <Card className="border-border bg-card shadow-sm overflow-hidden">
       <CardContent className="p-0">
@@ -92,7 +91,7 @@ export default function OrderList({
                         </Avatar>
                         <div>
                           <p className="text-sm font-semibold">
-                            {reg?.user?.firstName + " " + reg?.user?.lastName}
+                            {reg?.user?.firstName} {reg?.user?.lastName}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {reg?.user?.phone}

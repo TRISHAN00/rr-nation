@@ -4,3 +4,8 @@ export const getDashboardEventInfo = async () => {
   const { data } = await api.get("/admin/dashboard/overview");
   return data;
 };
+
+export const getDashboardEventById = async (eventId) => {
+  const { data } = await api.get(`/admin/dashboard/overview/${eventId}`);
+  return data;
+};

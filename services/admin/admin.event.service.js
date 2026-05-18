@@ -45,11 +45,24 @@ export const deleteDashboardEvent = (eventId) => {
   return api.delete(`/admin/event/${eventId}`);
 };
 
+// GET all events for dropdowns and filters
+export const getAllEvents = async () => {
+  const { data } = await api.get(`/admin/events`);
+  return data;
+};
+
 // GET EVENT ORDERS
-export const getAllOrders = async (page = 1, limit = 10, searchQuery = "") => {
-  console.log(limit)
-  const { data } = await api.get(
-    `/admin/order-history?page=${page}&limit=${limit}&search=${searchQuery}`
-  );
+export const getAllOrders = async (page = 1, limit = 10, searchQuery = "", eventId = "") => {
+  console.log(limit);
+  
+  // Base URL string
+  let url = `/admin/order-history?page=${page}&limit=${limit}&search=${encodeURIComponent(searchQuery)}`;
+  
+  // Only append eventId if it has a valid, truthy value (not null, undefined, or empty string)
+  if (eventId) {
+    url += `&eventId=${eventId}`;
+  }
+
+  const { data } = await api.get(url);
   return data;
 };

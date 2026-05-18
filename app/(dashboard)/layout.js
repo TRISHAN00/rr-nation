@@ -2,10 +2,10 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { DashboardHeader } from "../(admin)/dashboard/_components/DashboardHeader";
 import { CouponProvider } from "../(admin)/dashboard/context/CouponContext";
 import EventProvider from "../(admin)/dashboard/context/EventContext";
 import { ThemeProvider } from "../(admin)/dashboard/context/ThemeContext";
+import { HeaderOrg } from "./organizer/_components/HeaderOrg";
 import { SidebarOrg } from "./organizer/_components/SidebarOrg";
 
 const DashboardLayout = ({ children }) => {
@@ -27,7 +27,7 @@ const DashboardLayout = ({ children }) => {
                     sidebarCollapsed ? "ml-16" : "ml-64",
                   )}
                 >
-                  <DashboardHeader />
+                  <HeaderOrg/>
                   <main className="flex-1 p-6">{children}</main>
                 </div>
               </div>

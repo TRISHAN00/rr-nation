@@ -106,7 +106,7 @@ export default function TableBodyPart({ loading, data }) {
             </TableCell>
 
             {/* Actions */}
-            <TableItemActionDrop />
+            <TableItemActionDrop item={item} />
           </TableRow>
         ))
       )}

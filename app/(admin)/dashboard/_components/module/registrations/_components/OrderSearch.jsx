@@ -8,16 +8,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
+import { getAllEvents } from "@/services/admin/admin.event.service";
 import { Calendar, ListFilter, Search, SlidersHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function OrderSearch({
   searchQuery,
   setSearchQuery,
   filterEvent,
-  setFilterEvent,
   setShowRegItem,
   showRegItem,
+  setSelectedEventId, // This is the prop we use to pass the selected ID back up
 }) {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await getAllEvents();
+        // Fallback check to handle API structures (e.g., res.data or just res)
+        const eventData = res?.data || res || [];
+        setEvents(eventData);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  // Handle value change safely
+  const handleEventChange = (value) => {
+    setSelectedEventId(value);
+    
+    if (value === "all") {
+      setSelectedEventId(null); // or "" depending on what your API expects for "no filter"
+    } else {
+      setSelectedEventId(value); // Passes the unique event.id up to the parent component
+    }
+  };
+
   return (
     <div className="flex sticky top-20 flex-col gap-4 p-4 rounded-xl border bg-card z-10 shadow-sm lg:flex-row lg:items-center">
       
@@ -32,15 +62,15 @@ export default function OrderSearch({
         />
       </div>
 
-      {/* 2. Divider for Desktop (Optional) */}
+      {/* 2. Divider for Desktop */}
       <div className="hidden lg:block h-8 w-[1px] bg-border mx-2" />
 
       {/* 3. Filters & Controls Group */}
       <div className="flex flex-wrap items-center gap-3">
         
         {/* Event Filter */}
-        <div className="flex-1 sm:flex-initial min-w-[160px]">
-          <Select value={filterEvent} onValueChange={setFilterEvent}>
+        <div className="flex-1 sm:flex-initial min-w-[200px]">
+          <Select value={filterEvent} onValueChange={handleEventChange}>
             <SelectTrigger className="h-11 bg-background border-muted-foreground/20">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
@@ -49,8 +79,12 @@ export default function OrderSearch({
             </SelectTrigger>
             <SelectContent align="end">
               <SelectItem value="all">All Events</SelectItem>
-              <SelectItem value="RunRise Nation">RunRise Nation</SelectItem>
-              <SelectItem value="City Marathon">City Marathon</SelectItem>
+              {events.map((event) => (
+                // Stringifying the event.id ensures shadcn select components process values correctly
+                <SelectItem key={event.id} value={String(event.id)}>
+                  {event.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -73,11 +107,12 @@ export default function OrderSearch({
           />
         </div>
 
-        {/* Reset / More Button (Optional Visual Anchor) */}
+        {/* Reset / More Button */}
         <button 
           onClick={() => {
             setSearchQuery("");
             setFilterEvent("all");
+            setSelectedEventId(null);
             setShowRegItem(50);
           }}
           className="p-2.5 rounded-md hover:bg-muted transition-colors text-muted-foreground"
