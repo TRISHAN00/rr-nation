@@ -6,11 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/ca
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
-import { ClipboardList, Loader2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs"; // Ensure you have Radix/Shadcn tabs installed
+import { Textarea } from "@/app/components/ui/textarea";
+import { ClipboardList, Code, Eye, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-// Dynamically import the Editor to avoid SSR issues
 const Editor = dynamic(() => import("@/app/(admin)/dashboard/_components/Editor"), {
   ssr: false,
   loading: () => <div className="h-[200px] w-full animate-pulse bg-muted rounded-md" />
@@ -27,6 +28,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
     name: "",
     organizerName: "",
     description: "",
+    emailTemplate: "", 
     date: "",
     time: "",
     address: "",
@@ -38,6 +40,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
 
   const [bannerImage, setBannerImage] = useState(null);
   const [thumbImage, setThumbImage] = useState(null);
+  const [activeTab, setActiveTab] = useState("edit"); // State to switch between HTML editor and HTML View
 
   useEffect(() => {
     if (event) {
@@ -45,6 +48,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
         name: event.name || "",
         organizerName: event.organizerName || "",
         description: event.description || "",
+        emailTemplate: event.emailTemplate || "",
         date: formatDateForInput(event.date),
         time: event.time || "",
         address: event.address || "",
@@ -56,20 +60,35 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
     }
   }, [event]);
 
+  // Helper function to strip newlines and carriage returns
+  const cleanHtmlString = (html) => {
+    if (!html) return "";
+    return html.replace(/[\r\n]+/gm, " ").trim();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+
+    const processedEmailTemplate = cleanHtmlString(form.emailTemplate);
 
     if (isEditMode) {
       formData.append("eventId", eventId || event?.id);
 
       Object.keys(form).forEach((key) => {
         let initialValue = event[key] ?? "";
+        let currentValue = form[key];
+
         if (key === 'date') initialValue = formatDateForInput(event.date);
         if (key === 'minPackagePrice') initialValue = String(event.minPackagePrice ?? "");
+        
+        if (key === 'emailTemplate') {
+          initialValue = cleanHtmlString(event.emailTemplate || "");
+          currentValue = processedEmailTemplate;
+        }
 
-        if (String(form[key]) !== String(initialValue)) {
-          formData.append(key, form[key]);
+        if (String(currentValue) !== String(initialValue)) {
+          formData.append(key, currentValue);
         }
       });
 
@@ -78,11 +97,11 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
 
       await handleUpdateEvent(formData, eventId || event?.id);
     } else {
-      // --- CREATE MODE FIX ---
       Object.keys(form).forEach((key) => {
-        // Description jodi empty thake tobe backend error dey, tai empty string ensure korchi
         if (key === "description") {
           formData.append(key, form[key] || "");
+        } else if (key === "emailTemplate") {
+          formData.append(key, processedEmailTemplate);
         } else if (form[key] !== null && form[key] !== undefined) {
           formData.append(key, form[key]);
         }
@@ -140,6 +159,54 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
             />
           </div>
 
+          {/* Email Template Container with Tab Controls */}
+          <div className="grid gap-2 border rounded-lg p-4 bg-muted/5">
+            <div className="flex items-center justify-between pb-2 border-b">
+              <Label className="text-base font-semibold">Email Template (Pure HTML)</Label>
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-[220px]">
+                <TabsList className="grid w-full grid-cols-2 h-9">
+                  <TabsTrigger value="edit" className="text-xs flex items-center gap-1">
+                    <Code className="h-3.5 w-3.5" /> HTML Code
+                  </TabsTrigger>
+                  <TabsTrigger value="preview" className="text-xs flex items-center gap-1">
+                    <Eye className="h-3.5 w-3.5" /> Live View
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
+            <Tabs value={activeTab} className="w-full mt-2">
+              {/* Tab 1: Raw Code Input */}
+              <TabsContent value="edit" className="m-0 space-y-2">
+                <Textarea
+                  id="emailTemplate"
+                  placeholder="<div style='padding: 20px; background: #f4f4f4;'><h1>Order Confirmed!</h1></div>"
+                  disabled={loading}
+                  className="font-mono text-sm min-h-[200px] bg-background border border-input resize-y"
+                  value={form.emailTemplate}
+                  onChange={(e) => setForm({ ...form, emailTemplate: e.target.value })}
+                />
+                <p className="text-xs text-muted-foreground">
+                  All formatting linebreaks (`\n`) are stripped safely on submission.
+                </p>
+              </TabsContent>
+              
+              {/* Tab 2: The View Renderer */}
+              <TabsContent value="preview" className="m-0">
+                {form.emailTemplate ? (
+                  <div 
+                    className="prose prose-sm dark:prose-invert max-w-none min-h-[200px] p-4 bg-background border rounded-md overflow-y-auto"
+                    dangerouslySetInnerHTML={{ __html: form.emailTemplate }}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center min-h-[200px] border border-dashed rounded-md text-muted-foreground text-sm bg-background">
+                    No template code found. Paste HTML tags in the "HTML Code" panel to verify your rendering.
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+          </div>
+
           {/* Row 3: Date, Time, Price */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="grid gap-2">
@@ -183,9 +250,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
                 placeholder="Team / Person"
                 disabled={loading}
                 value={form.packageType}
-                onChange={(e) =>
-                  setForm({ ...form, packageType: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, packageType: e.target.value })}
               />
             </div>
           </div>

@@ -192,7 +192,7 @@ export default function RegistrationsPage() {
         <OrderStats stats={stats} />
       )}
 
-      <OrderSearch setShowRegItem={setShowRegItem} showRegItem={showRegItem} setSearchQuery={setSearchQuery} setSelectedEventId={setSelectedEventId} />
+      <OrderSearch setShowRegItem={setShowRegItem} showRegItem={showRegItem} setSearchQuery={setSearchQuery} setSelectedEventId={setSelectedEventId} selectedEventId={selectedEventId} />
 
       <OrderList
         registeredUsers={registeredUsers}

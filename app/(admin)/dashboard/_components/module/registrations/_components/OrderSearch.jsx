@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 export default function OrderSearch({
   searchQuery,
   setSearchQuery,
-  filterEvent,
+  selectedEventId,
   setShowRegItem,
   showRegItem,
   setSelectedEventId, // This is the prop we use to pass the selected ID back up
@@ -70,7 +70,7 @@ export default function OrderSearch({
         
         {/* Event Filter */}
         <div className="flex-1 sm:flex-initial min-w-[200px]">
-          <Select value={filterEvent} onValueChange={handleEventChange}>
+          <Select value={selectedEventId} onValueChange={handleEventChange}>
             <SelectTrigger className="h-11 bg-background border-muted-foreground/20">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
@@ -111,7 +111,6 @@ export default function OrderSearch({
         <button 
           onClick={() => {
             setSearchQuery("");
-            setFilterEvent("all");
             setSelectedEventId(null);
             setShowRegItem(50);
           }}

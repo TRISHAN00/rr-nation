@@ -12,7 +12,7 @@ const anta = Anta({
   variable: "--font-anta",
   weight: ["400"],
   display: "swap",
-});
+});g
 
 export default function RootLayout({ children }) {
   return (
