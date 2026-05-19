@@ -11,8 +11,6 @@ export default function ProfilePage() {
   const [memberInfo, setMemberInfo] = useState({})
   const [loading, setLoading] = useState(true);
 
-    console.log(user)
-
   /* -------- FETCH PROFILE DATA -------- */
   async function fetchProfile() {
     try {

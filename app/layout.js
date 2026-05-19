@@ -7,12 +7,13 @@ const albertSans = Albert_Sans({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
+
 const anta = Anta({
   subsets: ["latin"],
   variable: "--font-anta",
   weight: ["400"],
   display: "swap",
-});g
+});
 
 export default function RootLayout({ children }) {
   return (

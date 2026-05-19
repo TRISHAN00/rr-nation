@@ -1,6 +1,7 @@
 "use client";
 
 import MemberForm from "@/app/(frontend)/member-register/_components/MemberForm";
+import MemPayModal from "@/app/(frontend)/profile/_components/MemPayModal";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,11 @@ import FillButton from "../../../common/FillButton";
 
 export default function RegistrationForm({ agree }) {
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isPayOpen, setIsPayOpen] = useState(false);
+
+
   const [formData, setFormData] = useState({
     facebookLink: "",
     age: 0,
@@ -31,9 +37,6 @@ export default function RegistrationForm({ agree }) {
     memberImage: null
   });
 
-  console.log(formData)
-
-
   const handleMemberSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -47,8 +50,6 @@ export default function RegistrationForm({ agree }) {
         payload.append(key, value);
       }
     });
-    console.log(payload)
-
 
     try {
       // 2. Send the FormData instance, NOT the state object
@@ -59,7 +60,12 @@ export default function RegistrationForm({ agree }) {
       if (response?.statusCode !== 201) {
         toast.error(response?.message || "Registration failed");
         return;
+      } else {
+        setOpen(true);
       }
+
+      setIsFormOpen(false);
+      setIsPayOpen(true);
 
       toast.success("Registration successful 🎉");
 
@@ -80,25 +86,29 @@ export default function RegistrationForm({ agree }) {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <FillButton
-          disabled={!agree}
-          className={`${!agree ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          Register Now
-        </FillButton>
-      </DialogTrigger>
+    <>
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen} >
+        <DialogTrigger asChild>
+          <FillButton
+            disabled={!agree}
+            className={`${!agree ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            Register Now
+          </FillButton>
+        </DialogTrigger>
 
-      <DialogContent className="w-[95vw] max-w-5xl max-h-[90vh] overflow-y-auto p-6 md:p-10 bg-white dark:bg-gray-900 rounded-2xl shadow-lg">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
-            Register as Member
-          </DialogTitle>
-        </DialogHeader>
+        <DialogContent className="w-[95vw] max-w-5xl max-h-[90vh] overflow-y-auto p-6 md:p-10 bg-white dark:bg-gray-900 rounded-2xl shadow-lg">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+              Register as Member
+            </DialogTitle>
+          </DialogHeader>
 
-        <MemberForm onSubmit={handleMemberSubmit} formData={formData} setFormData={setFormData} loading={loading} />
-      </DialogContent>
-    </Dialog>
+          <MemberForm onSubmit={handleMemberSubmit} formData={formData} setFormData={setFormData} loading={loading} />
+        </DialogContent>
+      </Dialog>
+
+      <MemPayModal setOpen={setIsPayOpen} open={isPayOpen} />
+    </>
   );
 }

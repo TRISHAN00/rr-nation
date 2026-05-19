@@ -43,3 +43,37 @@ export const createMemberPayment = async (payload) => {
 
   return data;
 };
+
+// POST add member event 
+export const addMemberEvent = async (payload) => {
+  const { data } = await api.post(
+    `/member/event`,
+    payload
+  );
+  return data;
+};
+
+// GET all member event tracks 
+export const getMemberEvents = async (page, limit) => {
+  const { data } = await api.get(
+    `/member/event?page=${page}&limit=${limit}`
+  );
+  return data;
+}
+
+// PATCH update member event by id
+export const updateMemberEventById = async (id, payload) => {
+  const { data } = await api.patch(
+    `/member/event/${id}`,
+    payload
+  );
+  return data;
+}
+
+// DELETE member event by id
+export const deleteMemberEventById = async (id) => {
+  const { data } = await api.delete(
+    `/member/event/${id}`
+  );
+  return data;
+}

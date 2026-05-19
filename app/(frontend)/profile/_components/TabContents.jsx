@@ -37,7 +37,6 @@ export default function TabContents({
             <TabsContent value="member" className="mt-6 space-y-6">
                 <MemberTab memberInfo={memberInfo} />
             </TabsContent>
-
         </div>
     );
 }

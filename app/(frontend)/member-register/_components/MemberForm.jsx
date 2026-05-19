@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { Textarea } from "@/app/components/ui/textarea";
+import MemPayModal from "../../profile/_components/MemPayModal";
 
 const tshirtOptions = [
   { label: 'XS (Chest: 36", Length: 25")', value: "XS" },
@@ -28,170 +29,174 @@ const tshirtOptions = [
   { label: '11-12 Years (Chest: 34", Length: 24")', value: "11-12 Years" },
 ];
 
-export default function MemberForm({onSubmit, formData, setFormData, loading}) {
+export default function MemberForm({ onSubmit, formData, setFormData, loading, open, setOpen }) {
+ 
   return (
-    <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <h3 className="md:col-span-2 text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2">
-        Member Registration
-      </h3>
+    <>
+      <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <h3 className="md:col-span-2 text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2">
+          Member Registration
+        </h3>
 
-      {/* facebookLink */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Facebook Profile Link</Label>
-        <Input
-          required
-          name="facebookLink"
-          val={formData.facebookLink}
-          placeholder="https://facebook.com/..."
-          onChange={(e) => setFormData({ ...formData, facebookLink: e.target.value })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* facebookLink */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Facebook Profile Link</Label>
+          <Input
+            required
+            name="facebookLink"
+            val={formData.facebookLink}
+            placeholder="https://facebook.com/..."
+            onChange={(e) => setFormData({ ...formData, facebookLink: e.target.value })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* age */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Age</Label>
-        <Input
-          required
-          type="number"
-          placeholder="Enter age"
-          onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* age */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Age</Label>
+          <Input
+            required
+            type="number"
+            placeholder="Enter age"
+            onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* district */}
-      <div className="flex flex-col gap-1.5">
-        <Label>District</Label>
-        <Input
-          required
-          placeholder="Your District"
-          onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* district */}
+        <div className="flex flex-col gap-1.5">
+          <Label>District</Label>
+          <Input
+            required
+            placeholder="Your District"
+            onChange={(e) => setFormData({ ...formData, district: e.target.value })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* tShirtSize */}
-      <div className="flex flex-col gap-1.5">
-        <Label>T-Shirt Size</Label>
-        <Select onValueChange={(val) => setFormData({ ...formData, tShirtSize: val })}>
-          <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
-            <SelectValue placeholder="Select size" />
-          </SelectTrigger>
-          <SelectContent>
-            {tshirtOptions.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+        {/* tShirtSize */}
+        <div className="flex flex-col gap-1.5">
+          <Label>T-Shirt Size</Label>
+          <Select onValueChange={(val) => setFormData({ ...formData, tShirtSize: val })}>
+            <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
+              <SelectValue placeholder="Select size" />
+            </SelectTrigger>
+            <SelectContent>
+              {tshirtOptions.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      {/* deliveryAddress */}
-      <div className="md:col-span-2 flex flex-col gap-1.5">
-        <Label>Delivery Address</Label>
-        <Input
-          required
-          placeholder="House, Street, Area..."
-          onChange={(e) => setFormData({ ...formData, deliveryAddress: e.target.value })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* deliveryAddress */}
+        <div className="md:col-span-2 flex flex-col gap-1.5">
+          <Label>Delivery Address</Label>
+          <Input
+            required
+            placeholder="House, Street, Area..."
+            onChange={(e) => setFormData({ ...formData, deliveryAddress: e.target.value })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* eventType */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Event Type</Label>
-        <Input
-          placeholder="e.g. Marathon"
-          onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* eventType */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Event Type</Label>
+          <Input
+            placeholder="e.g. Marathon"
+            onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* occupation */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Occupation</Label>
-        <Input
-          placeholder="Your Profession"
-          onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* occupation */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Occupation</Label>
+          <Input
+            placeholder="Your Profession"
+            onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* specialSkill */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Special Skill</Label>
-        <Input
-          placeholder="e.g. Photography"
-          onChange={(e) => setFormData({ ...formData, specialSkill: e.target.value })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* specialSkill */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Special Skill</Label>
+          <Input
+            placeholder="e.g. Photography"
+            onChange={(e) => setFormData({ ...formData, specialSkill: e.target.value })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* preferableRunningDistance */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Preferable Running Distance (KM)</Label>
-        <Input
-          type="number"
-          placeholder="e.g. 10"
-          onChange={(e) => setFormData({ ...formData, preferableRunningDistance: Number(e.target.value) })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* preferableRunningDistance */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Preferable Running Distance (KM)</Label>
+          <Input
+            type="number"
+            placeholder="e.g. 10"
+            onChange={(e) => setFormData({ ...formData, preferableRunningDistance: Number(e.target.value) })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* isEventStaff */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Interested in being Event Staff?</Label>
-        <Select onValueChange={(val) => setFormData({ ...formData, isEventStaff: val === "true" })}>
-          <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
-            <SelectValue placeholder="Select Option" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="true">Yes</SelectItem>
-            <SelectItem value="false">No</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        {/* isEventStaff */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Interested in being Event Staff?</Label>
+          <Select onValueChange={(val) => setFormData({ ...formData, isEventStaff: val === "true" })}>
+            <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
+              <SelectValue placeholder="Select Option" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="true">Yes</SelectItem>
+              <SelectItem value="false">No</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      {/* eventsParticipatedNumber */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Events Participated (Number)</Label>
-        <Input
-          type="number"
-          placeholder="0"
-          onChange={(e) => setFormData({ ...formData, eventsParticipatedNumber: Number(e.target.value) })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* eventsParticipatedNumber */}
+        <div className="flex flex-col gap-1.5">
+          <Label>Events Participated (Number)</Label>
+          <Input
+            type="number"
+            placeholder="0"
+            onChange={(e) => setFormData({ ...formData, eventsParticipatedNumber: Number(e.target.value) })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* recommendationMessage */}
-      <div className="md:col-span-2 flex flex-col gap-1.5">
-        <Label>Recommendation / Ideas</Label>
-        <Textarea
-          placeholder="Share your thoughts..."
-          rows={3}
-          onChange={(e) => setFormData({ ...formData, recommendationMessage: e.target.value })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* recommendationMessage */}
+        <div className="md:col-span-2 flex flex-col gap-1.5">
+          <Label>Recommendation / Ideas</Label>
+          <Textarea
+            placeholder="Share your thoughts..."
+            rows={3}
+            onChange={(e) => setFormData({ ...formData, recommendationMessage: e.target.value })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      {/* memberImage */}
-      <div className="md:col-span-2 flex flex-col gap-1.5">
-        <Label>Member Image</Label>
-        <Input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setFormData({ ...formData, memberImage: e.target.files[0] })}
-          className="w-full bg-gray-50 dark:bg-gray-800"
-        />
-      </div>
+        {/* memberImage */}
+        <div className="md:col-span-2 flex flex-col gap-1.5">
+          <Label>Member Image</Label>
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setFormData({ ...formData, memberImage: e.target.files[0] })}
+            className="w-full bg-gray-50 dark:bg-gray-800"
+          />
+        </div>
 
-      <div className="md:col-span-2 flex justify-end pt-4">
-        <FillButton type="submit" disabled={loading}>
-          {loading ? "Registering..." : "Submit Registration"}
-        </FillButton>
-      </div>
-    </form>
+        <div className="md:col-span-2 flex justify-end pt-4">
+          <FillButton type="submit" disabled={loading}>
+            {loading ? "Registering..." : "Submit Registration"}
+          </FillButton>
+        </div>
+      </form>
+
+    </>
   );
 }

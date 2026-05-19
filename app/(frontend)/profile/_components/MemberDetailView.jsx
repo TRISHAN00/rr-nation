@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import MemPayModal from "./MemPayModal";
+import MemberEvents from "./MemberEvents";
 
 const MEMBER_TYPE_LABELS = {
     premium: "Premium Member",
@@ -106,6 +107,8 @@ export default function MemberDetailView({ member }) {
                 </CardContent>
 
             </Card>
+
+            <MemberEvents/>
 
             <MemPayModal open={open} setOpen={setOpen} memberId={member?.data?.id}
             />
