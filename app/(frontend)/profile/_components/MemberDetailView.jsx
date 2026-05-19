@@ -42,9 +42,12 @@ export default function MemberDetailView({ member }) {
             <TabsTrigger value="profile" className="text-xs font-medium gap-1.5 px-4 h-8 data-[state=active]:shadow-sm">
               <User className="h-3.5 w-3.5" /> Profile Info
             </TabsTrigger>
-            <TabsTrigger value="events" className="text-xs font-medium gap-1.5 px-4 h-8 data-[state=active]:shadow-sm">
-              <Trophy className="h-3.5 w-3.5" /> My Events
-            </TabsTrigger>
+            {
+              isPaid && <TabsTrigger value="events" className="text-xs font-medium gap-1.5 px-4 h-8 data-[state=active]:shadow-sm">
+                <Trophy className="h-3.5 w-3.5" /> My Events
+              </TabsTrigger>
+            }
+
           </TabsList>
         </div>
 
@@ -64,8 +67,8 @@ export default function MemberDetailView({ member }) {
                     <Badge variant="outline" className="text-xs font-semibold px-2.5 py-0.5 rounded-md">
                       {MEMBER_TYPE_LABELS[member?.data?.memberType] || "N/A"}
                     </Badge>
-                    <Badge 
-                      variant={isPaid ? "default" : "destructive"} 
+                    <Badge
+                      variant={isPaid ? "default" : "destructive"}
                       className="text-xs font-semibold px-2.5 py-0.5 rounded-md shadow-none"
                     >
                       {PAYMENT_STATUS_LABELS[member?.data?.paymentStatus] || "Unknown"}

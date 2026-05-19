@@ -81,6 +81,7 @@ export default function UserProfileTabs({ user, memberInfo }) {
         className="w-full"
       >
         <TabActions />
+        
         <TabContents 
           allTickets={allTickets} 
           upcomingEvents={upcomingEvents} 
