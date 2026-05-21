@@ -2,7 +2,6 @@ import { Calendar, Clock, MapPin, User } from "lucide-react";
 import DashboardEventCardTotalReg from "./DashboardEventCardTotalReg";
 
 export default function EventMeta({ event }) {
-  console.log(event)
   return (
     <div className="flex flex-wrap gap-4 text-sm">
       <div className="flex items-center gap-2 text-muted-foreground">

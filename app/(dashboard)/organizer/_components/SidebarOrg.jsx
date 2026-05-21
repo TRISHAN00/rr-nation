@@ -3,22 +3,22 @@
 import { Button } from "@/app/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-    Calendar,
-    ChevronDown,
-    ChevronLeft,
-    ChevronRight,
-    LayoutDashboard,
-    Trophy,
-    UserCheck
+  Calendar,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  LayoutDashboard,
+  Trophy,
+  UserCheck
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const menuItems = [
-  { title: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { title: "Events", icon: Calendar, path: "/dashboard/events" },
-  { title: "Registrations", icon: UserCheck, path: "/dashboard/registrations" },
+  { title: "Dashboard", icon: LayoutDashboard, path: "/organizer/dashboard" },
+  { title: "Events", icon: Calendar, path: "/organizer/events" },
+  { title: "Registrations", icon: UserCheck, path: "/organizer/registrations" },
 ];
 
 export function SidebarOrg({ collapsed, onToggle }) {

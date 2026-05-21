@@ -10,10 +10,11 @@ export function middleware(request) {
 
   const isDashboard = pathname.startsWith("/dashboard");
   const isProfile = pathname.startsWith("/profile");
+  const isOrganizer = pathname.startsWith("/organizer");
 
   /* ---------- NOT LOGGED IN ---------- */
   if (!token) {
-    if (isDashboard || isProfile) {
+    if (isDashboard || isProfile || isOrganizer) {
       return NextResponse.redirect(
         new URL("/accounts/login", request.url)
       );
@@ -30,10 +31,9 @@ export function middleware(request) {
         new URL("/dashboard", request.url)
       );
     }
-
-    // return NextResponse.redirect(
-    //   new URL("/profile", request.url)
-    // );
+    return NextResponse.redirect(
+      new URL("/profile", request.url)
+    );
   }
 
   // User trying to access admin dashboard
@@ -52,5 +52,6 @@ export const config = {
     "/admin/login",
     "/dashboard/:path*",
     "/profile/:path*",
+    "/organizer/:path*",
   ],
 };

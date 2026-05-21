@@ -4,34 +4,34 @@ import { Button } from "@/app/components/ui/button";
 import { CardHeader, CardTitle } from "@/app/components/ui/card";
 import { CollapsibleTrigger } from "@/app/components/ui/collapsible";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
-  ChevronDown,
-  ChevronUp,
-  Edit,
-  Eye,
-  MoreHorizontal,
-  Trash2,
+    ChevronDown,
+    ChevronUp,
+    Edit,
+    Eye,
+    MoreHorizontal,
+    Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import DashboardEventBadges from "./DashboardEventCardBadge";
+import OrgDashEvBadges from "./OrgDashEvBadges";
 
-export default function DashboardEventCardHeader({
+export default function OrgDashEvCardHeader({
   TypeIcon,
   typeConfig,
   expandedEvent,
@@ -45,7 +45,7 @@ export default function DashboardEventCardHeader({
     <CardHeader className="pb-3">
       <div className="flex items-start justify-between">
         <div className="flex-1 space-y-2">
-          <DashboardEventBadges
+          <OrgDashEvBadges
             TypeIcon={TypeIcon}
             typeConfig={typeConfig}
             event={event}
