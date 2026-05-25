@@ -1,32 +1,60 @@
 import EventDetail from "@/app/components/pages/events/EventDetail";
+import { getEventBySlug } from "@/services/user.service";
 
-export const metadata = {
-  title: "RunRise Nation Noboborsho Run 1433",
-  description: `Celebrate the spirit of Pohela Boishakh with energy, unity, and resilience at{" "} RunRise Nation Noboborsho Run 1433 . This special New Year run is more than a race—it’s a celebration of culture, health, and community. Whether you’re a seasoned runner or just beginning your fitness journey, everyone is welcome to start the Bengali year with strength and positivity.`,
-  keywords: [
-    "1.33 KM Boishakhi Fun Run 1133 BDT",
-    "7.33 KM Boishakhi Challenge 1433 BDT",
-    "14.33 KM Noboborsho Endurance Run 1533 BDT",
-  ],
-  openGraph: {
-    title: "RunRise Nation Noboborsho Run 1433",
-    description: "RunRise Nation Noboborsho Run 1433",
-    type: "article", 
-    images: [
-      {
-        url: "/dynamic/about/inner-banner.jpg",
-        width: 1200,
-        height: 630,
-        alt: "RunRise Nation Noboborsho Run 1433",
+// NEXT.JS DYNAMIC METADATA GENERATOR RUNNING ON THE SERVER
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  
+  try {
+    const res = await getEventBySlug(slug);
+    const event = res?.data?.data || null;
+
+    if (!event) {
+      return {
+        title: "Event Not Found | RunRise Nation",
+        description: "The requested event registration data could not be located.",
+      };
+    }
+
+    // Extract package names/pricing dynamically for search engine indexing
+    const keywordsList = event.packages?.map(
+      (pak) => `${pak.name || "Package"} - ${pak.price} BDT`
+    ) || [];
+
+    return {
+      title: `${event.name} | RunRise Nation`,
+      description: event.description || `Join us for the ${event.name} running event. Celebrate health, culture, and community with RunRise Nation.`,
+      keywords: [event.name, "RunRise Nation Marathon", ...keywordsList],
+      openGraph: {
+        title: event.name,
+        description: event.description || `Register for ${event.name} today.`,
+        type: "article",
+        images: [
+          {
+            url: event.bannerImage || "/dynamic/about/inner-banner.jpg",
+            width: 1200,
+            height: 630,
+            alt: event.name,
+          },
+        ],
       },
-    ],
-  },
-};
+    };
+  } catch (error) {
+    console.error("Metadata generation failure:", error);
+    return {
+      title: "RunRise Nation Events",
+      description: "Explore ongoing, upcoming, and past marathon running events.",
+    };
+  }
+}
 
-export default function EventDetailPage() {
+// MAIN ROUTE WRAPPER (SERVER DRIVEN)
+export default async function EventDetailPage({ params }) {
+  const { slug } = await params;
+
   return (
     <>
-      <EventDetail />
+      <EventDetail initialSlug={slug} />
     </>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
+
 import { getRegFieldByEventId } from "@/services/regfield.service";
 import { getEventBySlug } from "@/services/user.service";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import InnerBanner from "../../common/InnerBanner";
 import CallUsCard from "../services/CallUsCard";
@@ -10,9 +10,7 @@ import EventContent from "./EventContent";
 import EventInfoCard from "./EventInfoCard";
 import SMFeatureEventCard from "./SMFeatureEventCard";
 
-export default function EventDetail() {
-  const { slug } = useParams();
-
+export default function EventDetail({ initialSlug }) {
   const [event, setEvent] = useState(null);
   const [regFields, setRegFields] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,22 +19,19 @@ export default function EventDetail() {
     try {
       const res = await getRegFieldByEventId(eventId);
       setRegFields(res?.data || []);
-
     } catch (err) {
       console.error("Failed to load registration fields", err);
     }
   };
 
-
   const fetchEvent = async () => {
     try {
       setLoading(true);
-      const res = await getEventBySlug(slug);
+      const res = await getEventBySlug(initialSlug);
       const eventData = res?.data?.data || null;
 
       setEvent(eventData);
 
-      // Fetch registration fields immediately once we have the ID
       if (eventData?.id) {
         await fetchRegFields(eventData.id);
       }
@@ -48,23 +43,22 @@ export default function EventDetail() {
   };
 
   useEffect(() => {
-    if (slug) {
+    if (initialSlug) {
       fetchEvent();
     }
-  }, [slug]);
+  }, [initialSlug]);
 
-  if (loading) return <div className="py-20 text-center">Loading event details...</div>;
+  if (loading) return <div className="py-20 text-center text-sm font-medium">Loading event details...</div>;
 
   return (
     <>
       <InnerBanner
         title={event?.name}
-        background="/dynamic/about/inner-banner.jpg"
+        background={"/dynamic/about/inner-banner.jpg"}
       />
-      <div className="container mx-auto px-4  py-12 sm:py-20">
-        {/* Banner */}
+      <div className="container mx-auto px-4 py-12 sm:py-20">
         {event?.bannerImage && (
-          <div className="rounded-3xl overflow-hidden relative">
+          <div className="rounded-3xl overflow-hidden relative shadow-sm">
             <Image
               src={event.bannerImage}
               alt={event.name || "Event Banner"}
@@ -76,14 +70,12 @@ export default function EventDetail() {
           </div>
         )}
         <div>
-          {/* Main Content */}
           <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left Content */}
             <div className="lg:col-span-8">
               <EventContent event={event} />
             </div>
 
-            {/* Event Tickets / Feature Cards */}
+            {/* Mobile Package Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 lg:hidden">
               {event?.packages?.map((pak, index) => (
                 <div key={pak.id || index} className="w-full min-w-0">
@@ -101,7 +93,7 @@ export default function EventDetail() {
               ))}
             </div>
 
-            {/* Right Sidebar */}
+            {/* Right Sidebar Desktop Container */}
             <div className="lg:col-span-4">
               <div className="lg:sticky lg:top-24 space-y-6">
                 <EventInfoCard event={event} />
@@ -110,7 +102,7 @@ export default function EventDetail() {
             </div>
           </div>
 
-          {/* Event Tickets / Feature Cards */}
+          {/* Desktop Package Grid */}
           <div className="hidden lg:grid grid-cols-1 xl:grid-cols-2 gap-6 mt-12">
             {event?.packages?.map((pak, index) => (
               <div key={pak.id || index} className="w-full min-w-0">
@@ -130,23 +122,5 @@ export default function EventDetail() {
         </div>
       </div>
     </>
-  );
-}
-
-/* Helpers */
-function Section({ title, children }) {
-  return (
-    <div className="mb-8 sm:mb-10">
-      <h3 className="text-xl sm:text-2xl font-bold mb-4">{title}</h3>
-      {children}
-    </div>
-  );
-}
-
-function Info({ label, value }) {
-  return (
-    <p className="text-gray-600 text-sm sm:text-base md:text-base mb-1">
-      <strong className="text-dark">{label}:</strong> {value}
-    </p>
   );
 }
