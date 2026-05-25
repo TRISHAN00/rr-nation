@@ -18,7 +18,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "/dynamic/events-og.jpg", // A high-energy race photo works best here
+        url: "/dynamic/events-og.jpg", 
         width: 1200,
         height: 630,
         alt: "RunRise Nation Race Start Line",
