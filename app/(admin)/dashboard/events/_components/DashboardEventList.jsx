@@ -5,8 +5,8 @@ import { Collapsible } from "@/app/components/ui/collapsible";
 import { CalendarClock, Monitor, Radio, Trophy } from "lucide-react";
 import { useState } from "react";
 
-import OrgDashEventList from "@/app/(dashboard)/organizer/events/_components/OrgDashEventList";
 import { useDashboardEvents } from "../../context/EventContext";
+import DashboardEventCardHeader from "./DashboardEventCardHeader";
 import DashboardTicketContent from "./DashboardTicketContent";
 import EventMeta from "./EventMeta";
 
@@ -38,7 +38,7 @@ export default function DashboardEventList({ events }) {
             <Card className="overflow-hidden transition-all hover:shadow-md">
               <div className="h-1.5 bg-linear-to-r from-primary to-primary/70" />
 
-              <OrgDashEventList
+              <DashboardEventCardHeader
                 TypeIcon={TypeIcon}
                 typeConfig={typeConfig}
                 expandedEvent={expandedEvent}
