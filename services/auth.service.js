@@ -44,3 +44,4 @@ export const registerUser = (data) => {
 export const forgotPassword = (data) => {
   return api.post("/auth/forgot-password", data);
 };
+

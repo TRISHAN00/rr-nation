@@ -66,7 +66,7 @@ export default function MemberList({
         <Table className="min-w-[1750px]">
           <TableHeader className="bg-muted/50 sticky top-0 z-10">
             <TableRow className="text-[10px] uppercase font-bold">
-              <TableHead className="w-[100px]">Reg. No</TableHead>
+              <TableHead className="w-[100px]">RRN Member ID</TableHead>
               <TableHead>Registration Date</TableHead>
               <TableHead>Member Name</TableHead>
               <TableHead>Age</TableHead>

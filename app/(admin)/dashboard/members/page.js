@@ -61,7 +61,7 @@ export default function DashboardMemberPage() {
   const handleExportCSV = () => {
     // 1. Define Headers for all fields in your JSON
     const headers = [
-      "Reg. No",
+      "RRN Member ID",
       "First Name",
       "Last Name",
       "Email",

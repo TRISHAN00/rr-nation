@@ -10,11 +10,29 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import { logoutUser } from "@/services/auth.service";
+import { getGlobalData } from "@/services/global.service";
 import { Building2, LayoutDashboard, LogOut, User, UserPlus } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export function ProfileDropdown({ user }) {
   const name = user?.firstName;
+  const [global, setGlobal] = useState({});
+
+  const fetchGlobal = async () => {
+    try {
+      const res = await getGlobalData();
+      setGlobal(res?.data?.data)
+    } catch (err) {
+      console.error(`FAiled to load global data`, err)
+    }
+  }
+
+  useEffect(() => {
+    fetchGlobal()
+  }, [])
+
+
 
   return (
     <DropdownMenu>
@@ -68,19 +86,29 @@ export function ProfileDropdown({ user }) {
 
         {/* --- NEW ROUTES --- */}
         <DropdownMenuItem asChild>
-          <Link href="/member-register" className="flex items-center gap-2">
-            <UserPlus className="h-4 w-4 text-cyan-500" />
-            Become a Member
-          </Link>
+          {
+            global?.isMember ? <Link href="/profile/member" className="flex items-center gap-2">
+              <UserPlus className="h-4 w-4 text-cyan-500" />
+              Member Profile
+            </Link> : <Link href="/member-register" className="flex items-center gap-2">
+              <UserPlus className="h-4 w-4 text-cyan-500" />
+              Become a Member
+            </Link>
+          }
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link href="/organizer-register" className="flex items-center gap-2">
-            <Building2 className="h-4 w-4 text-cyan-500" />
-            Become an Organization
-          </Link>
+          {
+            global?.isOrganizer ? <Link href="/dashboard/organizer" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-cyan-500" />
+             Organizer Dashboard
+            </Link> : <Link href="/organizer-register" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-cyan-500" />
+              Become an Organizer
+            </Link>
+          }
+
         </DropdownMenuItem>
-        {/* ------------------ */}
 
         <DropdownMenuSeparator />
 

@@ -47,6 +47,7 @@ export async function generateMetadata({ params }) {
             width: 1200,
             height: 630,
             alt: event.name,
+            type: absoluteImageUrl.endsWith(".png") ? "image/png" : "image/jpeg",
           },
         ],
       },
