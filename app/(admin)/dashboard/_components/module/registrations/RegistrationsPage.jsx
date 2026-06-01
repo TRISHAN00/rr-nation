@@ -137,9 +137,9 @@ export default function RegistrationsPage() {
 
         // Construct baseline static string segments (Order matches baseHeaders completely)
         const baseRowData = [
-          `"${u.firstName || "N/A"} ${u.lastName || "N/A"}"`,
-          `"${u.email || "N/A"}"`,
-          `"${e.name || "N/A"}"`,
+          `"${u.firstName || ""} ${u.lastName || ""}"`,
+          `"${u.email || ""}"`,
+          `"${e.name || ""}"`,
           `"${e.address || "N/A"}"`,
           `"${e.bannerImage || "N/A"}"`,
           `"${e.eventStage || "N/A"}"`,
