@@ -2,7 +2,7 @@
 
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getAllOrders } from "@/services/admin/admin.event.service";
-import { getDashboardEventInfo } from "@/services/admin/admin.overview.service";
+import { getDashboardEventById } from "@/services/admin/admin.overview.service";
 import { useCallback, useEffect, useState } from "react";
 import OrderHeader from "./_components/OrderHeader";
 import OrderList from "./_components/OrderList";
@@ -32,8 +32,8 @@ export default function RegistrationsPage() {
     try {
       setLoading(true);
       const res = await getAllOrders(currentPage, itemsPerPage, searchQuery, selectedEventId);
-      
-      const resOverview = await getDashboardEventInfo();
+
+      const resOverview = await getDashboardEventById(selectedEventId);
 
       const items = res?.data?.items || [];
       const total = res?.data?.totalPages || 1;
@@ -64,7 +64,7 @@ export default function RegistrationsPage() {
   const handleExportCSV = () => {
     // 1. Gather all unique dynamic formData labels across the current dataset
     const dynamicLabelsSet = new Set();
-    
+
     registeredUsers?.forEach((reg) => {
       reg.order?.items?.forEach((item) => {
         if (Array.isArray(item.formData)) {
@@ -83,26 +83,32 @@ export default function RegistrationsPage() {
 
     // 2. Define Static Base Headers
     const baseHeaders = [
-      "Participant Name",
-      "Participant Email",
-      "Participant Phone",
+      "User Name",
+      "User Email",
       "Event Name",
-      "Coupon",
-      "Ticket Category",
-      "Runner Category",
-      "Age Category",
-      "DOB",
-      "Distance",
-      "T-Shirt Size",
-      "Blood Group",
-      "Gender",
-      "Community",
-      "Amount Paid",
-      "Status",
-      "Transaction ID",
-      "Payment Date",
-      "Account Holder",
-      "Account Holder Email",
+      "Event Address",
+      "Event Banner Image",
+      "Event Stage",
+      "Event Type",
+      "Event Organizer",
+      "Event Time",
+      "Event Ticket Name",
+      "Event Ticket Distance",
+      "Event Ticket Price",
+      "Participant Name",
+      "Participant Age Category",
+      "Participant Bib Number",
+      "Participant Blood Group",
+      "Participant Contact Number",
+      "Participant Date of Birth",
+      "Participant Distance Category",
+      "Participant Email",
+      "Participant Emergency Contact Name",
+      "Participant Emergency Contact Number",
+      "Participant Gender",
+      "Participant Runner Category",
+      "Participant Tshirt Size",
+
     ];
 
     // Combine static tracking headers with parsed form labels
@@ -111,8 +117,13 @@ export default function RegistrationsPage() {
     // 3. Map and Flatten Data Matrices
     const csvData = registeredUsers?.flatMap((reg) => {
       return (reg.order?.items || []).map((item) => {
+        console.log("Processing item for CSV export:", reg);
+        const e = item.eventTicket?.event || {};
+        const evt = item.eventTicket || {};
         const p = item.participant || {};
         const u = reg.user || {};
+
+        console.log(u)
 
         // Build a temporary key/value lookup map for this row item's form fields
         const formDataMap = {};
@@ -126,26 +137,31 @@ export default function RegistrationsPage() {
 
         // Construct baseline static string segments (Order matches baseHeaders completely)
         const baseRowData = [
+          `"${u.firstName || "N/A"} ${u.lastName || "N/A"}"`,
+          `"${u.email || "N/A"}"`,
+          `"${e.name || "N/A"}"`,
+          `"${e.address || "N/A"}"`,
+          `"${e.bannerImage || "N/A"}"`,
+          `"${e.eventStage || "N/A"}"`,
+          `"${e.eventType || "N/A"}"`,
+          `"${e.organizerName || "N/A"}"`,
+          `"${e.time || "N/A"}"`,
+          `"${evt.name || "N/A"}"`,
+          `"${evt.distance || "N/A"}"`,
+          `"${evt.price || "N/A"}"`,
           `"${p.name || "N/A"}"`,
-          `"${p.email || "N/A"}"`,
-          `"${p.contactNumber || "N/A"}"`,
-          `"${item.eventTicket?.event?.name || "N/A"}"`,
-          `"${reg.dicountCoupon?.code || "N/A"}"`,
-          `"${item.eventTicket?.name || "N/A"}"`,
-          `"${p.runnerCategory || "N/A"}"`,
           `"${p.ageCategory || "N/A"}"`,
+          `"${p.bibNumber || "N/A"}"`,
+          `"${p.bloodGroup || "N/A"}"`,
+          `"${p.contactNumber || "N/A"}"`,
           `"${p.dateOfBirth || "N/A"}"`,
           `"${p.distanceCategory || "N/A"}"`,
-          `"${p.tshirtSize || "N/A"}"`,
-          `"${p.bloodGroup || "N/A"}"`,
+          `"${p.email || "N/A"}"`,
+          `"${p.emergencyContactName || "N/A"}"`,
+          `"${p.emergencyContactNumber || "N/A"}"`,
           `"${p.gender || "N/A"}"`,
-          `"${p.communityName || "Individual"}"`,
-          Math.ceil(Number(reg.afterDiscountAmount || 0)),
-          `"${reg.status || "N/A"}"`,
-          `"${reg.transactionId || "N/A"}"`,
-          `"${reg.paymentDate ? new Date(reg.paymentDate).toLocaleDateString() : "N/A"}"`,
-          `"${(`${u.firstName || ""} ${u.lastName || ""}`).trim() || "N/A"}"`,
-          `"${u.email || "N/A"}"`,
+          `"${p.runnerCategory || "N/A"}"`,
+          `"${p.tshirtSize || "N/A"}"`,
         ];
 
         // Match missing or existing dynamic values to the sequence of dynamicHeaders columns

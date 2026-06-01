@@ -10,7 +10,7 @@ import { CreditCard, Ticket, User } from "lucide-react";
 import BIBInput from "./BIBInput";
 import OrderDataField from "./OrderDataField";
 
-export default function OrderSheet({ selectedReg, setTotalPages }) {
+export default function OrderSheet({ selectedReg }) {
   return (
     <div className="p-6 space-y-8">
       {/* Section 1: Buyer Information (The Account Holder) */}
@@ -78,6 +78,8 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
 
         <Accordion type="single" collapsible className="space-y-3">
           {selectedReg?.order?.items.map((item, idx) => {
+            console.log("Rendering item:", item); // Debug log to check item structure
+
             return (
               <AccordionItem
                 key={idx}
@@ -87,205 +89,93 @@ export default function OrderSheet({ selectedReg, setTotalPages }) {
                 <AccordionTrigger className="hover:no-underline py-4">
                   <div className="flex items-center gap-3 text-left">
                     <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                      {item?.participant?.name?.charAt(0)}
+                      {item?.eventTicket?.name?.charAt(0) || "E"}
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm font-bold">
-                        {item?.participant?.name}
+                        {item?.eventTicket?.event?.name || ""}
                       </span>
                       <span className="text-[11px] text-muted-foreground font-medium">
-                        {item?.eventTicket?.name}
-
-                        {item?.participant?.distanceCategory && (
-                          <> • {item.participant.distanceCategory}KM</>
-                        )}
+                        {item?.eventTicket?.name|| ""}
                       </span>
                     </div>
                   </div>
                 </AccordionTrigger>
+
                 <AccordionContent className="border-t border-border/50 pt-4 pb-4">
+                  {/* BIB Input component */}
                   <BIBInput item={item} />
+
                   <div className="grid grid-cols-2 gap-x-4 gap-y-4">
-                    {
-                      selectedReg?.order?.items?.map((item) =>
-                        item?.formData?.map((field, index) => (
-                          <OrderDataField
-                            key={`${item.id}-${index}`}
-                            label={field.label}
-                            value={field.value}
-                          />
-                        ))
-                      )
-                    }
-                    {/* Key Stats */}
-                    {
-                      item.participant?.tshirtSize && <OrderDataField
-                        label="T-Shirt Size"
-                        value={item.participant?.tshirtSize}
-                        highlight
-                      />
-                    }
 
-                    {
-                      item.participant?.bloodGroup && <OrderDataField
-                        label="Blood Group"
-                        value={item.participant?.bloodGroup}
-                        color="text-destructive"
-                      />
-                    }
-
-                    {
-                      item.participant?.distanceCategory && <OrderDataField
-                        label="Distance"
-                        value={item.participant?.distanceCategory}
-                      />
-                    }
-
-                    {
-                      item.participant?.runnerCategory && <OrderDataField
-                        label="Runner Cat."
-                        value={item.participant?.runnerCategory}
-                      />
-                    }
-
-                    {
-                      item.participant?.ageCategory && <OrderDataField
-                        label="Age Category"
-                        value={item.participant?.ageCategory}
-                      />
-                    }
-
-                    {
-                      item.participant?.dateOfBirth && <OrderDataField
-                        label="DOB"
-                        value={item.participant?.dateOfBirth}
-                      />
-                    }
-
-                    {
-                      item.participant?.emergencyContactNumber && <OrderDataField
-                        label="Emergency Contact"
-                        value={item.participant?.emergencyContactNumber}
-                      />
-                    }
-                    {
-                      item.participant?.communityName && <OrderDataField
-                        label="Community"
-                        value={item.participant?.communityName}
-                      />
-                    }
-
-                    {
-                      item.participant?.participatedEventNumbers !== undefined && <OrderDataField
-                        label="Past Events"
-                        value={item.participant?.participatedEventNumbers}
-                      />
-                    }
-
-                    {
-                      item.participant?.cycleBrandName && <OrderDataField
-                        label="Cycle Brand"
-                        value={item.participant?.cycleBrandName}
-                      />
-                    }
-
-                    {
-                      item.participant?.cycleFrameSize && <OrderDataField
-                        label="Frame Size"
-                        value={item.participant?.cycleFrameSize}
-                      />
-                    }
-
-                    {
-                      item.participant?.deliveryAddress && <OrderDataField
-                        label="Delivery Address"
-                        value={item.participant?.deliveryAddress}
-                      />
-                    }
-                    {
-                      item.participant?.district && <OrderDataField
-                        label="District"
-                        value={item.participant?.district}
-                      />
-                    }
-
-
-                    {/* Contact Info */}
-                    <div className="col-span-2 grid grid-cols-2 gap-4 border-t border-b border-border/30 py-3 my-1">
-                      {
-                        item.participant?.email && <OrderDataField
-                          label="Email"
-                          value={item.participant?.email}
-                        />
-                      }
-                      {
-                        item.participant?.contactNumber && <OrderDataField
-                          label="Phone"
-                          value={item.participant?.contactNumber}
-                        />
-                      }
-
-                    </div>
-
-                    {/* Affiliation */}
-                    <div className="col-span-2">
+                    {/* 1. MAPPING FROM formData ARRAY (If it exists) */}
+                    {item?.formData?.map((field, index) => (
                       <OrderDataField
-                        label="Community"
-                        value={item.participant?.communityName || "Individual"}
+                        key={`form-field-${idx}-${index}`}
+                        label={field.label}
+                        value={field.value}
+                        highlight={field.name.includes("option") || field.name.includes("confirm")}
                       />
-                    </div>
+                    ))}
 
-                    {/* Cycle Info (Conditional Rendering) */}
-                    {(item.participant?.cycleBrandName ||
-                      item.participant?.cycleFrameSize) && (
-                        <div className="col-span-2 grid grid-cols-2 gap-4 bg-muted/30 p-2 rounded">
-                          <OrderDataField
-                            label="Cycle Brand"
-                            value={item.participant?.cycleBrandName}
-                          />
-                          <OrderDataField
-                            label="Frame Size"
-                            value={item.participant?.cycleFrameSize}
-                          />
+                    {/* 2. MAPPING FROM participant OBJECT (If formData is null/empty) */}
+                    {(!item?.formData || item.formData.length === 0) && item?.participant && (
+                      <>
+                        {item.participant.name && <OrderDataField label="Name" value={item.participant.name} />}
+                        {item.participant.email && <OrderDataField label="Email" value={item.participant.email} />}
+                        {item.participant.contactNumber && <OrderDataField label="Phone" value={item.participant.contactNumber} />}
+                        {item.participant.gender && <OrderDataField label="Gender" value={item.participant.gender} />}
+                        {item.participant.bloodGroup && (
+                          <OrderDataField label="Blood Group" value={item.participant.bloodGroup} color="text-destructive" />
+                        )}
+                        {item.participant.tshirtSize && <OrderDataField label="T-Shirt" value={item.participant.tshirtSize} />}
+                        {item.participant.ageCategory && <OrderDataField label="Age Category" value={item.participant.ageCategory} />}
+                        {item.participant.runnerCategory && <OrderDataField label="Runner Cat." value={item.participant.runnerCategory} />}
+                      </>
+                    )}
+
+                    {/* 3. TICKET-LEVEL METRICS (Fallback/Static) */}
+                    {item.eventTicket?.distance && (
+                      <OrderDataField label="Distance" value={item.eventTicket.distance} />
+                    )}
+
+                    {/* 4. CONDITIONAL CYCLE METRICS */}
+                    {(item.participant?.cycleBrandName || item.participant?.cycleFrameSize) && (
+                      <div className="col-span-2 grid grid-cols-2 gap-4 bg-muted/30 p-2 rounded mt-1">
+                        {item.participant?.cycleBrandName && (
+                          <OrderDataField label="Cycle Brand" value={item.participant.cycleBrandName} />
+                        )}
+                        {item.participant?.cycleFrameSize && (
+                          <OrderDataField label="Frame Size" value={item.participant.cycleFrameSize} />
+                        )}
+                      </div>
+                    )}
+
+                    {/* 5. EMERGENCY CONTACT BLOCK (Prioritizing participant object data) */}
+                    {(item.participant?.emergencyContactName || item.eventTicket?.emergencyContactName) && (
+                      <div className="col-span-2 grid grid-cols-2 gap-4 bg-amber-50/70 p-3 rounded-lg border border-amber-100/50 mt-2">
+                        <div>
+                          <p className="text-[9px] font-bold text-amber-700 uppercase tracking-tighter">
+                            Emergency: {item.participant?.emergencyContactName || item.eventTicket?.emergencyContactName || "Guardian"}
+                          </p>
+                          <p className="text-xs font-bold text-amber-900">
+                            {item.participant?.emergencyContactNumber || item.eventTicket?.emergencyContactNumber || "Not Provided"}
+                          </p>
                         </div>
-                      )}
-
-                    {/* Location Info */}
-                    {/* <div className="col-span-2">
-                    <OrderDataField
-                      label="Delivery Address"
-                      value={
-                        item.participant?.deliveryAddress ||
-                        item.participant?.district ||
-                        "No address provided"
-                      }
-                    />
-                  </div> */}
-
-                    {/* Emergency Contact Section */}
-                    <div className="col-span-2 mt-2 p-3 bg-amber-50 rounded-lg border border-amber-100 flex justify-between items-center">
-                      <div>
-                        <p className="text-[9px] font-bold text-amber-700 uppercase tracking-tighter">
-                          Emergency Contact (
-                          {item.participant?.emergencyContactName || "Guardian"})
-                        </p>
-                        <p className="text-xs font-bold text-amber-900">
-                          {item.participant?.emergencyContactNumber}
-                        </p>
+                        <div className="text-right">
+                          <p className="text-[9px] font-bold text-amber-700 uppercase tracking-tighter">
+                            Past Events
+                          </p>
+                          <p className="text-xs font-bold text-amber-900">
+                            {item.participant?.participatedEventNumbers ?? item.eventTicket?.participatedEventNumbers ?? "0"}
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-[9px] font-bold text-amber-700 uppercase tracking-tighter">
-                          Past Events
-                        </p>
-                        <p className="text-xs font-bold text-amber-900">
-                          {item.participant?.participatedEventNumbers || "0"}
-                        </p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </AccordionContent>
               </AccordionItem>
-            )
+            );
           })}
         </Accordion>
       </section>

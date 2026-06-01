@@ -1,7 +1,7 @@
 import api from "@/lib/api";
 
-export const getDashboardEventInfo = async () => {
-  const { data } = await api.get("/admin/dashboard/overview");
+export const getDashboardEventInfo = async (selectedEventId) => {
+  const { data } = await api.get("/admin/dashboard/overview", );
   return data;
 };
 
