@@ -33,6 +33,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
     time: "",
     address: "",
     eventType: "",
+    eventStage: "",
     minPackagePrice: 0,
     packageType: "",
     status: "active",
@@ -52,6 +53,7 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
         date: formatDateForInput(event.date),
         time: event.time || "",
         address: event.address || "",
+        eventStage: event?.eventStage || "",
         eventType: event?.eventType || "",
         packageType: event?.packageType || "",
         minPackagePrice: event?.minPackagePrice || "",
@@ -268,6 +270,23 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
               />
             </div>
             <div className="grid gap-2">
+              <Label>Event Stage *</Label>
+              <Select
+                disabled={loading}
+                value={form.eventStage}
+                onValueChange={(val) => setForm({ ...form, eventStage: val })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select stage" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ongoing">Ongoing</SelectItem>
+                  <SelectItem value="upcoming">Upcoming</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
               <Label>Event Type *</Label>
               <Select
                 disabled={loading}
@@ -280,8 +299,6 @@ export default function EventInfoForm({ eventId, onEventCreated, event }) {
                 <SelectContent>
                   <SelectItem value="live">Live</SelectItem>
                   <SelectItem value="virtual">Virtual</SelectItem>
-                  <SelectItem value="upcoming">Upcoming</SelectItem>
-                  <SelectItem value="successful">Successful</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -9,16 +9,20 @@ export default function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [eventType, setEventType] = useState("");
+  // Unified State for Filters
+  const [filters, setFilters] = useState({
+    eventStage: "all",
+    eventType: "all",
+  });
   const [isRunRiseNation, setIsRunRiseNation] = useState(true);
 
-  // ✅ pagination states
+  // Pagination states
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
   const observerRef = useRef();
 
-  // 🔥 fetch function
+  // Fetch function
   const fetchEvents = async (pageNumber = 1, reset = false) => {
     setLoading(true);
     try {
@@ -27,7 +31,8 @@ export default function Events() {
         10,
         isRunRiseNation,
         "",
-        eventType
+        filters.eventStage,
+        filters.eventType
       );
 
       const newEvents = res?.data?.items || [];
@@ -36,7 +41,7 @@ export default function Events() {
         reset ? newEvents : [...prev, ...newEvents]
       );
 
-      // ✅ if less than limit → no more data
+      // If less than limit threshold -> no more pages
       setHasMore(newEvents.length === 10);
     } catch (err) {
       console.error("Failed to load events", err);
@@ -45,22 +50,21 @@ export default function Events() {
     }
   };
 
-  // ✅ reset when filter/switch changes
+  // Reset when filter matrix changes
   useEffect(() => {
     setPage(1);
     fetchEvents(1, true);
-  }, [isRunRiseNation, eventType]);
+  }, [isRunRiseNation, filters]);
 
-  // ✅ load more when page increases
+  // Load next index split when page increments
   useEffect(() => {
     if (page === 1) return;
     fetchEvents(page);
   }, [page]);
 
-  // 🔥 intersection observer
+  // Intersection observer pipeline
   const lastElementRef = (node) => {
     if (loading) return;
-
     if (observerRef.current) observerRef.current.disconnect();
 
     observerRef.current = new IntersectionObserver((entries) => {
@@ -82,7 +86,7 @@ export default function Events() {
         hideSearch
       />
 
-      {/* 🔘 Switch */}
+      {/* Switch Control */}
       <div className="flex justify-center pt-8 sm:pt-12 lg:pt-20">
         <EventSwitch
           active={isRunRiseNation ? "runrise" : "other"}
@@ -92,12 +96,13 @@ export default function Events() {
         />
       </div>
 
-      {/* 🔍 Filter + Grid */}
+      {/* Multi-layered Filter + Grid System */}
       <div className="flex justify-center pt-6 sm:pt-10 lg:pt-16">
         <EventFilter
           events={events}
           loading={loading}
-          onChange={(type) => setEventType(type)}
+          currentFilters={filters}
+          onChange={(updatedFilters) => setFilters(updatedFilters)}
           lastRef={lastElementRef}
           page={page}
         />

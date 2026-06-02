@@ -35,21 +35,20 @@ export const getAllEvent = async (
   limit = 10,
   isRunRiseNation = true,
   search = "",
+  eventStage = "",
   eventType = ""
 ) => {
   try {
     const query = new URLSearchParams({
-      page,
-      limit,
+      page: String(page),
+      limit: String(limit),
       isRunRiseNation: String(isRunRiseNation),
+      ...(eventStage && eventStage !== "all" && { eventStage }),
       ...(eventType && eventType !== "all" && { eventType }),
       ...(search && { search }),
     }).toString();
 
-    const { data } = await api.get(
-      `/auth/user/event/all?${query}`
-    );
-
+    const { data } = await api.get(`/auth/user/event/all?${query}`);
     return data;
   } catch (error) {
     console.error("Error fetching events:", error);
