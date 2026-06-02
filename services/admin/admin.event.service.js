@@ -6,11 +6,12 @@ export const getAllDashbaordEvents = async (
   limit,
   isRunRiseNation,
   search,
-  eventType,
   date,
+  eventStage,
+  eventType,
 ) => {
   const { data } = await api.get(
-    `/admin/event/all?page=${page}&limit=${limit}&isRunRiseNation=${isRunRiseNation}&search=${search}&eventType=${eventType}&date=${date}`,
+    `/admin/event/all?page=${page}&limit=${limit}&isRunRiseNation=${isRunRiseNation}&search=${search}&date=${date}&eventStage=${eventStage}&eventType=${eventType}`,
   );
   return data;
 };

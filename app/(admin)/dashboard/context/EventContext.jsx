@@ -30,7 +30,11 @@ export default function EventProvider({ children }) {
   const [limit, setLimit] = useState(10);
   const [isRunRiseNation, setIsRunRiseNation] = useState(true);
   const [eventType, setEventType] = useState("");
+  const [eventStage, setEventStage] = useState("");
   const [date, setDate] = useState(null);
+
+  console.log("event type", eventType);
+  console.log("event stage", eventStage);
 
   const router = useRouter();
 
@@ -50,8 +54,9 @@ export default function EventProvider({ children }) {
         limit,
         isRunRiseNation,
         search,
-        eventType === "all" ? "" : eventType,
         encodedDate,
+        eventStage === "all" ? "" : eventStage, // Correctly handles "all"
+        eventType === "all" ? "" : eventType,   // Correctly handles "all"
       );
 
       setEvents(response?.data?.items || response?.items || []);
@@ -61,7 +66,7 @@ export default function EventProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, isRunRiseNation, search, eventType, date]);
+  }, [page, limit, isRunRiseNation, search, eventStage, eventType, date]);
 
   useEffect(() => {
     fetchEvents();
@@ -143,6 +148,7 @@ export default function EventProvider({ children }) {
     [fetchEvents],
   );
 
+  // Inside EventProvider return:
   return (
     <EventContext.Provider
       value={{
@@ -152,9 +158,11 @@ export default function EventProvider({ children }) {
         setSearch,
         loading,
         eventType,
+        setEventType, // Added
+        eventStage,   // Added
+        setEventStage, // Added
         date,
         setDate,
-        setEventType,
         fetchEvents,
         handleCreateEvent,
         handleUpdateEvent,

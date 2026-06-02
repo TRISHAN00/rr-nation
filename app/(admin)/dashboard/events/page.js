@@ -20,6 +20,8 @@ export default function DashboardEventsPage() {
     setEventType,
     date,
     setDate,
+    eventStage,
+    setEventStage,
   } = useDashboardEvents();
 
   return (
@@ -29,6 +31,8 @@ export default function DashboardEventsPage() {
 
         <div className="flex flex-wrap items-center gap-4">
           <DashboardEventTab
+            eventStage={eventStage}
+            setEventStage={setEventStage}
             eventType={eventType}
             setEventType={setEventType}
           />
