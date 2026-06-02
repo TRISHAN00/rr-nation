@@ -11,6 +11,7 @@ import BIBInput from "./BIBInput";
 import OrderDataField from "./OrderDataField";
 
 export default function OrderSheet({ selectedReg }) {
+  console.log("OrderSheet received selectedReg:", selectedReg);
   return (
     <div className="p-6 space-y-8">
       {/* Section 1: Buyer Information (The Account Holder) */}
@@ -78,7 +79,6 @@ export default function OrderSheet({ selectedReg }) {
 
         <Accordion type="single" collapsible className="space-y-3">
           {selectedReg?.order?.items.map((item, idx) => {
-            console.log("Rendering item:", item); // Debug log to check item structure
 
             return (
               <AccordionItem
