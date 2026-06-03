@@ -16,63 +16,92 @@ import FillButton from "../../../common/FillButton";
 
 export default function RegistrationForm({ agree }) {
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isPayOpen, setIsPayOpen] = useState(false);
 
-
   const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    birthDate: "", 
+    educationalQualification: "",
+    hscPassingYear: "", 
+    religion: "",
+    gender: "",
+    bloodGroup: "",
     facebookLink: "",
-    age: 0,
     district: "",
     deliveryAddress: "",
     tShirtSize: "",
-    eventType: "",
-    occupation: "string",
-    specialSkill: "",
-    preferableRunningDistance: "",
-    isEventStaff: false,
-    eventsParticipatedNumber: 0,
+    eventType: [], 
+    occupation: "",
+    preferableRunningDistance: [], 
+    preferableEventLocation: [], 
+    whyJoin: "",
+    wantsToJoinTeam: false, 
+    joinTeamReason: "",
+    interested: [], 
     recommendationMessage: "",
-    memberImage: null
+    memberImage: null 
   });
+
+  console.log("FORM DATA:", formData);
 
   const handleMemberSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // 1. Transform state object into FormData for multipart/form-data
     const payload = new FormData();
+
     Object.keys(formData).forEach((key) => {
       const value = formData[key];
-      // Only append fields that are not null/undefined
-      if (value !== null && value !== undefined) {
-        payload.append(key, value);
+
+      if (value !== null && value !== undefined && value !== "") {
+        // FIX 1: Turn arrays into single comma-separated strings as expected by the backend
+        if (Array.isArray(value)) {
+          payload.append(key, value.join(","));
+        } 
+        // Ensure booleans are cleanly passed as standard string configurations
+        else if (typeof value === "boolean") {
+          payload.append(key, value ? "true" : "false");
+        } 
+        // Explicitly format into standard integer types
+        else if (key === "hscPassingYear") {
+          payload.append(key, Number(value));
+        } 
+        // FIX 2: Sanitize and rebuild broken date year selections (e.g., '0195' -> '1995')
+        else if (key === "birthDate") {
+          const dateParts = value.split("-");
+          if (dateParts[0] && dateParts[0].length === 4 && dateParts[0].startsWith("01")) {
+            const correctedYear = dateParts[0].replace(/^01/, "19");
+            payload.append(key, `${correctedYear}-${dateParts[1] || "01"}-${dateParts[2] || "01"}`);
+          } else {
+            payload.append(key, value);
+          }
+        } 
+        else {
+          payload.append(key, value);
+        }
+      } else if (typeof value === "boolean") {
+        payload.append(key, "false");
       }
     });
 
     try {
-      // 2. Send the FormData instance, NOT the state object
       const response = await registerMember(payload);
-      console.log(response)
+      console.log("SERVER RESPONSE:", response);
 
-      // 3. Keep your requested logic pattern
       if (response?.statusCode !== 201) {
         toast.error(response?.message || "Registration failed");
         return;
-      } else {
-        setOpen(true);
       }
 
       setIsFormOpen(false);
       setIsPayOpen(true);
-
       toast.success("Registration successful 🎉");
 
-      // Optional: Reset form or close modal here
     } catch (error) {
-      console.log("FULL ERROR:", error);
-
+      console.log("FULL ERROR DETAILS:", error);
       const errorMessage =
         error?.response?.data?.message ||
         error?.response?.data?.error ||
@@ -87,7 +116,7 @@ export default function RegistrationForm({ agree }) {
 
   return (
     <>
-      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen} >
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogTrigger asChild>
           <FillButton
             disabled={!agree}
@@ -104,7 +133,12 @@ export default function RegistrationForm({ agree }) {
             </DialogTitle>
           </DialogHeader>
 
-          <MemberForm onSubmit={handleMemberSubmit} formData={formData} setFormData={setFormData} loading={loading} />
+          <MemberForm 
+            onSubmit={handleMemberSubmit} 
+            formData={formData} 
+            setFormData={setFormData} 
+            loading={loading} 
+          />
         </DialogContent>
       </Dialog>
 
