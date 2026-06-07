@@ -36,9 +36,9 @@ import { MemberListSkeleton } from "./MemberSkeleton";
 
 export default function MemberList({
   members = [],
-  handleViewDetails,
   loading,
   onAction,
+  onViewDetails
 }) {
   const getStatusBadge = (status) => {
     const styles = {
@@ -60,26 +60,20 @@ export default function MemberList({
   };
 
   return (
-    /* Added custom-scrollbar here */
     <Card className="border-border bg-card shadow-sm overflow-x-auto custom-scrollbar">
       <CardContent className="p-0">
-        <Table className="min-w-[1750px]">
+        {/* Reduced min-width from 1750px to 1100px for better monitor responsiveness */}
+        <Table className="min-w-[1100px]">
           <TableHeader className="bg-muted/50 sticky top-0 z-10">
             <TableRow className="text-[10px] uppercase font-bold">
-              <TableHead className="w-[100px]">RRN Member ID</TableHead>
-              <TableHead>Registration Date</TableHead>
-              <TableHead>Member Name</TableHead>
-              <TableHead>Age</TableHead>
+              <TableHead>Member Info</TableHead>
+              <TableHead>Reg. Date</TableHead>
               <TableHead>Type</TableHead>
-              <TableHead>Event</TableHead>
+              <TableHead>Event Category</TableHead>
               <TableHead>Distance</TableHead>
-              <TableHead>Occupation</TableHead>
-              <TableHead>District</TableHead>
-              <TableHead>T-Shirt</TableHead>
-              <TableHead>Payment Status</TableHead>
-              <TableHead>Payment Date</TableHead>
+              <TableHead>Payment</TableHead>
               <TableHead>Amount</TableHead>
-              <TableHead>Approval</TableHead>
+              <TableHead>Admin Approval</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -92,72 +86,78 @@ export default function MemberList({
                   key={item.id}
                   className="text-[12px] hover:bg-muted/30"
                 >
-                  <TableCell className="font-bold text-primary">
-                    {item.registrationNumber}
+                  {/* COMPACT MEMBER PROFILE */}
+                  <TableCell>
+                    <div className="flex items-center gap-2.5">
+                      <Avatar className="h-8 w-8 border shadow-sm shrink-0">
+                        <AvatarImage src={item.memberImage} />
+                        <AvatarFallback className="text-[10px]">
+                          <User className="h-3.5 w-3.5" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-semibold text-foreground truncate max-w-[140px]">
+                          {item.user?.firstName} {item.user?.lastName}
+                        </span>
+                        <span className="text-[10px] font-mono font-bold text-primary">
+                          {item.registrationNumber}
+                        </span>
+                      </div>
+                    </div>
                   </TableCell>
+
                   <TableCell className="whitespace-nowrap text-muted-foreground">
                     {formatDate(item.createdAt)}
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-7 w-7 border shadow-sm">
-                        <AvatarImage src={item.memberImage} />
-                        <AvatarFallback className="text-[10px]">
-                          <User className="h-3 w-3" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium truncate max-w-[110px]">
-                        {item.user?.firstName} {item.user?.lastName}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>{item.age}</TableCell>
+
                   <TableCell>
                     <Badge
                       variant="outline"
-                      className="text-[9px] uppercase h-4 px-1"
+                      className="text-[9px] uppercase h-4 px-1 font-medium"
                     >
                       {item.memberType}
                     </Badge>
                   </TableCell>
-                  <TableCell className="whitespace-nowrap">
+
+                  <TableCell className="whitespace-nowrap font-medium text-muted-foreground">
                     {item.eventType}
                   </TableCell>
-                  <TableCell className="font-medium">
+
+                  <TableCell className="font-bold">
                     {item.preferableRunningDistance} KM
                   </TableCell>
-                  <TableCell className="truncate max-w-[100px]">
-                    {item.occupation}
-                  </TableCell>
-                  <TableCell>{item.district}</TableCell>
-                  <TableCell className="font-bold text-center">
-                    {item.tShirtSize}
-                  </TableCell>
+
+                  {/* PAYMENT DETAILS */}
                   <TableCell>
-                    <Badge
-                      className={`text-[9px] h-4 px-1.5 ${getStatusBadge(item.paymentStatus)}`}
-                    >
-                      {item.paymentStatus}
-                    </Badge>
+                    <div className="flex flex-col gap-0.5">
+                      <Badge
+                        className={`text-[9px] h-4 px-1.5 w-fit font-bold ${getStatusBadge(item.paymentStatus)}`}
+                      >
+                        {item.paymentStatus}
+                      </Badge>
+                      {item.paymentStatus === "paid" && item.paymentDate && (
+                        <span className="text-[10px] text-muted-foreground font-medium pl-0.5">
+                          {formatDate(item.paymentDate)}
+                        </span>
+                      )}
+                    </div>
                   </TableCell>
-                  <TableCell className="whitespace-nowrap text-muted-foreground">
-                    {item.paymentStatus === "paid"
-                      ? formatDate(item.paymentDate)
-                      : "—"}
-                  </TableCell>
+
                   <TableCell className="font-bold text-emerald-600">
                     ৳{item.afterDiscountAmount || 0}
                   </TableCell>
+
                   <TableCell>
                     <Badge
-                      className={`text-[9px] h-4 px-1.5 ${getStatusBadge(item.adminApproval)}`}
+                      className={`text-[9px] h-4 px-1.5 font-bold ${getStatusBadge(item.adminApproval)}`}
                     >
                       {item.adminApproval}
                     </Badge>
                   </TableCell>
+
+                  {/* ACTIONS DROP-DOWN */}
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1">
-                      {/* 1. Quick Edit Button */}
                       <Button
                         variant="ghost"
                         size="sm"
@@ -167,7 +167,6 @@ export default function MemberList({
                         <Edit className="h-4 w-4" />
                       </Button>
 
-                      {/* 2. More Actions Dropdown */}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -183,7 +182,7 @@ export default function MemberList({
                             Quick Actions
                           </DropdownMenuLabel>
                           <DropdownMenuItem
-                            onClick={() => handleViewDetails(item)}
+                            onClick={() => onViewDetails(item)}
                           >
                             <Eye className="mr-2 h-3.5 w-3.5" /> Details
                           </DropdownMenuItem>
@@ -192,14 +191,14 @@ export default function MemberList({
 
                           <DropdownMenuItem
                             onClick={() => onAction(item, "approve")}
-                            className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50"
+                            className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50 font-medium"
                           >
                             <CheckCircle className="mr-2 h-3.5 w-3.5" /> Approve
                           </DropdownMenuItem>
 
                           <DropdownMenuItem
                             onClick={() => onAction(item, "reject")}
-                            className="text-rose-600 focus:text-rose-600 focus:bg-rose-50"
+                            className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 font-medium"
                           >
                             <XCircle className="mr-2 h-3.5 w-3.5" /> Reject
                           </DropdownMenuItem>

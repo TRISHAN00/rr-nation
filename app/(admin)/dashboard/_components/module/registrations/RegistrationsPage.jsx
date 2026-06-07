@@ -123,8 +123,6 @@ export default function RegistrationsPage() {
         const p = item.participant || {};
         const u = reg.user || {};
 
-        console.log(u)
-
         // Build a temporary key/value lookup map for this row item's form fields
         const formDataMap = {};
         if (Array.isArray(item.formData)) {
