@@ -44,9 +44,12 @@ export default function FeaturedCardLeft({
             {event?.name}
           </h4>
 
-          <h1 className="text-brand text-6xl sm:text-7xl lg:text-[120px] leading-none">
-            {minDistance}KM
-          </h1>
+          {
+            minDistance ? <h1 className="text-brand text-6xl sm:text-7xl lg:text-[120px] leading-none">
+              {minDistance}KM
+            </h1> : <div className="h-16"></div>
+          }
+
 
           <ul className="mt-5 space-y-2 text-light lg:flex items-center gap-4">
             <li className="flex mb-0 items-center gap-2.5 text-sm sm:text-base">
@@ -59,7 +62,7 @@ export default function FeaturedCardLeft({
         </div>
 
         <div className="text-[#B3E9E7] text-sm sm:text-base flex justify-between flex-col">
-         
+
 
           <div className=" flex mt-4 justify-center lg:items-center flex-col ">
             <Logo />
