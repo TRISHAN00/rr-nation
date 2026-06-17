@@ -156,9 +156,9 @@ export default function MemberDetailView({ member }) {
             {/* FOOTER METADATA ZONE */}
             <CardContent className="py-4 bg-muted/30">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-2">
-                {profile.paymentGateway && <DataRow label="Gateway" value={profile.paymentGateway} />}
-                {profile.currency && <DataRow label="Currency" value={profile.currency} />}
-                {profile.adminApproval && <DataRow label="Admin Approval" value={profile.adminApproval} />}
+                {profile?.paymentGateway && <DataRow label="Gateway" value={profile.paymentGateway} />}
+                {profile?.currency && <DataRow label="Currency" value={profile.currency} />}
+                {profile?.adminApproval && <DataRow label="Admin Approval" value={profile.adminApproval} />}
               </div>
             </CardContent>
           </Card>

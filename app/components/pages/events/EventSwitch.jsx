@@ -13,7 +13,7 @@ export default function EventSwitch({ active, onChange }) {
             : "text-dark hover:text-brand"
         )}
       >
-        Run Rise Nation Event
+        RunRise Nation Events
       </button>
 
       <button
@@ -25,7 +25,7 @@ export default function EventSwitch({ active, onChange }) {
             : "text-dark hover:text-brand"
         )}
       >
-        Other Event
+        Other Events
       </button>
     </div>
   );

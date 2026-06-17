@@ -81,133 +81,140 @@ export default function MemberList({
             {loading ? (
               <MemberListSkeleton rowCount={10} />
             ) : (
-              members.map((item) => (
-                <TableRow
-                  key={item.id}
-                  className="text-[12px] hover:bg-muted/30"
-                >
-                  {/* COMPACT MEMBER PROFILE */}
-                  <TableCell>
-                    <div className="flex items-center gap-2.5">
-                      <Avatar className="h-8 w-8 border shadow-sm shrink-0">
-                        <AvatarImage src={item.memberImage} />
-                        <AvatarFallback className="text-[10px]">
-                          <User className="h-3.5 w-3.5" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-foreground truncate max-w-[140px]">
-                          {item.user?.firstName} {item.user?.lastName}
-                        </span>
-                        <span className="text-[10px] font-mono font-bold text-primary">
-                          {item.registrationNumber}
-                        </span>
+              members.map((item) => {
+                console.log(item?.adminApproval)
+                return (
+                  <TableRow
+                    key={item.id}
+                    className="text-[12px] hover:bg-muted/30"
+                  >
+                    {/* COMPACT MEMBER PROFILE */}
+                    <TableCell>
+                      <div className="flex items-center gap-2.5">
+                        <Avatar className="h-8 w-8 border shadow-sm shrink-0">
+                          <AvatarImage src={item.memberImage} />
+                          <AvatarFallback className="text-[10px]">
+                            <User className="h-3.5 w-3.5" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-semibold text-foreground truncate max-w-[140px]">
+                            {item.user?.firstName} {item.user?.lastName}
+                          </span>
+                          <span className="text-[10px] font-mono font-bold text-primary">
+                            {item.registrationNumber}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
+                    </TableCell>
 
-                  <TableCell className="whitespace-nowrap text-muted-foreground">
-                    {formatDate(item.createdAt)}
-                  </TableCell>
+                    <TableCell className="whitespace-nowrap text-muted-foreground">
+                      {formatDate(item.createdAt)}
+                    </TableCell>
 
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className="text-[9px] uppercase h-4 px-1 font-medium"
-                    >
-                      {item.memberType}
-                    </Badge>
-                  </TableCell>
-
-                  <TableCell className="whitespace-nowrap font-medium text-muted-foreground">
-                    {item.eventType}
-                  </TableCell>
-
-                  <TableCell className="font-bold">
-                    {item.preferableRunningDistance} KM
-                  </TableCell>
-
-                  {/* PAYMENT DETAILS */}
-                  <TableCell>
-                    <div className="flex flex-col gap-0.5">
+                    <TableCell>
                       <Badge
-                        className={`text-[9px] h-4 px-1.5 w-fit font-bold ${getStatusBadge(item.paymentStatus)}`}
+                        variant="outline"
+                        className="text-[9px] uppercase h-4 px-1 font-medium"
                       >
-                        {item.paymentStatus}
+                        {item.memberType}
                       </Badge>
-                      {item.paymentStatus === "paid" && item.paymentDate && (
-                        <span className="text-[10px] text-muted-foreground font-medium pl-0.5">
-                          {formatDate(item.paymentDate)}
-                        </span>
-                      )}
-                    </div>
-                  </TableCell>
+                    </TableCell>
 
-                  <TableCell className="font-bold text-emerald-600">
-                    ৳{item.afterDiscountAmount || 0}
-                  </TableCell>
+                    <TableCell className="whitespace-nowrap font-medium text-muted-foreground">
+                      {item.eventType}
+                    </TableCell>
 
-                  <TableCell>
-                    <Badge
-                      className={`text-[9px] h-4 px-1.5 font-bold ${getStatusBadge(item.adminApproval)}`}
-                    >
-                      {item.adminApproval}
-                    </Badge>
-                  </TableCell>
 
-                  {/* ACTIONS DROP-DOWN */}
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 w-7 p-0 text-muted-foreground hover:text-primary"
-                        onClick={() => onAction(item, "edit")}
+                    <TableCell className="font-bold">
+                      {item.preferableRunningDistance ? item.preferableRunningDistance : ''}
+                    </TableCell>
+
+                    {/* PAYMENT DETAILS */}
+                    <TableCell>
+                      <div className="flex flex-col gap-0.5">
+                        <Badge
+                          className={`text-[9px] h-4 px-1.5 w-fit font-bold uppercase ${getStatusBadge(item.paymentStatus)}`}
+                        >
+                          {item.paymentStatus}
+                        </Badge>
+                        {item.paymentStatus === "paid" && item.paymentDate && (
+                          <span className="text-[10px] text-muted-foreground font-medium pl-0.5">
+                            {formatDate(item.paymentDate)}
+                          </span>
+                        )}
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="font-bold text-emerald-600">
+                      ৳{item.afterDiscountAmount || 0}
+                    </TableCell>
+
+                    <TableCell>
+                      <Badge
+                        className={`text-[9px] h-4 px-1.5 font-bold uppercase ${getStatusBadge(item.adminApproval)}`}
                       >
-                        <Edit className="h-4 w-4" />
-                      </Button>
+                        {item.adminApproval}
+                      </Badge>
+                    </TableCell>
 
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-7 w-7 p-0"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="text-xs">
-                          <DropdownMenuLabel className="text-[10px] text-muted-foreground">
-                            Quick Actions
-                          </DropdownMenuLabel>
-                          <DropdownMenuItem
-                            onClick={() => onViewDetails(item)}
-                          >
-                            <Eye className="mr-2 h-3.5 w-3.5" /> Details
-                          </DropdownMenuItem>
+                    {/* ACTIONS DROP-DOWN */}
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 w-7 p-0 text-muted-foreground hover:text-primary"
+                          onClick={() => onAction(item, "edit")}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
 
-                          <DropdownMenuSeparator />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 w-7 p-0"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="text-xs">
+                            <DropdownMenuLabel className="text-[10px] text-muted-foreground">
+                              Quick Actions
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem
+                              onClick={() => onViewDetails(item)}
+                            >
+                              <Eye className="mr-2 h-3.5 w-3.5" /> Details
+                            </DropdownMenuItem>
 
-                          <DropdownMenuItem
-                            onClick={() => onAction(item, "approve")}
-                            className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50 font-medium"
-                          >
-                            <CheckCircle className="mr-2 h-3.5 w-3.5" /> Approve
-                          </DropdownMenuItem>
-
-                          <DropdownMenuItem
-                            onClick={() => onAction(item, "reject")}
-                            className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 font-medium"
-                          >
-                            <XCircle className="mr-2 h-3.5 w-3.5" /> Reject
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                            <DropdownMenuSeparator />
+                            {
+                                  item.adminApproval === "rejected" && item.adminApproval !== "pending" && <DropdownMenuItem
+                                onClick={() => onAction(item, "approve")}
+                                className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50 font-medium"
+                              >
+                                <CheckCircle className="mr-2 h-3.5 w-3.5" /> Approve
+                              </DropdownMenuItem>
+                            }
+                            {
+                              item?.adminApproval === "approved" &&  item.adminApproval !== "pending" &&
+                              <DropdownMenuItem
+                                onClick={() => onAction(item, "reject")}
+                                className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 font-medium"
+                              >
+                                <XCircle className="mr-2 h-3.5 w-3.5" /> Reject
+                              </DropdownMenuItem>
+                            }
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
             )}
           </TableBody>
         </Table>
