@@ -54,16 +54,19 @@ export default function DashboardEventCardHeader({
         </div>
 
         <div className="flex items-center gap-2">
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="sm" className="gap-1">
-              {expandedEvent === event.id ? (
-                <ChevronUp className="h-4 w-4" />
-              ) : (
-                <ChevronDown className="h-4 w-4" />
-              )}
-              {expandedEvent === event.id ? "Hide Packages" : "View Packages"}
-            </Button>
-          </CollapsibleTrigger>
+          {
+            event?.packages?.length > 0 && <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-1">
+                {expandedEvent === event.id ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+                {expandedEvent === event.id ? "Hide Packages" : "View Packages"}
+              </Button>
+            </CollapsibleTrigger>
+          }
+
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

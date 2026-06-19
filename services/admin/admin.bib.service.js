@@ -1,5 +1,10 @@
 import api from "@/lib/api";
 
+export const updateVirtualEventSubmission = async (payload) => {
+  const { data } = await api.patch("/admin/virtual-event/data-submission", payload);
+  return data;
+};
+
 export default {
   async getBibNumber(participantId) {
     const response = await api.get(`/admin/order/participant/${participantId}/bib-number`);

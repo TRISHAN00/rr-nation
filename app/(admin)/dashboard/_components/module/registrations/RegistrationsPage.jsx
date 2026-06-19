@@ -61,6 +61,23 @@ export default function RegistrationsPage() {
     setIsSheetOpen(true);
   };
 
+  const handleBibUpdate = (orderItemId, updatedFields) => {
+    const updateItem = (reg) => ({
+      ...reg,
+      order: {
+        ...reg.order,
+        items: reg.order.items.map((item) =>
+          item.id === orderItemId
+            ? { ...item, bib: { ...item.bib, ...updatedFields } }
+            : item
+        ),
+      },
+    });
+
+    setSelectedReg((prev) => (prev ? updateItem(prev) : prev));
+    setRegisteredUsers((prev) => prev.map((reg) => updateItem(reg)));
+  };
+
   const handleExportCSV = () => {
     // 1. Gather all unique dynamic formData labels across the current dataset
     const dynamicLabelsSet = new Set();
@@ -229,7 +246,7 @@ export default function RegistrationsPage() {
           {/* Header Section */}
           {selectedReg && <OrderSheetHeader selectedReg={selectedReg} />}
 
-          {selectedReg && <OrderSheet selectedReg={selectedReg} />}
+          {selectedReg && <OrderSheet selectedReg={selectedReg} onBibUpdate={handleBibUpdate} />}
         </SheetContent>
       </Sheet>
     </div>

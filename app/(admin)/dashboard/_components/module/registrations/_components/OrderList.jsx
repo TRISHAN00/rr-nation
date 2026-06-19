@@ -15,7 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/components/ui/table";
-import { Eye } from "lucide-react";
+import { Badge } from "@/app/components/ui/badge";
+import { Eye, Hash } from "lucide-react";
 import { OrderListSkeleton } from "./Skeleton/OrderSkeleton";
 
 export default function OrderList({
@@ -29,28 +30,15 @@ export default function OrderList({
         <Table>
           <TableHeader className="bg-muted/50">
             <TableRow>
-              <TableHead className="font-semibold text-foreground text-left">
-                ID
-              </TableHead>
-
-              <TableHead className="font-semibold text-foreground text-left">Event / BIB Status</TableHead>
-              <TableHead className="font-semibold text-foreground text-left">
-                Event Name
-              </TableHead>
-
-              <TableHead className="font-semibold text-foreground text-left">
-                Coupon
-              </TableHead>
-              <TableHead className="font-semibold text-foreground text-left">
-                Amount
-              </TableHead>
-              <TableHead className="font-semibold text-foreground text-left">
-                Payment Date/Time
-              </TableHead>
-
-              <TableHead className="text-right font-semibold text-foreground">
-                Action
-              </TableHead>
+              <TableHead className="font-semibold text-foreground text-left">ID</TableHead>
+              <TableHead className="font-semibold text-foreground text-left">User</TableHead>
+              <TableHead className="font-semibold text-foreground text-left">Event / Ticket</TableHead>
+              <TableHead className="font-semibold text-foreground text-left">BIB</TableHead>
+              <TableHead className="font-semibold text-foreground text-left">Tracking</TableHead>
+              <TableHead className="font-semibold text-foreground text-left">Coupon</TableHead>
+              <TableHead className="font-semibold text-foreground text-left">Amount</TableHead>
+              <TableHead className="font-semibold text-foreground text-left">Payment Date/Time</TableHead>
+              <TableHead className="text-right font-semibold text-foreground">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -62,22 +50,23 @@ export default function OrderList({
                 const eventName =
                   reg?.order?.items?.[0]?.eventTicket?.event?.name;
                 const itemCount = reg?.order?.items?.length || 0;
+                const items = reg?.order?.items || [];
 
-                // Define colors for 1, 2, 3, and 4+
                 const getBadgeColor = (count) => {
                   switch (count) {
-                    case 1:
-                      return "bg-blue-500";
-                    case 2:
-                      return "bg-emerald-500";
-                    case 3:
-                      return "bg-amber-500";
-                    case 4:
-                      return "bg-rose-500";
-                    default:
-                      return "bg-brand"; // Fallback for 0 or 5+
+                    case 1: return "bg-blue-500";
+                    case 2: return "bg-emerald-500";
+                    case 3: return "bg-amber-500";
+                    case 4: return "bg-rose-500";
+                    default: return "bg-brand";
                   }
                 };
+
+                const allBibs = items.filter((i) => i.bib);
+                const trackingValues = [
+                  ...new Set(allBibs.map((i) => i.bib.tracking).filter(Boolean)),
+                ];
+
                 return (
                   <TableRow key={reg?.id}>
                     <TableCell>NR{reg?.user?.id}</TableCell>
@@ -100,13 +89,56 @@ export default function OrderList({
                       </div>
                     </TableCell>
 
-                    <TableCell className="flex items-center gap-2">
-                      {eventName}
-                      <span
-                        className={`text-xs px-2 py-1 rounded text-white ${getBadgeColor(itemCount)}`}
-                      >
-                        {itemCount}
-                      </span>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium truncate max-w-[160px]">{eventName}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded text-white ${getBadgeColor(itemCount)}`}>
+                          {itemCount}
+                        </span>
+                      </div>
+                      <div className="mt-1 space-y-0.5">
+                        {items.map((item, idx) => (
+                          <div key={idx} className="text-[10px] text-muted-foreground">
+                            {item.eventTicket?.name || `Item ${idx + 1}`}
+                          </div>
+                        ))}
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      {allBibs.length > 0 ? (
+                        <div className="space-y-1.5">
+                          {allBibs.map((item, idx) => (
+                            <div key={idx} className="flex items-center gap-1.5">
+                              <Hash className="h-3 w-3 text-muted-foreground shrink-0" />
+                              <span className="text-xs font-semibold">{item.bib.bibNumber}</span>
+                              <Badge className={`text-[8px] h-4 px-1 font-bold uppercase ${
+                                item.bib.adminApproval === "approved" ? "bg-emerald-500" :
+                                item.bib.adminApproval === "pending" ? "bg-amber-500" :
+                                "bg-red-500"
+                              }`}>
+                                {item.bib.adminApproval}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
+
+                    <TableCell>
+                      {trackingValues.length > 0 ? (
+                        <div className="space-y-0.5">
+                          {trackingValues.map((t, i) => (
+                            <div key={i} className="text-[10px] text-muted-foreground max-w-[140px] truncate" title={t}>
+                              {t}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
                     </TableCell>
 
                     <TableCell>

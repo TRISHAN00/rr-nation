@@ -69,3 +69,8 @@ export const getAllUserOrders = async () => {
   const { data } = await api.get("/auth/user/order-history");
   return data;
 };
+
+export const submitVirtualEventData = async (payload) => {
+  const { data } = await api.patch("/auth/user/virtual-event/data-submission", payload);
+  return data;
+};
