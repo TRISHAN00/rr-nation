@@ -39,7 +39,7 @@ export default function DashboardMemberPage() {
     setIsModalOpen(true);
   };
 
-  const handleConfirmAction = async () => {
+  const handleConfirmAction = async (selectedType) => {
     if (!selectedMember) return;
 
     setIsUpdating(true);
@@ -47,7 +47,7 @@ export default function DashboardMemberPage() {
       const payload = {
         memberId: selectedMember.id,
         adminApproval: actionType === "approve" ? "approved" : "rejected",
-        memberType: selectedMember.memberType,
+        memberType: selectedType || selectedMember.memberType,
       };
 
       await updateMemberStatus(payload);

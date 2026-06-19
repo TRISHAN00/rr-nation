@@ -191,23 +191,22 @@ export default function MemberList({
                             </DropdownMenuItem>
 
                             <DropdownMenuSeparator />
-                            {
-                                  item.adminApproval === "rejected" && item.adminApproval !== "pending" && <DropdownMenuItem
+                            {item.adminApproval !== "approved" && (
+                              <DropdownMenuItem
                                 onClick={() => onAction(item, "approve")}
                                 className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50 font-medium"
                               >
                                 <CheckCircle className="mr-2 h-3.5 w-3.5" /> Approve
                               </DropdownMenuItem>
-                            }
-                            {
-                              item?.adminApproval === "approved" &&  item.adminApproval !== "pending" &&
+                            )}
+                            {item.adminApproval !== "rejected" && (
                               <DropdownMenuItem
                                 onClick={() => onAction(item, "reject")}
                                 className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 font-medium"
                               >
                                 <XCircle className="mr-2 h-3.5 w-3.5" /> Reject
                               </DropdownMenuItem>
-                            }
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
