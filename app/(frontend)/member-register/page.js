@@ -24,9 +24,9 @@ export default function RegisterPage() {
   return (
     <>
       <InnerBanner
-        title="Member Register"
+        title="Member Registration"
         background="/dynamic/about/inner-banner.jpg"
-        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Register" }]}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Registration" }]}
       />
       <RegisterMemberContent />
     </>

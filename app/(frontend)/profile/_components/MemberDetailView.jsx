@@ -4,8 +4,8 @@ import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import { CreditCard, MessageCircle, Trophy, User } from "lucide-react";
+import { CreditCard, Gift, MessageCircle, Trophy, User, UserPlus } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import MemPayModal from "./MemPayModal";
 import MemberEvents from "./MemberEvents";
@@ -26,6 +26,7 @@ export default function MemberDetailView({ member }) {
 
   const profile = member?.data || {};
   const isPaid = profile.paymentStatus === "paid";
+  const hasData = Object.keys(profile).length > 0;
 
   const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/DUkNdmvMZFAJaTbt5bBjq0?s=cl&p=i&ilr=2";
 
@@ -38,9 +39,31 @@ export default function MemberDetailView({ member }) {
     </div>
   );
 
+  if (!hasData) {
+    return (
+      <div className="mt-6 w-full mx-auto">
+        <Card className="border-muted/70 shadow-md rounded-xl">
+          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="p-4 rounded-full bg-brand/10 mb-6">
+              <Gift className="h-12 w-12 text-brand" />
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-2">No Membership Found</h3>
+            <p className="text-sm text-muted-foreground max-w-md mb-8">
+              You haven&apos;t registered as a member yet. Become a member to unlock exclusive benefits, training sessions, event discounts, and more.
+            </p>
+            <Link href="/member-register">
+              <Button size="lg" className="gap-2 text-sm font-bold shadow-lg">
+                <UserPlus className="h-5 w-5" /> Become a Member
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-6 w-full mx-auto">
-      {/* Tab Nav Controller Structure */}
       <Tabs defaultValue="profile" className="space-y-6">
         <div className="border-b pb-1">
           <TabsList className="bg-muted/50 p-1 h-10 gap-1 rounded-lg">
@@ -55,10 +78,8 @@ export default function MemberDetailView({ member }) {
           </TabsList>
         </div>
 
-        {/* TAB 1: PROFILE DETAILS INFO OVERLAY BLOCK */}
         <TabsContent value="profile" className="space-y-6 focus-visible:outline-none focus-visible:ring-0 mt-0">
           <Card className="border-muted/70 shadow-md backdrop-blur-sm bg-card/90 rounded-xl overflow-hidden">
-            {/* HEADER DESIGN CONTROLS */}
             <CardHeader className="pb-4 bg-muted/10 border-b border-muted/40">
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
@@ -69,7 +90,7 @@ export default function MemberDetailView({ member }) {
                 <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
                   <div className="flex gap-2">
                     <Badge variant="outline" className="text-xs font-semibold px-2.5 py-1 bg-background rounded-md shadow-sm">
-                      {MEMBER_TYPE_LABELS[profile.memberType] || "N/A"}
+                      {MEMBER_TYPE_LABELS[profile.memberType] || profile.memberType || "N/A"}
                     </Badge>
                     {profile.paymentStatus && (
                       <Badge
@@ -102,26 +123,31 @@ export default function MemberDetailView({ member }) {
               </div>
             </CardHeader>
 
-            {/* TWO COLUMN SUMMARY CONTENT SHEET */}
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 pt-6">
-              {/* Personal Info Grid Box */}
               <div className="space-y-4">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider border-b border-primary/20 pb-1.5">
                   Personal Info
                 </h4>
                 <div className="space-y-0.5">
-                  {profile.registrationNumber && <DataRow label="Registration ID" value={profile.registrationNumber} />}
+                  {profile.registrationNumber && <DataRow label="Member ID" value={profile.registrationNumber} />}
+                  {profile.gender && <DataRow label="Gender" value={profile.gender} />}
+                  {profile.bloodGroup && <DataRow label="Blood Group" value={profile.bloodGroup} />}
                   {profile.age && <DataRow label="Age" value={`${profile.age} Years`} />}
+                  {profile.phone && <DataRow label="Phone" value={profile.phone} />}
+                  {profile.educationalQualification && <DataRow label="Education" value={profile.educationalQualification} />}
+                  {profile.hscPassingYear && <DataRow label="HSC Passing Year" value={profile.hscPassingYear} />}
                   {profile.occupation && <DataRow label="Occupation" value={profile.occupation} />}
+                  {profile.religion && <DataRow label="Religion" value={profile.religion} />}
                   {profile.specialSkill && <DataRow label="Special Skill" value={profile.specialSkill} />}
                   {profile.district && <DataRow label="District" value={profile.district} />}
+                  {profile.deliveryAddress && <DataRow label="Delivery Address" value={profile.deliveryAddress} />}
                   {profile.facebookLink && (
                     <div className="flex justify-between items-center py-3 border-b border-muted last:border-0 hover:bg-muted/30 px-2 rounded-md transition-colors">
                       <span className="text-xs sm:text-sm text-muted-foreground font-medium">Facebook</span>
-                      <a 
-                        href={profile.facebookLink} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
+                      <a
+                        href={profile.facebookLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-xs sm:text-sm text-blue-600 hover:underline font-semibold max-w-[180px] sm:max-w-xs truncate"
                       >
                         View Profile
@@ -131,45 +157,34 @@ export default function MemberDetailView({ member }) {
                 </div>
               </div>
 
-              {/* Running Specific Event Metrics */}
               <div className="space-y-4">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider border-b border-primary/20 pb-1.5">
-                  Event Data
+                  Event & Athletic Profile
                 </h4>
                 <div className="space-y-0.5">
                   {profile.eventType && <DataRow label="Event Type" value={profile.eventType} />}
                   {profile.preferableRunningDistance && (
-                    <DataRow label="Target Distance" value={`${profile.preferableRunningDistance} km`} />
+                    <DataRow label="Target Distance" value={profile.preferableRunningDistance} />
                   )}
+                  {profile.preferableEventLocation && <DataRow label="Preferred Location" value={profile.preferableEventLocation} />}
                   {profile.tShirtSize && <DataRow label="T-Shirt Size" value={profile.tShirtSize} />}
-                  {profile.eventsParticipatedNumber !== undefined && (
-                    <DataRow label="Past Participations" value={profile.eventsParticipatedNumber} />
+                  {profile.wantsToJoinTeam !== undefined && (
+                    <DataRow label="Wants to Join Team" value={profile.wantsToJoinTeam ? "Yes" : "No"} />
                   )}
-                  <DataRow label="Event Staff" value={profile.isEventStaff ? "Yes" : "No"} />
+                  {profile.joinTeamReason && <DataRow label="Reason to Join Team" value={profile.joinTeamReason} />}
+                  {profile.whyJoin && <DataRow label="Why Joined RRN" value={profile.whyJoin} />}
+                  {profile.recommendationMessage && <DataRow label="Recommendations" value={profile.recommendationMessage} />}
                 </div>
-              </div>
-            </CardContent>
-
-            <Separator className="opacity-60" />
-
-            {/* FOOTER METADATA ZONE */}
-            <CardContent className="py-4 bg-muted/30">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-2">
-                {profile?.paymentGateway && <DataRow label="Gateway" value={profile.paymentGateway} />}
-                {profile?.currency && <DataRow label="Currency" value={profile.currency} />}
-                {profile?.adminApproval && <DataRow label="Admin Approval" value={profile.adminApproval} />}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* TAB 2: COMPLETED RUNS HISTORY TABLE COMPONENT */}
         <TabsContent value="events" className="focus-visible:outline-none focus-visible:ring-0 mt-0">
           <MemberEvents />
         </TabsContent>
       </Tabs>
 
-      {/* Payment handling modal utility layer */}
       <MemPayModal open={open} setOpen={setOpen} memberId={profile.id} />
     </div>
   );

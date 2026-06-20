@@ -115,20 +115,6 @@ export default function MainMenu({ isMember }) {
             <Link href="/contact">Contact</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
-
-        {/* Become a Member */}
-        {!isMember && (
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link
-                href="/member-register"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-brand text-white font-bold text-sm hover:bg-brand/90 transition-all shadow-md"
-              >
-                Become a Member
-              </Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        )}
       </NavigationMenuList>
     </NavigationMenu>
   );
