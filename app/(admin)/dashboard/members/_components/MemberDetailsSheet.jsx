@@ -4,8 +4,10 @@ import { Badge } from "@/app/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
-    AlertCircle, Award, Briefcase, Calendar, CreditCard,
-    DollarSign, Mail, MapPin, Phone, ShieldAlert, Shirt, Sparkles, Trophy, User
+  AlertCircle, Award, Briefcase, Calendar, CreditCard,
+  DollarSign, ExternalLink, Facebook, Hash, Heart, Mail,
+  MapPin, MessageSquare, Phone, Ruler, ShieldAlert, Shirt,
+  Star, User
 } from "lucide-react";
 import Image from "next/image";
 
@@ -56,9 +58,12 @@ export default function MemberDetailsSheet({ isOpen, onOpenChange, selectedMembe
                 <SheetTitle className="text-xl font-extrabold tracking-tight text-foreground">
                   {selectedMember.name}
                 </SheetTitle>
-                <SheetDescription className="text-xs font-medium text-muted-foreground flex items-center justify-center gap-1.5">
-                  ID Reference: <span className="font-mono text-foreground font-bold">{selectedMember.id}</span>
-                </SheetDescription>
+                {
+                  selectedMember.registrationNumber && <SheetDescription className="text-xs font-medium text-muted-foreground flex items-center justify-center gap-1.5">
+                    Member ID: <span className="font-mono text-foreground font-bold">{selectedMember.registrationNumber}</span>
+                  </SheetDescription>
+                }
+
               </SheetHeader>
 
               {/* Status Badges Row */}
@@ -66,21 +71,19 @@ export default function MemberDetailsSheet({ isOpen, onOpenChange, selectedMembe
                 <Badge className="uppercase font-bold text-[10px] tracking-wider px-2.5 py-0.5" variant="secondary">
                   {selectedMember.memberType || "Member"}
                 </Badge>
-                
-                <Badge 
-                  className={`uppercase font-bold text-[10px] tracking-wider px-2.5 py-0.5 text-white border-none ${
-                    selectedMember.adminApproval === "approved" ? "bg-emerald-600" : "bg-amber-500"
-                  }`}
+
+                <Badge
+                  className={`uppercase font-bold text-[10px] tracking-wider px-2.5 py-0.5 text-white border-none ${selectedMember.adminApproval === "approved" ? "bg-emerald-600" : "bg-amber-500"
+                    }`}
                 >
                   Approval: {selectedMember.adminApproval || "Pending"}
                 </Badge>
 
-                <Badge 
-                  className={`uppercase font-bold text-[10px] tracking-wider px-2.5 py-0.5 text-white border-none ${
-                    selectedMember.paymentStatus === "success" || selectedMember.paymentStatus === "paid" 
-                      ? "bg-emerald-600" 
-                      : "bg-rose-500"
-                  }`}
+                <Badge
+                  className={`uppercase font-bold text-[10px] tracking-wider px-2.5 py-0.5 text-white border-none ${selectedMember.paymentStatus === "success" || selectedMember.paymentStatus === "paid"
+                    ? "bg-emerald-600"
+                    : "bg-rose-500"
+                    }`}
                 >
                   Payment: {selectedMember.paymentStatus || "Pending"}
                 </Badge>
@@ -95,7 +98,6 @@ export default function MemberDetailsSheet({ isOpen, onOpenChange, selectedMembe
               <div>
                 <SectionTitle title="Account & User Bindings" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 border border-border/60 p-3 rounded-xl bg-muted/20">
-                  <DetailRow icon={User} label="User ID Node" value={selectedMember.user?.id} />
                   <DetailRow icon={Mail} label="Account Auth Email" value={selectedMember.user?.email} />
                   <DetailRow icon={User} label="First Name Profile" value={selectedMember.user?.firstName} />
                   <DetailRow icon={User} label="Last Name Profile" value={selectedMember.user?.lastName} />
@@ -109,9 +111,9 @@ export default function MemberDetailsSheet({ isOpen, onOpenChange, selectedMembe
                   <DetailRow icon={Mail} label="Form Contact Email" value={selectedMember.email} />
                   <DetailRow icon={Phone} label="Phone Number" value={selectedMember.phone} />
                   <DetailRow icon={Calendar} label="Date of Birth" value={selectedMember.birthDate ? new Date(selectedMember.birthDate).toLocaleDateString() : null} />
-                  <DetailRow icon={User} label="Age / Gender" value={`${selectedMember.age || "—"} Years / ${selectedMember.gender || "—"}`} />
+                  <DetailRow icon={User} label="Gender" value={`${selectedMember.gender?.toUpperCase()}`} />
                   <DetailRow icon={Award} label="Blood Group" value={selectedMember.bloodGroup} />
-                  <DetailRow icon={Award} label="Religion Cluster" value={selectedMember.religion} />
+                  <DetailRow icon={Award} label="Religion" value={selectedMember.religion} />
                   <DetailRow icon={Briefcase} label="Occupation" value={selectedMember.occupation} />
                   <DetailRow icon={Award} label="Education Structure" value={selectedMember.educationalQualification} />
                   <DetailRow icon={Calendar} label="HSC Passing Year" value={selectedMember.hscPassingYear} />
@@ -119,6 +121,25 @@ export default function MemberDetailsSheet({ isOpen, onOpenChange, selectedMembe
                   <div className="sm:col-span-2">
                     <DetailRow icon={MapPin} label="Delivery Address String" value={selectedMember.deliveryAddress} />
                   </div>
+                  {selectedMember.facebookLink && (
+                    <div className="sm:col-span-2">
+                      <div className="flex items-start gap-3 py-2.5 text-sm">
+                        <Facebook className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                        <div className="space-y-0.5 w-full min-w-0">
+                          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Facebook Profile</p>
+                          <a
+                            href={selectedMember.facebookLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold text-primary hover:underline inline-flex items-center gap-1 break-all"
+                          >
+                            {selectedMember.facebookLink}
+                            <ExternalLink className="h-3 w-3 shrink-0" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -126,19 +147,30 @@ export default function MemberDetailsSheet({ isOpen, onOpenChange, selectedMembe
               <div>
                 <SectionTitle title="Athletic Profile & Community Engagement" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 border border-border/60 p-3 rounded-xl bg-muted/20">
-                  <Shirt className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
                   <DetailRow icon={Shirt} label="Selected T-Shirt Size" value={selectedMember.tShirtSize} />
-                  <DetailRow icon={Trophy} label="Events Participated" value={selectedMember.eventsParticipatedNumber} />
+                  <DetailRow icon={Star} label="Preferable Event Type" value={selectedMember.eventType} />
+                  <DetailRow icon={Ruler} label="Running Distance Preference" value={selectedMember.preferableRunningDistance} />
+                  <DetailRow icon={Hash} label="Events Participated" value={selectedMember.eventsParticipatedNumber} />
+                  <DetailRow icon={Award} label="Special Skills" value={selectedMember.specialSkill} />
                   <DetailRow icon={ShieldAlert} label="Is Assigned Event Staff" value={selectedMember.isEventStaff ? "YES (Staff)" : "NO (Standard)"} />
-                  <DetailRow icon={Sparkles} label="Special Talents / Skills" value={selectedMember.specialSkill} />
                   <DetailRow icon={User} label="Wants to Join Team" value={selectedMember.wantsToJoinTeam ? "YES" : "NO"} />
                   <DetailRow icon={MapPin} label="Preferred Location" value={selectedMember.preferableEventLocation} />
+                  {selectedMember.interested?.length > 0 && (
+                    <div className="sm:col-span-2">
+                      <DetailRow icon={Heart} label="Areas of Interest" value={Array.isArray(selectedMember.interested) ? selectedMember.interested.join(", ") : selectedMember.interested} />
+                    </div>
+                  )}
                   <div className="sm:col-span-2">
                     <DetailRow icon={AlertCircle} label="Reason for Joining Team" value={selectedMember.joinTeamReason} />
                   </div>
                   <div className="sm:col-span-2">
                     <DetailRow icon={AlertCircle} label="Statement of Purpose (Why Join)" value={selectedMember.whyJoin} />
                   </div>
+                  {selectedMember.recommendationMessage && (
+                    <div className="sm:col-span-2">
+                      <DetailRow icon={MessageSquare} label="Ideas / Recommendations" value={selectedMember.recommendationMessage} />
+                    </div>
+                  )}
                 </div>
               </div>
 

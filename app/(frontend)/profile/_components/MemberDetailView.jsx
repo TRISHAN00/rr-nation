@@ -110,7 +110,6 @@ export default function MemberDetailView({ member }) {
                   Personal Info
                 </h4>
                 <div className="space-y-0.5">
-                  {profile.id && <DataRow label="Member ID" value={`#${profile.id}`} />}
                   {profile.registrationNumber && <DataRow label="Registration ID" value={profile.registrationNumber} />}
                   {profile.age && <DataRow label="Age" value={`${profile.age} Years`} />}
                   {profile.occupation && <DataRow label="Occupation" value={profile.occupation} />}

@@ -49,6 +49,20 @@ export default function RegistrationForm({ agree }) {
 
   const handleMemberSubmit = async (e) => {
     e.preventDefault();
+
+    const requiredFields = [
+      { key: "gender", label: "Gender" },
+      { key: "bloodGroup", label: "Blood Group" },
+      { key: "tShirtSize", label: "T-Shirt Size" },
+    ];
+
+    for (const field of requiredFields) {
+      if (!formData[field.key]) {
+        toast.error(`Please select your ${field.label}`);
+        return;
+      }
+    }
+
     setLoading(true);
 
     const payload = new FormData();

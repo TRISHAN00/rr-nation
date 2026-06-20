@@ -1,6 +1,8 @@
 "use client";
 
 import BannerShapes from "@/app/components/common/ShapeIcon";
+import { useAuthContext } from "@/context/AuthContext";
+import { getGlobalData } from "@/services/global.service";
 import { useEffect, useState } from "react";
 import Logo from "../Logo";
 import FooterCTA from "./FooterCTA";
@@ -9,11 +11,24 @@ import FooterList from "./FooterList";
 import FooterSocial from "./FooterSocial";
 
 export default function Footer() {
+  const { isAuthenticated } = useAuthContext();
   const [mounted, setMounted] = useState(false);
+  const [global, setGlobal] = useState({});
+
+  const fetchGlobal = async () => {
+    try {
+      if (!isAuthenticated) return;
+      const res = await getGlobalData();
+      setGlobal(res?.data?.data || {});
+    } catch (err) {
+      console.error("Failed to load global data", err);
+    }
+  };
 
   useEffect(() => {
-    setMounted(true); // only render dynamic parts on client
-  }, []);
+    setMounted(true);
+    fetchGlobal();
+  }, [isAuthenticated]);
 
   return (
     <footer
@@ -51,6 +66,7 @@ export default function Footer() {
             links={[
               { label: "Home", href: "/" },
               { label: "About Us", href: "/about" },
+              ...(!global?.isMember ? [{ label: "Become a Member", href: "/member-register" }] : []),
               { label: "Our Services", href: "/services" },
               { label: "Blogs", href: "/blogs" },
             ]}

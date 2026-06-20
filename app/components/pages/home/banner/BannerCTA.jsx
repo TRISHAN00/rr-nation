@@ -39,9 +39,6 @@ export default function BannerCTA() {
             Start Running Today
           </FillButton>
         </Link>
-
-        {/* Video CTA */}
-
         <Suspense fallback={null}>
           <VideoModalGallery />
         </Suspense>

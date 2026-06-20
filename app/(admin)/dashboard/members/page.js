@@ -72,26 +72,46 @@ export default function DashboardMemberPage() {
 
   const handleExportCSV = () => {
     const headers = [
-      "Member ID", "First Name", "Last Name", "Email", "Registration Date",
-      "Age", "District", "Delivery Address", "T-Shirt Size", "Member Type",
-      "Event Type", "Occupation", "Special Skill", "Running Distance (KM)",
-      "Is Event Staff", "Past Events", "Recommendation Msg", "Payment Status",
-      "Payment Date", "Payment Gateway", "Transaction ID", "Original Amount",
-      "Discount", "Paid Amount", "Currency", "Admin Approval",
+      "Member ID", "Registration Date",
+      "Form Email", "Phone", "Date of Birth", "Gender", "Blood Group",
+      "Religion", "Educational Qualification", "HSC Passing Year",
+      "Occupation", "Facebook Profile",
+      "Home District", "Delivery Address",
+      "T-Shirt Size", "Member Type",
+      "Preferable Event Type", "Running Distance Preference",
+      "Preferable Event Location", "Is Event Staff",
+      "Wants to Join Team", "Reason to Join Team",
+      "Areas of Interest",
+      "Statement of Purpose (Why Join)", "Recommendation / Ideas",
+      "Payment Status", "Payment Date", "Payment Gateway",
+      "Transaction ID", "Original Amount", "Discount",
+      "Paid Amount", "Currency", "Admin Approval",
     ];
 
     const csvData = members.map((m) => {
       const u = m.user || {};
       const clean = (val) => val ? `"${String(val).replace(/"/g, '""')}"` : '""';
+      const joinArr = (val) => Array.isArray(val) ? clean(val.join("; ")) : clean(val);
 
       return [
-        clean(m.registrationNumber), clean(u.firstName), clean(u.lastName), clean(u.email),
-        clean(m.createdAt ? new Date(m.createdAt).toLocaleDateString() : ""), m.age || 0,
-        clean(m.district), clean(m.deliveryAddress), clean(m.tShirtSize), clean(m.memberType),
-        clean(m.eventType), clean(m.occupation), clean(m.specialSkill), m.preferableRunningDistance || 0,
-        m.isEventStaff ? "YES" : "NO", m.eventsParticipatedNumber || 0, clean(m.recommendationMessage),
-        clean(m.paymentStatus), clean(m.paymentDate ? new Date(m.paymentDate).toLocaleDateString() : ""),
-        clean(m.paymentGateway), clean(m.transactionId), m.orginalAmount || 0, m.discountAmount || 0,
+        clean(m.registrationNumber),
+        clean(m.createdAt ? new Date(m.createdAt).toLocaleDateString() : ""),
+        clean(m.email), clean(m.phone),
+        clean(m.birthDate ? new Date(m.birthDate).toLocaleDateString() : ""),
+        clean(m.gender), clean(m.bloodGroup),
+        clean(m.religion), clean(m.educationalQualification), clean(m.hscPassingYear),
+        clean(m.occupation), clean(m.facebookLink),
+        clean(m.district), clean(m.deliveryAddress),
+        clean(m.tShirtSize), clean(m.memberType),
+        clean(m.eventType), clean(m.preferableRunningDistance),
+        clean(m.preferableEventLocation), m.isEventStaff ? "YES" : "NO",
+        m.wantsToJoinTeam ? "YES" : "NO", clean(m.joinTeamReason),
+        joinArr(m.interested),
+        clean(m.whyJoin), clean(m.recommendationMessage),
+        clean(m.paymentStatus),
+        clean(m.paymentDate ? new Date(m.paymentDate).toLocaleDateString() : ""),
+        clean(m.paymentGateway), clean(m.transactionId),
+        m.orginalAmount || 0, m.discountAmount || 0,
         m.afterDiscountAmount || 0, clean(m.currency), clean(m.adminApproval),
       ];
     });

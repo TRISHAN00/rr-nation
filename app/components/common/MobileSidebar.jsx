@@ -2,6 +2,7 @@
 
 import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { getGlobalData } from "@/services/global.service";
 import { logoutUser } from "@/services/auth.service";
 import {
   ChevronRight,
@@ -16,11 +17,26 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CartIcon from "./CartIcon";
+import Logo from "./Logo";
 
 export default function MobileSidebar() {
   const [open, setOpen] = useState(false);
   const { cartData, setIsCartOpen } = useCart();
   const { isAuthenticated, user } = useAuthContext();
+  const [global, setGlobal] = useState({});
+
+  const fetchGlobal = async () => {
+    try {
+      const res = await getGlobalData();
+      setGlobal(res?.data?.data || {});
+    } catch (err) {
+      console.error("Failed to load global data", err);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) fetchGlobal();
+  }, [isAuthenticated]);
 
   // Handle Body Scroll Lock
   useEffect(() => {
@@ -83,7 +99,7 @@ export default function MobileSidebar() {
       >
         {/* Header Section */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 shrink-0">
-          <span className="text-xl font-bold text-brand">Menu</span>
+          <span className="text-xl font-bold text-brand"><Logo/></span>
           <button
             onClick={closeSidebar}
             className="p-2 hover:bg-white/10 rounded-full"
@@ -184,14 +200,16 @@ export default function MobileSidebar() {
                 <User size={18} />
                 <span>My Profile</span>
               </Link>
-              <Link
-                href="/member-register"
-                onClick={closeSidebar}
-                className="flex items-center gap-3 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-brand to-[#f39200] text-black font-bold text-sm hover:brightness-110 transition-all shadow-lg"
-              >
-                <UserPlus size={18} />
-                <span>Become a Member</span>
-              </Link>
+              {!global?.isMember && (
+                <Link
+                  href="/member-register"
+                  onClick={closeSidebar}
+                  className="flex items-center gap-3 w-full px-4 py-3 rounded-xl bg-brand text-white font-bold text-sm hover:brightness-110 transition-all shadow-lg"
+                >
+                  <UserPlus size={18} />
+                  <span>Become a Member</span>
+                </Link>
+              )}
               <button
                 onClick={() => {
                   logoutUser();
@@ -204,13 +222,25 @@ export default function MobileSidebar() {
               </button>
             </div>
           ) : (
-            <Link
-              href="/accounts/login"
-              onClick={closeSidebar}
-              className="block w-full text-center py-4 rounded-xl bg-brand text-black font-bold hover:brightness-110 transition-all shadow-lg"
-            >
-              Login / Sign Up
-            </Link>
+            <div className="space-y-3">
+              <Link
+                href="/accounts/login"
+                onClick={closeSidebar}
+                className="block w-full text-center py-4 rounded-xl bg-brand text-white font-bold hover:brightness-110 transition-all shadow-lg"
+              >
+                Login / Sign Up
+              </Link>
+              {!global?.isMember && (
+                <Link
+                  href="/member-register"
+                  onClick={closeSidebar}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-brand text-brand font-bold text-sm hover:bg-brand hover:text-white transition-all"
+                >
+                  <UserPlus size={18} />
+                  <span>Become a Member</span>
+                </Link>
+              )}
+            </div>
           )}
         </div>
       </aside>

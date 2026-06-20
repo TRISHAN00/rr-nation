@@ -11,10 +11,11 @@ export function middleware(request) {
   const isDashboard = pathname.startsWith("/dashboard");
   const isProfile = pathname.startsWith("/profile");
   const isOrganizer = pathname.startsWith("/organizer");
+  const isMemberRegister = pathname.startsWith("/member-register");
 
   /* ---------- NOT LOGGED IN ---------- */
   if (!token) {
-    if (isDashboard || isProfile || isOrganizer) {
+    if (isDashboard || isProfile || isOrganizer || isMemberRegister) {
       return NextResponse.redirect(
         new URL("/accounts/login", request.url)
       );
@@ -53,5 +54,6 @@ export const config = {
     "/dashboard/:path*",
     "/profile/:path*",
     "/organizer/:path*",
+    "/member-register",
   ],
 };

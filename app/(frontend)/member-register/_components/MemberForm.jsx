@@ -64,7 +64,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* name */}
       <div className="flex flex-col gap-1.5">
-        <Label>Name</Label>
+        <Label>Name <span className="text-red-500">*</span></Label>
         <Input
           required
           type="text"
@@ -77,7 +77,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* email */}
       <div className="flex flex-col gap-1.5">
-        <Label>Email Address</Label>
+        <Label>Email Address <span className="text-red-500">*</span></Label>
         <Input
           required
           type="email"
@@ -90,7 +90,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* phone */}
       <div className="flex flex-col gap-1.5">
-        <Label>Contact Number</Label>
+        <Label>Contact Number <span className="text-red-500">*</span></Label>
         <Input
           required
           type="tel"
@@ -103,7 +103,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* birthDate */}
       <div className="flex flex-col gap-1.5">
-        <Label>Birth Date</Label>
+        <Label>Birth Date <span className="text-red-500">*</span></Label>
         <Input
           required
           type="date"
@@ -115,8 +115,9 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* educationalQualification */}
       <div className="flex flex-col gap-1.5">
-        <Label>Educational Qualifications</Label>
+        <Label>Educational Qualifications <span className="text-red-500">*</span></Label>
         <Input
+          required
           type="text"
           value={formData.educationalQualification || ""}
           placeholder="BSc in Computer Science"
@@ -157,7 +158,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* gender */}
       <div className="flex flex-col gap-1.5">
-        <Label>Gender</Label>
+        <Label>Gender <span className="text-red-500">*</span></Label>
         <Select 
           value={formData.gender || ""} 
           onValueChange={(val) => setFormData({ ...formData, gender: val })}
@@ -175,7 +176,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* bloodGroup */}
       <div className="flex flex-col gap-1.5">
-        <Label>Blood Group</Label>
+        <Label>Blood Group <span className="text-red-500">*</span></Label>
         <Select 
           value={formData.bloodGroup || ""} 
           onValueChange={(val) => setFormData({ ...formData, bloodGroup: val })}
@@ -205,8 +206,9 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* district */}
       <div className="flex flex-col gap-1.5">
-        <Label>Home District</Label>
+        <Label>Home District <span className="text-red-500">*</span></Label>
         <Input
+          required
           type="text"
           value={formData.district || ""}
           placeholder="Dhaka"
@@ -217,8 +219,9 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* deliveryAddress */}
       <div className="md:col-span-2 flex flex-col gap-1.5">
-        <Label>Delivery Address</Label>
+        <Label>Delivery Address <span className="text-red-500">*</span></Label>
         <Input
+          required
           type="text"
           value={formData.deliveryAddress || ""}
           placeholder="House 22, Road 4, Banani"
@@ -229,7 +232,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* tShirtSize */}
       <div className="flex flex-col gap-1.5">
-        <Label>T-Shirt Size</Label>
+        <Label>T-Shirt Size <span className="text-red-500">*</span></Label>
         <Select 
           value={formData.tShirtSize || ""} 
           onValueChange={(val) => setFormData({ ...formData, tShirtSize: val })}
@@ -249,8 +252,9 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* occupation */}
       <div className="flex flex-col gap-1.5">
-        <Label>Occupation</Label>
+        <Label>Occupation <span className="text-red-500">*</span></Label>
         <Input
+          required
           type="text"
           value={formData.occupation || ""}
           placeholder="Software Engineer"
@@ -404,8 +408,9 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* memberImage */}
       <div className="md:col-span-2 flex flex-col gap-1.5">
-        <Label>Member Image</Label>
+        <Label>Member Image <span className="text-red-500">*</span></Label>
         <Input
+        required
           type="file"
           accept="image/*"
           onChange={(e) => setFormData({ ...formData, memberImage: e.target.files[0] || null })}
