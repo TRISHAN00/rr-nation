@@ -61,7 +61,7 @@ export default function DataSubmissionModal({ open, onClose, orderItem }) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg w-[calc(100%-2rem)] sm:w-full">
         <DialogHeader>
           <DialogTitle>Submit Event Data</DialogTitle>
           <DialogDescription>
@@ -72,10 +72,10 @@ export default function DataSubmissionModal({ open, onClose, orderItem }) {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+        <div className="space-y-3 max-h-[50vh] sm:max-h-80 overflow-y-auto pr-1">
           {submissionLinks.map((entry, idx) => (
             <div key={idx} className="flex items-start gap-2">
-              <div className="flex-1 space-y-2">
+              <div className="flex-1 space-y-2 min-w-0">
                 <Input
                   placeholder="Title (e.g. PDF, Certificate)"
                   value={entry.title}
@@ -107,11 +107,11 @@ export default function DataSubmissionModal({ open, onClose, orderItem }) {
           <Plus className="h-4 w-4 mr-1" /> Add Another Link
         </Button>
 
-        <div className="flex justify-end gap-3 pt-2">
-          <Button variant="outline" onClick={onClose} disabled={submitting}>
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
+          <Button variant="outline" onClick={onClose} disabled={submitting} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={submitting}>
+          <Button onClick={handleSubmit} disabled={submitting} className="w-full sm:w-auto">
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-1" />}
             {submitting ? "Submitting..." : "Submit"}
           </Button>

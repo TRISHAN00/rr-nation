@@ -10,6 +10,7 @@ import {
   Menu,
   ShoppingCart,
   User,
+  UserPlus,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -182,6 +183,14 @@ export default function MobileSidebar() {
               >
                 <User size={18} />
                 <span>My Profile</span>
+              </Link>
+              <Link
+                href="/member-register"
+                onClick={closeSidebar}
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-brand to-[#f39200] text-black font-bold text-sm hover:brightness-110 transition-all shadow-lg"
+              >
+                <UserPlus size={18} />
+                <span>Become a Member</span>
               </Link>
               <button
                 onClick={() => {
