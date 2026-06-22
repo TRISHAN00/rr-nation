@@ -41,7 +41,6 @@ export default function CouponMemberTableBody({
                 ) : (
                     coupons?.map((coupon) => (
                         <TableRow key={coupon.id}>
-                            <TableCell>#{coupon.id}</TableCell>
 
                             <TableCell className="font-semibold">
                                 {coupon.code}

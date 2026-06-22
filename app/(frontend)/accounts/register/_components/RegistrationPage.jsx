@@ -98,11 +98,11 @@ export default function RegisterPage({ redirectTo = "/" }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-sm text-gray-500 mt-1">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-3 sm:px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-5 sm:p-8">
+        <div className="text-center mb-5 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Create Account</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">
             {step === 3 ? "Set your password" : "Register to get started"}
           </p>
         </div>
@@ -117,24 +117,24 @@ export default function RegisterPage({ redirectTo = "/" }) {
         )}
 
         {step === 2 && (
-          <form className="space-y-4" onSubmit={handleVerifyOtp}>
-            <p className="text-sm text-green-600 bg-green-50 border border-green-200 p-2 rounded">
+          <form className="space-y-3.5 sm:space-y-4" onSubmit={handleVerifyOtp}>
+            <p className="text-xs sm:text-sm text-green-600 bg-green-50 border border-green-200 p-2 rounded">
               OTP sent to <strong>{registerData?.email}</strong>.
             </p>
             <div>
-              <Label className={'mb-2'} htmlFor="otp">OTP</Label>
-              <Input id="otp" name="otp" placeholder="Enter 6-digit code" required />
+              <Label className={'mb-1.5 sm:mb-2 text-sm sm:text-base'} htmlFor="otp">OTP</Label>
+              <Input id="otp" name="otp" placeholder="Enter 6-digit code" required className="h-10 sm:h-11 text-sm" />
             </div>
-            <Button className="w-full" disabled={loading} type="submit">
+            <Button className="w-full h-10 sm:h-11 text-sm sm:text-base" disabled={loading} type="submit">
               {loading ? "Verifying..." : "Verify OTP"}
             </Button>
           </form>
         )}
 
         {step === 3 && (
-          <form className="space-y-4" onSubmit={handleRegister}>
+          <form className="space-y-3.5 sm:space-y-4" onSubmit={handleRegister}>
             <div>
-              <Label className={'mb-2'} htmlFor="password">Password</Label>
+              <Label className={'mb-1.5 sm:mb-2 text-sm sm:text-base'} htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -142,7 +142,7 @@ export default function RegisterPage({ redirectTo = "/" }) {
                   type={showPassword ? "text" : "password"}
                   placeholder="Create password"
                   required
-                  className="pr-10"
+                  className="pr-10 h-10 sm:h-11 text-sm"
                 />
                 <button
                   type="button"
@@ -153,17 +153,17 @@ export default function RegisterPage({ redirectTo = "/" }) {
                 </button>
               </div>
             </div>
-            <Button className="w-full" disabled={loading} type="submit">
+            <Button className="w-full h-10 sm:h-11 text-sm sm:text-base" disabled={loading} type="submit">
               {loading ? "Creating Account..." : "Complete Registration"}
             </Button>
           </form>
         )}
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">Already have an account?</p>
+        <div className="mt-5 sm:mt-6 text-center">
+          <p className="text-xs sm:text-sm text-gray-500">Already have an account?</p>
           <Link
             href={`/accounts/login?redirectTo=${redirectTo}`}
-            className="inline-block mt-2 text-sm font-semibold text-brand hover:text-blue-700 transition-colors"
+            className="inline-block mt-2 text-xs sm:text-sm font-semibold text-brand hover:text-blue-700 transition-colors"
           >
             Login to your account →
           </Link>

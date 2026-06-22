@@ -7,14 +7,16 @@ export const getAllDashboardMembers = async (
   adminApproval,
   memberType,
   paymentStatus,
+  search,
 ) => {
   const { data } = await api.get("/admin/member", {
     params: {
       page,
       limit,
-      adminApproval: adminApproval || undefined, // undefined avoids sending empty strings
+      adminApproval: adminApproval || undefined,
       memberType: memberType || undefined,
       paymentStatus: paymentStatus || undefined,
+      search: search || undefined,
     },
   });
   return data;

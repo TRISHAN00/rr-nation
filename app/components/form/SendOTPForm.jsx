@@ -34,24 +34,24 @@ export default function SendOTPForm({
   }
 
   return (
-    <form className="space-y-4" onSubmit={handleSendOtp}>
+    <form className="space-y-3.5 sm:space-y-4" onSubmit={handleSendOtp}>
       <div className="flex flex-col gap-1.5">
-        <Label>First Name</Label>
-        <Input name="firstName" placeholder="First name" required />
+        <Label className="text-sm sm:text-base">First Name</Label>
+        <Input name="firstName" placeholder="First name" required className="h-10 sm:h-11 text-sm" />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label>Last Name</Label>
-        <Input name="lastName" placeholder="Last name" required />
+        <Label className="text-sm sm:text-base">Last Name</Label>
+        <Input name="lastName" placeholder="Last name" required className="h-10 sm:h-11 text-sm" />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label>Email</Label>
-        <Input name="email" type="email" placeholder="Email address" required />
+        <Label className="text-sm sm:text-base">Email</Label>
+        <Input name="email" type="email" placeholder="Email address" required className="h-10 sm:h-11 text-sm" />
       </div>
 
       <Button
-        className="w-full"
+        className="w-full h-10 sm:h-11 text-sm sm:text-base"
         disabled={loading}
         style={{ backgroundColor: "var(--color-brand)" }}
       >

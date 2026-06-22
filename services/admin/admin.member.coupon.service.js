@@ -1,8 +1,14 @@
 import api from "@/lib/api";
 
 // GET Coupon List
-export const getMemberCoupons = async () => {
-    const { data } = await api.get(`/admin/member/coupon`);
+export const getMemberCoupons = async (page = 1, limit = 10, search) => {
+    const { data } = await api.get(`/admin/member/coupon`, {
+        params: {
+            page,
+            limit,
+            search: search || undefined,
+        },
+    });
     return data;
 }
 

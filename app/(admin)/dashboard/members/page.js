@@ -96,7 +96,7 @@ export default function DashboardMemberPage() {
       return [
         clean(m.registrationNumber),
         clean(m.createdAt ? new Date(m.createdAt).toLocaleDateString() : ""),
-        clean(m.email), clean(m.phone),
+        clean(m.user?.email || m.email), clean(m.phone),
         clean(m.birthDate ? new Date(m.birthDate).toLocaleDateString() : ""),
         clean(m.gender), clean(m.bloodGroup),
         clean(m.religion), clean(m.educationalQualification), clean(m.hscPassingYear),

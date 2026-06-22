@@ -16,7 +16,7 @@ export default function MemberProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(50);
   const [totalItems, setTotalItems] = useState(0); // Added to track total for pagination
   const [adminApproval, setAdminApproval] = useState("");
   const [memberType, setMemberType] = useState("");
@@ -35,6 +35,7 @@ export default function MemberProvider({ children }) {
         adminApproval,
         memberType,
         paymentStatus,
+        search,
       );
 
       // Adjust these keys based on your actual API response structure
@@ -81,6 +82,7 @@ export default function MemberProvider({ children }) {
         setAdminApproval,
         setMemberType,
         setPaymentStatus,
+        setSearch,
         updateMember
       }}
     >

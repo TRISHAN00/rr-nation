@@ -8,7 +8,7 @@ import { StatCardSkeleton } from "./StatCardSkeleton";
 
 export default function MemberStats() {
     const [members, setMembers] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
         try {
@@ -26,15 +26,16 @@ export default function MemberStats() {
         fetchData();
     }, []);
 
+    const stats = members || {};
+
     const totalMembers =
-        (members?.paidApprovedCount || 0) +
-        (members?.pendingPaymentCount || 0) +
-        (members?.paidPendingApprovalCount || 0);
+        (stats?.paidApprovedCount || 0) +
+        (stats?.paidPendingApprovalCount || 0) +
+        (stats?.pendingPaymentCount || 0);
 
     return (
         <div className="grid gap-4 md:grid-cols-4 mt-4">
 
-            {/* SKELETON */}
             {loading ? (
                 <>
                     <StatCardSkeleton />
@@ -45,35 +46,31 @@ export default function MemberStats() {
             ) : (
                 <>
                     <StatCard
-                        icon={<Users className="h-5 w-5 text-blue-600" />}
-                        label="Total Members"
+                        icon={<Users className="h-5 w-5" />}
+                        title="Total Members"
                         value={totalMembers}
-                        subText="All registered members"
-                        color="bg-blue-500/10"
+                        change="All registered"
                     />
 
                     <StatCard
-                        icon={<CheckCircle className="h-5 w-5 text-green-600" />}
-                        label="Paid & Approved"
-                        value={members?.paidApprovedCount || 0}
-                        subText="Fully confirmed"
-                        color="bg-green-500/10"
+                        icon={<CheckCircle className="h-5 w-5" />}
+                        title="Paid & Approved"
+                        value={stats.paidApprovedCount || 0}
+                        change="Fully confirmed"
                     />
 
                     <StatCard
-                        icon={<Clock className="h-5 w-5 text-yellow-600" />}
-                        label="Pending Payment"
-                        value={members?.pendingPaymentCount || 0}
-                        subText="Awaiting payment"
-                        color="bg-yellow-500/10"
+                        icon={<Clock className="h-5 w-5" />}
+                        title="Pending Payment"
+                        value={stats.pendingPaymentCount || 0}
+                        change="Awaiting payment"
                     />
 
                     <StatCard
-                        icon={<DollarSign className="h-5 w-5 text-purple-600" />}
-                        label="Total Revenue"
-                        value={`৳${members?.totalRevenue || 0}`}
-                        subText="From paid members"
-                        color="bg-purple-500/10"
+                        icon={<DollarSign className="h-5 w-5" />}
+                        title="Total Revenue"
+                        value={`৳${stats.totalRevenue || 0}`}
+                        change="From paid members"
                     />
                 </>
             )}

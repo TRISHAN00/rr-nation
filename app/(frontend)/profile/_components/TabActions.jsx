@@ -10,9 +10,9 @@ export default function TabActions() {
     return (
         <TabsList className="w-full justify-start border-b bg-transparent p-0 h-auto overflow-x-auto flex-nowrap">
             <TabActionItem value={'me'} icon={<Calendar className="h-4 w-4 mr-2" />} name={'Registered Events'} />
+            <TabActionItem value={'member'} icon={<User className="h-4 w-4 mr-2" />} name={'Member'} />
             <TabActionItem value={'settings'} icon={<User className="h-4 w-4 mr-2" />} name={'Settings'} />
             <TabActionItem value={'security'} icon={<Lock className="h-4 w-4 mr-2" />} name={'Security'} />
-            <TabActionItem value={'member'} icon={<User className="h-4 w-4 mr-2" />} name={'Member'} />
         </TabsList>
     )
 }

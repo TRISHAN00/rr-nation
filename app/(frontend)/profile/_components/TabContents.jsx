@@ -25,6 +25,10 @@ export default function TabContents({
                     pastEvents={pastEvents}
                 />
             </TabsContent>
+            
+            <TabsContent value="member" className="mt-6 space-y-6">
+                <MemberTab memberInfo={memberInfo} />
+            </TabsContent>
 
             <TabsContent value="settings" className="mt-6 space-y-6">
                 <SettingsTab user={user} />
@@ -34,9 +38,7 @@ export default function TabContents({
                 <SecurityTab />
             </TabsContent>
 
-            <TabsContent value="member" className="mt-6 space-y-6">
-                <MemberTab memberInfo={memberInfo} />
-            </TabsContent>
+
         </div>
     );
 }
