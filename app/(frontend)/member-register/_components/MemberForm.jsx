@@ -128,8 +128,9 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
 
       {/* hscPassingYear */}
       <div className="flex flex-col gap-1.5">
-        <Label>HSC Passing Year</Label>
+        <Label>HSC Passing Year<span className="text-red-500">*</span></Label>
         <Input
+          required
           type="number"
           value={formData.hscPassingYear || ""}
           placeholder="2020"
@@ -141,8 +142,8 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
       {/* religion */}
       <div className="flex flex-col gap-1.5">
         <Label>Religion</Label>
-        <Select 
-          value={formData.religion || ""} 
+        <Select
+          value={formData.religion || ""}
           onValueChange={(val) => setFormData({ ...formData, religion: val })}
         >
           <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
@@ -159,8 +160,8 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
       {/* gender */}
       <div className="flex flex-col gap-1.5">
         <Label>Gender <span className="text-red-500">*</span></Label>
-        <Select 
-          value={formData.gender || ""} 
+        <Select
+          value={formData.gender || ""}
           onValueChange={(val) => setFormData({ ...formData, gender: val })}
         >
           <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
@@ -177,8 +178,8 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
       {/* bloodGroup */}
       <div className="flex flex-col gap-1.5">
         <Label>Blood Group <span className="text-red-500">*</span></Label>
-        <Select 
-          value={formData.bloodGroup || ""} 
+        <Select
+          value={formData.bloodGroup || ""}
           onValueChange={(val) => setFormData({ ...formData, bloodGroup: val })}
         >
           <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
@@ -233,8 +234,8 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
       {/* tShirtSize */}
       <div className="flex flex-col gap-1.5">
         <Label>T-Shirt Size <span className="text-red-500">*</span></Label>
-        <Select 
-          value={formData.tShirtSize || ""} 
+        <Select
+          value={formData.tShirtSize || ""}
           onValueChange={(val) => setFormData({ ...formData, tShirtSize: val })}
         >
           <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
@@ -273,7 +274,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
           {eventTypeOptions.map((option) => (
             <div key={option} className="flex items-center space-x-2.5">
-              <Checkbox 
+              <Checkbox
                 id={`event-${option}`}
                 checked={(formData.eventType || []).includes(option)}
                 onCheckedChange={(checked) => handleCheckboxChange("eventType", option, !!checked)}
@@ -292,7 +293,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
           {runningDistanceOptions.map((option) => (
             <div key={option} className="flex items-center space-x-2.5">
-              <Checkbox 
+              <Checkbox
                 id={`distance-${option}`}
                 checked={(formData.preferableRunningDistance || []).includes(option)}
                 onCheckedChange={(checked) => handleCheckboxChange("preferableRunningDistance", option, !!checked)}
@@ -311,7 +312,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
           {eventLocationOptions.map((option) => (
             <div key={option} className="flex items-center space-x-2.5">
-              <Checkbox 
+              <Checkbox
                 id={`location-${option}`}
                 checked={(formData.preferableEventLocation || []).includes(option)}
                 onCheckedChange={(checked) => handleCheckboxChange("preferableEventLocation", option, !!checked)}
@@ -339,8 +340,8 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
       {/* wantsToJoinTeam */}
       <div className="flex flex-col gap-1.5">
         <Label>Do you want to Join RRN Event Management Volunteer or Core Team?</Label>
-        <Select 
-          value={formData.wantsToJoinTeam ? "true" : "false"} 
+        <Select
+          value={formData.wantsToJoinTeam ? "true" : "false"}
           onValueChange={(val) => setFormData({ ...formData, wantsToJoinTeam: val === "true" })}
         >
           <SelectTrigger className="w-full bg-gray-50 dark:bg-gray-800">
@@ -410,7 +411,7 @@ export default function MemberForm({ onSubmit, formData, setFormData, loading })
       <div className="md:col-span-2 flex flex-col gap-1.5">
         <Label>Member Image <span className="text-red-500">*</span></Label>
         <Input
-        required
+          required
           type="file"
           accept="image/*"
           onChange={(e) => setFormData({ ...formData, memberImage: e.target.files[0] || null })}

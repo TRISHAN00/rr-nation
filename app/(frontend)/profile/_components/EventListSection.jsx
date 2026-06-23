@@ -5,12 +5,40 @@ import DataSubmissionModal from "./DataSubmissionModal";
 export default function EventListSection({ title, events, isPast }) {
   const [submitFor, setSubmitFor] = useState(null);
   const [expandedForm, setExpandedForm] = useState(null);
+  const [submittingId, setSubmittingId] = useState(null);
+  const [hiddenIds, setHiddenIds] = useState(new Set());
+
+  const isButtonVisible = (item) => {
+    if (submittingId === item.id) return false;
+    if (hiddenIds.has(item.id)) return false;
+    if (!item.submittedData?.length) return true;
+    const hasRejected = item.submittedData.some((s) => s.adminApproval === "rejected");
+    const hasApproved = item.submittedData.some((s) => s.adminApproval === "approved");
+    if (hasApproved && !hasRejected) return false;
+    return !hasApproved;
+  };
+
+  const handleSubmissionComplete = (itemId) => {
+    setSubmittingId(null);
+    setSubmitFor(null);
+  };
+
+  const handleSubmissionSuccess = (itemId) => {
+    setHiddenIds((prev) => new Set(prev).add(itemId));
+    setSubmittingId(null);
+    setSubmitFor(null);
+  };
+
+  const handleSubmissionStart = (item) => {
+    setSubmittingId(item.id);
+  };
 
   if (events.length === 0) return null;
   return (
     <div>
       <h3 className="text-sm font-semibold text-gray-900 mb-4">{title}</h3>
       {events.map((item, index) => {
+        console.log(item)
         const eventData = item.eventTicket.event;
         const formData = item.formData || [];
         const isExpanded = expandedForm === index;
@@ -114,13 +142,16 @@ export default function EventListSection({ title, events, isPast }) {
                 <p>ORDER: <span className="text-dark font-medium break-all">{item.transactionId.substring(0, 12)}...</span></p>
                 <p>AMOUNT: <span className="text-dark font-medium">৳{item.totalPrice}</span></p>
               </div>
-              {item.eventTicket?.event?.eventType === "virtual" && (
+              {item.eventTicket?.event?.eventType === "virtual" && item?.bib?.adminApproval === 'rejected' && isButtonVisible(item) && (
                 <button
-                  onClick={() => setSubmitFor(item)}
+                  onClick={() => {
+                    handleSubmissionStart(item);
+                    setSubmitFor(item);
+                  }}
                   className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-semibold bg-brand/10 text-brand hover:bg-brand/20 transition-colors w-full sm:w-auto"
                 >
                   <Upload className="h-3.5 w-3.5 shrink-0" />
-                  {item.submittedData?.length ? "Update Submission" : "Data Submission"}
+                  {item?.bib?.length ? "Update Submission" : "Data Submission"}
                 </button>
               )}
             </div>
@@ -130,7 +161,8 @@ export default function EventListSection({ title, events, isPast }) {
       {submitFor && (
         <DataSubmissionModal
           open={!!submitFor}
-          onClose={() => setSubmitFor(null)}
+          onClose={() => handleSubmissionComplete(submitFor.id)}
+          onSuccess={() => handleSubmissionSuccess(submitFor.id)}
           orderItem={submitFor}
         />
       )}

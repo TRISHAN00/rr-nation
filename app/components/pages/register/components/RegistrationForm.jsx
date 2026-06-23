@@ -45,8 +45,6 @@ export default function RegistrationForm({ agree }) {
     memberImage: null 
   });
 
-  console.log("FORM DATA:", formData);
-
   const handleMemberSubmit = async (e) => {
     e.preventDefault();
 

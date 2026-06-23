@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 import { useState } from "react";
 import CreateMemberEventModal from "./CreateMemberEventModal";
 
-export default function MemberEventPageHeader({ onRefresh }) {
+export default function MemberEventPageHeader({ onRefresh, onExportCSV, events }) {
     const [open, setOpen] = useState(false);
     return (
         <div className="flex justify-between items-center mb-4">
@@ -12,9 +13,16 @@ export default function MemberEventPageHeader({ onRefresh }) {
                 My Events
             </h2>
 
-            <Button onClick={() => setOpen(true)} >
-                + Add Event
-            </Button>
+            <div className="flex items-center gap-2">
+                {events?.length > 0 && (
+                    <Button variant="outline" size="sm" onClick={onExportCSV}>
+                        <Download className="h-4 w-4 mr-1.5" /> Export CSV
+                    </Button>
+                )}
+                <Button onClick={() => setOpen(true)}>
+                    + Add Event
+                </Button>
+            </div>
 
             <CreateMemberEventModal open={open} setOpen={setOpen} onRefresh={onRefresh} />
         </div>

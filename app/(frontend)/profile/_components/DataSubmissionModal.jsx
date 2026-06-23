@@ -14,7 +14,7 @@ import { Loader2, Plus, Trash2, Link as LinkIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function DataSubmissionModal({ open, onClose, orderItem }) {
+export default function DataSubmissionModal({ open, onClose, onSuccess, orderItem }) {
   const existingSubmissions = orderItem?.submittedData || [];
   const [submissionLinks, setSubmissionLinks] = useState(
     existingSubmissions.length > 0
@@ -51,6 +51,7 @@ export default function DataSubmissionModal({ open, onClose, orderItem }) {
         submissionLinks: valid,
       });
       toast.success("Data submitted successfully");
+      onSuccess?.();
       onClose();
     } catch (err) {
       toast.error(err?.response?.data?.message || "Submission failed");

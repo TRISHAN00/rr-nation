@@ -54,10 +54,16 @@ export const addMemberEvent = async (payload) => {
 };
 
 // GET all member event tracks 
-export const getMemberEvents = async (page, limit) => {
-  const { data } = await api.get(
-    `/member/event?page=${page}&limit=${limit}`
-  );
+export const getMemberEvents = async (page = 1, limit = 10, search, startDate, endDate) => {
+  const { data } = await api.get(`/member/event`, {
+    params: {
+      page,
+      limit,
+      search: search || undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+    },
+  });
   return data;
 }
 
