@@ -33,7 +33,7 @@ export default function MemberDetailView({ member }) {
   const DataRow = ({ label, value }) => (
     <div className="flex justify-between items-center py-3 border-b border-muted last:border-0 hover:bg-muted/30 px-2 rounded-md transition-colors">
       <span className="text-xs sm:text-sm text-muted-foreground font-medium">{label}</span>
-      <span className="text-xs sm:text-sm text-foreground font-semibold truncate max-w-[180px] sm:max-w-xs text-right">
+      <span className="text-xs sm:text-sm text-foreground font-semibold truncate max-w-45 sm:max-w-xs text-right">
         {value ?? "N/A"}
       </span>
     </div>

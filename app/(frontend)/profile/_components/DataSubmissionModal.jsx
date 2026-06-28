@@ -4,18 +4,18 @@ import { Button } from "@/app/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/app/components/ui/dialog";
 import { Input } from "@/app/components/ui/input";
 import { submitVirtualEventData } from "@/services/user.service";
-import { Loader2, Plus, Trash2, Link as LinkIcon } from "lucide-react";
+import { Link as LinkIcon, Loader2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export default function DataSubmissionModal({ open, onClose, onSuccess, orderItem }) {
-  const existingSubmissions = orderItem?.submittedData || [];
+  const existingSubmissions = orderItem?.bib?.submissionLinks || [];
   const [submissionLinks, setSubmissionLinks] = useState(
     existingSubmissions.length > 0
       ? existingSubmissions.map((s) => ({ title: s.title || "", link: s.link || "" }))
@@ -44,14 +44,15 @@ export default function DataSubmissionModal({ open, onClose, onSuccess, orderIte
       toast.error("Add at least one submission link");
       return;
     }
+    const existing = orderItem?.bib?.submissionLinks?.map((s) => ({ title: s.title, link: s.link })) || [];
+    const allLinks = [...existing, ...valid];
     setSubmitting(true);
     try {
       await submitVirtualEventData({
         orderItemId: orderItem.id,
-        submissionLinks: valid,
+        submissionLinks: allLinks,
       });
       toast.success("Data submitted successfully");
-      onSuccess?.();
       onClose();
     } catch (err) {
       toast.error(err?.response?.data?.message || "Submission failed");

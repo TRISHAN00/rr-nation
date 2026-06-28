@@ -1,36 +1,27 @@
+import { Switch } from "@/app/components/ui/switch";
 import { Calendar, ChevronDown, ChevronUp, Clock, ExternalLink, Hash, Upload } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import DataSubmissionModal from "./DataSubmissionModal";
 
 export default function EventListSection({ title, events, isPast }) {
   const [submitFor, setSubmitFor] = useState(null);
   const [expandedForm, setExpandedForm] = useState(null);
   const [submittingId, setSubmittingId] = useState(null);
-  const [hiddenIds, setHiddenIds] = useState(new Set());
-
-  const isButtonVisible = (item) => {
-    if (submittingId === item.id) return false;
-    if (hiddenIds.has(item.id)) return false;
-    if (!item.submittedData?.length) return true;
-    const hasRejected = item.submittedData.some((s) => s.adminApproval === "rejected");
-    const hasApproved = item.submittedData.some((s) => s.adminApproval === "approved");
-    if (hasApproved && !hasRejected) return false;
-    return !hasApproved;
-  };
+  const [showSubmitForm, setShowSubmitForm] = useState({});
 
   const handleSubmissionComplete = (itemId) => {
     setSubmittingId(null);
     setSubmitFor(null);
   };
 
-  const handleSubmissionSuccess = (itemId) => {
-    setHiddenIds((prev) => new Set(prev).add(itemId));
-    setSubmittingId(null);
-    setSubmitFor(null);
-  };
-
   const handleSubmissionStart = (item) => {
     setSubmittingId(item.id);
+    setSubmitFor(item);
+  };
+
+  const toggleSubmissionMode = (itemId) => {
+    setShowSubmitForm((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
   };
 
   if (events.length === 0) return null;
@@ -38,10 +29,12 @@ export default function EventListSection({ title, events, isPast }) {
     <div>
       <h3 className="text-sm font-semibold text-gray-900 mb-4">{title}</h3>
       {events.map((item, index) => {
-        console.log(item)
         const eventData = item.eventTicket.event;
         const formData = item.formData || [];
         const isExpanded = expandedForm === index;
+        const hasSubmission = item.bib?.submissionLinks?.length > 0;
+        const isVirtual = item.eventTicket?.event?.eventType === "virtual";
+        const isSubmitting = submittingId === item.id;
         return (
           <div key={index} className={"p-3 sm:p-4 border rounded-lg mb-3 hover:bg-gray-50 transition " + (isPast ? "opacity-70" : "")}>
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2">
@@ -142,17 +135,43 @@ export default function EventListSection({ title, events, isPast }) {
                 <p>ORDER: <span className="text-dark font-medium break-all">{item.transactionId.substring(0, 12)}...</span></p>
                 <p>AMOUNT: <span className="text-dark font-medium">৳{item.totalPrice}</span></p>
               </div>
-              {item.eventTicket?.event?.eventType === "virtual" && item?.bib?.adminApproval === 'rejected' && isButtonVisible(item) && (
-                <button
-                  onClick={() => {
-                    handleSubmissionStart(item);
-                    setSubmitFor(item);
-                  }}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-semibold bg-brand/10 text-brand hover:bg-brand/20 transition-colors w-full sm:w-auto"
-                >
-                  <Upload className="h-3.5 w-3.5 shrink-0" />
-                  {item?.bib?.length ? "Update Submission" : "Data Submission"}
-                </button>
+              {isVirtual && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  {hasSubmission ? (
+                    <>
+                      <span className={`text-[14px] font-semibold ${!showSubmitForm[item.id] ? "text-brand" : "text-gray-400"}`}>
+                        Submitted
+                      </span>
+                      <Switch
+                        checked={!!showSubmitForm[item.id]}
+                        onCheckedChange={() => toggleSubmissionMode(item.id)}
+                        size="sm"
+                      />
+                      <span className={`text-[14px] font-semibold ${showSubmitForm[item.id] ? "text-brand" : "text-gray-400"}`}>
+                        Re-Submit
+                      </span>
+                      {showSubmitForm[item.id] && (
+                        <button
+                          onClick={() => !isSubmitting && handleSubmissionStart(item)}
+                          disabled={isSubmitting}
+                          className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-semibold bg-brand/10 text-brand hover:bg-brand/20 transition-colors disabled:opacity-50"
+                        >
+                          <Upload className="h-3.5 w-3.5 shrink-0" />
+                          {isSubmitting ? "Submitting..." : "Data Submission"}
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => !isSubmitting && handleSubmissionStart(item)}
+                      disabled={isSubmitting}
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-semibold bg-brand/10 text-brand hover:bg-brand/20 transition-colors w-full sm:w-auto disabled:opacity-50"
+                    >
+                      <Upload className="h-3.5 w-3.5 shrink-0" />
+                      {isSubmitting ? "Submitting..." : "Data Submission"}
+                    </button>
+                  )}
+                </div>
               )}
             </div>
           </div>
@@ -162,7 +181,10 @@ export default function EventListSection({ title, events, isPast }) {
         <DataSubmissionModal
           open={!!submitFor}
           onClose={() => handleSubmissionComplete(submitFor.id)}
-          onSuccess={() => handleSubmissionSuccess(submitFor.id)}
+          onSuccess={() => {
+            toast.success("Data submitted successfully");
+            handleSubmissionComplete(submitFor.id);
+          }}
           orderItem={submitFor}
         />
       )}

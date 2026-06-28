@@ -124,7 +124,7 @@ export default function OrderSheet({ selectedReg, onBibUpdate }) {
 
         <Accordion type="single" collapsible className="space-y-3">
           {selectedReg?.order?.items.map((item, idx) => {
-
+              console.log(item)
             return (
               <AccordionItem
                 key={idx}
@@ -276,7 +276,7 @@ export default function OrderSheet({ selectedReg, onBibUpdate }) {
                             {item.bib.submissionLinks.map((link, li) => (
                               <a
                                 key={li}
-                                href={link.link}
+                                href={link.link?.startsWith("http") ? link.link : `https://${link.link}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 text-xs text-primary hover:underline bg-background px-2.5 py-1.5 rounded border border-border/50"

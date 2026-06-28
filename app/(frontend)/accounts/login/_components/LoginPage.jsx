@@ -24,7 +24,16 @@ export default function LoginPage({ redirectTo = "/" }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("rememberMe") === "true";
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("rememberMe", rememberMe);
+  }, [rememberMe]);
 
   /**
    * SHARED SESSION HANDLER
