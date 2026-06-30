@@ -124,7 +124,6 @@ export default function OrderSheet({ selectedReg, onBibUpdate }) {
 
         <Accordion type="single" collapsible className="space-y-3">
           {selectedReg?.order?.items.map((item, idx) => {
-              console.log(item)
             return (
               <AccordionItem
                 key={idx}

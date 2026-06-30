@@ -15,6 +15,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function DataSubmissionModal({ open, onClose, onSuccess, orderItem }) {
+  console.log(orderItem)
   const existingSubmissions = orderItem?.bib?.submissionLinks || [];
   const [submissionLinks, setSubmissionLinks] = useState(
     existingSubmissions.length > 0
@@ -44,13 +45,11 @@ export default function DataSubmissionModal({ open, onClose, onSuccess, orderIte
       toast.error("Add at least one submission link");
       return;
     }
-    const existing = orderItem?.bib?.submissionLinks?.map((s) => ({ title: s.title, link: s.link })) || [];
-    const allLinks = [...existing, ...valid];
     setSubmitting(true);
     try {
       await submitVirtualEventData({
         orderItemId: orderItem.id,
-        submissionLinks: allLinks,
+        submissionLinks: valid,
       });
       toast.success("Data submitted successfully");
       onClose();

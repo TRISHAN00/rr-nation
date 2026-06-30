@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, FileImage } from "lucide-react";
 
 export default function OrderHeader({
   handleExportCSV,
+  handleExportSVG,
   title = "",
   desc = "",
 }) {
@@ -14,13 +15,22 @@ export default function OrderHeader({
         )}
         {desc && <p className="text-muted-foreground text-sm">{desc}</p>}
       </div>
-      <Button
-        onClick={handleExportCSV}
-        variant="outline"
-        className="w-fit gap-2 border-primary/20 hover:bg-primary/5"
-      >
-        <Download className="h-4 w-4" /> Export Current View
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button
+          onClick={handleExportSVG}
+          variant="outline"
+          className="w-fit gap-2 border-primary/20 hover:bg-primary/5"
+        >
+          <FileImage className="h-4 w-4" /> Export SVG
+        </Button>
+        <Button
+          onClick={handleExportCSV}
+          variant="outline"
+          className="w-fit gap-2 border-primary/20 hover:bg-primary/5"
+        >
+          <Download className="h-4 w-4" /> Export CSV
+        </Button>
+      </div>
     </div>
   );
 }

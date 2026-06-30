@@ -79,131 +79,93 @@ export default function RegistrationsPage() {
   };
 
   const handleExportCSV = () => {
-    // 1. Gather all unique dynamic formData labels across the current dataset
     const dynamicLabelsSet = new Set();
-
     registeredUsers?.forEach((reg) => {
       reg.order?.items?.forEach((item) => {
         if (Array.isArray(item.formData)) {
           item.formData.forEach((field) => {
-            if (field.label) {
-              // Trim whitespace to avoid generating duplicate columns for slightly varied strings
-              dynamicLabelsSet.add(field.label.trim());
-            }
+            if (field.label) dynamicLabelsSet.add(field.label.trim());
           });
         }
       });
     });
-
-    // Convert Set into an array to maintain a solid column sorting structure
     const dynamicHeaders = Array.from(dynamicLabelsSet);
 
-    // 2. Define Static Base Headers
     const baseHeaders = [
-      "User Name",
-      "User Email",
-      "Event Name",
-      "Event Address",
-      "Event Banner Image",
-      "Event Stage",
-      "Event Type",
-      "Event Organizer",
-      "Event Time",
-      "Event Ticket Name",
-      "Event Ticket Distance",
-      "Event Ticket Price",
-      "Participant Name",
-      "Participant Age Category",
-      "Participant Bib Number",
-      "Participant Blood Group",
-      "Participant Contact Number",
-      "Participant Date of Birth",
-      "Participant Distance Category",
-      "Participant Email",
-      "Participant Emergency Contact Name",
-      "Participant Emergency Contact Number",
-      "Participant Gender",
-      "Participant Runner Category",
-      "Participant Tshirt Size",
-
+      "Transaction ID", "Payment Gateway", "Payment Status", "Payment Date",
+      "Coupon Code", "Coupon Discount Type", "Coupon Value",
+      "Order Total Amount", "Order Discount Amount", "Order After Discount",
+      "User ID", "User First Name", "User Last Name", "User Email", "User Phone", "User Address", "User Image", "User Gender", "User Birth Date",
+      "Event ID", "Event Name", "Event Slug", "Event Date", "Event Time", "Event Address", "Event Type", "Event Stage", "Organizer Name",
+      "Event Banner Image", "Min Package Price", "Package Type", "Event Status", "Event Admin Approval",
+      "Ticket ID", "Ticket Name", "Distance", "Price", "Available Slots", "Used Slots", "Ticket Status",
+      "Order Item ID", "Item Type", "Quantity", "Unit Price", "Total Price",
+      "Participant Name", "Participant Email", "Participant Contact Number",
+      "Delivery Address", "District", "Distance Category", "Age Category", "T-Shirt Size",
+      "Gender", "Date of Birth", "Blood Group", "Religion",
+      "Emergency Contact Name", "Emergency Contact Number",
+      "Community Name", "Community Discount Code", "Participated Event Numbers",
+      "Runner Category", "Cycle Frame Size", "Cycle Brand Name", "Participant BIB Number",
+      "BIB ID", "BIB Number", "BIB Attachment", "BIB Submission Links",
+      "Certificate Download Link", "Admin Approval", "Tracking", "BIB Created At", "BIB Updated At",
     ];
 
-    // Combine static tracking headers with parsed form labels
     const finalHeaders = [...baseHeaders, ...dynamicHeaders];
 
-    // 3. Map and Flatten Data Matrices
     const csvData = registeredUsers?.flatMap((reg) => {
       return (reg.order?.items || []).map((item) => {
-        console.log("Processing item for CSV export:", reg);
         const e = item.eventTicket?.event || {};
         const evt = item.eventTicket || {};
         const p = item.participant || {};
         const u = reg.user || {};
+        const bib = item.bib || {};
+        const dc = reg.dicountCoupon || {};
+        const subLinks = bib.submissionLinks?.map(s => `${s.title}: ${s.link}`).join("; ") || "";
 
-        // Build a temporary key/value lookup map for this row item's form fields
         const formDataMap = {};
         if (Array.isArray(item.formData)) {
           item.formData.forEach((field) => {
-            if (field.label) {
-              formDataMap[field.label.trim()] = field.value;
-            }
+            if (field.label) formDataMap[field.label.trim()] = field.value;
           });
         }
 
-        // Construct baseline static string segments (Order matches baseHeaders completely)
         const baseRowData = [
-          `"${u.firstName || ""} ${u.lastName || ""}"`,
-          `"${u.email || ""}"`,
-          `"${e.name || ""}"`,
-          `"${e.address || "N/A"}"`,
-          `"${e.bannerImage || "N/A"}"`,
-          `"${e.eventStage || "N/A"}"`,
-          `"${e.eventType || "N/A"}"`,
-          `"${e.organizerName || "N/A"}"`,
-          `"${e.time || "N/A"}"`,
-          `"${evt.name || "N/A"}"`,
-          `"${evt.distance || "N/A"}"`,
-          `"${evt.price || "N/A"}"`,
-          `"${p.name || "N/A"}"`,
-          `"${p.ageCategory || "N/A"}"`,
-          `"${p.bibNumber || "N/A"}"`,
-          `"${p.bloodGroup || "N/A"}"`,
-          `"${p.contactNumber || "N/A"}"`,
-          `"${p.dateOfBirth || "N/A"}"`,
-          `"${p.distanceCategory || "N/A"}"`,
-          `"${p.email || "N/A"}"`,
-          `"${p.emergencyContactName || "N/A"}"`,
-          `"${p.emergencyContactNumber || "N/A"}"`,
-          `"${p.gender || "N/A"}"`,
-          `"${p.runnerCategory || "N/A"}"`,
-          `"${p.tshirtSize || "N/A"}"`,
+          `"${reg.transactionId || ""}"`, `"${reg.paymentGateway || ""}"`, `"${reg.status || ""}"`, `"${reg.paymentDate || ""}"`,
+          `"${dc.code || ""}"`, `"${dc.discountType || ""}"`, `"${dc.value || ""}"`,
+          `"${reg.order?.totalAmount || ""}"`, `"${reg.discountAmount || ""}"`, `"${reg.afterDiscountAmount || ""}"`,
+          `"${u.id || ""}"`, `"${u.firstName || ""}"`, `"${u.lastName || ""}"`, `"${u.email || ""}"`, `"${u.phone || ""}"`, `"${u.address || ""}"`, `"${u.image || ""}"`, `"${u.gender || ""}"`, `"${u.birthDate || ""}"`,
+          `"${e.id || ""}"`, `"${e.name || ""}"`, `"${e.slug || ""}"`, `"${e.date || ""}"`, `"${e.time || ""}"`, `"${e.address || ""}"`, `"${e.eventType || ""}"`, `"${e.eventStage || ""}"`, `"${e.organizerName || ""}"`,
+          `"${e.bannerImage || ""}"`, `"${e.minPackagePrice || ""}"`, `"${e.packageType || ""}"`, `"${e.status || ""}"`, `"${e.adminApproval || ""}"`,
+          `"${evt.id || ""}"`, `"${evt.name || ""}"`, `"${evt.distance || ""}"`, `"${evt.price || ""}"`, `"${evt.availableSlots || ""}"`, `"${evt.usedSlots || ""}"`, `"${evt.status || ""}"`,
+          `"${item.id || ""}"`, `"${item.itemType || ""}"`, `"${item.quantity || ""}"`, `"${item.unitPrice || ""}"`, `"${item.totalPrice || ""}"`,
+          `"${p.name || ""}"`, `"${p.email || ""}"`, `"${p.contactNumber || ""}"`,
+          `"${p.deliveryAddress || ""}"`, `"${p.district || ""}"`, `"${p.distanceCategory || ""}"`, `"${p.ageCategory || ""}"`, `"${p.tshirtSize || ""}"`,
+          `"${p.gender || ""}"`, `"${p.dateOfBirth || ""}"`, `"${p.bloodGroup || ""}"`, `"${p.religion || ""}"`,
+          `"${p.emergencyContactName || ""}"`, `"${p.emergencyContactNumber || ""}"`,
+          `"${p.communityName || ""}"`, `"${p.communityDiscountCode || ""}"`, `"${p.participatedEventNumbers || ""}"`,
+          `"${p.runnerCategory || ""}"`, `"${p.cycleFrameSize || ""}"`, `"${p.cycleBrandName || ""}"`, `"${p.bibNumber || ""}"`,
+          `"${bib.id || ""}"`, `"${bib.bibNumber || ""}"`, `"${bib.bibAttachment || ""}"`, `"${subLinks}"`,
+          `"${bib.certificateDownloadLink || ""}"`, `"${bib.adminApproval || ""}"`, `"${bib.tracking || ""}"`, `"${bib.createdAt || ""}"`, `"${bib.updatedAt || ""}"`,
         ];
 
-        // Match missing or existing dynamic values to the sequence of dynamicHeaders columns
         const dynamicRowData = dynamicHeaders.map((label) => {
           const val = formDataMap[label];
-          // Fill missing intersections with an empty text cell so layout bounds match correctly
           return val !== null && val !== undefined ? `"${val}"` : `""`;
         });
 
-        // Concat the flat columns together
         return [...baseRowData, ...dynamicRowData];
       });
     });
 
-    // 4. Construct CSV String
     const csvContent = [finalHeaders, ...csvData]
       .map((row) => row.join(","))
       .join("\n");
 
-    // 5. Trigger Browser download pipeline
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-
     link.setAttribute("href", url);
-    link.setAttribute("download", `Event_Participants_Page_${currentPage || 1}.csv`);
-
+    link.setAttribute("download", `Event_Participants_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
