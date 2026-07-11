@@ -3,15 +3,21 @@ import { Card, CardContent } from "@/app/components/ui/card";
 import { Input } from "@/app/components/ui/input";
 import { Table } from "@/app/components/ui/table";
 import { useDebounce } from "@/hooks/useDebounce";
-import { getMemberEvents } from "@/services/member.service";
-import { Calendar, ChevronLeft, ChevronRight, Download, Search, X } from "lucide-react";
+import { getMemberEvents, getMemberEventSummary } from "@/services/member.service";
+import {
+  Calendar, ChevronLeft, ChevronRight,
+  Search,
+  X
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import MemberEventPageHeader from "../[tab]/_components/member/MemberEventPageHeader";
 import MemberEventTableBody from "../[tab]/_components/member/MemberEventTableBody";
 import CouponMemberTableHeader from "../[tab]/_components/member/MemberEventTableHeader";
+import MemberStatsSummary from "./MemberStatsSummary";
 
 export default function MemberEventList() {
   const [events, setEvents] = useState([]);
+  const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -29,6 +35,15 @@ export default function MemberEventList() {
     setEndDateInput("");
   };
 
+  const fetchSummary = useCallback(async () => {
+    try {
+      const res = await getMemberEventSummary();
+      setSummary(res?.data || null);
+    } catch (error) {
+      console.error("Error fetching summary:", error);
+    }
+  }, []);
+
   const fetchEvents = useCallback(async () => {
     try {
       setLoading(true);
@@ -42,6 +57,10 @@ export default function MemberEventList() {
       setLoading(false);
     }
   }, [page, limit, search, startDate, endDate]);
+
+  useEffect(() => {
+    fetchSummary();
+  }, [fetchSummary]);
 
   useEffect(() => {
     setPage(1);
@@ -86,29 +105,35 @@ export default function MemberEventList() {
     document.body.removeChild(link);
   };
 
+  const s = summary || {};
+
   return (
     <>
       <MemberEventPageHeader onRefresh={fetchEvents} onExportCSV={handleExportCSV} events={events} />
 
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 my-4">
-        <div className="relative w-full max-w-sm">
+      <MemberStatsSummary summary={s} />
+
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 my-4 rounded-lg border border-border/60 bg-muted/20 p-3">
+        <div className="relative w-full sm:max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search events..."
-            className="pl-9 h-10"
+            className="pl-9 h-10 bg-background"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
+
+        <div className="hidden sm:block h-6 w-px bg-border" />
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:flex-initial">
             <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
               type="date"
-              value={startDate}
+              value={startDateInput}
               onChange={(e) => setStartDateInput(e.target.value)}
-              className="pl-8 h-10 w-full sm:w-[160px] text-xs"
+              className="pl-8 h-10 w-full sm:w-[150px] text-xs bg-background"
             />
           </div>
           <span className="text-xs text-muted-foreground shrink-0">to</span>
@@ -118,7 +143,7 @@ export default function MemberEventList() {
               type="date"
               value={endDateInput}
               onChange={(e) => setEndDateInput(e.target.value)}
-              className="pl-8 h-10 w-full sm:w-[160px] text-xs"
+              className="pl-8 h-10 w-full sm:w-[150px] text-xs bg-background"
             />
           </div>
           {(startDateInput || endDateInput) && (
@@ -128,7 +153,7 @@ export default function MemberEventList() {
           )}
         </div>
       </div>
-      
+
       <Card className="border-border bg-card shadow-sm overflow-hidden">
         <CardContent className="p-0">
           <Table>
@@ -145,28 +170,20 @@ export default function MemberEventList() {
       </Card>
 
       {totalItems > 0 && (
-        <div className="flex items-center justify-between px-4 py-4 border rounded-xl bg-card my-4">
+        <div className="flex items-center justify-between px-4 py-3 border border-border/60 rounded-lg bg-card my-4">
           <p className="text-xs text-muted-foreground">
-            Total <span className="font-bold text-foreground">{totalItems}</span> events
+            Showing <span className="font-semibold text-foreground">{(page - 1) * limit + 1}</span>–
+            <span className="font-semibold text-foreground">{Math.min(page * limit, totalItems)}</span> of{" "}
+            <span className="font-semibold text-foreground">{totalItems}</span>
           </p>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page === 1}
-              onClick={() => setPage(prev => prev - 1)}
-            >
+            <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
               <ChevronLeft className="h-4 w-4 mr-1" /> Previous
             </Button>
-            <span className="text-xs font-medium">
+            <span className="text-xs font-medium px-2">
               Page {page} of {totalPages}
             </span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page === totalPages}
-              onClick={() => setPage(prev => prev + 1)}
-            >
+            <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
               Next <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
           </div>

@@ -28,6 +28,8 @@ export default function EventProvider({ children }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [isRunRiseNation, setIsRunRiseNation] = useState(true);
   const [eventType, setEventType] = useState("");
   const [eventStage, setEventStage] = useState("");
@@ -59,7 +61,10 @@ export default function EventProvider({ children }) {
         eventType === "all" ? "" : eventType,   // Correctly handles "all"
       );
 
-      setEvents(response?.data?.items || response?.items || []);
+      const data = response?.data || response || {};
+      setEvents(data?.items || []);
+      setTotalPages(data?.totalPages || 1);
+      setTotalItems(data?.total || data?.count || 0);
     } catch (err) {
       console.error("Fetch Error:", err);
       toast.error("Failed to fetch events");
@@ -71,6 +76,10 @@ export default function EventProvider({ children }) {
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, eventStage, eventType, date]);
 
   // --- CREATE EVENT ---
   const handleCreateEvent = useCallback(
@@ -157,10 +166,15 @@ export default function EventProvider({ children }) {
         search,
         setSearch,
         loading,
+        page,
+        setPage,
+        limit,
+        totalPages,
+        totalItems,
         eventType,
-        setEventType, // Added
-        eventStage,   // Added
-        setEventStage, // Added
+        setEventType,
+        eventStage,
+        setEventStage,
         date,
         setDate,
         fetchEvents,

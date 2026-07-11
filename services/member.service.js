@@ -53,6 +53,12 @@ export const addMemberEvent = async (payload) => {
   return data;
 };
 
+// GET member event summary stats
+export const getMemberEventSummary = async () => {
+  const { data } = await api.get("/member/event/summary");
+  return data;
+};
+
 // GET all member event tracks 
 export const getMemberEvents = async (page = 1, limit = 10, search, startDate, endDate) => {
   const { data } = await api.get(`/member/event`, {
