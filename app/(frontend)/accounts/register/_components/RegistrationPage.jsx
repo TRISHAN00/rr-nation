@@ -16,6 +16,29 @@ import { Label } from "@/app/components/ui/label";
 import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
+function PasswordChecklist({ password }) {
+  const rules = [
+    { label: "8+ characters", test: (p) => p.length >= 8 },
+    { label: "One uppercase", test: (p) => /[A-Z]/.test(p) },
+    { label: "One lowercase", test: (p) => /[a-z]/.test(p) },
+    { label: "One number", test: (p) => /\d/.test(p) },
+    { label: "One special character", test: (p) => /[!@#$%^&*(),.?":{}|<>]/.test(p) },
+  ];
+  return (
+    <div className="mt-2 space-y-1">
+      {rules.map((rule) => {
+        const done = rule.test(password);
+        return (
+          <div key={rule.label} className={`flex items-center gap-1.5 text-[10px] sm:text-xs transition-colors ${done ? "text-green-600" : "text-gray-400"}`}>
+            <span className="text-xs leading-none">{done ? "✓" : "○"}</span>
+            {rule.label}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function RegisterPage({ redirectTo = "/" }) {
   const router = useRouter();
   
@@ -24,6 +47,7 @@ export default function RegisterPage({ redirectTo = "/" }) {
   const [registerData, setRegisterData] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordValue, setPasswordValue] = useState("");
   
   // Contexts
   const { refreshProfile } = useAuthContext();
@@ -143,6 +167,8 @@ export default function RegisterPage({ redirectTo = "/" }) {
                   placeholder="Create password"
                   required
                   className="pr-10 h-10 sm:h-11 text-sm"
+                  value={passwordValue}
+                  onChange={(e) => setPasswordValue(e.target.value)}
                 />
                 <button
                   type="button"
@@ -152,6 +178,7 @@ export default function RegisterPage({ redirectTo = "/" }) {
                   {showPassword ? <EyeOffIcon size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+              <PasswordChecklist password={passwordValue} />
             </div>
             <Button className="w-full h-10 sm:h-11 text-sm sm:text-base" disabled={loading} type="submit">
               {loading ? "Creating Account..." : "Complete Registration"}
