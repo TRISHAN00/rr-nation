@@ -8,9 +8,16 @@ export default function OurMission({
   hideShape,
   hideRound,
   hideTopImage,
-  hideSearch
+  hideSearch,
+  data
 }) {
+ 
+  const image = data?.images?.list?.[0]?.full_path;
+  const overImgText = data?.images?.list?.[0]?.short_title;
+
   return (
+    console.log("OurMission Data:", data), // Debugging line to check the structure of data
+
     <section
       className="relative bg-cover bg-no-repeat bg-center py-16 sm:py-24 xl:py-36"
       style={{
@@ -25,10 +32,10 @@ export default function OurMission({
         "
       >
         {/* Left Image Section */}
-        <AwardWin hideShape={hideShape} hideRound={hideRound} hideTopImage={hideTopImage} />
+        <AwardWin hideShape={hideShape} hideRound={hideRound} hideTopImage={hideTopImage} image={image} overImgText={overImgText} />
 
         {/* Right Content */}
-        <MissionItem hideBtn={hideBtn} />
+        <MissionItem hideBtn={hideBtn} data={data} />
       </div>
       {!hideIcon && (
         <div className=" absolute top-14 right-28 hidden  lg:block 2xl:block  ">

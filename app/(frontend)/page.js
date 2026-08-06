@@ -12,44 +12,68 @@ import ServiceSlide from "@/app/components/pages/services/ServiceSlide";
 import SuccessfulEvents from "../components/pages/events/SuccessfulEvents";
 import { getApi } from "./api/page-api";
 
-export const metadata = {
-  title: "RunRise Nation | Bangladesh's Leading Running Community",
-  description:
-    "Join RunRise Nation (RRN), a premier AIMS-associate running community in Bangladesh. Explore marathons, virtual runs, fitness training, and a supportive network of athletes. Run and Rise Together!",
-  keywords: [
-    "RunRise Nation",
-    "RRN",
-    "Running Bangladesh",
-    "Dhaka Marathon",
-    "Hatirjheel Run",
-    "AIMS Associate Bangladesh",
-    "Fitness Community Bangladesh",
-  ],
-  openGraph: {
-    title: "RunRise Nation - Run and Rise Together",
-    description:
-      "Empowering runners of all levels through events, training, and community. Join the movement today!",
-    url: "https://runrisenation.com", // Replace with actual URL
-    siteName: "RunRise Nation",
-    images: [
-      {
-        url: "/static/opengraph-image.jpg", // Ensure you have an OG image in your public folder
-        width: 1200,
-        height: 630,
-        alt: "RunRise Nation Community Run",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "RunRise Nation | Bangladesh's Premier Running Club",
-    description:
-      "The ultimate platform for runners in Bangladesh. Register for events, track your journey, and join our mission.",
-    images: ["/static/opengraph-image.jpg"],
-  },
-};
+export async function generateMetadata() {
+  const homeData = await getApi("home");
+
+  const pageData = homeData?.data?.page_data;
+  const bannerData = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "banner"
+  );
+
+  // Extract primary image or fallback to public/opengraph-image.jpg
+  const ogImage =
+    bannerData?.images?.list?.[0]?.full_path ||
+    "/static/opengraph-image.jpg";
+
+  console.log("Banner Data:", bannerData?.images?.list?.[0]?.full_path); // Debugging line to check the structure of bannerData
+
+  const title =
+    pageData?.meta_title ||
+    "";
+
+  const description =
+    pageData?.meta_description ||
+    "";
+
+  const ogTitle = pageData?.og_title || title;
+  const ogDescription = pageData?.og_description || description;
+
+  return {
+    // Sets base URL so relative paths (e.g. '/opengraph-image.jpg') resolve automatically
+    metadataBase: new URL("https://runrisenation.com"),
+    title,
+    description,
+
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+      url: "https://runrisenation.com",
+      siteName: "RunRise Nation",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: ogTitle,
+        },
+      ],
+      locale: "en_US",
+      type: "website",
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: ogDescription,
+      images: [
+        {
+          url: ogImage,
+          alt: ogTitle,
+        },
+      ],
+    },
+  };
+}
 
 export default async function Home() {
   const apiValue = "home";
@@ -63,13 +87,15 @@ export default async function Home() {
     (f) => f?.section_data?.slug === "announcement-marquee"
   );
 
-  console.log("Announcement Data:", announcementData); // Debugging line to check the structure of announcementData
+  const aboutUsData = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "about-us"
+  );
 
   return (
     <>
       <Banner data={bannerData} />
       <AutoSlideLogo data={announcementData} />
-      <OurMission hideTopImage />
+      <OurMission hideTopImage data={aboutUsData} />
       <SuccessfulEvents />
       <Counter />
       <ServiceSlide />

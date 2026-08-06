@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function AwardWin({ hideShape, hideRound, hideTopImage }) {
+export default function AwardWin({ hideShape, hideRound, hideTopImage, overImgText, image }) {
   return (
     <div className="relative flex items-start">
       {/* Decorative Shape */}
@@ -16,7 +16,7 @@ export default function AwardWin({ hideShape, hideRound, hideTopImage }) {
 
       <div className="relative w-full max-w-[470] h-[360] sm:h-[480] md:h-[636] rounded-4xl overflow-hidden md:ml-10">
         <Image
-          src="/dynamic/about/Vision-Photo_Award_Winning.jpg"
+          src={image}
           alt="Run Rise About and Mission"
           fill
           className="object-fill h-full w-full "
@@ -36,7 +36,7 @@ export default function AwardWin({ hideShape, hideRound, hideTopImage }) {
             height={43}
             className="object-cover"
           />{" "}
-          <span className=" uppercase" >Award Winning</span>
+          <span className=" uppercase" >{overImgText}</span>
         </div>
       )}
 

@@ -4,61 +4,41 @@ import RunIcon from "@/app/components/icons/RunIcon";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function MissionList({ hideBtn }) {
+export default function MissionList({ hideBtn, points, buttonName, buttonSlug }) {
   return (
     <>
       {/* Mission Items */}
       <ul className="flex flex-col gap-8 sm:gap-10 border-b border-[#00A19A]/40 pb-8 sm:pb-9">
         {/* Item 1 */}
-        <li className="flex gap-4 sm:gap-7.5 items-start">
-          {/* Icon */}
-          <div className="shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full border border-brand flex items-center justify-center">
-            <Image
-              src="/static/people-group.svg"
-              height={22}
-              width={16}
-              alt="Safe Environment"
-            />
-          </div>
-
-          {/* Content */}
-          <div>
-            <h6 className="text-[18px] sm:text-[24px] leading-6 sm:leading-7 font-bold text-dark mb-2 sm:mb-4">
-              Safe Environment
-            </h6>
-            <p className="text-[14px] sm:text-[16px] leading-6 text-gray">
-              RunRise Nation is a passionate running community built on fitness,
-              endurance, and togetherness.
-            </p>
-          </div>
-        </li>
-
-        {/* Item 2 */}
-        <li className="flex gap-4 sm:gap-7.5 items-start">
-          <div className="shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full border border-brand flex items-center justify-center">
-            <Image
-              src="/static/people-group.svg"
-              height={22}
-              width={16}
-              alt="Eco-conscious running events"
-            />
-          </div>
-
-          <div>
-            <h6 className="text-[18px] sm:text-[24px] leading-6 sm:leading-7 font-bold text-dark mb-2 sm:mb-4">
-              Eco-conscious Running Events
-            </h6>
-            <p className="text-[14px] sm:text-[16px] leading-6 text-brand">
-              RunRise Nation goes beyond hosting races—it builds a culture of
-              discipline, health, and perseverance.
-            </p>
-          </div>
-        </li>
+        {
+          points?.map((point, index) => (
+            <li key={index} className="flex gap-4 sm:gap-7.5 items-start">
+              {/* Icon */}
+              <div className="shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full border border-brand flex items-center justify-center">
+                <Image
+                  src="/static/people-group.svg"
+                  height={22}
+                  width={16}
+                  alt={point?.data?.title || "Mission Point"}
+                />
+              </div>
+              {/* Content */}
+              <div>
+                <h6 className="text-[18px] sm:text-[24px] leading-6 sm:leading-7 font-bold text-dark mb-2 sm:mb-4">
+                  {point?.data?.title}
+                </h6>
+                <p className="text-[14px] sm:text-[16px] leading-6 text-gray">
+                  {point?.data?.description}
+                </p>
+              </div>
+            </li>
+          ))
+        }
       </ul>
 
       {!hideBtn && (
         <div className="mt-8 sm:mt-10 relative w-fit mx-auto sm:ml-20">
-          <Link href={"/about"}>
+          <Link href={buttonSlug || "#"} className="w-fit">
             <FillButton
               hoverBg="#001819"
               textColor="#FAFAFA"
@@ -66,7 +46,7 @@ export default function MissionList({ hideBtn }) {
               iconPosition="right"
               gifIcon={<RunIcon icon="/static/marathon.gif" />}
             >
-              Start Running Today
+              {buttonName}
             </FillButton>
           </Link>
 
