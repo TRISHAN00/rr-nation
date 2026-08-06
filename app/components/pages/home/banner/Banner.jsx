@@ -6,11 +6,17 @@ import BannerPagination from "./BannerPagination";
 import BannerSlider from "./BannerSlider";
 import FollowUs from "./FollowUs";
 
-export default function Banner() {
+export default function Banner({ data }) {
+  const sliderImages = data?.images?.list;
+
   return (
     <section className="relative w-full min-h-screen overflow-hidden">
       {/* Swiper */}
-      <BannerSlider />
+      {
+        sliderImages?.length > 0 && (
+          <BannerSlider sliderImages={sliderImages} />
+        )
+      }
 
       {/* Overlay */}
       <Overlay />
@@ -26,7 +32,7 @@ export default function Banner() {
         </div>
 
         {/* Banner Text */}
-        <BannerCTA />
+        <BannerCTA data={data} />
       </div>
 
       {/* Shapes */}

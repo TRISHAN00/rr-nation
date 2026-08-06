@@ -5,7 +5,7 @@ const leftItems = [
   {
     icon: MapPin,
     text: "House 91/B, Fulkoli Mor, Section-12, Block B, Road 1, Kalshi Road, Pallabi, Dhaka-1216",
-    href: "#",
+    href: "https://maps.app.goo.gl/gviJhSxTuiY7pthX9",
   },
   {
     icon: Phone,

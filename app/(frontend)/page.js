@@ -10,6 +10,7 @@ import JourneySection from "@/app/components/pages/home/journey/JourneySection";
 import Partners from "@/app/components/pages/home/partners/Partners";
 import ServiceSlide from "@/app/components/pages/services/ServiceSlide";
 import SuccessfulEvents from "../components/pages/events/SuccessfulEvents";
+import { getApi } from "./api/page-api";
 
 export const metadata = {
   title: "RunRise Nation | Bangladesh's Leading Running Community",
@@ -50,10 +51,19 @@ export const metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const apiValue = "home";
+  const homeData = await getApi(apiValue);
+
+  const bannerData = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "banner"
+  );
+
+  console.log("Banner Data:", bannerData); // Debugging line to check the structure of bannerData
+
   return (
     <>
-      <Banner />
+      <Banner data={bannerData} />
       <AutoSlideLogo />
       <OurMission hideTopImage />
       <SuccessfulEvents />

@@ -13,7 +13,7 @@ const LightGallery = dynamic(() => import("lightgallery/react"), {
 import "lightgallery/css/lg-video.css";
 import "lightgallery/css/lightgallery.css";
 
-export default function VideoModalGallery() {
+export default function VideoModalGallery({ ytBtnName, ytLink, ytHeadline }) {
   const lightGalleryRef = useRef(null);
 
   const onInit = (detail) => {
@@ -26,14 +26,15 @@ export default function VideoModalGallery() {
 
   const videos = [
     {
-      src: "https://youtu.be/hWfn751NQys?si=BiQX4YZbyPPd4uN_",
-      subHtml: "<h4>অনুষ্ঠিত হলো দৌড় প্রতিযোগিতা রানরাইজ নেশন ফিফটিন-কে ২০২৫ | RunRise Marathon | Jamuna TV</h4>",
+      src: ytLink,
+      subHtml: `<h4>${ytHeadline}</h4>`,
     },
   ];
 
   return (
     <div className="flex items-center gap-4 sm:gap-5 md:gap-6">
       <VideoPlayBtn
+        label={ytBtnName}
         openVideo={openVideo}
         size={44}
         className="scale-90 sm:scale-100 md:scale-110 lg:scale-125"

@@ -36,7 +36,7 @@ export default function VideoPlayBtn({
                      transition-transform duration-300 group-hover:scale-105"
         >
           <Play
-            className="text-white ml-[2px] transition-transform duration-300 group-hover:animate-play"
+            className="text-white ml-0.5 transition-transform duration-300 group-hover:animate-play"
             size={14}
           />
         </span>

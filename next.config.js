@@ -8,7 +8,7 @@ const nextConfig = {
   },
 
   images: {
-    domains: ["api.runrisenation.com"],
+    domains: ["api.runrisenation.com", "cms.runrisenation.com"],
   },
 };
 

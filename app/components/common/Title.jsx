@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SearchEvent from "../pages/events/SearchEvent";
 import FillButton from "./FillButton";
 import SwiperArrows from "./SwiperArrows";
@@ -34,10 +35,11 @@ export default function Title({
       {/* Right Controls */}
       {!hideBtnArrow && (
         <div className="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-4 sm:gap-6 items-center sm:items-end">
-          <FillButton className="w-full sm:w-auto">
-            View All Blogs
-          </FillButton>
-
+          <Link href={"/team"}>
+            <FillButton className="w-full sm:w-auto">
+              View All Team
+            </FillButton>
+          </Link>
           <SwiperArrows
             onPrev={onPrev}
             onNext={onNext}
