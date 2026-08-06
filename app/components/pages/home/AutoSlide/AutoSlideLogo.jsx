@@ -1,6 +1,8 @@
 import AutoSlideItem from "./AutoSlideItem";
 
-export default function AutoSlideLogo() {
+export default function AutoSlideLogo({ data }) {
+  const items = data?.posts?.list;
+
   return (
     <section className="bg-brand py-6 overflow-hidden">
       <div
@@ -9,19 +11,11 @@ export default function AutoSlideLogo() {
           animation: "marquee 100s linear infinite",
         }}
       >
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
-
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
-        <AutoSlideItem />
+        {
+          items?.length > 0 && items.map((item, index) => (
+            <AutoSlideItem key={index} item={item} />
+          ))
+        }
       </div>
 
       {/* global keyframes */}

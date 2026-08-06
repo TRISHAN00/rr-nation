@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function AutoSlideItem() {
+export default function AutoSlideItem({ item }) {
   return (
     <div className="flex items-center gap-3 md:gap-4 whitespace-nowrap">
       <h1
@@ -12,7 +12,7 @@ export default function AutoSlideItem() {
           xl:text-3xl
         "
       >
-        RunRise Nation | Let’s Run, Rise & Celebrate Together
+        {item?.data?.subtitle || "RunRise Nation"}
       </h1>
 
       <Image

@@ -59,12 +59,16 @@ export default async function Home() {
     (f) => f?.section_data?.slug === "banner"
   );
 
-  console.log("Banner Data:", bannerData); // Debugging line to check the structure of bannerData
+  const announcementData = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "announcement-marquee"
+  );
+
+  console.log("Announcement Data:", announcementData); // Debugging line to check the structure of announcementData
 
   return (
     <>
       <Banner data={bannerData} />
-      <AutoSlideLogo />
+      <AutoSlideLogo data={announcementData} />
       <OurMission hideTopImage />
       <SuccessfulEvents />
       <Counter />
