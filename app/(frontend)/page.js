@@ -100,6 +100,10 @@ export default async function Home() {
     (f) => f?.section_data?.slug === "feature-services"
   );
 
+  const ourMarJour = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "our-marathon-journey"
+  );
+
   return (
     <>
       <Banner data={bannerData} />
@@ -108,7 +112,7 @@ export default async function Home() {
       <SuccessfulEvents data={successfulEventsData} />
       <Counter data={statsCounterData} />
       <ServiceSlide data={featureService} />
-      <JourneySection />
+      <JourneySection data={ourMarJour} />
       <TestimonialSec />
       <Partners />
       <PhotoGallery />

@@ -2,46 +2,66 @@ import JourneyArrow from "./JourneyArrow";
 import JourneyItem from "./JourneyItem";
 import JourneyShapeBg from "./JourneyShapeBg";
 
-export default function JourneySection() {
-  return (
-    <section className="relative bg-white py-16 pb-40  overflow-hidden">
-      <div className="relative container mx-auto px-4">
-        {/* Decorative background */}
-        <JourneyShapeBg />
+export default function JourneySection({ data }) {
+  const overLine = data?.section_data?.overline_text;
+  const subtitle = data?.section_data?.subtitle;
+  const journeyList = data?.posts?.list || [];
 
+  return (
+    <section className="relative overflow-hidden py-16 lg:py-24">
+      {/* Decorative background */}
+      <JourneyShapeBg />
+
+      <div className="container mx-auto px-4">
         {/* Heading */}
-        <div className="text-center mb-10 mb:20 lg:mb-20 relative z-10">
-          <span className="text-brand uppercase font-bold tracking-wide text-sm">
-            Our Marathon Journey
-          </span>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-dark">
-            How we make every race successful
-          </h2>
+        <div className="relative z-10 mb-10 text-center lg:mb-20">
+          {overLine && (
+            <span className="text-brand text-sm font-bold uppercase tracking-wide">
+              {overLine}
+            </span>
+          )}
+
+          {subtitle && (
+            <h2 className="text-dark mt-4 text-3xl font-bold md:text-4xl">
+              {subtitle}
+            </h2>
+          )}
         </div>
 
         {/* Journey Row */}
-        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-center gap-14 lg:gap-10">
-          <JourneyItem
-            title="Plan the Race"
-            text="We plan routes, schedules, and categories carefully to ensure a safe and enjoyable race for everyone."
-            icon="/static/plan-the-rance.svg"
-          />
+        <div className="relative z-10 flex flex-col items-center justify-center gap-14 lg:flex-row lg:gap-10">
+          {journeyList.map((item, index) => {
+            const post = item?.data || item;
 
-          <JourneyArrow />
+            const title = post?.title || "";
+            const text =
+              post?.short_desc ||
+              post?.description ||
+              post?.excerpt ||
+              "";
 
-          <JourneyItem
-            title="Build the Community"
-            text="We bring runners, volunteers, and organizers together to grow a supportive running community."
-            icon="/static/build-the -community.svg"
-          />
+            const image =
+              item?.images?.list?.[0]?.full_path ||
+              item?.images?.[0]?.full_path ||
+              post?.image ||
+              "";
 
-          <JourneyArrow />
+            return (
+              <div
+                key={post?.id || index}
+                className="flex flex-col items-center lg:flex-row"
+              >
+                <JourneyItem
+                  title={title}
+                  text={text}
+                  icon={image}
+                />
 
-          <JourneyItem
-            title="Deliver the Experience"
-            text="From race day to the finish line, we deliver a smooth, memorable, and rewarding marathon experience."
-            icon="/static/deliver-the-exp.svg"
-          />
+                {/* Don't show arrow after the last item */}
+                {index < journeyList.length - 1 && <JourneyArrow />}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

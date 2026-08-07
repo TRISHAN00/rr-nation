@@ -3,7 +3,6 @@ import clsx from "clsx";
 import Image from "next/image";
 
 export default function ServiceCard({ service }) {
-  console.log(service)
   const serName = service?.data?.title;
   const serDesc = service?.data?.description;
   const thumb = service?.images?.[0]?.full_path

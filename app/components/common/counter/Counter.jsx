@@ -17,7 +17,6 @@ export default function Counter({ data }) {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center">
         {counters.map((item, index) => {
-          console.log(item)
           const number = item?.data?.number || 0;
           const label = item?.data?.title || "";
           const icon = item?.images?.[0]?.full_path || "";

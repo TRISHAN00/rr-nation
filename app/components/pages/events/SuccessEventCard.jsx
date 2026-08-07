@@ -4,7 +4,6 @@ import Link from "next/link";
 import { AspectRatio } from "../../ui/aspect-ratio";
 
 export default function SuccessEventCard({ event, href }) {
-  console.log("SuccessEventCard event:", event); // Debugging line to check the structure of event
   const subtitle = event?.data?.subtitle;
   const eventLocation = event?.data?.event_location;
   const date = event?.data?.event_date;
