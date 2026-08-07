@@ -20,12 +20,9 @@ export async function generateMetadata() {
     (f) => f?.section_data?.slug === "banner"
   );
 
-  // Extract primary image or fallback to public/opengraph-image.jpg
   const ogImage =
     bannerData?.images?.list?.[0]?.full_path ||
     "/static/opengraph-image.jpg";
-
-  console.log("Banner Data:", bannerData?.images?.list?.[0]?.full_path); // Debugging line to check the structure of bannerData
 
   const title =
     pageData?.meta_title ||
@@ -91,12 +88,16 @@ export default async function Home() {
     (f) => f?.section_data?.slug === "about-us"
   );
 
+  const successfulEventsData = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "our-successful-events"
+  );
+
   return (
     <>
       <Banner data={bannerData} />
       <AutoSlideLogo data={announcementData} />
       <OurMission hideTopImage data={aboutUsData} />
-      <SuccessfulEvents />
+      <SuccessfulEvents data={successfulEventsData} />
       <Counter />
       <ServiceSlide />
       <JourneySection />

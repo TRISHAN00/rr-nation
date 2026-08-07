@@ -5,62 +5,21 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SuccessEventCard from "./SuccessEventCard";
 
-const succEvents = [
-  {
-    id: 1,
-    name: 'Accounting Day Run 2025',
-    date: 'November 07, 2025 ',
-    Organizer: 'ICAB',
-    partner: 'RunRise Nation',
-    thumb: '/dynamic/successful-ev/1.jpeg'
-  },
-  {
-    id: 2,
-    name: 'RunRise Nation Community Fun Run 2025 (Edition 1)',
-    date: 'January 25, 2025  ',
-    vanue: 'Chandrima Udyan',
-    Organizer: 'ICAB',
-    partner: 'RunRise Nation',
-    thumb: '/dynamic/successful-ev/4.jpg'
-  },
-  {
-    id: 3,
-    name: 'Gigabyte Presents RunRise Nation Noboborhso Run 1432',
-    date: 'April 12, 2025 ',
-    vanue: 'Chandrima Udyan',
-    Organizer: 'ICAB',
-    partner: 'RunRise Nation',
-    thumb: '/dynamic/successful-ev/2.jpeg'
-  },
-  {
-    id: 4,
-    name: 'RunRise Nation 15K 2025 Powered by Gigabyte',
-    date: 'August 29, 2025 ',
-    vanue: 'Hatirjheel, Dhaka ',
-    Organizer: '(AIMS Certified)',
-    thumb: '/dynamic/successful-ev/3.jpg'
-  },
-  {
-    id: 5,
-    name: 'RunRise Nation Badminton Tournament 2026',
-    date: 'JAN 10 2026',
-    vanue: 'Mirpur, Dhaka ',
-    Organizer: '(AIMS Certified)',
-    thumb: '/dynamic/successful-ev/5.jpeg'
-  },
-]
-
-export default function SuccessfulEvents() {
+export default function SuccessfulEvents({ data }) {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  const subtitle = data?.section_data?.subtitle || "";
+  const title = data?.section_data?.title || "";
+  const succEvents = data?.posts?.list || [];
 
   return (
     <section className="py-16 lg:py-35 bg-white">
       <div className="container m-auto px-7.5 overflow-hidden">
         <SubtitleWithArrow
-          label="Our Successful Events"
-          title="Featuring Our Successful Marathon Events"
+          label={title}
+          title={subtitle}
           onPrev={() => swiperInstance?.slidePrev()}
           onNext={() => swiperInstance?.slideNext()}
           isBeginning={isBeginning}

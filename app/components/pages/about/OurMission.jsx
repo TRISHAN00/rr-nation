@@ -16,8 +16,6 @@ export default function OurMission({
   const overImgText = data?.images?.list?.[0]?.short_title;
 
   return (
-    console.log("OurMission Data:", data), // Debugging line to check the structure of data
-
     <section
       className="relative bg-cover bg-no-repeat bg-center py-16 sm:py-24 xl:py-36"
       style={{

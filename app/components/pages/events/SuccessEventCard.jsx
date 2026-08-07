@@ -4,6 +4,11 @@ import Link from "next/link";
 import { AspectRatio } from "../../ui/aspect-ratio";
 
 export default function SuccessEventCard({ event, href }) {
+  console.log("SuccessEventCard event:", event); // Debugging line to check the structure of event
+  const subtitle = event?.data?.subtitle;
+  const eventLocation = event?.data?.event_location;
+  const date = event?.data?.event_date;
+  const thumb = event?.images?.[0]?.full_path;
   if (!event) return null;
 
   const formatDate = (dateString) => {
@@ -14,7 +19,7 @@ export default function SuccessEventCard({ event, href }) {
     };
   };
 
-  const { day, month } = formatDate(event?.date);
+  const { day, month } = formatDate(date);
 
   // If href exists, wrap in Link; otherwise, just a div
   const Container = href ? Link : "div";
@@ -39,8 +44,8 @@ export default function SuccessEventCard({ event, href }) {
           className="bg-muted rounded-t-4xl overflow-hidden"
         >
           <Image
-            src={event?.thumb || "/images/placeholder.jpg"}
-            alt={event?.name || "Event Thumbnail"}
+            src={thumb || ""}
+            alt={subtitle || ""}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -51,7 +56,7 @@ export default function SuccessEventCard({ event, href }) {
         <div className="px-5 sm:px-6 py-5 flex flex-col gap-4">
           <div className="overflow-hidden relative">
             <h5 className={`text-dark text-md sm:text-xl lg:text-1xl font-bold leading-snug truncate transition-colors duration-300 ${href ? "group-hover:text-white" : ""}`}>
-              {event?.name}
+              {subtitle}
             </h5>
           </div>
 
@@ -77,7 +82,7 @@ export default function SuccessEventCard({ event, href }) {
             <div className="flex items-center gap-2 flex-1">
               <MapPin className={`text-gray transition-colors duration-300 shrink-0 ${href ? "group-hover:text-white" : ""}`} />
               <p className={`text-gray text-sm sm:text-[16px] font-medium transition-colors duration-300 line-clamp-2 ${href ? "group-hover:text-white" : ""}`}>
-                {event?.vanue || event?.Organizer || "Venue TBD"}
+                {eventLocation || ""}
               </p>
             </div>
           </div>
