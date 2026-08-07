@@ -29,10 +29,14 @@ const services = [
   },
 ];
 
-export default function ServiceSlide() {
+export default function ServiceSlide({ data }) {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  const overLine = data?.section_data?.overline_text;
+  const subtitle = data?.section_data?.subtitle;
+  const ser = data?.posts?.list;
 
   return (
     <section
@@ -43,8 +47,8 @@ export default function ServiceSlide() {
       <div className="pt-20 lg:pt-35 bg-[#E0F7F6] ">
         <div className="container m-auto px-7.5 overflow-hidden">
           <SubtitleWithArrow
-            label="Services"
-            title="In what we are the best"
+            label={overLine}
+            title={subtitle}
             onPrev={() => swiperInstance?.slidePrev()}
             onNext={() => swiperInstance?.slideNext()}
             isBeginning={isBeginning}
@@ -74,7 +78,7 @@ export default function ServiceSlide() {
               1024: { slidesPerView: 3 },
             }}
           >
-            {services?.map((service) => (
+            {ser?.map((service) => (
               <SwiperSlide>
                 <ServiceCard service={service} />
               </SwiperSlide>

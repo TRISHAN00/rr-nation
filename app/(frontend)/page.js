@@ -95,6 +95,10 @@ export default async function Home() {
   const statsCounterData = homeData?.data?.sections?.find(
     (f) => f?.section_data?.slug === "stats-counter"
   );
+  
+  const featureService = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "feature-services"
+  );
 
   return (
     <>
@@ -103,7 +107,7 @@ export default async function Home() {
       <OurMission hideTopImage data={aboutUsData} />
       <SuccessfulEvents data={successfulEventsData} />
       <Counter data={statsCounterData} />
-      <ServiceSlide />
+      <ServiceSlide data={featureService} />
       <JourneySection />
       <TestimonialSec />
       <Partners />

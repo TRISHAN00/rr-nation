@@ -3,6 +3,10 @@ import clsx from "clsx";
 import Image from "next/image";
 
 export default function ServiceCard({ service }) {
+  console.log(service)
+  const serName = service?.data?.title;
+  const serDesc = service?.data?.description;
+  const thumb = service?.images?.[0]?.full_path
   return (
     <div className="w-full cursor-pointer pb-28 group">
       <div className="relative z-10">
@@ -10,9 +14,9 @@ export default function ServiceCard({ service }) {
         <div className="relative rounded-3xl md:rounded-4xl overflow-hidden">
           <AspectRatio ratio={10 / 8}>
             <Image
-              src={service?.image}
+              src={thumb}
               fill
-              alt={service?.title}
+              alt={serName}
               className="h-full w-full object-cover"
             />
           </AspectRatio>
@@ -53,7 +57,7 @@ export default function ServiceCard({ service }) {
               transition-colors duration-500
               md:group-hover:text-light`)}
           >
-            {service?.title}
+            {serName}
           </h5>
 
           {/* Description */}
@@ -71,7 +75,7 @@ export default function ServiceCard({ service }) {
               md:group-hover:max-h-40
               md:group-hover:translate-y-0`}
           >
-            {service?.desc}
+            {serDesc}
           </p>
         </div>
       </div>
