@@ -9,7 +9,9 @@ export default function CounterItem({
   showPlus = true,      // ✅ new prop
   imageHeight = 80,
   imageWidth = 80,
+  suffix = "",          // ✅ new prop
 }) {
+  console.log(suffix, "suffix in CounterItem"); // Debugging line to check the value of suffix
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <Image
@@ -20,7 +22,7 @@ export default function CounterItem({
       />
       <h2 className="text-light text-[36px] leading-snug font-bold mt-5 mb-2.5">
         <CountUp start={0} end={count} duration={2} separator="," />
-        {showPlus && "+"}
+        {suffix && "+"}
       </h2>
       <span className="text-light text-[20px] leading-6 font-medium">
         {label}
