@@ -53,17 +53,21 @@ const blogPosts = [
   },
 ];
 
-export default function FeaturedBlogSlide() {
+export default function FeaturedBlogSlide({ data, featuredBlogs }) {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  const overLine = data?.section_data?.overline_text;
+  const subtitle = data?.section_data?.subtitle;
+
 
   return (
     <section className=" py-20 lg:py-35">
       <div className="container m-auto px-7.5 ">
         <SubtitleWithArrow
-          label="Blogs"
-          title="Explore Latest Blogs"
+          label={overLine}
+          title={subtitle}
           onPrev={() => swiperInstance?.slidePrev()}
           onNext={() => swiperInstance?.slideNext()}
           isBeginning={isBeginning}
@@ -90,7 +94,7 @@ export default function FeaturedBlogSlide() {
             1024: { slidesPerView: 3 },
           }}
         >
-          {blogPosts?.map((blog) => (
+          {featuredBlogs?.map((blog) => (
             <SwiperSlide key={blog?.id}>
               <BlogCard key={blog.id} blog={blog} />
             </SwiperSlide>

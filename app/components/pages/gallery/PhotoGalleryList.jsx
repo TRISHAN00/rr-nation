@@ -28,11 +28,11 @@ export default function PhotoGalleryList({ images }) {
       {images.map((src, index) => (
         <a
           key={index}
-          href={src}
+          href={src?.full_path}
           className="mb-4 break-inside-avoid block rounded-2xl overflow-hidden"
         >
           <Image
-            src={src}
+            src={src?.full_path}
             alt={`Gallery image ${index + 1}`}
             width={400}
             height={300}

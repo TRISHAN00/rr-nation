@@ -3,9 +3,12 @@ import { getAllEvent } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import FeaturedEventCard from "./FeaturedEventCard";
 
-export default function FeatureEventList() {
+export default function FeatureEventList({ data }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const overLine = data?.section_data?.overline_text;
+  const subtitle = data?.section_data?.subtitle;
 
   const fetchEvents = async () => {
     try {
@@ -27,12 +30,18 @@ export default function FeatureEventList() {
       <div className="container m-auto px-7.5">
         {/* Heading */}
         <div className="text-center mb-10 md:mb-20 relative z-10 px-4">
-          <span className="text-brand uppercase font-bold tracking-wide text-sm">
-            EVENTS
-          </span>
-          <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold text-dark">
-            Our Events
-          </h2>
+          {
+            overLine && <span className="text-brand uppercase font-bold tracking-wide text-sm">
+              {overLine}
+            </span>
+          }
+          {
+            subtitle && <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold text-dark">
+              {subtitle}
+            </h2>
+          }
+
+
         </div>
 
         {events?.map((event) => {

@@ -10,6 +10,7 @@ import JourneySection from "@/app/components/pages/home/journey/JourneySection";
 import Partners from "@/app/components/pages/home/partners/Partners";
 import ServiceSlide from "@/app/components/pages/services/ServiceSlide";
 import SuccessfulEvents from "../components/pages/events/SuccessfulEvents";
+import { getBlogListApi } from "./api/blog-api";
 import { getApi } from "./api/page-api";
 
 export async function generateMetadata() {
@@ -75,6 +76,8 @@ export async function generateMetadata() {
 export default async function Home() {
   const apiValue = "home";
   const homeData = await getApi(apiValue);
+  const blogs = await getBlogListApi();
+
 
   const bannerData = homeData?.data?.sections?.find(
     (f) => f?.section_data?.slug === "banner"
@@ -104,6 +107,31 @@ export default async function Home() {
     (f) => f?.section_data?.slug === "our-marathon-journey"
   );
 
+  const testimonial = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "testimonial"
+  );
+
+  const partners = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "our-trusted-partners"
+  );
+
+  const gallery = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "gallery"
+  );
+
+  const featureEvents = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "feature-events"
+  );
+
+  const featureBlogSubtitle = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "feature-blogs"
+  );
+
+  const featuredBlogs = blogs?.data?.filter(blog => blog?.data?.is_featured === 1);
+
+  console.log(featuredBlogs)
+
+
   return (
     <>
       <Banner data={bannerData} />
@@ -113,11 +141,11 @@ export default async function Home() {
       <Counter data={statsCounterData} />
       <ServiceSlide data={featureService} />
       <JourneySection data={ourMarJour} />
-      <TestimonialSec />
-      <Partners />
-      <PhotoGallery />
-      <FeatureEventList />
-      <FeaturedBlogSlide />
+      <TestimonialSec data={testimonial} />
+      <Partners data={partners} />
+      <PhotoGallery data={gallery} />
+      <FeatureEventList data={featureEvents} />
+      <FeaturedBlogSlide data={featureBlogSubtitle} featuredBlogs={featuredBlogs}  />
     </>
   );
 }

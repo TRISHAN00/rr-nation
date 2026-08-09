@@ -2,15 +2,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar"
 import Image from "next/image";
 
 export default function BlogCard({ blog }) {
+  const title = blog?.data?.title;
+  const body = blog?.data?.body;
+  const thumb = blog?.images?.list?.[0]?.full_path;
+  const author = blog?.images?.list?.[0]?.short_title;
+  console.log(blog)
   // Destructure for cleaner code
-  const { title, author, description, image, category } = blog;
+  const { category } = blog;
 
   return (
     <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition hover:shadow-lg group">
       {/* IMAGE */}
       <div className="relative w-full h-45 sm:h-55 md:h-65 lg:h-70 overflow-hidden">
         <Image
-          src={image}
+          src={thumb}
           fill
           alt={title}
           className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -37,7 +42,7 @@ export default function BlogCard({ blog }) {
             {title}
           </h5>
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed line-clamp-2">
-            {description}
+            {body}
           </p>
         </div>
 

@@ -31,7 +31,11 @@ const testimonials = [
   },
 ];
 
-export default function TestimonialSec() {
+export default function TestimonialSec({ data }) {
+  const overLine = data?.section_data?.overline_text;
+  const subtitle = data?.section_data?.subtitle;
+  const testimonials = data?.posts?.list || [];
+
   return (
     <section
       className="relative pt-20 md:pt-35 pb-20 md:pb-55"
@@ -44,12 +48,11 @@ export default function TestimonialSec() {
     >
       {/* Heading */}
       <div className="text-center mb-10 md:mb-20 relative z-10 px-4">
-        <span className="text-brand uppercase font-bold tracking-wide text-sm">
-          Testimonial
-        </span>
-        <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold text-dark">
-          Runners Best Feedback
-        </h2>
+
+        {overLine && <span className="text-brand uppercase font-bold tracking-wide text-sm"> {overLine} </span>}
+        {subtitle && <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold text-dark">{subtitle}</h2>}
+
+
       </div>
 
       {/* Swiper Slider */}
@@ -77,6 +80,7 @@ export default function TestimonialSec() {
           }}
         >
           {testimonials?.map((testimonial) => (
+              
             <SwiperSlide>
               <TestimonialCard testimonial={testimonial} />
             </SwiperSlide>

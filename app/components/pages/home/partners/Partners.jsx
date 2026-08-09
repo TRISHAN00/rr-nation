@@ -4,19 +4,10 @@ import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Partner from "./Partner";
 
-const partners = [
-  "/dynamic/partners/1.PNG",
-  "/dynamic/partners/2.PNG",
-  "/dynamic/partners/3.jpg",
-  "/dynamic/partners/4.png",
-  "/dynamic/partners/5.jpg",
-  "/dynamic/partners/6.jpg",
-  "/dynamic/partners/7.jpg",
-  "/dynamic/partners/8.png",
+export default function Partners({ data }) {
+  const subtitle = data?.section_data?.subtitle;
+  const logos = data?.images?.list;
 
-];
-
-export default function Partners() {
   return (
     <section className="partners-area relative bg-[#FAFAFA]">
       <div className="absolute top-0 left-0 w-full h-1/2 bg-[#E0F7F6]  z-0"></div>
@@ -25,9 +16,12 @@ export default function Partners() {
         {/* Half background */}
 
         <div className="relative bg-brand py-3 px-4 lg:py-14 lg:px-8 md:px-16 container mx-auto rounded-4xl overflow-hidden z-10">
-          <h6 className="text-[24px] text-white leading-7 font-bold text-center mb-10">
-            Our Trusted Partners
-          </h6>
+          {
+            subtitle && <h6 className="text-[24px] text-white leading-7 font-bold text-center mb-10">
+              {subtitle}
+            </h6>
+          }
+
 
           <Swiper
             modules={[Autoplay]}
@@ -41,9 +35,9 @@ export default function Partners() {
               1024: { slidesPerView: 6 },
             }}
           >
-            {partners.map((logo, index) => (
+            {logos.map((logo, index) => (
               <SwiperSlide key={index}>
-                <Partner src={logo} />
+                <Partner src={logo?.full_path} />
               </SwiperSlide>
             ))}
           </Swiper>
