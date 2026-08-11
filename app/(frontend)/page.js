@@ -95,10 +95,11 @@ export default async function Home() {
     (f) => f?.section_data?.slug === "our-successful-events"
   );
 
-  const statsCounterData = homeData?.data?.sections?.find(
+   const statsCounterData = homeData?.data?.sections?.find(
     (f) => f?.section_data?.slug === "stats-counter"
   );
-  
+
+
   const featureService = homeData?.data?.sections?.find(
     (f) => f?.section_data?.slug === "feature-services"
   );
@@ -128,9 +129,6 @@ export default async function Home() {
   );
 
   const featuredBlogs = blogs?.data?.filter(blog => blog?.data?.is_featured === 1);
-
-  console.log(featuredBlogs)
-
 
   return (
     <>

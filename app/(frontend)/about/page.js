@@ -2,6 +2,7 @@ import Counter from "@/app/components/common/counter/Counter";
 import InnerBanner from "@/app/components/common/InnerBanner";
 import OurMission from "@/app/components/pages/about/OurMission";
 import Team from "@/app/components/pages/team/FeatureTeamSlide";
+import { getApi } from "../api/page-api";
 
 export const metadata = {
   title: "About Us | The Heart of RunRise Nation",
@@ -22,18 +23,39 @@ export const metadata = {
   },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const apiValue = "about";
+  const apiHomeValue = "home";
+  const aboutData = await getApi(apiValue);
+  const homeData = await getApi(apiHomeValue);
+
+  const bannerData = aboutData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "about-banner"
+  );
+
+  const aboutOurMission = aboutData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "about-our-mission"
+  );
+
+  const statsCounterData = homeData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "stats-counter"
+  );
+
+  const featureTeam = aboutData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "feature-team"
+  );
+
   return (
     <>
       <InnerBanner
-        title="About Us"
-        background="/dynamic/about/inner-banner.jpg"
+        title={bannerData?.section_data?.subtitle}
+        background={bannerData?.images?.list?.[0]?.full_path}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
       />
 
-      <OurMission hideIcon hideBtn hideShape hideRound />
-      <Counter />
-      <Team hideSearch />
+      <OurMission hideIcon hideBtn hideShape hideRound  data={aboutOurMission}/>
+      <Counter data={statsCounterData} />
+      <Team data={featureTeam} hideSearch />
     </>
   );
 }

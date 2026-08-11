@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function AwardWin({ hideShape, hideRound, hideTopImage, overImgText, image }) {
+export default function AwardWin({ hideShape, hideRound, hideTopImage, overImgText, image, topImage }) {
   return (
     <div className="relative flex items-start">
       {/* Decorative Shape */}
@@ -43,7 +43,7 @@ export default function AwardWin({ hideShape, hideRound, hideTopImage, overImgTe
       {!hideTopImage && (
         <div className=" absolute -bottom-20 right-0 rounded-4xl hidden md:flex lg:flex overflow-hidden">
           <Image
-            src="/dynamic/about/about-us-dd.jpg"
+            src={topImage?.full_path}
             alt="Run Rise About and Mission"
             width={350}
             height={350}

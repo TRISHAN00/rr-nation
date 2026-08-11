@@ -14,6 +14,9 @@ export default function OurMission({
  
   const image = data?.images?.list?.[0]?.full_path;
   const overImgText = data?.images?.list?.[0]?.short_title;
+  const topImage = data?.images?.list?.find(img => img?.small === "on")
+
+  console.log(topImage)
 
   return (
     <section
@@ -30,7 +33,7 @@ export default function OurMission({
         "
       >
         {/* Left Image Section */}
-        <AwardWin hideShape={hideShape} hideRound={hideRound} hideTopImage={hideTopImage} image={image} overImgText={overImgText} />
+        <AwardWin hideShape={hideShape} hideRound={hideRound} hideTopImage={hideTopImage} image={image} overImgText={overImgText} topImage={topImage} />
 
         {/* Right Content */}
         <MissionItem hideBtn={hideBtn} data={data} />
