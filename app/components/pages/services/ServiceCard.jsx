@@ -7,7 +7,7 @@ export default function ServiceCard({ service }) {
   const serDesc = service?.data?.description;
   const thumb = service?.images?.[0]?.full_path
   return (
-    <div className="w-full cursor-pointer pb-28 group">
+    <div className="w-full pb-28 group">
       <div className="relative z-10">
         {/* Image Wrapper */}
         <div className="relative rounded-3xl md:rounded-4xl overflow-hidden">
