@@ -23,6 +23,7 @@ export default function Blogs({ blogs }) {
             className="mb-10"
             bgColor={"#E0F7F6"}
             hideBtnArrow
+            hideSearch
           />
         </div>
         <div className="grid gap-5 sm:gap-6 lg:gap-7.5 mt-8 sm:mt-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

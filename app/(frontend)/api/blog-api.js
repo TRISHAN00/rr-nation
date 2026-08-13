@@ -17,7 +17,7 @@ export async function getBlogListApi() {
 
 export async function getBlogDetailApi(param) {
   const response = await fetch(
-    `${BASE_URL}/api/get-req-data/blog-data?type=slug&value=${param}`,
+    `${BASE_URL}/api/get-req-data/blog-data?type=slug&value=${encodeURIComponent(param)}`,
     {
       cache: "no-store",
     }
@@ -26,6 +26,5 @@ export async function getBlogDetailApi(param) {
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-
   return response.json();
 }

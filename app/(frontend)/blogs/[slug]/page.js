@@ -3,24 +3,26 @@ import ShareLinks from "@/app/components/common/ShareLinks";
 import UsefulLinks from "@/app/components/common/UsefulLinks";
 import BlogDetail from "@/app/components/pages/blogs/BlogDetail";
 import RelatedBlogCard from "@/app/components/pages/blogs/RelatedBlogCard";
+import { getBlogDetailApi, getBlogListApi } from "../../api/blog-api";
 
 // This function helps with SEO by pulling the specific blog data
 export async function generateMetadata({ params }) {
-  // Fetch your blog data based on params.id or params.slug
-  // const blog = await getBlogData(params.slug);
+  const { slug } = await params;
+  const res = await getBlogDetailApi(slug);
+  const blog = res?.data?.data;
 
   return {
-    title: `ABC | RunRise Nation Blog`, // Replace "ABC" with blog.title
-    description: "Read the latest update from RunRise Nation...", // Replace with blog.excerpt
+    title: `${blog?.title || "Blog"} | RunRise Nation Blog`,
+    description: blog?.meta_description || blog?.body?.slice(0, 160),
     openGraph: {
-      title: "ABC",
-      description: "Read more on RunRise Nation",
+      title: blog?.og_title || blog?.title,
+      description: blog?.og_description || blog?.meta_description,
       type: "article",
-      publishedTime: "2024-01-30T00:00:00.000Z", // Use actual publish date
+      publishedTime: blog?.date ? `${blog.date}T00:00:00.000Z` : "2024-01-30T00:00:00.000Z",
       authors: ["RunRise Nation"],
       images: [
         {
-          url: "/dynamic/about/inner-banner.jpg", // Use the blog's featured image
+          url: res?.data?.images?.list?.[0]?.full_path,
           width: 1200,
           height: 630,
         },
@@ -29,19 +31,33 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function BlogDetailPage() {
+export default async function BlogDetailPage({ params }) {
+
+  const { slug } = await params;
+  console.log(slug)
+  const [res, listRes] = await Promise.all([
+    getBlogDetailApi(slug),
+    getBlogListApi(),
+  ]);
+  const blog = res?.data;
+  const banner = blog?.images?.list?.find(image => image?.banner === "on");
+
+  const relatedBlogs = (listRes?.data || [])
+    .filter((item) => item?.data?.id !== blog?.data?.id)
+    .slice(0, 4);
+
   return (
     <section>
       <InnerBanner
-        title="Blog Details"
-        background="/dynamic/about/inner-banner.jpg"
-        breadcrumbs={[{ label: "Blogs", href: "/blogs" }, { label: "ABC" }]}
+        title={blog?.data?.title}
+        background={banner?.full_path}
+        breadcrumbs={[{ label: "Blogs", href: "/blogs" }, { label: blog?.data?.title }]}
       />
       <div className="container mx-auto px-7.5">
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Content */}
           <div className="lg:col-span-8">
-            <BlogDetail />
+            <BlogDetail blog={blog} />
           </div>
 
           {/* Right Sidebar */}
@@ -49,7 +65,7 @@ export default function BlogDetailPage() {
             <div className="lg:sticky lg:top-24 space-y-6">
               <ShareLinks />
               <UsefulLinks />
-              <RelatedBlogCard />
+              <RelatedBlogCard blogs={relatedBlogs} />
             </div>
           </div>
         </div>

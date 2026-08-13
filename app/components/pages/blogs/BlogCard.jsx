@@ -1,9 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function BlogCard({ blog }) {
   const title = blog?.data?.title;
   const body = blog?.data?.body;
-  const thumb = blog?.images?.list?.[0]?.full_path;
+  const slug = blog?.data?.slug;
+  const thumb = blog?.images?.list?.find(image => image?.thumb === "on");
   const author = blog?.images?.list?.[0]?.short_title;
   const date = blog?.data?.date ? new Date(blog.data.date) : null;
   const formattedDate = date ? date.toLocaleDateString("en-GB", {
@@ -12,12 +14,17 @@ export default function BlogCard({ blog }) {
     year: "numeric",
   }) : "";
 
+  console.log(blog?.images?.list?.find(image => image?.thub === "on"))
+
   return (
-    <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition hover:shadow-lg group">
+    <Link
+      href={`/blogs/${slug}`}
+      className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition hover:shadow-lg group block"
+    >
       {/* IMAGE */}
       <div className="relative w-full h-45 sm:h-55 md:h-65 lg:h-70 overflow-hidden">
         <Image
-          src={thumb}
+          src={thumb?.full_path}
           fill
           alt={title}
           className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -48,6 +55,6 @@ export default function BlogCard({ blog }) {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
