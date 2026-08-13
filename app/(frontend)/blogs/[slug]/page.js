@@ -63,7 +63,10 @@ export default async function BlogDetailPage({ params }) {
           {/* Right Sidebar */}
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-24 space-y-6">
-              <ShareLinks />
+              <ShareLinks
+                url={`https://runrisenation.com/blogs/${encodeURIComponent(slug)}`}
+                title={blog?.data?.title}
+              />
               <UsefulLinks />
               <RelatedBlogCard blogs={relatedBlogs} />
             </div>

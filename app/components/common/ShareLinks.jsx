@@ -1,27 +1,29 @@
 "use client";
 
-import { Calendar, Facebook, Mail, Share2, Twitter } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Facebook, Link2, Mail, Share2, Twitter } from "lucide-react";
 
-export default function ShareLinks({
-  eventUrl = "https://tickify.live/events/accounting-day-run-2025",
-  title = "Accounting Day Run 2025",
-  location = "Hatirjheel, Dhaka",
-  startDate = "20251107T053000Z",
-  endDate = "20251107T063000Z",
-}) {
+export default function ShareLinks({ url, title }) {
+  const [currentUrl, setCurrentUrl] = useState(url);
+
+  useEffect(() => {
+    if (!currentUrl && typeof window !== "undefined") {
+      setCurrentUrl(window.location.href);
+    }
+  }, [currentUrl]);
+
+  const shareUrl = currentUrl || url || "";
+
   const shareLinks = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      eventUrl
+      shareUrl
     )}`,
     twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-      eventUrl
-    )}&text=${encodeURIComponent(title)}`,
+      shareUrl
+    )}&text=${encodeURIComponent(title || "")}`,
     email: `mailto:?subject=${encodeURIComponent(
-      title
-    )}&body=${encodeURIComponent(eventUrl)}`,
-    googleCalendar: `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-      title
-    )}&dates=${startDate}/${endDate}&location=${encodeURIComponent(location)}`,
+      title || ""
+    )}&body=${encodeURIComponent(shareUrl)}`,
   };
 
   const handleNativeShare = async () => {
@@ -30,11 +32,19 @@ export default function ShareLinks({
     try {
       await navigator.share({
         title,
-        text: `Check out this event: ${title}`,
-        url: eventUrl,
+        text: `Check this out: ${title}`,
+        url: shareUrl,
       });
     } catch {
       // user cancelled
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // clipboard unavailable
     }
   };
 
@@ -57,9 +67,15 @@ export default function ShareLinks({
           <Mail className="w-5 h-5" />
         </ShareIcon>
 
-        <ShareIcon href={shareLinks.googleCalendar} label="Add to Calendar">
-          <Calendar className="w-5 h-5" />
-        </ShareIcon>
+        {/* Copy link */}
+        <button
+          onClick={handleCopyLink}
+          aria-label="Copy link"
+          className="flex items-center justify-center w-10 h-10 rounded-full border border-gray/20
+                     hover:bg-brand hover:text-white transition"
+        >
+          <Link2 className="w-5 h-5" />
+        </button>
 
         {/* Native Share (mostly mobile) */}
         <button
