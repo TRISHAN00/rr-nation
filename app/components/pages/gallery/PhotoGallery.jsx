@@ -1,7 +1,9 @@
 "use client"
 import clsx from "clsx";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import PhotoGalleryList from "./PhotoGalleryList";
+import FillButton from "@/app/components/common/FillButton";
 const AnimatedShowSVG = dynamic(() => import('@/app/components/animated-svg/AnimatedShowSVG'), { ssr: false })
 
 export default function PhotoGallery({ data }) {
@@ -45,6 +47,15 @@ export default function PhotoGallery({ data }) {
       {/* Masonry Grid */}
       <div className=" container m-auto">
         <PhotoGalleryList images={images} />
+      </div>
+
+      {/* See More Button */}
+      <div className="text-center mt-12 relative z-10">
+        <Link href="/gallery" className="inline-block">
+          <FillButton>
+            See More
+          </FillButton>
+        </Link>
       </div>
     </section>
   );

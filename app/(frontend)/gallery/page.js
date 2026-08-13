@@ -1,5 +1,6 @@
 import InnerBanner from "@/app/components/common/InnerBanner";
 import PhotoList from "@/app/components/pages/gallery/PhotoList";
+import { getApi } from "../api/page-api";
 
 export const metadata = {
   title: "Photo Gallery | RunRise Nation Race Highlights",
@@ -20,15 +21,28 @@ export const metadata = {
   },
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const apiValue = "gallery-page";
+  const galleryData = await getApi(apiValue);
+
+  const bannerData = galleryData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "gallery-page-banner"
+  );
+
+  const galleryImages = galleryData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "moments-we-cherish"
+  );
+
+
+
   return (
     <>
       <InnerBanner
-        title="Gallery"
-        background="/dynamic/about/inner-banner.jpg"
+        title={bannerData?.section_data?.subtitle}
+        background={bannerData?.images?.list?.[0]?.full_path}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Gallery" }]}
       />
-      <PhotoList/>
+      <PhotoList data={galleryImages} />
     </>
   );
 }
