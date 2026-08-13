@@ -16,8 +16,6 @@ export default function OurMission({
   const overImgText = data?.images?.list?.[0]?.short_title;
   const topImage = data?.images?.list?.find(img => img?.small === "on")
 
-  console.log(topImage)
-
   return (
     <section
       className="relative bg-cover bg-no-repeat bg-center py-16 sm:py-24 xl:py-36"

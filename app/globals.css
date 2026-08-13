@@ -551,6 +551,13 @@ body {
   }
 }
 
+/* Skip rendering off-screen team cards so their images + spin
+   animation don't consume CPU/GPU until scrolled into view */
+.team-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 420px;
+}
+
 /* Hover Me */
 .button {
   width: 120px;
