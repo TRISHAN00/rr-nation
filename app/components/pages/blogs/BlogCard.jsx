@@ -5,9 +5,12 @@ export default function BlogCard({ blog }) {
   const body = blog?.data?.body;
   const thumb = blog?.images?.list?.[0]?.full_path;
   const author = blog?.images?.list?.[0]?.short_title;
-  console.log(blog)
-  // Destructure for cleaner code
-  const { category } = blog;
+  const date = blog?.data?.date ? new Date(blog.data.date) : null;
+  const formattedDate = date ? date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }) : "";
 
   return (
     <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition hover:shadow-lg group">
@@ -21,7 +24,7 @@ export default function BlogCard({ blog }) {
         />
         {/* Category Tag (Optional addition) */}
         <span className="absolute top-4 left-4 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">
-          {category}
+          {author || "Blog"}
         </span>
       </div>
 
@@ -31,7 +34,7 @@ export default function BlogCard({ blog }) {
         <div className="flex items-center gap-2">
           <span className="w-4 sm:w-5 h-0.5 bg-[#4DC9C1]" />
           <span className="text-gray-500 text-sm sm:text-base font-medium">
-            12 Oct, 2025
+            {formattedDate || "12 Oct, 2025"}
           </span>
         </div>
 

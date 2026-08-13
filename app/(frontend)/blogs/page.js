@@ -1,5 +1,6 @@
 import InnerBanner from "@/app/components/common/InnerBanner";
 import Blogs from "@/app/components/pages/blogs/Blogs";
+import { getBlogListApi } from "../api/blog-api";
 import { getApi } from "../api/page-api";
 
 export const metadata = {
@@ -17,6 +18,7 @@ export const metadata = {
 export default async function BlogPage() {
   const apiValue = "blogs";
   const eventData = await getApi(apiValue);
+  const blogsData = await getBlogListApi()
 
   const bannerData = eventData?.data?.sections?.find(
     (f) => f?.section_data?.slug === "blogs-banner"
@@ -29,7 +31,7 @@ export default async function BlogPage() {
         background={bannerData?.images?.list?.[0]?.full_path}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Blogs" }]}
       />
-      <Blogs hideBtnArrow />
+      <Blogs hideBtnArrow blogs={blogsData} />
     </>
   );
 }
