@@ -1,5 +1,6 @@
 import InnerBanner from "@/app/components/common/InnerBanner";
 import Blogs from "@/app/components/pages/blogs/Blogs";
+import { getApi } from "../api/page-api";
 
 export const metadata = {
   title: "Running Insights & Stories | RunRise Nation Blog",
@@ -13,12 +14,19 @@ export const metadata = {
   },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const apiValue = "blogs";
+  const eventData = await getApi(apiValue);
+
+  const bannerData = eventData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "blogs-banner"
+  );
+
   return (
     <>
       <InnerBanner
-        title="Blogs"
-        background="/dynamic/about/inner-banner.jpg"
+        title={bannerData?.section_data?.subtitle}
+        background={bannerData?.images?.list?.[0]?.full_path}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Blogs" }]}
       />
       <Blogs hideBtnArrow />
