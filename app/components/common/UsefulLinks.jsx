@@ -11,7 +11,7 @@ export default function UsefulLinks() {
       <ul className="space-y-3">
         <li>
           <Link
-            href="#"
+            href="/privacy-policy"
             className="flex items-center gap-2 text-black hover:text-brand transition-colors duration-300"
           >
             <LinkIcon size={16} />
@@ -21,7 +21,7 @@ export default function UsefulLinks() {
 
         <li>
           <Link
-            href="#"
+            href="/terms"
             className="flex items-center gap-2 text-black hover:text-brand transition-colors duration-300"
           >
             <LinkIcon size={16} />
@@ -31,11 +31,20 @@ export default function UsefulLinks() {
 
         <li>
           <Link
-            href="#"
+            href="/refund-policy"
             className="flex items-center gap-2 text-black hover:text-brand transition-colors duration-300"
           >
             <LinkIcon size={16} />
             <span>Refund Policy</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/faqs"
+            className="flex items-center gap-2 text-black hover:text-brand transition-colors duration-300"
+          >
+            <LinkIcon size={16} />
+            <span>FAQs</span>
           </Link>
         </li>
       </ul>

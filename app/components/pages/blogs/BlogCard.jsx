@@ -5,7 +5,7 @@ export default function BlogCard({ blog }) {
   const title = blog?.data?.title;
   const body = blog?.data?.body;
   const slug = blog?.data?.slug;
-  const thumb = blog?.images?.list?.find(image => image?.thumb === "on");
+  const thumb = blog?.images?.list?.find(image => image?.full_path)?.full_path || null;
   const author = blog?.images?.list?.[0]?.short_title;
   const date = blog?.data?.date ? new Date(blog.data.date) : null;
   const formattedDate = date ? date.toLocaleDateString("en-GB", {
@@ -14,21 +14,21 @@ export default function BlogCard({ blog }) {
     year: "numeric",
   }) : "";
 
-  console.log(blog?.images?.list?.find(image => image?.thub === "on"))
-
   return (
     <Link
-      href={`/blogs/${slug}`}
+      href={`/blogs/${encodeURIComponent(slug)}`}
       className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border bg-white transition hover:shadow-lg group block"
     >
       {/* IMAGE */}
-      <div className="relative w-full h-45 sm:h-55 md:h-65 lg:h-70 overflow-hidden">
-        <Image
-          src={thumb?.full_path}
-          fill
-          alt={title}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+      <div className="relative w-full h-45 sm:h-55 md:h-65 lg:h-70 overflow-hidden bg-gray-100">
+        {thumb && (
+          <Image
+            src={thumb}
+            fill
+            alt={title}
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
         {/* Category Tag (Optional addition) */}
         <span className="absolute top-4 left-4 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">
           {author || "Blog"}

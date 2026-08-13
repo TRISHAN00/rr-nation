@@ -19,7 +19,9 @@ export default function NavItems() {
     <nav>
       <ul className="flex text-white gap-7">
         {navLinks.map((link) => {
-          const isActive = pathname === link.href;
+          const isActive =
+            pathname === link.href ||
+            (link.href !== "/" && pathname.startsWith(`${link.href}/`));
 
           return (
             <li key={link.href}>
