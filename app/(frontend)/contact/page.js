@@ -1,6 +1,7 @@
 import InnerBanner from "@/app/components/common/InnerBanner";
 import ContactInfo from "@/app/components/pages/contact/ContactInfo";
 import ContactMapForm from "@/app/components/pages/contact/ContactMapForm";
+import { getApi } from "../api/page-api";
 
 export const metadata = {
   title: "Contact Us | Connect with RunRise Nation",
@@ -13,16 +14,23 @@ export const metadata = {
   },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const apiValue = "contact";
+  const contactData = await getApi(apiValue);
+
+  const bannerData = contactData?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "contact-banner"
+  );
+
   return (
     <>
       <InnerBanner
-        title="Contact"
-        background="/dynamic/about/inner-banner.jpg"
+        title={bannerData?.section_data?.subtitle}
+        background={bannerData?.images?.list?.[0]?.full_path}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
       />
-      <ContactInfo/>
-      <ContactMapForm/>
+      <ContactInfo />
+      <ContactMapForm />
     </>
   );
 }
