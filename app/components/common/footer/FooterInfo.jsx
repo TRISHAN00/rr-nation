@@ -1,31 +1,35 @@
+"use client";
+
+import { useCMSGlobal } from "@/app/(frontend)/context/CMSGlobalContext";
 import { Mail, MapPin, Phone } from "lucide-react";
 import HeaderListItem from "../header/HeaderListItem";
 
-const leftItems = [
-  {
-    icon: MapPin,
-    text: "House 91/B, Fulkoli Mor, Section-12, Block B, Road 1, Kalshi Road, Pallabi, Dhaka-1216",
-    href: "https://maps.app.goo.gl/gviJhSxTuiY7pthX9",
-  },
-  {
-    icon: Phone,
-    text: "+8801889996700",
-    href: "tel:+8801889996700",
-  },
-  {
-    icon: Mail,
-    text: "info.runrisenation@gmail.com",
-    href: "mailto:info.runrisenation@gmail.com",
-  },
-];
-
 export default function FooterInfo() {
+  const { cmsGlobal } = useCMSGlobal();
+
+  const leftItems = [
+    cmsGlobal?.office_location && {
+      icon: MapPin,
+      text: cmsGlobal.office_location,
+      href: cmsGlobal.office_map_link || "#",
+    },
+    (cmsGlobal?.office_phone || cmsGlobal?.phone_list) && {
+      icon: Phone,
+      text: cmsGlobal.office_phone || cmsGlobal.phone_list,
+      href: `tel:${cmsGlobal.office_phone || cmsGlobal.phone_list}`,
+    },
+    cmsGlobal?.contact_email && {
+      icon: Mail,
+      text: cmsGlobal.contact_email,
+      href: `mailto:${cmsGlobal.contact_email}`,
+    },
+  ].filter(Boolean);
+
   return (
     <div>
       <p className="text-[15px] sm:text-[16px] lg:text-[18px] leading-relaxed mb-8 text-[#fafafa]">
-        RunRise Nation is a global running community dedicated to promoting
-        fitness, sustainability, and environmental responsibility through
-        impactful running events.
+        {cmsGlobal?.footer_text ||
+          "RunRise Nation is a global running community dedicated to promoting fitness, sustainability, and environmental responsibility through impactful running events."}
       </p>
 
       <ul className="flex flex-col gap-5">

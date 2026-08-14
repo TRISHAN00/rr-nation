@@ -1,5 +1,6 @@
 "use client";
 
+import { useCMSGlobal } from "@/app/(frontend)/context/CMSGlobalContext";
 import BannerShapes from "@/app/components/common/ShapeIcon";
 import { useAuthContext } from "@/context/AuthContext";
 import { getGlobalData } from "@/services/global.service";
@@ -12,6 +13,7 @@ import FooterSocial from "./FooterSocial";
 
 export default function Footer() {
   const { isAuthenticated } = useAuthContext();
+  const { cmsGlobal } = useCMSGlobal();
   const [mounted, setMounted] = useState(false);
   const [global, setGlobal] = useState({});
 
@@ -93,7 +95,8 @@ export default function Footer() {
         <div className="border-t border-white/10 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-white/70 text-sm">
             <p>
-              © {new Date().getFullYear()} Run Rise Nation. All Rights Reserved.
+              © {new Date().getFullYear()}{" "}
+              {cmsGlobal?.copyright_text || "Run Rise Nation. All Rights Reserved."}
             </p>
 
             <p>

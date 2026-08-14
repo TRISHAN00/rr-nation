@@ -37,7 +37,7 @@ export default function HeaderTop() {
             <HeaderTopListItem key={index} {...item} />
           ))}
         </ul>
-        <HeaderSocial cmsGlobal={cmsGlobal} />
+        <HeaderSocial />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useCMSGlobal } from "@/app/(frontend)/context/CMSGlobalContext";
 import { Facebook, Instagram, Twitter, Users, Youtube } from "lucide-react";
 import Link from "next/link";
 
@@ -10,8 +11,9 @@ export default function HeaderSocial({
   strokeColor = "#fff",
   size = 36,
   gap = 12,
-  cmsGlobal
 }) {
+  const { cmsGlobal } = useCMSGlobal();
+
   const socialData = [
     cmsGlobal?.facebook && {
       name: "Facebook",
