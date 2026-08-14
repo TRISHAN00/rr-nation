@@ -1,4 +1,4 @@
-const BASE_URL = process.env.CMS_API_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_CMS_API_BASE_URL;
 
 export async function getBlogListApi() {
   const response = await fetch(

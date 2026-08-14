@@ -1,29 +1,28 @@
-import { Mail, MapPin, Phone } from "lucide-react";
+"use client";
+import { useCMSGlobal } from "@/app/(frontend)/context/CMSGlobalContext";
+import { Mail, Phone } from "lucide-react";
 import HeaderTopListItem from "./HeaderListItem";
 import HeaderSocial from "./HeaderSocial";
 
-const leftItems = [
-  {
-    icon: MapPin,
-    text: "Pallabi, Mirpur, Dhaka-1216.",
-    href: "#",
-  },
-  {
-    icon: Mail,
-    text: "info.runrisenation@gmail.com",
-    href: "mailto:info.runrisenation@gmail.com",
-  },
-];
-
-const rightItems = [
-  {
-    icon: Phone,
-    text: "+8801889996700",
-    href: "tel:+8801889996700",
-  },
-];
-
 export default function HeaderTop() {
+  const { cmsGlobal } = useCMSGlobal();
+
+  const leftItems = [
+    cmsGlobal?.contact_email && {
+      icon: Mail,
+      text: cmsGlobal.contact_email,
+      href: `mailto:${cmsGlobal.contact_email}`,
+    },
+  ].filter(Boolean);
+
+  const rightItems = [
+    cmsGlobal?.office_phone && {
+      icon: Phone,
+      text: cmsGlobal.office_phone,
+      href: `tel:${cmsGlobal.office_phone}`,
+    },
+  ].filter(Boolean);
+
   return (
     <div className="flex justify-between border-b border-white/20 pb-2.5 mb-2.5">
       <ul className="flex gap-10">
@@ -38,7 +37,7 @@ export default function HeaderTop() {
             <HeaderTopListItem key={index} {...item} />
           ))}
         </ul>
-        <HeaderSocial />
+        <HeaderSocial cmsGlobal={cmsGlobal} />
       </div>
     </div>
   );

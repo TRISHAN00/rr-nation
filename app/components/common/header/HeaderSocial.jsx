@@ -10,46 +10,47 @@ export default function HeaderSocial({
   strokeColor = "#fff",
   size = 36,
   gap = 12,
+  cmsGlobal
 }) {
   const socialData = [
-    {
+    cmsGlobal?.facebook && {
       name: "Facebook",
       Icon: Facebook,
       fill: true,
-      url: "https://www.facebook.com/runrise.nation",
+      url: cmsGlobal.facebook,
     },
-    {
+    cmsGlobal?.linkedin && {
       name: "Facebook Group",
-      Icon: Users, // 'Users' is the standard Lucide icon for groups
+      Icon: Users,
       fill: true,
-      url: "https://www.facebook.com/groups/runrisenation",
+      url: cmsGlobal.linkedin,
     },
-    {
+    cmsGlobal?.instagram && {
       name: "Instagram",
       Icon: Instagram,
       fill: false,
-      url: "https://www.instagram.com/runrise_nation",
+      url: cmsGlobal.instagram,
     },
-    {
+    cmsGlobal?.youtube && {
       name: "YouTube",
       Icon: Youtube,
       fill: false,
-      url: "https://www.youtube.com/@RunRiseNation",
+      url: cmsGlobal.youtube,
     },
-    {
+    cmsGlobal?.twitter && {
       name: "Twitter",
       Icon: Twitter,
       fill: true,
-      url: "https://twitter.com/runrise",
+      url: cmsGlobal.twitter,
     },
     {
       name: "Strava",
-      Icon: "/static/social/strava.svg", // Path to your default SVG
+      Icon: "/static/social/strava.svg",
       fill: false,
       url: "https://www.strava.com/clubs/RunRiseNation",
-      isOriginalColor: true, // Flag to prevent color overriding
+      isOriginalColor: true,
     },
-  ];
+  ].filter(Boolean);
 
   return (
     <ul
@@ -93,7 +94,7 @@ export default function HeaderSocial({
                     objectFit: "contain",
                   }}
                   // No 'invert' or 'brightness' filters here so it stays default
-                  className="relative z-10" 
+                  className="relative z-10"
                 />
               ) : (
                 <Icon

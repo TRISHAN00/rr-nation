@@ -5,6 +5,7 @@ import { CartProvider } from "@/context/CartContext";
 import { Albert_Sans, Anta } from "next/font/google";
 import { Toaster } from "sonner";
 import "../globals.css";
+import CMSGlobalProvider from "./context/CMSGlobalContext";
 
 const albertSans = Albert_Sans({
   subsets: ["latin"],
@@ -62,10 +63,12 @@ export default function PublicLayout({ children }) {
   return (
     <AuthProvider>
       <CartProvider>
-        <Toaster position="top-right" />
-        <Header />
-        {children}
-        <Footer />
+        <CMSGlobalProvider>
+          <Toaster position="top-right" />
+          <Header />
+          {children}
+          <Footer />
+        </CMSGlobalProvider>
       </CartProvider>
     </AuthProvider>
   );
