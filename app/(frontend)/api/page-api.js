@@ -24,7 +24,7 @@ export async function getChildApi(param) {
 
 export async function getSettingApi() {
   const response = await fetch(
-    `${BASE_URL}/api/get-req-data/settings-data`,
+    `/api/cms/get-req-data/settings-data`,
     { cache: "no-store" }
   );
   if (!response.ok) {
