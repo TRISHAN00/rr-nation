@@ -3,8 +3,9 @@ import BlogInfo from "./BlogInfo";
 import BlogQuote from "./BlogQuote";
 
 export default function BlogDetail({ blog }) {
-  const thumb = blog?.images?.list?.[0]?.full_path;
-    const author = blog?.images?.list?.find(image => image?.isAuthor === "on");
+  const images = Array.isArray(blog?.images?.list) ? blog.images.list : [];
+  const thumb = images[0]?.full_path;
+  const author = images.find(image => image?.isAuthor === "on");
   
 
   return (

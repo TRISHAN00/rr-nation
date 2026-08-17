@@ -5,8 +5,9 @@ export default function BlogCard({ blog }) {
   const title = blog?.data?.title;
   const body = blog?.data?.body;
   const slug = blog?.data?.slug;
-  const thumb = blog?.images?.list?.find(image => image?.full_path)?.full_path || null;
-  const author = blog?.images?.list?.[0]?.short_title;
+  const images = Array.isArray(blog?.images?.list) ? blog.images.list : [];
+  const thumb = images.find(image => image?.full_path)?.full_path || null;
+  const author = images[0]?.short_title;
   const date = blog?.data?.date ? new Date(blog.data.date) : null;
   const formattedDate = date ? date.toLocaleDateString("en-GB", {
     day: "numeric",

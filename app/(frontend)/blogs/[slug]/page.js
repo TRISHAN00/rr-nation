@@ -3,12 +3,19 @@ import ShareLinks from "@/app/components/common/ShareLinks";
 import UsefulLinks from "@/app/components/common/UsefulLinks";
 import BlogDetail from "@/app/components/pages/blogs/BlogDetail";
 import RelatedBlogCard from "@/app/components/pages/blogs/RelatedBlogCard";
+import { notFound } from "next/navigation";
 import { getBlogDetailApi, getBlogListApi } from "../../api/blog-api";
 
 // This function helps with SEO by pulling the specific blog data
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const res = await getBlogDetailApi(slug);
+  let res;
+  try {
+    res = await getBlogDetailApi(slug);
+  } catch (err) {
+    console.error("Failed to load blog for metadata", err);
+    return {};
+  }
   const blog = res?.data?.data;
 
   return {
@@ -34,13 +41,20 @@ export async function generateMetadata({ params }) {
 export default async function BlogDetailPage({ params }) {
 
   const { slug } = await params;
-  console.log(slug)
-  const [res, listRes] = await Promise.all([
-    getBlogDetailApi(slug),
-    getBlogListApi(),
-  ]);
+  let res, listRes;
+  try {
+    [res, listRes] = await Promise.all([
+      getBlogDetailApi(slug),
+      getBlogListApi(),
+    ]);
+  } catch (err) {
+    console.error("Failed to load blog detail", err);
+    notFound();
+  }
   const blog = res?.data;
-  const banner = blog?.images?.list?.find(image => image?.banner === "on");
+  const banner = Array.isArray(blog?.images?.list)
+    ? blog.images.list.find(image => image?.banner === "on")
+    : undefined;
 
   const relatedBlogs = (listRes?.data || [])
     .filter((item) => item?.data?.id !== blog?.data?.id)

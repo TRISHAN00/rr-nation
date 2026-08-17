@@ -12,7 +12,7 @@ export default function RelatedBlogCard({ blogs = [] }) {
         <ul className="flex flex-col gap-4">
           {blogs.map((item) => {
             const data = item?.data;
-            const thumb = item?.images?.list?.[0]?.full_path;
+            const thumb = Array.isArray(item?.images?.list) ? item.images.list[0]?.full_path : undefined;
             return (
               <li key={data?.id}>
                 <Link

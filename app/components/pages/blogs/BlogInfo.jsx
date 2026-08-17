@@ -3,9 +3,8 @@ import { Calendar } from "lucide-react";
 
 export default function BlogInfo({ blog }) {
   const data = blog?.data;
-  const authorInfo = blog?.images?.list?.find(image => image?.isAuthor === "on");
-
-  console.log(authorInfo?.full_path)
+  const images = Array.isArray(blog?.images?.list) ? blog.images.list : [];
+  const authorInfo = images.find(image => image?.isAuthor === "on") || {};
 
   const date = data?.date ? new Date(data.date) : null;
   const formattedDate = date ? date.toLocaleDateString("en-GB", {
@@ -38,8 +37,8 @@ export default function BlogInfo({ blog }) {
               src={authorInfo?.full_path ? authorInfo?.full_path : "https://github.com/shadcn.png"}
             />
             <AvatarFallback>
-              {authorInfo?.short_title
-                .split(" ")
+              {authorInfo.short_title
+                ?.split(" ")
                 .map((n) => n[0])
                 .join("")}
             </AvatarFallback>+
