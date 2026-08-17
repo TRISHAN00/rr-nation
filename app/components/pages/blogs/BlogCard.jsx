@@ -7,7 +7,9 @@ export default function BlogCard({ blog }) {
   const slug = blog?.data?.slug;
   const images = Array.isArray(blog?.images?.list) ? blog.images.list : [];
   const thumb = images.find(image => image?.full_path)?.full_path || null;
-  const author = images[0]?.short_title;
+  const author = images.find(image => image?.isAuthor === "on");
+  const authorName = author?.short_title || images[0]?.short_title;
+  const authorAvatar = author?.full_path || null;
   const date = blog?.data?.date ? new Date(blog.data.date) : null;
   const formattedDate = date ? date.toLocaleDateString("en-GB", {
     day: "numeric",
@@ -32,7 +34,7 @@ export default function BlogCard({ blog }) {
         )}
         {/* Category Tag (Optional addition) */}
         <span className="absolute top-4 left-4 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">
-          {author || "Blog"}
+          {"Blog"}
         </span>
       </div>
 
@@ -48,12 +50,29 @@ export default function BlogCard({ blog }) {
 
         {/* TITLE + DESC */}
         <div className="border-b border-[#4DC9C1]/30 mt-4 sm:mt-5 pb-4 sm:pb-5 mb-4 sm:mb-5">
-          <h5 className="text-lg sm:text-xl md:text-[22px] leading-snug font-bold mb-3 line-clamp-2">
+          <h5 className="text-lg sm:text-xl md:text-[22px] leading-snug font-bold mb-3 line-clamp-2 min-h-[3.25rem]">
             {title}
           </h5>
-          <p className="text-gray-600 text-sm sm:text-base leading-relaxed line-clamp-2">
+          <p className="text-gray-600 text-sm sm:text-base leading-relaxed line-clamp-2 min-h-[3rem]">
             {body}
           </p>
+        </div>
+
+        {/* AUTHOR */}
+        <div className="flex items-center gap-2.5">
+          {authorAvatar && (
+            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden shrink-0">
+              <Image
+                src={authorAvatar}
+                fill
+                alt={authorName || "Author"}
+                className="object-cover"
+              />
+            </div>
+          )}
+          <span className="text-gray-700 text-sm sm:text-base font-medium">
+            {authorName || "RunRise Nation"}
+          </span>
         </div>
       </div>
     </Link>
