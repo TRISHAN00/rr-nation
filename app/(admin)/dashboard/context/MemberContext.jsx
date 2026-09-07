@@ -1,5 +1,5 @@
 "use client";
-import { getAllDashboardMembers } from "@/services/admin/admin.member.service";
+import { getAllDashboardMembers, updateMemberStatus } from "@/services/admin/admin.member.service";
 import {
   createContext,
   useCallback,
@@ -21,6 +21,7 @@ export default function MemberProvider({ children }) {
   const [adminApproval, setAdminApproval] = useState("");
   const [memberType, setMemberType] = useState("");
   const [paymentStatus, setPaymentStatus] = useState(""); // Added
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchMembers = useCallback(async () => {
     const token =
@@ -47,7 +48,11 @@ export default function MemberProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, adminApproval, memberType, paymentStatus, search]);
+  }, [page, limit, adminApproval, memberType, paymentStatus, search, refreshKey]);
+
+  const refreshMembers = useCallback(() => {
+    setRefreshKey((k) => k + 1);
+  }, []);
 
   const updateMember = async (memberId, newStatus, currentType) => {
     try {
@@ -83,7 +88,8 @@ export default function MemberProvider({ children }) {
         setMemberType,
         setPaymentStatus,
         setSearch,
-        updateMember
+        updateMember,
+        refreshMembers,
       }}
     >
       {children}

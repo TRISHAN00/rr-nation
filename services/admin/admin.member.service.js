@@ -28,6 +28,14 @@ export const updateMemberStatus = async (payload) => {
   return data;
 };
 
+// update member information (multipart/form-data)
+export const updateMember = async (payload) => {
+  const { data } = await api.patch("/admin/member", payload, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+};
+
 // get all stats
 export const getMemberOverviewData = async () => {
   const { data } = await api.get(`/admin/member/overview`);

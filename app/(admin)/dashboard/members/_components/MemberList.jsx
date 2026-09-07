@@ -39,7 +39,8 @@ export default function MemberList({
   members = [],
   loading,
   onAction,
-  onViewDetails
+  onViewDetails,
+  onEdit,
 }) {
   const getStatusBadge = (status) => {
     const styles = {
@@ -207,7 +208,7 @@ export default function MemberList({
                           variant="ghost"
                           size="sm"
                           className="h-7 w-7 p-0 text-muted-foreground hover:text-primary"
-                          onClick={() => onAction(item, "edit")}
+                          onClick={() => onEdit(item)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>

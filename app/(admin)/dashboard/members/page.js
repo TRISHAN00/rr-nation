@@ -7,6 +7,7 @@ import { useDashboardMembers } from "../context/MemberContext";
 
 import OrderHeader from "../_components/module/registrations/_components/OrderHeader";
 import ActionConfirmationModal from "./_components/ActionConfirmationModal";
+import EditMemberModal from "./_components/EditMemberModal";
 import MemberActions from "./_components/MemberActions";
 import MemberList from "./_components/MemberList";
 import { MemberPaginationFooter } from "./_components/MemberPaginationFooter";
@@ -23,6 +24,7 @@ export default function DashboardMemberPage() {
     setMemberType,
     setPaymentStatus,
     fetchMembers,
+    refreshMembers,
   } = useDashboardMembers();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,6 +34,8 @@ export default function DashboardMemberPage() {
   
   // Sheet presentation visibility state wrapper
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editMember, setEditMember] = useState(null);
 
   const handleOpenModal = (member, type) => {
     setSelectedMember(member);
@@ -55,7 +59,7 @@ export default function DashboardMemberPage() {
       toast.success(`Member ${payload.adminApproval} successfully!`);
       setIsModalOpen(false);
 
-      if (fetchMembers) fetchMembers();
+      if (refreshMembers) refreshMembers();
       else window.location.reload(); 
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update status");
@@ -68,6 +72,11 @@ export default function DashboardMemberPage() {
     console.log("Viewing details for member:", member);
     setSelectedMember(member);
     setIsSheetOpen(true);
+  };
+
+  const handleEditMember = (member) => {
+    setEditMember(member);
+    setIsEditModalOpen(true);
   };
 
   const handleExportCSV = () => {
@@ -150,6 +159,7 @@ export default function DashboardMemberPage() {
         loading={loading}
         onAction={handleOpenModal}
         onViewDetails={handleViewDetails}
+        onEdit={handleEditMember}
       />
 
       <MemberPaginationFooter />
@@ -168,6 +178,14 @@ export default function DashboardMemberPage() {
         isOpen={isSheetOpen} 
         onOpenChange={setIsSheetOpen} 
         selectedMember={selectedMember} 
+      />
+
+      {/* 🔥 EDIT MEMBER MODAL */}
+      <EditMemberModal
+        open={isEditModalOpen}
+        setOpen={setIsEditModalOpen}
+        member={editMember}
+        onRefresh={refreshMembers}
       />
     </>
   );

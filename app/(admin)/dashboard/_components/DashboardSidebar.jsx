@@ -1,24 +1,21 @@
 "use client";
 
+import Logo from "@/app/components/common/Logo";
 import { Button } from "@/app/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   Box,
-  Briefcase,
   Calendar,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  CreditCard,
-  FileText,
-  Image,
   LayoutDashboard,
-  MessageSquare,
-  Settings,
+  ShoppingBag,
+  Tags,
   Trophy,
+  Truck,
   User,
-  UserCheck,
-  Users
+  UserCheck
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -53,14 +50,16 @@ const menuItems = [
   },
  
   { title: "Events", icon: Calendar, path: "/dashboard/events" },
+  {
+    title: "Shop",
+    icon: ShoppingBag,
+    children: [
+      { title: "Products", path: "/dashboard/products" },
+      { title: "Categories", path: "/dashboard/categories" },
+      { title: "Delivery Options", path: "/dashboard/delivery-options" },
+    ],
+  },
   { title: "Registrations", icon: UserCheck, path: "/dashboard/registrations" },
-  { title: "Services", icon: Briefcase, path: "/dashboard/services" },
-  { title: "Blog Posts", icon: FileText, path: "/dashboard/blog" },
-  { title: "Team", icon: Users, path: "/dashboard/team" },
-  { title: "Gallery", icon: Image, path: "/dashboard/gallery" },
-  { title: "Testimonial", icon: MessageSquare, path: "/dashboard/testimonial" },
-  { title: "Payments", icon: CreditCard, path: "/dashboard/payments" },
-  { title: "Settings", icon: Settings, path: "/dashboard/settings" },
 ];
 
 export function DashboardSidebar({ collapsed, onToggle }) {
@@ -84,18 +83,10 @@ export function DashboardSidebar({ collapsed, onToggle }) {
       )}
     >
       {/* Logo Section */}
-      <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
+      <div className="flex h-auto py-2 items-center justify-between border-b border-sidebar-border px-4">
         {!collapsed ? (
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand">
-              <Trophy className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <span className="block text-sm font-bold text-sidebar-foreground">
-                Run Rise
-              </span>
-              <span className="text-xs text-sidebar-muted">Dashboard</span>
-            </div>
+            <Logo/>
           </div>
         ) : (
           <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg bg-brand">
