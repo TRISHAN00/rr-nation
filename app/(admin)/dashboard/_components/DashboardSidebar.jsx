@@ -9,6 +9,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
   LayoutDashboard,
   ShoppingBag,
   Tags,
@@ -17,6 +18,7 @@ import {
   User,
   UserCheck
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -57,6 +59,9 @@ const menuItems = [
       { title: "Products", path: "/dashboard/products" },
       { title: "Categories", path: "/dashboard/categories" },
       { title: "Delivery Options", path: "/dashboard/delivery-options" },
+      { title: "Shipping Methods", path: "/dashboard/shop/shipping-methods" },
+      { title: "Coupons", path: "/dashboard/shop/coupons" },
+      { title: "Locations", path: "/dashboard/shop/locations" },
     ],
   },
   { title: "Registrations", icon: UserCheck, path: "/dashboard/registrations" },
@@ -89,9 +94,16 @@ export function DashboardSidebar({ collapsed, onToggle }) {
             <Logo/>
           </div>
         ) : (
-          <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg bg-brand">
-            <Trophy className="h-5 w-5 text-white" />
-          </div>
+          <Link href="/" className="mx-auto">
+            <Image
+              src="/rr-nation-logo.svg"
+              alt="RRN"
+              width={32}
+              height={32}
+              className="h-8 w-auto"
+              priority
+            />
+          </Link>
         )}
       </div>
 
@@ -170,6 +182,23 @@ export function DashboardSidebar({ collapsed, onToggle }) {
           );
         })}
       </nav>
+
+      {/* View Website Link */}
+      <div className="absolute bottom-12 left-0 right-0 px-3">
+        <a
+          href="https://runrisenation.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
+            "text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground",
+            collapsed && "justify-center px-2"
+          )}
+        >
+          <ExternalLink className="h-5 w-5 shrink-0" />
+          {!collapsed && <span>View Website</span>}
+        </a>
+      </div>
 
       {/* Collapse Toggle Button */}
       <Button
