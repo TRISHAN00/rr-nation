@@ -14,7 +14,7 @@ export default function GoogleSuccessContent() {
   const searchParams = useSearchParams();
 
   const { refreshProfile } = useAuthContext();
-  const { syncGuestCart, fetchCart } = useCart();
+  const { syncGuestCart, syncShopGuestCart, fetchCart } = useCart();
 
   const [loading, setLoading] = useState(true);
 
@@ -48,6 +48,7 @@ export default function GoogleSuccessContent() {
         await refreshProfile();
 
         await syncGuestCart();
+        await syncShopGuestCart();
         await fetchCart();
 
         window.history.replaceState({}, document.title, "/");
@@ -80,6 +81,7 @@ export default function GoogleSuccessContent() {
     router,
     refreshProfile,
     syncGuestCart,
+    syncShopGuestCart,
     fetchCart,
   ]);
 

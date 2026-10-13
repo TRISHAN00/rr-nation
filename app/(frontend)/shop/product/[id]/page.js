@@ -4,14 +4,17 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getProductById } from "@/services/product.service";
+import { useShopCart } from "@/hooks/useShopCart";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
-import { ArrowLeft, ShoppingCart, Star, Tag } from "lucide-react";
+import InnerBanner from "@/app/components/common/InnerBanner";
+import { ArrowLeft, Loader2, ShoppingCart, Star, Tag } from "lucide-react";
 
 export default function ProductPage({ params }) {
   const [id, setId] = useState(null);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { addToCart, loading: cartLoading } = useShopCart();
 
   useEffect(() => {
     params.then((p) => setId(p.id));
@@ -65,15 +68,19 @@ export default function ProductPage({ params }) {
   const hasDiscount = product.salePrice && product.basePrice > product.salePrice;
 
   return (
-    <div className="container mx-auto px-4 py-24">
-      <Link
-        href="/shop"
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
-      >
-        <ArrowLeft className="h-4 w-4" /> Back to Shop
-      </Link>
+    <>
+      <InnerBanner
+        title={product.name}
+        background={product.thumbnailImage || "/dynamic/about/inner-banner.jpg"}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Shop", href: "/shop" },
+          { label: product.name },
+        ]}
+      />
 
-      {/* Main Product */}
+      <div className="container mx-auto px-4 py-16">
+        {/* Main Product */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Image */}
         <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted">
@@ -174,9 +181,23 @@ export default function ProductPage({ params }) {
           )}
 
           {/* Add to Cart */}
-          <Button size="lg" className="w-full sm:w-auto" disabled={product.stockQuantity <= 0}>
-            <ShoppingCart className="h-5 w-5 mr-2" />
-            Add to Cart
+          <Button
+            size="lg"
+            className="w-full sm:w-auto"
+            disabled={product.stockQuantity <= 0 || cartLoading}
+            onClick={() => addToCart(product.id, 1, {
+              name: product.name,
+              imageUrl: product.images?.[0]?.url || product.thumbnailImage,
+              unitPrice: product.salePrice || product.price,
+              unitSalePrice: product.salePrice,
+            })}
+          >
+            {cartLoading ? (
+              <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+            ) : (
+              <ShoppingCart className="h-5 w-5 mr-2" />
+            )}
+            {cartLoading ? "Adding..." : "Add to Cart"}
           </Button>
         </div>
       </div>
@@ -230,26 +251,36 @@ export default function ProductPage({ params }) {
               <Link
                 key={item.id}
                 href={`/shop/product/${item.id}`}
-                className="group rounded-xl border border-border overflow-hidden bg-card hover:shadow-md transition-all"
+                className="group relative rounded-4xl overflow-hidden w-full bg-[#E0F7F6] block transition-all cursor-pointer"
               >
-                <div className="relative h-36 bg-muted overflow-hidden">
-                  <Image
-                    src={item.thumbnailImage || "/placeholder.png"}
-                    alt={item.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform"
-                    sizes="25vw"
-                  />
-                </div>
-                <div className="p-3">
-                  <h3 className="text-sm font-semibold line-clamp-1">{item.name}</h3>
-                  <p className="text-sm font-bold text-brand">৳{item.salePrice || item.basePrice}</p>
+                <div className="event-card-flow" />
+                <div className="event-card-shimmer" />
+                <div className="relative p-3 flex flex-col z-10">
+                  <div className="relative w-full aspect-[20/10] bg-muted rounded-t-4xl overflow-hidden">
+                    <Image
+                      src={item.thumbnailImage || "/placeholder.png"}
+                      alt={item.name}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="25vw"
+                    />
+                  </div>
+                  <div className="px-4 py-4">
+                    <h5 className="text-sm font-bold leading-snug truncate transition-colors duration-300 group-hover:text-white text-dark">
+                      {item.name}
+                    </h5>
+                    <div className="bg-brand h-1 w-8 mt-2 transition-all duration-500 group-hover:bg-white group-hover:w-12"></div>
+                    <p className="text-sm font-bold text-dark mt-2 transition-colors duration-300 group-hover:text-white">
+                      ৳{item.salePrice || item.basePrice}
+                    </p>
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

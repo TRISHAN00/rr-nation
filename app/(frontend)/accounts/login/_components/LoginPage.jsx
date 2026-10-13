@@ -18,7 +18,7 @@ import Link from "next/link";
 export default function LoginPage({ redirectTo = "/" }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { syncGuestCart, fetchCart } = useCart();
+  const { syncGuestCart, syncShopGuestCart, fetchCart } = useCart();
   const { refreshProfile } = useAuthContext();
 
   const [loading, setLoading] = useState(false);
@@ -54,6 +54,7 @@ export default function LoginPage({ redirectTo = "/" }) {
     // Sync Contexts
     await refreshProfile();
     await syncGuestCart();
+    await syncShopGuestCart();
     await fetchCart();
 
     // REDIRECT LOGIC:
@@ -62,7 +63,7 @@ export default function LoginPage({ redirectTo = "/" }) {
     
     console.log("Auth Success. Redirecting to:", finalPath);
     router.push(finalPath);
-  }, [fetchCart, refreshProfile, router, redirectTo, syncGuestCart, searchParams]);
+  }, [fetchCart, refreshProfile, router, redirectTo, syncGuestCart, syncShopGuestCart, searchParams]);
 
   /**
    * GOOGLE CALLBACK HANDLER

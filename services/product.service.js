@@ -14,6 +14,10 @@ export const getProductById = async (id) => {
 
 // GET Public Categories
 export const getPublicCategories = async () => {
-  const { data } = await api.get("/e-commerce/categories");
-  return data;
+  try {
+    const { data } = await api.get("/e-commerce/ecommerce-categories");
+    return data;
+  } catch {
+    return { data: [] };
+  }
 };

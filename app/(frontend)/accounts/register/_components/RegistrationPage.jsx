@@ -51,7 +51,7 @@ export default function RegisterPage({ redirectTo = "/" }) {
   
   // Contexts
   const { refreshProfile } = useAuthContext();
-  const { syncGuestCart, fetchCart } = useCart();
+  const { syncGuestCart, syncShopGuestCart, fetchCart } = useCart();
 
   /* ---------------- VERIFY OTP ---------------- */
   async function handleVerifyOtp(e) {
@@ -107,6 +107,7 @@ export default function RegisterPage({ redirectTo = "/" }) {
 
       // 3. CART SYNC & REFRESH (The logic you wanted)
       await syncGuestCart(); 
+      await syncShopGuestCart();
       await refreshProfile(); 
       await fetchCart(); 
 
