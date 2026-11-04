@@ -16,9 +16,9 @@ export function middleware(request) {
   /* ---------- NOT LOGGED IN ---------- */
   if (!token) {
     if (isDashboard || isProfile || isOrganizer || isMemberRegister) {
-      return NextResponse.redirect(
-        new URL("/accounts/login", request.url)
-      );
+      // The admin dashboard has its own login page.
+      const loginPath = isDashboard ? "/admin/login" : "/accounts/login";
+      return NextResponse.redirect(new URL(loginPath, request.url));
     }
     return NextResponse.next();
   }

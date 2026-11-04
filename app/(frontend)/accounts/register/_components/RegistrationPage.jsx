@@ -97,6 +97,7 @@ export default function RegisterPage({ redirectTo = "/" }) {
 
       // 1. Client Storage
       localStorage.setItem("authToken", token);
+      localStorage.setItem("userRole", "user");
       localStorage.setItem("refresh_token", refreshToken);
       localStorage.setItem("userData", JSON.stringify(userData));
 

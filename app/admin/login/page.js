@@ -22,26 +22,15 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      const response = await loginAdmin({
+      // loginAdmin stores the token, refresh token, user data and the
+      // authToken/userRole cookies for the middleware.
+      await loginAdmin({
         email: e.target.email.value,
         password: e.target.password.value,
         roleId: 2,
       });
 
-      const { token, refreshToken, userData } = response.data.data;
-
-      // 1. Client Storage
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("refresh_token", refreshToken);
-      localStorage.setItem("userData", JSON.stringify(userData));
-
-      // 2. Cookie for Middleware
-      document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Lax`;
-      document.cookie = `userRole=admin; path=/; max-age=604800; SameSite=Lax`;
-
-
-      window.location.reload();
-      router.push("/dashboard");
+      router.replace("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {

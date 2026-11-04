@@ -8,6 +8,7 @@ import { useShopCart } from "@/hooks/useShopCart";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
 import InnerBanner from "@/app/components/common/InnerBanner";
+import ProductCard from "../../_components/ProductCard";
 import { ArrowLeft, Loader2, ShoppingCart, Star, Tag } from "lucide-react";
 
 export default function ProductPage({ params }) {
@@ -248,34 +249,7 @@ export default function ProductPage({ params }) {
           <h2 className="text-lg font-bold mb-4">Similar Products</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {product.similarProducts.map((item) => (
-              <Link
-                key={item.id}
-                href={`/shop/product/${item.id}`}
-                className="group relative rounded-4xl overflow-hidden w-full bg-[#E0F7F6] block transition-all cursor-pointer"
-              >
-                <div className="event-card-flow" />
-                <div className="event-card-shimmer" />
-                <div className="relative p-3 flex flex-col z-10">
-                  <div className="relative w-full aspect-[20/10] bg-muted rounded-t-4xl overflow-hidden">
-                    <Image
-                      src={item.thumbnailImage || "/placeholder.png"}
-                      alt={item.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="25vw"
-                    />
-                  </div>
-                  <div className="px-4 py-4">
-                    <h5 className="text-sm font-bold leading-snug truncate transition-colors duration-300 group-hover:text-white text-dark">
-                      {item.name}
-                    </h5>
-                    <div className="bg-brand h-1 w-8 mt-2 transition-all duration-500 group-hover:bg-white group-hover:w-12"></div>
-                    <p className="text-sm font-bold text-dark mt-2 transition-colors duration-300 group-hover:text-white">
-                      ৳{item.salePrice || item.basePrice}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+              <ProductCard key={item.id} product={item} />
             ))}
           </div>
         </div>

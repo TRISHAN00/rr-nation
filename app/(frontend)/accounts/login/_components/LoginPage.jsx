@@ -44,6 +44,7 @@ export default function LoginPage({ redirectTo = "/" }) {
 
     // Persistence
     localStorage.setItem("authToken", token);
+    localStorage.setItem("userRole", "user");
     localStorage.setItem("refresh_token", refreshToken);
     localStorage.setItem("userData", JSON.stringify(userData));
 

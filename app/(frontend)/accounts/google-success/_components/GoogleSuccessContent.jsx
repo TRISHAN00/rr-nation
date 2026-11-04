@@ -30,6 +30,7 @@ export default function GoogleSuccessContent() {
     const authenticateGoogleUser = async () => {
       try {
         localStorage.setItem("authToken", token);
+        localStorage.setItem("userRole", "user");
         localStorage.setItem("refresh_token", refreshToken);
 
         const cookieConfig =

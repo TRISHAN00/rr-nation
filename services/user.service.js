@@ -6,11 +6,18 @@ export const updateProfile = async (payload) => {
 };
 
 export const getProfileData = async (token) => {
-  const { data } = await api.get("/auth/user", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  // When a token is passed explicitly (e.g. Google login callback) use it,
+  // otherwise let the axios request interceptor attach the stored token.
+  const { data } = await api.get(
+    "/auth/user",
+    token
+      ? {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      : undefined
+  );
   return data.data.userData;
 };
 
