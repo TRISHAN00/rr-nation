@@ -1,5 +1,6 @@
 "use client";
 
+import PaymentStatusCheck from "@/app/(frontend)/payment/_components/PaymentStatusCheck";
 import { ArrowLeft, XCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -15,6 +16,7 @@ export default function PaymentCancel() {
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Payment Cancelled
         </h1>
+        <PaymentStatusCheck />
         <p className="text-gray-600 mb-8">
           You have cancelled the payment process. Don't worry, your items are still safe in your cart.
         </p>

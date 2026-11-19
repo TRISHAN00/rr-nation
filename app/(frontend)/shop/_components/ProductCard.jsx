@@ -29,7 +29,7 @@ export default function ProductCard({ product, priority = false, className = "" 
     >
       {/* Image */}
       <Link
-        href={`/shop/product/${product.id}`}
+        href={`/shop/product/${product.slug || product.id}`}
         className="relative block overflow-hidden bg-neutral-100"
         aria-label={product.name}
       >
@@ -78,7 +78,7 @@ export default function ProductCard({ product, priority = false, className = "" 
           {product.categoryName || "Uncategorized"}
         </p>
 
-        <Link href={`/shop/product/${product.id}`} className="outline-none">
+        <Link href={`/shop/product/${product.slug || product.id}`} className="outline-none">
           <h3 className="line-clamp-2 min-h-10 text-[15px] font-semibold leading-5 text-dark transition-colors duration-200 group-hover:text-brand">
             {product.name}
           </h3>

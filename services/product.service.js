@@ -12,6 +12,12 @@ export const getProductById = async (id) => {
   return data;
 };
 
+// GET Public Product by slug
+export const getProductBySlug = async (slug) => {
+  const { data } = await api.get(`/e-commerce/products/slug/${slug}`);
+  return data;
+};
+
 // GET Public Categories
 export const getPublicCategories = async () => {
   try {

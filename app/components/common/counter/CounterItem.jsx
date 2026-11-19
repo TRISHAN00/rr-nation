@@ -11,7 +11,6 @@ export default function CounterItem({
   imageWidth = 80,
   suffix = "",          // ✅ new prop
 }) {
-  console.log(suffix, "suffix in CounterItem"); // Debugging line to check the value of suffix
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <Image

@@ -1,5 +1,6 @@
 import { TabsContent } from "@/app/components/ui/tabs";
 
+import ShopOrders from "@/app/(frontend)/shop/_components/ShopOrders";
 import MemberTab from "./MemberTab";
 import MeTab from "./MeTab";
 import SecurityTab from "./SecurityTab";
@@ -24,6 +25,10 @@ export default function TabContents({
                     totalSpent={totalSpent}
                     pastEvents={pastEvents}
                 />
+            </TabsContent>
+            
+            <TabsContent value="shop-orders" className="mt-6 space-y-6">
+                <ShopOrders />
             </TabsContent>
             
             <TabsContent value="member" className="mt-6 space-y-6">

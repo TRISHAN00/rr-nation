@@ -9,6 +9,7 @@ export default function NavItems() {
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Event", href: "/event" },
+    { label: "Shop", href: "/shop" },
     { label: "Blog", href: "/blog" },
     { label: "Gallery", href: "/gallery" },
     { label: "Team", href: "/team" },

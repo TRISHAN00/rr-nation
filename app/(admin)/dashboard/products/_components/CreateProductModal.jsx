@@ -7,55 +7,38 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/app/components/ui/dialog";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/components/ui/select";
-import { Switch } from "@/app/components/ui/switch";
-import { Textarea } from "@/app/components/ui/textarea";
-import { createProduct } from "@/services/admin/admin.product.service";
+import { createProduct, getBrands } from "@/services/admin/admin.product.service";
 import { getCategories } from "@/services/admin/admin.ecommerce-category.service";
+import { buildProductFormData, initialProductForm } from "@/utils/productForm";
 import { ImagePlus, Loader2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
-const initialForm = {
-  name: "",
-  slug: "",
-  sku: "",
-  description: "",
-  shortDescription: "",
-  basePrice: "",
-  salePrice: "",
-  discountPercent: "",
-  stockQuantity: "",
-  categoryId: "",
-  isFeatured: false,
-};
+import ProductFormFields from "./ProductFormFields";
 
 export default function CreateProductModal({ open, setOpen, onRefresh }) {
-  const [form, setForm] = useState(initialForm);
+  const [form, setForm] = useState(initialProductForm);
   const [thumbnail, setThumbnail] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (!open) return;
-    const fetchCategories = async () => {
+    const fetchOptions = async () => {
       try {
-        const res = await getCategories(1, 100);
-        setCategories(res?.data?.categories || []);
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
+        const [categoriesRes, brandsRes] = await Promise.all([
+          getCategories(1, 100),
+          getBrands(),
+        ]);
+        setCategories(categoriesRes?.data?.categories || []);
+        setBrands(brandsRes?.data?.brands || []);
+      } catch (err) {
+        console.error("Failed to fetch product options:", err);
       }
     };
-    fetchCategories();
+    fetchOptions();
   }, [open]);
 
   const handleChange = (field, value) => {
@@ -83,37 +66,36 @@ export default function CreateProductModal({ open, setOpen, onRefresh }) {
   };
 
   const resetForm = () => {
-    setForm(initialForm);
+    setForm(initialProductForm);
     setThumbnail(null);
     setPreview(null);
+    setError("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
+      setError("");
 
-      const payload = new FormData();
-      payload.append("name", form.name.trim());
-      payload.append("slug", form.slug.trim());
-      payload.append("sku", form.sku.trim());
-      payload.append("description", form.description.trim());
-      payload.append("shortDescription", form.shortDescription.trim());
-      payload.append("basePrice", String(Number(form.basePrice)));
-      payload.append("salePrice", String(Number(form.salePrice)));
-      payload.append("discountPercent", String(Number(form.discountPercent) || 0));
-      payload.append("stockQuantity", String(Number(form.stockQuantity) || 0));
-      payload.append("categoryId", String(Number(form.categoryId) || 0));
-      payload.append("isFeatured", String(form.isFeatured));
-      payload.append("thumbnail", thumbnail || "");
+      // Mirrors the exact multipart shape expected by the products API.
+      const payload = buildProductFormData(form, thumbnail, {
+        includeEmptyThumbnail: true,
+      });
 
       await createProduct(payload);
 
       resetForm();
       setOpen(false);
       if (onRefresh) onRefresh();
-    } catch (error) {
-      console.error("Product create failed:", error);
+    } catch (err) {
+      console.error("Product create failed:", err);
+      const message = err?.response?.data?.message;
+      setError(
+        Array.isArray(message)
+          ? message.join(", ")
+          : message || "Failed to create product.",
+      );
     } finally {
       setLoading(false);
     }
@@ -135,7 +117,7 @@ export default function CreateProductModal({ open, setOpen, onRefresh }) {
         <div className="space-y-6">
           {/* Thumbnail */}
           <div>
-            <Label className="mb-2 block">Thumbnail</Label>
+            <label className="mb-2 block text-sm font-medium">Thumbnail</label>
             <input
               ref={fileInputRef}
               type="file"
@@ -174,134 +156,20 @@ export default function CreateProductModal({ open, setOpen, onRefresh }) {
             )}
           </div>
 
-          {/* Basic Info */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label>Name</Label>
-              <Input
-                placeholder="Chocolate Cake"
-                value={form.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Slug</Label>
-              <Input
-                placeholder="chocolate-cake"
-                value={form.slug}
-                readOnly
-                className="bg-muted/50"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>SKU</Label>
-              <Input
-                placeholder="CAKE-001"
-                value={form.sku}
-                onChange={(e) => handleChange("sku", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Stock Quantity</Label>
-              <Input
-                type="number"
-                placeholder="20"
-                value={form.stockQuantity}
-                onChange={(e) => handleChange("stockQuantity", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Category</Label>
-              <Select
-                value={form.categoryId ? String(form.categoryId) : undefined}
-                onValueChange={(value) => handleChange("categoryId", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={String(cat.id)}>
-                      {cat.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Pricing */}
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="space-y-1">
-              <Label>Base Price (৳)</Label>
-              <Input
-                type="number"
-                placeholder="1200"
-                value={form.basePrice}
-                onChange={(e) => handleChange("basePrice", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Sale Price (৳)</Label>
-              <Input
-                type="number"
-                placeholder="1000"
-                value={form.salePrice}
-                onChange={(e) => handleChange("salePrice", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Discount (%)</Label>
-              <Input
-                type="number"
-                placeholder="16.67"
-                value={form.discountPercent}
-                onChange={(e) => handleChange("discountPercent", e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Descriptions */}
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <Label>Short Description</Label>
-              <Input
-                placeholder="Fresh chocolate cake"
-                value={form.shortDescription}
-                onChange={(e) => handleChange("shortDescription", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Description</Label>
-              <Textarea
-                rows={4}
-                placeholder="Premium chocolate cake."
-                value={form.description}
-                onChange={(e) => handleChange("description", e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Toggles */}
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { key: "isFeatured", label: "Featured" },
-            ].map(({ key, label }) => (
-              <div
-                key={key}
-                className="flex items-center justify-between rounded-lg border border-border p-3"
-              >
-                <Label className="mb-0">{label}</Label>
-                <Switch
-                  checked={form[key]}
-                  onCheckedChange={(val) => handleChange(key, val)}
-                />
-              </div>
-            ))}
-          </div>
+          <ProductFormFields
+            form={form}
+            handleChange={handleChange}
+            categories={categories}
+            brands={brands}
+          />
         </div>
 
         {/* Footer */}
+        {error && (
+          <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            {error}
+          </p>
+        )}
         <div className="flex justify-end gap-3 pt-4 border-t mt-2">
           <Button variant="ghost" onClick={() => setOpen(false)}>
             Cancel

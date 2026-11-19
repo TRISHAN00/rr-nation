@@ -1,5 +1,6 @@
 "use client";
 
+import PaymentStatusCheck from "@/app/(frontend)/payment/_components/PaymentStatusCheck";
 import { useCart } from "@/context/CartContext";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
@@ -17,6 +18,7 @@ export default function PaymentSuccess() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg text-center">
         <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-4" />
+        <PaymentStatusCheck />
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
         <p className="text-gray-600 mb-8">
           Thank you for your registration. Your spot has been secured.

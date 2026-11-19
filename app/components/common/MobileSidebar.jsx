@@ -56,6 +56,7 @@ export default function MobileSidebar() {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Events", href: "/events" },
+    { name: "Shop", href: "/shop" },
     { name: "Blogs", href: "/blogs" },
     { name: "Gallery", href: "/gallery" },
     { name: "Team", href: "/team" },

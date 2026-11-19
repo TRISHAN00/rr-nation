@@ -56,6 +56,21 @@ export default function MainMenu({ isMember }) {
           </NavigationMenuLink>
         </NavigationMenuItem>
 
+        {/* Shop */}
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            asChild
+            className={navigationMenuTriggerStyle({
+              className:
+                pathname === "/shop" || pathname.startsWith("/shop/")
+                  ? activeClass
+                  : defaultClass,
+            })}
+          >
+            <Link href="/shop">Shop</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+
         {/* Services */}
         <NavigationMenuItem>
           <NavigationMenuLink

@@ -25,6 +25,12 @@ export default function CheckoutSuccessPage() {
             >
               Continue Shopping
             </Link>
+            <Link
+              href="/shop/orders"
+              className="w-full sm:w-auto rounded-xl border border-[#00a19a] px-8 py-3 text-sm font-bold text-[#00a19a] hover:bg-[#00a19a]/5 transition-all text-center"
+            >
+              View My Orders
+            </Link>
           </div>
         </div>
       </div>

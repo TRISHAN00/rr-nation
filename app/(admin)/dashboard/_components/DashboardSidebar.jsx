@@ -57,6 +57,7 @@ const menuItems = [
     icon: ShoppingBag,
     children: [
       { title: "Products", path: "/dashboard/products" },
+      { title: "Orders", path: "/dashboard/shop/orders" },
       { title: "Categories", path: "/dashboard/categories" },
       { title: "Delivery Options", path: "/dashboard/delivery-options" },
       { title: "Shipping Methods", path: "/dashboard/shop/shipping-methods" },

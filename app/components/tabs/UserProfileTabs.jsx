@@ -21,7 +21,7 @@ export default function UserProfileTabs({ user, memberInfo }) {
   const [loading, setLoading] = useState(true);
 
   // Sync active tab with URL slug
-  const allowedTabs = ["me", "settings", "security", "member"];
+  const allowedTabs = ["me", "shop-orders", "settings", "security", "member"];
   const activeTab = params.tab || "me";
 
   const handleTabChange = (value) => {

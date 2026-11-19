@@ -12,6 +12,14 @@ export const getProducts = async (page = 1, limit = 10, search) => {
   return data;
 };
 
+/* ---------- GET BRANDS ---------- */
+export const getBrands = async () => {
+  const { data } = await api.get(`/e-commerce/admin/brands`, {
+    params: { page: 1, limit: 100 },
+  });
+  return data;
+};
+
 /* ---------- GET PRODUCT DETAIL ---------- */
 export const getProductById = async (id) => {
   const { data } = await api.get(`/e-commerce/admin/products/${id}`);
