@@ -2,6 +2,7 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Toaster } from "@/app/components/ui/sonner";
 import { DashboardHeader } from "./_components/DashboardHeader";
 import { DashboardSidebar } from "./_components/DashboardSidebar";
 import { CouponProvider } from "./context/CouponContext";
@@ -33,6 +34,7 @@ const DashboardLayout = ({ children }) => {
                   <main className="flex-1 p-6">{children}</main>
                 </div>
               </div>
+              <Toaster position="top-right" richColors />
             </CouponProvider>
           </MemberProvider>
         </EventProvider>

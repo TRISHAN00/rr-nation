@@ -101,8 +101,8 @@ export default function ProductCard({ product, priority = false, className = "" 
               productData={{
                 name: product.name,
                 imageUrl: product.thumbnailImage || product.imageUrl,
-                unitPrice: salePrice || Number(product.price) || basePrice,
-                unitSalePrice: salePrice || undefined,
+                basePrice,
+                salePrice: hasDiscount ? salePrice : 0,
               }}
               className="h-10 w-full rounded-lg bg-dark text-sm font-semibold text-white hover:bg-brand"
             />

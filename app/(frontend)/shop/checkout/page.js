@@ -41,7 +41,7 @@ export default function ShopCheckoutPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthContext();
   const {
-    shopItems, shopSubtotal, shopCouponDiscount, deliveryFee,
+    shopItems, shopSubtotal, shopCouponDiscount, deliveryFee, shopTotal,
     handleDeleteCartItem, updateShopItemQuantity,
     applyShopCoupon, removeShopCoupon, shopSummary,
   } = useCart();
@@ -216,7 +216,8 @@ export default function ShopCheckoutPage() {
   const handleApplyCoupon = async () => {
     if (!couponCode.trim()) return toast.error("Enter a coupon code");
     setCouponLoading(true);
-    try { await applyShopCoupon(couponCode.trim()); toast.success("Coupon applied!"); setCouponCode(""); }
+    const code = couponCode.trim();
+    try { await applyShopCoupon(code); toast.success("Coupon applied!"); setCouponCode(""); }
     catch (err) { toast.error(err?.response?.data?.message || "Invalid coupon"); }
     finally { setCouponLoading(false); }
   };
@@ -261,13 +262,27 @@ export default function ShopCheckoutPage() {
     }
   };
 
-  const totals = summary?.summary || {
-    productPrice: shopSubtotal,
-    couponDiscount: shopCouponDiscount,
-    deliveryFee,
-    totalPrice: shopSubtotal - shopCouponDiscount + deliveryFee,
+  const summaryTotals = summary?.summary || null;
+  const rawProductPrice = Number(summaryTotals?.productPrice ?? shopSubtotal) || 0;
+  const productDiscount = Number(summaryTotals?.productDiscountPrice || 0) || 0;
+  const effectiveSubtotal = Math.max(0, rawProductPrice - productDiscount) || shopSubtotal;
+  const couponDiscountValue = Number(summaryTotals?.couponDiscount ?? shopCouponDiscount) || 0;
+  const deliveryFeeValue = Number(summaryTotals?.deliveryFee ?? summaryTotals?.shippingCharge ?? deliveryFee) || 0;
+  const shippingDiscount = Number(summaryTotals?.shippingDiscount || 0) || 0;
+  const displayTotal =
+    Number(
+      summaryTotals?.totalPrice ??
+        Math.max(0, effectiveSubtotal - couponDiscountValue + deliveryFeeValue - shippingDiscount),
+    ) || 0;
+  const totals = {
+    productPrice: effectiveSubtotal,
+    originalProductPrice: rawProductPrice,
+    productDiscountPrice: productDiscount,
+    couponDiscount: couponDiscountValue,
+    deliveryFee: deliveryFeeValue,
+    shippingDiscount,
+    totalPrice: displayTotal,
   };
-  const displayTotal = Number(totals.totalPrice ?? totals) || 0;
 
   const inputClass =
     "w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#00a19a]/30 focus:border-[#00a19a]";
@@ -472,15 +487,25 @@ export default function ShopCheckoutPage() {
                   <h2 className="text-xl font-bold text-[#001819] mb-4">Order Items ({shopItems.length})</h2>
                   <div className="space-y-4">
                     {shopItems.map((item) => {
-                      const price = Number(item.unitSalePrice || item.unitPrice || 0);
                       const qty = item.quantity || 1;
+                      const unit = Number(
+                        item.effectiveUnitPrice ?? item.unitSalePrice ?? item.unitPrice ?? 0,
+                      );
+                      const base = Number(item.baseUnitPrice ?? item.unitPrice ?? unit);
+                      const line = Number(item.lineTotal ?? unit * qty);
+                      const hasItemDiscount = base > unit && unit > 0;
                       return (
                         <div key={item.id} className="flex items-center gap-4 p-3 rounded-xl bg-gray-50">
                           {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="h-16 w-16 rounded-lg object-cover border" />}
                           <div className="flex-1 min-w-0">
                             <h3 className="font-semibold text-[#001819] text-sm truncate">{item.name}</h3>
                             {item.variantName && <p className="text-xs text-gray-500">{item.variantName}</p>}
-                            <p className="text-xs text-gray-500">৳ {price.toLocaleString()} each</p>
+                            <p className="text-xs text-gray-500">
+                              ৳ {unit.toLocaleString()} each
+                              {hasItemDiscount && (
+                                <span className="ml-1.5 text-gray-400 line-through">৳ {base.toLocaleString()}</span>
+                              )}
+                            </p>
                           </div>
                           <div className="flex items-center gap-2">
                             <button onClick={() => qty > 1 && updateShopItemQuantity(item.id, qty - 1)} disabled={qty <= 1}
@@ -489,7 +514,7 @@ export default function ShopCheckoutPage() {
                             <button onClick={() => updateShopItemQuantity(item.id, qty + 1)}
                               className="h-7 w-7 rounded-full border flex items-center justify-center text-gray-500 hover:bg-gray-100"><Plus size={14} /></button>
                           </div>
-                          <p className="font-bold text-sm text-[#001819] shrink-0">৳ {(price * qty).toLocaleString()}</p>
+                          <p className="font-bold text-sm text-[#001819] shrink-0">৳ {line.toLocaleString()}</p>
                           <button onClick={() => handleDeleteCartItem(item.id, "product")} className="text-red-400 hover:text-red-600 shrink-0"><Trash2 size={16} /></button>
                         </div>
                       );
@@ -520,10 +545,10 @@ export default function ShopCheckoutPage() {
                   <span>Delivery</span>
                   <span className="font-medium">{Number(totals.deliveryFee) > 0 ? `৳ ${Number(totals.deliveryFee).toLocaleString()}` : "Free"}</span>
                 </div>
-                {summary?.summary?.shippingDiscount > 0 && (
+                {Number(totals.shippingDiscount) > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>Shipping discount</span>
-                    <span className="font-medium">- ৳ {Number(summary.summary.shippingDiscount).toLocaleString()}</span>
+                    <span className="font-medium">- ৳ {Number(totals.shippingDiscount).toLocaleString()}</span>
                   </div>
                 )}
                 <div className="flex justify-between font-bold text-[#00a19a] text-xl pt-3 border-t">
@@ -539,16 +564,31 @@ export default function ShopCheckoutPage() {
                   <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2">
                     <span className="text-sm font-semibold text-green-700 flex items-center gap-1.5"><Tag size={14} /> Applied</span>
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-bold text-green-700">- ৳{shopCouponDiscount.toLocaleString()}</span>
+                      <span className="text-sm font-bold text-green-700">- ৳{Number(totals.couponDiscount || shopCouponDiscount).toLocaleString()}</span>
                       <button onClick={removeShopCoupon} className="text-xs text-red-500 hover:text-red-600 font-bold">Remove</button>
                     </div>
                   </div>
                 ) : (
                   <div className="flex gap-2">
-                    <input value={couponCode} onChange={(e) => setCouponCode(e.target.value)} placeholder="Enter coupon code"
-                      className="flex-1 rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00a19a]/30" />
-                    <button onClick={handleApplyCoupon} disabled={couponLoading}
-                      className="rounded-lg bg-[#001819] px-4 py-2.5 text-sm font-bold text-white hover:bg-gray-800 transition-colors disabled:opacity-50">
+                    <input
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (couponCode.trim() && !couponLoading) handleApplyCoupon();
+                        }
+                      }}
+                      placeholder="Enter coupon code"
+                      autoComplete="off"
+                      className="flex-1 rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00a19a]/30"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleApplyCoupon}
+                      disabled={couponLoading || !couponCode.trim()}
+                      className="rounded-lg bg-[#001819] px-4 py-2.5 text-sm font-bold text-white hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
                       {couponLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}
                     </button>
                   </div>

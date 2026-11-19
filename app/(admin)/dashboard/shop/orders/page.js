@@ -1,9 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent } from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
 import {
   Table,
   TableBody,
@@ -13,7 +21,7 @@ import {
   TableRow,
 } from "@/app/components/ui/table";
 import { getAdminOrders } from "@/services/admin/admin.order.service";
-import { ChevronLeft, ChevronRight, Eye, Loader2, ShoppingBag } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Loader2, Search, ShoppingBag, X } from "lucide-react";
 import OrderDetailSheet from "./_components/OrderDetailSheet";
 
 const getOrderNumber = (order) =>
@@ -103,6 +111,9 @@ export default function OrdersPage() {
   const [totalItems, setTotalItems] = useState(0);
   const [detailOrderNumber, setDetailOrderNumber] = useState("");
   const [detailOpen, setDetailOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("all");
 
   const totalPages = Math.ceil(totalItems / limit);
 
@@ -132,6 +143,37 @@ export default function OrdersPage() {
     fetchOrders();
   }, [fetchOrders]);
 
+  const hasFilters =
+    search.trim() !== "" || orderStatusFilter !== "all" || paymentStatusFilter !== "all";
+
+  const filteredOrders = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return orders.filter((order) => {
+      const customer = getCustomer(order);
+      const status = String(getStatus(order) || "").toUpperCase();
+      const paymentStatus = String(order.paymentStatus || "").toUpperCase();
+
+      const matchesSearch =
+        !query ||
+        String(order.orderNumber || "").toLowerCase().includes(query) ||
+        String(customer.name || "").toLowerCase().includes(query) ||
+        String(customer.email || "").toLowerCase().includes(query);
+
+      const matchesOrderStatus =
+        orderStatusFilter === "all" || status === orderStatusFilter;
+      const matchesPaymentStatus =
+        paymentStatusFilter === "all" || paymentStatus === paymentStatusFilter;
+
+      return matchesSearch && matchesOrderStatus && matchesPaymentStatus;
+    });
+  }, [orders, search, orderStatusFilter, paymentStatusFilter]);
+
+  const clearFilters = () => {
+    setSearch("");
+    setOrderStatusFilter("all");
+    setPaymentStatusFilter("all");
+  };
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -147,6 +189,55 @@ export default function OrdersPage() {
           {error}
         </p>
       )}
+
+      {/* Filters */}
+      <Card className="border-border bg-card">
+        <CardContent className="p-4">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search order number, customer name or email..."
+                className="pl-9"
+              />
+            </div>
+            <Select value={orderStatusFilter} onValueChange={setOrderStatusFilter}>
+              <SelectTrigger className="w-full md:w-[220px]">
+                <SelectValue placeholder="Order status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All order statuses</SelectItem>
+                <SelectItem value="PENDING_PAYMENT">Pending Payment</SelectItem>
+                <SelectItem value="CONFIRMED">Confirmed</SelectItem>
+                <SelectItem value="PROCESSING">Processing</SelectItem>
+                <SelectItem value="SHIPPED">Shipped</SelectItem>
+                <SelectItem value="DELIVERED">Delivered</SelectItem>
+                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={paymentStatusFilter} onValueChange={setPaymentStatusFilter}>
+              <SelectTrigger className="w-full md:w-[220px]">
+                <SelectValue placeholder="Payment status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All payment statuses</SelectItem>
+                <SelectItem value="PENDING">Pending</SelectItem>
+                <SelectItem value="PAID">Paid</SelectItem>
+                <SelectItem value="FAILED">Failed</SelectItem>
+                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                <SelectItem value="REFUNDED">Refunded</SelectItem>
+              </SelectContent>
+            </Select>
+            {hasFilters && (
+              <Button variant="ghost" onClick={clearFilters} className="md:w-auto">
+                <X className="mr-2 h-4 w-4" /> Clear
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Table */}
       <Card className="border-border bg-card shadow-sm overflow-hidden">
@@ -170,7 +261,7 @@ export default function OrdersPage() {
                     <Loader2 className="mx-auto h-5 w-5 animate-spin" />
                   </TableCell>
                 </TableRow>
-              ) : orders.length === 0 ? (
+              ) : filteredOrders.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-16">
                     <div className="flex flex-col items-center gap-3">
@@ -178,16 +269,22 @@ export default function OrdersPage() {
                         <ShoppingBag className="h-6 w-6 text-muted-foreground" />
                       </div>
                       <div>
-                        <p className="font-medium">No orders found</p>
+                        <p className="font-medium">
+                          {orders.length === 0
+                            ? "No orders found"
+                            : "No orders match your filters"}
+                        </p>
                         <p className="text-sm text-muted-foreground">
-                          Orders will appear here once customers check out.
+                          {orders.length === 0
+                            ? "Orders will appear here once customers check out."
+                            : "Try adjusting or clearing your search and filters."}
                         </p>
                       </div>
                     </div>
                   </TableCell>
                 </TableRow>
               ) : (
-                orders.map((order) => {
+                filteredOrders.map((order) => {
                   const customer = getCustomer(order);
                   const status = getStatus(order);
 
@@ -260,7 +357,17 @@ export default function OrdersPage() {
       {!loading && totalItems > 0 && (
         <div className="flex items-center justify-between px-4 py-4 border rounded-xl bg-card">
           <p className="text-xs text-muted-foreground">
-            Total <span className="font-bold text-foreground">{totalItems}</span> orders
+            {hasFilters ? (
+              <>
+                Showing{" "}
+                <span className="font-bold text-foreground">{filteredOrders.length}</span> of{" "}
+                <span className="font-bold text-foreground">{totalItems}</span> orders
+              </>
+            ) : (
+              <>
+                Total <span className="font-bold text-foreground">{totalItems}</span> orders
+              </>
+            )}
           </p>
           <div className="flex items-center gap-2">
             <Button

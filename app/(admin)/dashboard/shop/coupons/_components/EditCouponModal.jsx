@@ -17,9 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
-import { updateEcommerceCoupon, toggleEcommerceCoupon } from "@/services/admin/admin.ecommerce-coupon.service";
+import { updateEcommerceCoupon } from "@/services/admin/admin.ecommerce-coupon.service";
 import { Loader2 } from "lucide-react";
-import { Switch } from "@/app/components/ui/switch";
 import { toast } from "sonner";
 
 export default function EditCouponModal({ open, setOpen, coupon, onRefresh }) {
@@ -28,7 +27,6 @@ export default function EditCouponModal({ open, setOpen, coupon, onRefresh }) {
     discountType: "percentage",
     value: "",
     usageLimit: "",
-    isActive: true,
   });
   const [loading, setLoading] = useState(false);
 
@@ -37,9 +35,8 @@ export default function EditCouponModal({ open, setOpen, coupon, onRefresh }) {
       setForm({
         code: coupon.code || "",
         discountType: coupon.discountType || "percentage",
-        value: coupon.value || "",
-        usageLimit: coupon.usageLimit || "",
-        isActive: coupon.isActive ?? true,
+        value: coupon.value ?? "",
+        usageLimit: coupon.usageLimit ?? "",
       });
     }
   }, [coupon, open]);
@@ -50,6 +47,10 @@ export default function EditCouponModal({ open, setOpen, coupon, onRefresh }) {
 
   const handleSubmit = async () => {
     if (!coupon) return;
+    if (!form.code.trim() || form.value === "" || form.usageLimit === "") {
+      toast.warning("Please fill all required fields");
+      return;
+    }
     try {
       setLoading(true);
       await updateEcommerceCoupon(coupon.id, {
@@ -58,14 +59,15 @@ export default function EditCouponModal({ open, setOpen, coupon, onRefresh }) {
         value: Number(form.value),
         usageLimit: Number(form.usageLimit),
       });
-      if (form.isActive !== coupon.isActive) {
-        await toggleEcommerceCoupon(coupon.id);
-      }
       toast.success("Coupon updated successfully!");
       setOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update coupon");
+      toast.error(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Failed to update coupon",
+      );
     } finally {
       setLoading(false);
     }
@@ -120,14 +122,6 @@ export default function EditCouponModal({ open, setOpen, coupon, onRefresh }) {
               placeholder="e.g. 100"
               value={form.usageLimit}
               onChange={(e) => handleChange("usageLimit", e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between border rounded-md p-3">
-            <Label className="mb-0">Active</Label>
-            <Switch
-              checked={form.isActive}
-              onCheckedChange={(val) => handleChange("isActive", val)}
             />
           </div>
         </div>

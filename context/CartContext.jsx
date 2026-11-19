@@ -19,6 +19,89 @@ const CartContext = createContext(null);
 const GUEST_CART_KEY = "runrise_guest_cart";
 const SHOP_GUEST_CART_KEY = "runrise_shop_guest_cart";
 
+const toNumber = (value, fallback = 0) => {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : fallback;
+};
+
+const resolvePrices = (item = {}) => {
+  const n = toNumber;
+  const base = n(item.basePrice ?? item.originalPrice, 0);
+  const sale = n(item.salePrice ?? item.discountPrice, 0);
+  const unit = n(item.unitPrice ?? item.price, 0);
+  const unitSale = n(item.unitSalePrice, 0);
+  const pkg = n(item.package?.price, 0);
+
+  let basePrice = base;
+  let effectivePrice = 0;
+
+  if (base > 0 && sale > 0 && sale < base) {
+    basePrice = base;
+    effectivePrice = sale;
+  } else if (base > 0 && unitSale > 0 && unitSale < base) {
+    basePrice = base;
+    effectivePrice = unitSale;
+  } else if (base > 0 && unit > 0 && unit < base) {
+    basePrice = base;
+    effectivePrice = unit;
+  } else if (unitSale > 0 && (base <= 0 || unitSale <= base)) {
+    basePrice = base || unit || unitSale;
+    effectivePrice = unitSale;
+  } else if (sale > 0 && (base <= 0 || sale <= base)) {
+    basePrice = base || unit || sale;
+    effectivePrice = sale;
+  } else {
+    effectivePrice = unit || unitSale || sale || base || pkg;
+    basePrice = base || effectivePrice;
+  }
+
+  if (basePrice > 0 && effectivePrice > basePrice) {
+    basePrice = effectivePrice;
+  }
+  if (basePrice <= 0) basePrice = effectivePrice;
+
+  return { basePrice, effectivePrice };
+};
+
+const normalizeEventCartItem = (item = {}) => {
+  const quantity = Math.max(1, toNumber(item.quantity, 1));
+  const { basePrice, effectivePrice } = resolvePrices(item);
+  const unitPrice = basePrice || effectivePrice || toNumber(item.package?.price, 0);
+  return {
+    ...item,
+    itemType: "ticket",
+    quantity,
+    unitPrice,
+    lineTotal: unitPrice * quantity,
+  };
+};
+
+const normalizeShopCartItem = (item = {}) => {
+  const quantity = Math.max(1, toNumber(item.quantity, 1));
+  const { basePrice, effectivePrice } = resolvePrices(item);
+  const baseUnitPrice = basePrice || effectivePrice;
+  const effectiveUnitPrice = effectivePrice || baseUnitPrice;
+  const lineTotal = toNumber(
+    item.totalSalePrice ?? item.totalAmount ?? item.lineTotal,
+    effectiveUnitPrice * quantity,
+  );
+
+  return {
+    ...item,
+    itemType: "product",
+    quantity,
+    // Keep both for compatibility: unitPrice = original/base, unitSalePrice = effective/sale
+    unitPrice: baseUnitPrice || effectiveUnitPrice,
+    unitSalePrice: effectiveUnitPrice,
+    baseUnitPrice,
+    effectiveUnitPrice,
+    lineTotal,
+  };
+};
+
+const sumLineTotals = (items = []) =>
+  items.reduce((acc, item) => acc + toNumber(item.lineTotal, 0), 0);
+
 export function CartProvider({ children }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartData, setCartData] = useState({ id: null, totalAmount: "0.00", items: [] });
@@ -31,12 +114,20 @@ export function CartProvider({ children }) {
   // ── Guest Helpers ──
   const getGuestItems = () => {
     if (typeof window === "undefined") return [];
-    return JSON.parse(localStorage.getItem(GUEST_CART_KEY) || "[]");
+    try {
+      return JSON.parse(localStorage.getItem(GUEST_CART_KEY) || "[]");
+    } catch {
+      return [];
+    }
   };
 
   const getShopGuestItems = () => {
     if (typeof window === "undefined") return [];
-    return JSON.parse(localStorage.getItem(SHOP_GUEST_CART_KEY) || "[]");
+    try {
+      return JSON.parse(localStorage.getItem(SHOP_GUEST_CART_KEY) || "[]");
+    } catch {
+      return [];
+    }
   };
 
   // ── Derived: separated items ──
@@ -44,17 +135,33 @@ export function CartProvider({ children }) {
   const shopItems = cartData.items.filter((i) => i.itemType === "product");
 
   const eventSubtotal = eventItems.reduce(
-    (acc, item) => acc + (Number(item.unitPrice || item.package?.price) || 0) * (item.quantity || 1),
-    0
+    (acc, item) =>
+      acc +
+      toNumber(item.unitPrice ?? item.package?.price, 0) *
+        Math.max(1, toNumber(item.quantity, 1)),
+    0,
   );
 
-  const shopSubtotal = Number(shopSummary?.productPrice || 0);
-  const shopDiscount = Number(shopSummary?.productDiscountPrice || 0);
-  const shopCouponDiscount = Number(shopSummary?.couponDiscount || 0);
-  const deliveryFee = Number(shopSummary?.deliveryFee || 0);
-  const shopTotal = Number(shopSummary?.totalPrice || 0);
+  const shopItemsSubtotal = sumLineTotals(shopItems);
+  const summaryProductPrice = toNumber(shopSummary?.productPrice, 0);
+  const summaryProductDiscount = toNumber(shopSummary?.productDiscountPrice, 0);
+  const summaryEffectiveSubtotal = Math.max(0, summaryProductPrice - summaryProductDiscount);
 
-  const grandTotal = (eventSubtotal - Number(eventDiscount || 0) + shopTotal).toFixed(2);
+  const shopSubtotal = shopSummary
+    ? summaryEffectiveSubtotal || shopItemsSubtotal || summaryProductPrice
+    : shopItemsSubtotal;
+  const shopDiscount = shopSummary
+    ? summaryProductDiscount || Math.max(0, summaryProductPrice - shopSubtotal)
+    : 0;
+  const shopCouponDiscount = toNumber(shopSummary?.couponDiscount, 0);
+  const deliveryFee = toNumber(shopSummary?.deliveryFee, 0);
+  const shopTotal = shopSummary
+    ? toNumber(shopSummary?.totalPrice, Math.max(0, shopSubtotal - shopCouponDiscount + deliveryFee))
+    : Math.max(0, shopSubtotal - shopCouponDiscount + deliveryFee);
+
+  const grandTotal = (
+    Math.max(0, eventSubtotal - toNumber(eventDiscount, 0)) + shopTotal
+  ).toFixed(2);
 
   // ── Fetch Cart ──
   const fetchCart = useCallback(async () => {
@@ -64,33 +171,55 @@ export function CartProvider({ children }) {
       const eventGuestItems = getGuestItems();
       const shopGuestItems = getShopGuestItems();
 
-      const mappedEventItems = eventGuestItems.map((item) => ({
-        id: item.tempId,
-        itemType: "ticket",
-        quantity: item.quantity,
-        unitPrice: item.package?.price,
-        formData: item.participantData,
-        package: item.package,
-      }));
+      const mappedEventItems = eventGuestItems.map((item) =>
+        normalizeEventCartItem({
+          id: item.tempId,
+          quantity: item.quantity,
+          unitPrice: item.package?.price ?? item.unitPrice,
+          formData: item.participantData,
+          package: item.package,
+        }),
+      );
 
-      const mappedShopItems = shopGuestItems.map((item) => ({
-        id: item.id,
-        itemType: "product",
-        quantity: item.quantity,
-        unitPrice: item.unitPrice || 0,
-        unitSalePrice: item.unitSalePrice || item.unitPrice || 0,
-        name: item.name || "Product",
-        imageUrl: item.imageUrl || null,
-        totalSalePrice: (item.unitSalePrice || item.unitPrice || 0) * (item.quantity || 1),
-      }));
+      const mappedShopItems = shopGuestItems.map((item) =>
+        normalizeShopCartItem({
+          id: item.id ?? item.tempId ?? item.productId,
+          quantity: item.quantity,
+          unitPrice: item.basePrice ?? item.baseUnitPrice ?? item.unitPrice,
+          unitSalePrice:
+            item.salePrice ??
+            item.unitSalePrice ??
+            item.effectiveUnitPrice ??
+            item.unitPrice,
+          basePrice: item.basePrice ?? item.baseUnitPrice ?? item.unitPrice,
+          salePrice:
+            item.salePrice ??
+            item.unitSalePrice ??
+            item.effectiveUnitPrice ??
+            item.unitPrice,
+          name: item.name || item.productName || "Product",
+          imageUrl: item.imageUrl || item.thumbnailImage || null,
+          variantName: item.variantName,
+        }),
+      );
 
       const allItems = [...mappedEventItems, ...mappedShopItems];
-      const totalAmount = allItems
-        .reduce((acc, curr) => acc + (Number(curr.unitPrice) || 0) * (curr.quantity || 1), 0)
-        .toFixed(2);
+      const eventTotal = sumLineTotals(mappedEventItems);
+      const shopTotalGuest = sumLineTotals(mappedShopItems);
+      const totalAmount = (eventTotal + shopTotalGuest).toFixed(2);
 
       setCartData({ id: "guest", totalAmount, items: allItems });
-      setShopSummary(null);
+      setShopSummary(
+        mappedShopItems.length > 0
+          ? {
+              productPrice: shopTotalGuest,
+              productDiscountPrice: 0,
+              couponDiscount: 0,
+              deliveryFee: 0,
+              totalPrice: shopTotalGuest,
+            }
+          : null,
+      );
     } else {
       try {
         const [eventRes, shopRes] = await Promise.allSettled([
@@ -103,13 +232,51 @@ export function CartProvider({ children }) {
         const shopItemsData = shopResData?.items || [];
         const shopSummaryData = shopResData?.summary || null;
 
-        const mappedEvent = eventApiItems.map((item) => ({ ...item, itemType: "ticket" }));
-        const mappedShop = shopItemsData.map((item) => ({ ...item, itemType: "product" }));
+        const mappedEvent = eventApiItems.map((item) => normalizeEventCartItem(item));
+        const mappedShop = shopItemsData.map((item) => normalizeShopCartItem(item));
+
+        const effectiveSubtotal = shopSummaryData
+          ? Math.max(
+              0,
+              toNumber(shopSummaryData.productPrice, 0) -
+                toNumber(shopSummaryData.productDiscountPrice, 0),
+            ) || sumLineTotals(mappedShop)
+          : sumLineTotals(mappedShop);
+        const normalizedShopSummary = shopSummaryData
+          ? {
+              ...shopSummaryData,
+              productPrice: toNumber(shopSummaryData.productPrice, effectiveSubtotal),
+              productDiscountPrice: toNumber(shopSummaryData.productDiscountPrice, 0),
+              couponDiscount: toNumber(shopSummaryData.couponDiscount, 0),
+              deliveryFee: toNumber(shopSummaryData.deliveryFee, 0),
+              totalPrice: toNumber(
+                shopSummaryData.totalPrice,
+                Math.max(
+                  0,
+                  effectiveSubtotal -
+                    toNumber(shopSummaryData.couponDiscount, 0) +
+                    toNumber(shopSummaryData.deliveryFee, 0),
+                ),
+              ),
+              effectiveProductPrice: effectiveSubtotal,
+            }
+          : mappedShop.length > 0
+            ? {
+                productPrice: effectiveSubtotal,
+                productDiscountPrice: 0,
+                couponDiscount: 0,
+                deliveryFee: 0,
+                totalPrice: effectiveSubtotal,
+                effectiveProductPrice: effectiveSubtotal,
+              }
+            : null;
 
         const allItems = [...mappedEvent, ...mappedShop];
-        const eventTotal = mappedEvent
-          .reduce((acc, curr) => acc + (Number(curr.unitPrice) || 0) * (curr.quantity || 1), 0);
-        const shopTotalAmount = shopSummaryData?.totalPrice || 0;
+        const eventTotal = sumLineTotals(mappedEvent);
+        const shopTotalAmount = toNumber(
+          normalizedShopSummary?.totalPrice,
+          effectiveSubtotal,
+        );
         const totalAmount = (eventTotal + shopTotalAmount).toFixed(2);
 
         setCartData({
@@ -117,7 +284,7 @@ export function CartProvider({ children }) {
           totalAmount,
           items: allItems,
         });
-        setShopSummary(shopSummaryData);
+        setShopSummary(normalizedShopSummary);
       } catch (error) {
         console.error("Failed to fetch cart:", error);
       }
@@ -208,22 +375,45 @@ export function CartProvider({ children }) {
   // ── Shop Cart Add ──
   const addShopToCart = async (productId, quantity = 1, productData = {}) => {
     const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+    const qty = Math.max(1, toNumber(quantity, 1));
+    const basePrice = toNumber(
+      productData.basePrice ?? productData.price ?? productData.unitPrice,
+      0,
+    );
+    const salePriceRaw = toNumber(productData.salePrice ?? productData.unitSalePrice, 0);
+    const salePrice =
+      salePriceRaw > 0 && (basePrice <= 0 || salePriceRaw < basePrice)
+        ? salePriceRaw
+        : 0;
+    const effectivePrice = salePrice || basePrice || salePriceRaw;
 
     if (token) {
-      await addShopCartItem({ productId, quantity });
+      await addShopCartItem({ productId, quantity: qty });
     } else {
       const currentItems = getShopGuestItems();
-      const existingIndex = currentItems.findIndex((item) => item.id === productId);
+      const existingIndex = currentItems.findIndex((item) => String(item.id) === String(productId));
       if (existingIndex >= 0) {
-        currentItems[existingIndex].quantity += quantity;
+        currentItems[existingIndex].quantity =
+          Math.max(1, toNumber(currentItems[existingIndex].quantity, 1)) + qty;
+        // Refresh pricing/details in case product data changed
+        if (productData.name) currentItems[existingIndex].name = productData.name;
+        if (productData.imageUrl) currentItems[existingIndex].imageUrl = productData.imageUrl;
+        if (basePrice || effectivePrice) {
+          currentItems[existingIndex].basePrice = basePrice || effectivePrice;
+          currentItems[existingIndex].salePrice = salePrice || null;
+          currentItems[existingIndex].unitPrice = basePrice || effectivePrice;
+          currentItems[existingIndex].unitSalePrice = effectivePrice;
+        }
       } else {
         currentItems.push({
           id: productId,
-          quantity,
+          quantity: qty,
           name: productData.name || "Product",
           imageUrl: productData.imageUrl || null,
-          unitPrice: productData.unitPrice || 0,
-          unitSalePrice: productData.unitSalePrice || productData.unitPrice || 0,
+          basePrice: basePrice || effectivePrice,
+          salePrice: salePrice || null,
+          unitPrice: basePrice || effectivePrice,
+          unitSalePrice: effectivePrice,
         });
       }
       localStorage.setItem(SHOP_GUEST_CART_KEY, JSON.stringify(currentItems));
@@ -266,7 +456,9 @@ export function CartProvider({ children }) {
 
   // ── Shop Coupon ──
   const applyShopCouponAction = async (code) => {
-    const res = await applyShopCoupon(code);
+    const trimmed = (code || "").trim();
+    if (!trimmed) throw new Error("Enter a coupon code");
+    const res = await applyShopCoupon(trimmed);
     await fetchCart();
     return res;
   };
@@ -278,7 +470,9 @@ export function CartProvider({ children }) {
 
   // ── Event Coupon ──
   const applyEventCouponAction = async (code) => {
-    const response = await applyEventCouponApi({ coupon: code });
+    const trimmed = (code || "").trim();
+    if (!trimmed) return { success: false, error: "Enter a coupon code" };
+    const response = await applyEventCouponApi({ coupon: trimmed });
     const responseData = response?.data?.data;
     const amount = responseData?.discountAmount;
     const id = responseData?.discountCoupon?.id;

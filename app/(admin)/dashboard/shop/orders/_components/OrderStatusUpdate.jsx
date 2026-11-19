@@ -28,6 +28,9 @@ const formatStatus = (value) =>
     .toLowerCase()
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
+const getErrorMessage = (payload) =>
+  payload?.message || payload?.error || "Failed to update order status";
+
 export default function OrderStatusUpdate({ order, onUpdated }) {
   const currentStatus = order?.orderStatus || "";
   const [status, setStatus] = useState(currentStatus);
@@ -53,10 +56,10 @@ export default function OrderStatusUpdate({ order, onUpdated }) {
         toast.success("Order status updated");
         onUpdated?.(res.data);
       } else {
-        toast.error(res?.error || "Failed to update order status");
+        toast.error(getErrorMessage(res));
       }
     } catch (err) {
-      toast.error(err?.response?.data?.error || "Failed to update order status");
+      toast.error(getErrorMessage(err?.response?.data));
     } finally {
       setUpdating(false);
     }

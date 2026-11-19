@@ -18,6 +18,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
     shopSubtotal,
     shopCouponDiscount,
     deliveryFee,
+    shopTotal,
     eventDiscount,
     grandTotal,
     applyEventCoupon,
@@ -87,7 +88,7 @@ export default function CartDetailModal({ open, onClose, cartData }) {
   const activeDelivery = activeTab === "events" ? 0 : deliveryFee;
   const activeTotal = activeTab === "events"
     ? Math.max(0, eventSubtotal - Number(eventDiscount || 0))
-    : shopSubtotal - shopCouponDiscount + deliveryFee;
+    : shopTotal;
 
   return (
     <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
@@ -144,8 +145,13 @@ export default function CartDetailModal({ open, onClose, cartData }) {
             <>
               <div className="space-y-3">
                 {shopItems.map((item) => {
-                  const price = Number(item.unitSalePrice || item.unitPrice || 0);
                   const qty = item.quantity || 1;
+                  const unit = Number(
+                    item.effectiveUnitPrice ?? item.unitSalePrice ?? item.unitPrice ?? 0,
+                  );
+                  const base = Number(item.baseUnitPrice ?? item.unitPrice ?? unit);
+                  const line = Number(item.lineTotal ?? unit * qty);
+                  const hasItemDiscount = base > unit && unit > 0;
                   return (
                     <div key={item.id} className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
                       <div className="flex items-center gap-4 px-4 py-3">
@@ -155,9 +161,14 @@ export default function CartDetailModal({ open, onClose, cartData }) {
                         <div className="flex-1 min-w-0">
                           <h4 className="font-bold text-[#001819] text-sm truncate">{item.name}</h4>
                           {item.variantName && <p className="text-xs text-gray-500">{item.variantName}</p>}
-                          <p className="text-xs text-[#00a19a] font-semibold">৳ {price.toLocaleString()} each</p>
+                          <p className="text-xs text-[#00a19a] font-semibold">
+                            ৳ {unit.toLocaleString()} each
+                            {hasItemDiscount && (
+                              <span className="ml-1.5 text-gray-400 font-normal line-through">৳ {base.toLocaleString()}</span>
+                            )}
+                          </p>
                         </div>
-                        <p className="font-bold text-[#001819] shrink-0 text-lg">৳ {(price * qty).toLocaleString()}</p>
+                        <p className="font-bold text-[#001819] shrink-0 text-lg">৳ {line.toLocaleString()}</p>
                       </div>
                       <div className="px-4 py-2 bg-gray-50/50 border-t flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -204,13 +215,21 @@ export default function CartDetailModal({ open, onClose, cartData }) {
                     <input
                       value={shopCouponCode}
                       onChange={(e) => setShopCouponCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (shopCouponCode.trim() && !shopCouponLoading) handleApplyShopCoupon();
+                        }
+                      }}
                       placeholder="Shop coupon code"
+                      autoComplete="off"
                       className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00a19a]/30"
                     />
                     <button
+                      type="button"
                       onClick={handleApplyShopCoupon}
-                      disabled={shopCouponLoading}
-                      className="rounded-lg bg-[#001819] px-4 py-2 text-sm font-bold text-white hover:bg-gray-800 transition-colors disabled:opacity-50"
+                      disabled={shopCouponLoading || !shopCouponCode.trim()}
+                      className="rounded-lg bg-[#001819] px-4 py-2 text-sm font-bold text-white hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {shopCouponLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}
                     </button>
@@ -282,13 +301,21 @@ export default function CartDetailModal({ open, onClose, cartData }) {
                     <input
                       value={eventCouponCode}
                       onChange={(e) => setEventCouponCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (eventCouponCode.trim() && !eventCouponLoading) handleApplyEventCoupon();
+                        }
+                      }}
                       placeholder="Event coupon code"
+                      autoComplete="off"
                       className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00a19a]/30"
                     />
                     <button
+                      type="button"
                       onClick={handleApplyEventCoupon}
-                      disabled={eventCouponLoading}
-                      className="rounded-lg bg-[#001819] px-4 py-2 text-sm font-bold text-white hover:bg-gray-800 transition-colors disabled:opacity-50"
+                      disabled={eventCouponLoading || !eventCouponCode.trim()}
+                      className="rounded-lg bg-[#001819] px-4 py-2 text-sm font-bold text-white hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {eventCouponLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}
                     </button>

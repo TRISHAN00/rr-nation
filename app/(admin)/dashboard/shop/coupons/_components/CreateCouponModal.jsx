@@ -19,7 +19,6 @@ import {
 } from "@/app/components/ui/select";
 import { createEcommerceCoupon } from "@/services/admin/admin.ecommerce-coupon.service";
 import { Loader2 } from "lucide-react";
-import { Switch } from "@/app/components/ui/switch";
 import { toast } from "sonner";
 
 export default function CreateCouponModal({ open, setOpen, onRefresh }) {
@@ -28,7 +27,6 @@ export default function CreateCouponModal({ open, setOpen, onRefresh }) {
     discountType: "percentage",
     value: "",
     usageLimit: "",
-    isActive: true,
   });
   const [loading, setLoading] = useState(false);
 
@@ -37,7 +35,7 @@ export default function CreateCouponModal({ open, setOpen, onRefresh }) {
   };
 
   const resetForm = () => {
-    setForm({ code: "", discountType: "percentage", value: "", usageLimit: "", isActive: true });
+    setForm({ code: "", discountType: "percentage", value: "", usageLimit: "" });
   };
 
   const handleSubmit = async () => {
@@ -58,7 +56,11 @@ export default function CreateCouponModal({ open, setOpen, onRefresh }) {
       setOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create coupon");
+      toast.error(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Failed to create coupon",
+      );
     } finally {
       setLoading(false);
     }
@@ -119,14 +121,6 @@ export default function CreateCouponModal({ open, setOpen, onRefresh }) {
               placeholder="e.g. 100"
               value={form.usageLimit}
               onChange={(e) => handleChange("usageLimit", e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between border rounded-md p-3">
-            <Label className="mb-0">Active</Label>
-            <Switch
-              checked={form.isActive}
-              onCheckedChange={(val) => handleChange("isActive", val)}
             />
           </div>
         </div>

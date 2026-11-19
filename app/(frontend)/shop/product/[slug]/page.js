@@ -210,8 +210,12 @@ export default function ProductPage({ params }) {
               onClick={() => addToCart(product.id, 1, {
                 name: product.name,
                 imageUrl: product.images?.[0]?.url || product.thumbnailImage,
-                unitPrice: product.salePrice || product.basePrice,
-                unitSalePrice: product.salePrice,
+                basePrice: Number(product.basePrice) || Number(product.price) || 0,
+                salePrice:
+                  Number(product.salePrice) > 0 &&
+                  Number(product.salePrice) < (Number(product.basePrice) || Number(product.price) || 0)
+                    ? Number(product.salePrice)
+                    : 0,
               })}
             >
               {cartLoading ? (

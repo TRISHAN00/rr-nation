@@ -55,13 +55,18 @@ export default function CouponInput({ setDiscount, setCouponId }) {
         placeholder="Coupon code"
         value={couponCode}
         disabled={loading}
+        autoComplete="off"
         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
         className="flex-1 rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-2 focus:ring-[#00a19a] outline-none"
       />
       <button
         type="submit"
-        disabled={loading}
-        className="min-w-[80px] bg-[#001819] text-white rounded-lg px-4 py-2 text-sm font-semibold"
+        disabled={loading || !couponCode.trim()}
+        className={`min-w-[80px] rounded-lg px-4 py-2 text-sm font-semibold text-white ${
+          loading || !couponCode.trim()
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-[#001819] hover:bg-[#00a19a]"
+        }`}
       >
         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}
       </button>

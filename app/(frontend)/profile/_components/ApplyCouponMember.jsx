@@ -12,12 +12,19 @@ export default function ApplyCouponMember({ onApply, onSetCoupon }) {
     const [status, setStatus] = useState("");
 
     const handleApply = async () => {
+        const code = coupon.trim();
+        if (!code) {
+            setMessage("Please enter a coupon code");
+            setStatus("error");
+            return;
+        }
+
         try {
             setLoading(true);
             setMessage("");
             setStatus("");
 
-            const res = await applyMemberCoupon(coupon.trim());
+            const res = await applyMemberCoupon(code);
 
             if (res?.statusCode === 200) {
                 const discount = res?.data?.discountAmount || 0;
@@ -58,6 +65,7 @@ export default function ApplyCouponMember({ onApply, onSetCoupon }) {
                     value={coupon}
                     onChange={(e) => setCoupon(e.target.value.toUpperCase())}
                     disabled={loading}
+                    autoComplete="off"
                 />
 
                 <Button
