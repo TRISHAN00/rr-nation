@@ -14,6 +14,7 @@ import { Switch } from "@/app/components/ui/switch";
 import { Textarea } from "@/app/components/ui/textarea";
 import { updateDeliveryOption } from "@/services/admin/admin.delivery-option.service";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function EditDeliveryOptionModal({ open, setOpen, option, onRefresh }) {
   const [form, setForm] = useState({
@@ -86,6 +87,7 @@ export default function EditDeliveryOptionModal({ open, setOpen, option, onRefre
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Delivery option update failed:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

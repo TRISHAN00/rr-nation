@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { getProfileData } from "@/services/user.service";
+import { toast } from "sonner";
 
 export default function GoogleSuccessContent() {
   const router = useRouter();
@@ -59,6 +60,7 @@ export default function GoogleSuccessContent() {
 
       } catch (err) {
         console.error("Google auth failed:", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
 
         localStorage.clear();
 

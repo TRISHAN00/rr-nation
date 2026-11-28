@@ -18,6 +18,7 @@ import {
 import { createEventCoupon } from "@/services/admin/admin.event.coupon.service";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function CreateEventCouponModal({ open, setOpen, onCoupons, eventId }) {
   const [coupons, setCoupons] = useState([
@@ -87,11 +88,13 @@ export default function CreateEventCouponModal({ open, setOpen, onCoupons, event
 
       await createEventCoupon(payload);
 
+      toast.success("Coupon(s) created successfully");
       resetForm();
       setOpen(false);
       onCoupons()
     } catch (error) {
       console.error("Coupon create failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to create coupon");
     } finally {
       setLoading(false);
     }

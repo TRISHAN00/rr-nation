@@ -9,10 +9,22 @@ export const getAllDashbaordEvents = async (
   date,
   eventStage,
   eventType,
+  adminApproval = "",
 ) => {
-  const { data } = await api.get(
-    `/admin/event/all?page=${page}&limit=${limit}&isRunRiseNation=${isRunRiseNation}&search=${search}&date=${date}&eventStage=${eventStage}&eventType=${eventType}`,
-  );
+  const params = new URLSearchParams({
+    page: String(page ?? 1),
+    limit: String(limit ?? 10),
+    search: search ?? "",
+    date: date ?? "",
+    eventStage: eventStage ?? "",
+    eventType: eventType ?? "",
+  });
+  if (isRunRiseNation !== "" && isRunRiseNation !== undefined && isRunRiseNation !== null) {
+    params.set("isRunRiseNation", String(isRunRiseNation));
+  }
+  if (adminApproval) params.set("adminApproval", adminApproval);
+
+  const { data } = await api.get(`/admin/event/all?${params.toString()}`);
   return data;
 };
 
@@ -39,6 +51,14 @@ export const updateEvent = async (payload) => {
 // Get Event By Id
 export const getDashboardEventById = (eventId) => {
   return api.get(`/admin/event/${eventId}`);
+};
+
+// Update Event Admin Approval
+export const updateEventAdminApproval = async (eventId, adminApproval) => {
+  const { data } = await api.patch(`/admin/event/approval/${eventId}`, {
+    adminApproval,
+  });
+  return data;
 };
 
 // Delete Event

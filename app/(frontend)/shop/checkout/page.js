@@ -136,7 +136,7 @@ export default function ShopCheckoutPage() {
       .then((res) => active && setSummary(res?.data || null))
       .catch((err) => console.error("Failed to load checkout summary:", err));
     return () => { active = false; };
-  }, [selectedAddressId, selectedShippingMethodId]);
+  }, [selectedAddressId, selectedShippingMethodId, shopItems]);
 
   const resetAddressForm = () => {
     setForm(emptyAddressForm);

@@ -14,6 +14,7 @@ import { Switch } from "@/app/components/ui/switch";
 import { Textarea } from "@/app/components/ui/textarea";
 import { createDeliveryOption } from "@/services/admin/admin.delivery-option.service";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const initialForm = {
   title: "",
@@ -67,6 +68,7 @@ export default function CreateDeliveryOptionModal({ open, setOpen, onRefresh }) 
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Delivery option create failed:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

@@ -12,6 +12,7 @@ import TabActions from "@/app/(frontend)/profile/_components/TabActions";
 import TabContents from "@/app/(frontend)/profile/_components/TabContents";
 import { Tabs } from "@/app/components/ui/tabs";
 import { getAllUserOrders } from "@/services/user.service";
+import { toast } from "sonner";
 
 export default function UserProfileTabs({ user, memberInfo }) {
   const params = useParams();
@@ -41,6 +42,7 @@ export default function UserProfileTabs({ user, memberInfo }) {
         setOrders(res.data || []);
       } catch (error) {
         console.error("Error fetching orders:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
       } finally {
         setLoading(false);
       }

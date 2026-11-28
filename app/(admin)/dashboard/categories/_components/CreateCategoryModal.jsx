@@ -12,6 +12,7 @@ import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { createCategory } from "@/services/admin/admin.ecommerce-category.service";
 import { ImagePlus, Loader2, X } from "lucide-react";
+import { toast } from "sonner";
 
 const initialForm = {
   name: "",
@@ -85,11 +86,13 @@ export default function CreateCategoryModal({ open, setOpen, onRefresh }) {
 
       await createCategory(payload);
 
+      toast.success("Category created successfully");
       resetForm();
       setOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Category create failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to create category");
     } finally {
       setLoading(false);
     }

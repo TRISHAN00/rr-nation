@@ -6,6 +6,7 @@ import { Shirt } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddEditTShirtSizeModal from "./AddEditTShirtSizeModal";
 import TShirtSizeList from "./TShirtSizeList";
+import { toast } from "sonner";
 
 const sizeCategories = [
   { id: "tshirt", label: "T-Shirt (Adult)", fields: ["chest", "length"] },
@@ -55,6 +56,7 @@ export function TShirtSizeManager({ eventId }) {
       }
     } catch (err) {
       console.error("Failed to fetch T-shirt sizes", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     }
   };
 
@@ -85,6 +87,7 @@ export function TShirtSizeManager({ eventId }) {
       }
     } catch (err) {
       console.error("Failed to create T-shirt size", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     } finally {
       setModalOpen(false);
     }
@@ -132,6 +135,7 @@ export function TShirtSizeManager({ eventId }) {
                 fetchSizes();
               } catch (err) {
                 console.error("Failed to archive size", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
               }
             }}
             onUpdate={async (cat, id, field, value) => {
@@ -150,6 +154,7 @@ export function TShirtSizeManager({ eventId }) {
                 fetchSizes();
               } catch (err) {
                 console.error("Failed to update size", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
               }
             }}
           />

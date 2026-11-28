@@ -15,6 +15,7 @@ import ProductPageHeader from "./ProductPageHeader";
 import ProductDetailSheet from "./ProductDetailSheet";
 import EditProductModal from "./EditProductModal";
 import StatusDropdown from "./StatusDropdown";
+import { toast } from "sonner";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -43,6 +44,7 @@ export default function ProductList() {
       fetchProducts();
     } catch (error) {
       console.error("Delete failed:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setDeleting(false);
     }

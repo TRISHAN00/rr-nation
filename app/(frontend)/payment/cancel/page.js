@@ -22,22 +22,18 @@ export default function PaymentCancel() {
         </p>
 
         <div className="space-y-3">
-          {/* Primary Action: Go back to Checkout */}
-          {/* <Link 
-            href="/events/checkout" 
+          <Link
+            href="/shop/checkout"
             className="flex items-center justify-center w-full py-3 bg-[#00a19a] text-white rounded-xl font-bold hover:bg-[#008c86] transition-all active:scale-95"
           >
-            <ShoppingCart className="mr-2 h-5 w-5" />
             Return to Checkout
-          </Link> */}
+          </Link>
 
-          {/* Secondary Action: Go Home */}
-          <Link 
-            href="/" 
+          <Link
+            href="/shop/orders"
             className="flex items-center justify-center w-full py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            View My Orders
           </Link>
         </div>
 

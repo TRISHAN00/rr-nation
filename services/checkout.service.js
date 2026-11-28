@@ -91,3 +91,10 @@ export const cancelOrder = async (orderNumber) => {
   );
   return data;
 };
+
+export const initiateOrderPayment = async (orderNumber) => {
+  const { data } = await api.post(
+    `/e-commerce/orders/${encodeURIComponent(orderNumber)}/initiate-payment`,
+  );
+  return data;
+};

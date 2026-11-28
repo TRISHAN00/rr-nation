@@ -46,35 +46,90 @@ export default function OrganizerRegForm() {
   };
 
   const handleFile = (field, file) => {
-    setForm((prev) => ({ ...prev, [field]: file }));
+    setForm((prev) => ({ ...prev, [field]: file || null }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
+    const requiredFields = [
+      "organizationName",
+      "organizationType",
+      "primaryRepresentative",
+      "officialEmail",
+      "officialPhone",
+      "registrationNumber",
+      "tinNumber",
+      "officeAddress",
+      "bankName",
+      "bankBranch",
+      "bankAccountName",
+      "bankAccountNumber",
+      "preferredPayoutCycle",
+    ];
+    const missingField = requiredFields.find((key) => !String(form[key] || "").trim());
+    if (missingField) {
+      toast.warning("Please fill all required fields");
+      return;
+    }
+
+    const requiredFiles = ["organizationLogo", "nidOrPassportCopy", "companyProfilePdf"];
+    const missingFile = requiredFiles.find((key) => !(form[key] instanceof File));
+    if (missingFile) {
+      toast.warning("Please upload all required documents");
+      return;
+    }
+
+    setLoading(true);
     try {
       const payload = new FormData();
-
-      Object.keys(form).forEach((key) => {
-        if (form[key] !== null && form[key] !== "") {
-          payload.append(key, form[key]);
+      Object.entries(form).forEach(([key, value]) => {
+        if (value instanceof File) {
+          payload.append(key, value);
+          return;
+        }
+        if (value !== null && value !== undefined && String(value).trim() !== "") {
+          payload.append(key, String(value).trim());
         }
       });
 
       const res = await registerOrganizer(payload);
-
-      if (res?.statusCode !== 201) {
-        toast.error(res?.message || "Registration failed");
+      if (res?.statusCode !== 201 && res?.status !== 201) {
+        toast.error(res?.message || res?.error || "Registration failed");
         return;
       }
 
       toast.success("Organizer registration successful 🎉");
-
+      setForm({
+        organizationName: "",
+        organizationType: "",
+        primaryRepresentative: "",
+        officialEmail: "",
+        officialPhone: "",
+        registrationNumber: "",
+        tinNumber: "",
+        officeAddress: "",
+        socialMediaLink: "",
+        totalEventsOrganized: "",
+        averageParticipantSize: "",
+        preferredEventZone: "",
+        whyJoinUs: "",
+        bankName: "",
+        bankBranch: "",
+        bankAccountName: "",
+        bankAccountNumber: "",
+        preferredPayoutCycle: "",
+        organizationLogo: null,
+        nidOrPassportCopy: null,
+        companyProfilePdf: null,
+      });
+      e.target.reset();
     } catch (error) {
       console.error(error);
       toast.error(
-        error?.response?.data?.message || "Something went wrong"
+        error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          "Something went wrong",
       );
     } finally {
       setLoading(false);

@@ -27,6 +27,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function UpdateEventForm({ event }) {
   const [formData, setFormData] = useState({
@@ -91,6 +92,7 @@ export default function UpdateEventForm({ event }) {
       console.log("Submitted Data:", Object.fromEntries(payload));
     } catch (error) {
       console.error("Update failed:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

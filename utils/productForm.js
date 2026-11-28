@@ -12,7 +12,6 @@ export const PRODUCT_FORM_FIELDS = [
   "eventName",
   "material",
   "model",
-  "hasVariant",
   "name",
   "slug",
   "thumbnail",
@@ -22,7 +21,6 @@ export const PRODUCT_FORM_FIELDS = [
   "isDeal",
   "basePrice",
   "eventCategory",
-  "isFeatured",
   "tags",
   "categoryId",
   "type",
@@ -32,9 +30,7 @@ export const PRODUCT_FORM_FIELDS = [
 ];
 
 const BOOLEAN_FIELDS = new Set([
-  "hasVariant",
   "isDeal",
-  "isFeatured",
   "isActive",
 ]);
 
@@ -50,7 +46,6 @@ export const initialProductForm = {
   eventName: "",
   material: "",
   model: "",
-  hasVariant: false,
   name: "",
   slug: "",
   colors: "",
@@ -59,7 +54,6 @@ export const initialProductForm = {
   isDeal: false,
   basePrice: "",
   eventCategory: "",
-  isFeatured: false,
   tags: "",
   categoryId: "",
   type: "",
@@ -99,7 +93,9 @@ export const buildProductFormData = (
       return;
     }
 
-    payload.append(field, toFormValue(field, form?.[field]));
+    const value = toFormValue(field, form?.[field]);
+    if (field === "brandId" && !String(value).trim()) return;
+    payload.append(field, value);
   });
 
   extraFields.forEach((field) => {

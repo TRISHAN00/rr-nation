@@ -6,6 +6,7 @@ import { getProducts } from "@/services/product.service";
 import InnerBanner from "@/app/components/common/InnerBanner";
 import ProductCard from "../../_components/ProductCard";
 import { ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CategoryPage({ params }) {
   const [slug, setSlug] = useState(null);
@@ -32,6 +33,7 @@ export default function CategoryPage({ params }) {
         }
       } catch (error) {
         console.error(error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
       } finally {
         setLoading(false);
       }

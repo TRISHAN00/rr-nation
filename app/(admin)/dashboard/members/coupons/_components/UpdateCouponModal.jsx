@@ -24,6 +24,7 @@ import {
 } from "@/services/admin/admin.member.coupon.service";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function UpdateCouponModal({
   open,
@@ -83,6 +84,7 @@ export default function UpdateCouponModal({
       setOpen(false);
     } catch (error) {
       console.error("Update failed:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

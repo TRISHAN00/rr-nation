@@ -117,10 +117,10 @@ export default function OrganizerRegModal({ agree }) {
         return;
       }
 
-      toast.success("Organizer registered 🎉");
+      toast.success("Organizer application submitted. Awaiting admin approval.");
       setOpen(false);
       setStep(0);
-      // Reset form if you want a fresh start for the next user session
+      window.location.reload();
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {

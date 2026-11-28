@@ -4,6 +4,7 @@ import { getAllEvent } from "@/services/user.service";
 import { useEffect, useRef, useState } from "react";
 import EventFilter from "./EventFilter";
 import EventSwitch from "./EventSwitch";
+import { toast } from "sonner";
 
 const FILTERS_STAGE = [
   { key: "all", label: "All Stages" },
@@ -58,6 +59,7 @@ export default function Events() {
       setHasMore(newEvents.length === 10);
     } catch (err) {
       console.error("Failed to load events", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

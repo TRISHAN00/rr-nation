@@ -19,7 +19,7 @@ const eventTypes = {
 
 export default function DashboardEventList({ events }) {
   const [expandedEvent, setExpandedEvent] = useState(null);
-  const { handleDeleteDashboardEvent, loading } = useDashboardEvents();
+  const { handleDeleteDashboardEvent, handleUpdateEventApproval, loading } = useDashboardEvents();
 
   return (
     <div className="space-y-4">
@@ -43,6 +43,7 @@ export default function DashboardEventList({ events }) {
                 typeConfig={typeConfig}
                 expandedEvent={expandedEvent}
                 onDelete={() => handleDeleteDashboardEvent(event.id)}
+                onApprovalChange={handleUpdateEventApproval}
                 event={event}
                 loading={loading}
               />

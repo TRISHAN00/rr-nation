@@ -2,6 +2,7 @@
 import { getMemberEvents } from "@/services/member.service";
 import { useEffect, useState } from "react";
 import MemberEventList from "./MemberEventList";
+import { toast } from "sonner";
 
 export default function MemberEvents() {
   const [events, setEvents] = useState([]);
@@ -16,6 +17,7 @@ export default function MemberEvents() {
       setEvents(eventItems);
     } catch (error) {
       console.error("Error fetching member events:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

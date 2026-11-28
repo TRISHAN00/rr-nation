@@ -14,6 +14,7 @@ import MemberEventPageHeader from "../[tab]/_components/member/MemberEventPageHe
 import MemberEventTableBody from "../[tab]/_components/member/MemberEventTableBody";
 import CouponMemberTableHeader from "../[tab]/_components/member/MemberEventTableHeader";
 import MemberStatsSummary from "./MemberStatsSummary";
+import { toast } from "sonner";
 
 export default function MemberEventList() {
   const [events, setEvents] = useState([]);
@@ -41,6 +42,7 @@ export default function MemberEventList() {
       setSummary(res?.data || null);
     } catch (error) {
       console.error("Error fetching summary:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     }
   }, []);
 
@@ -53,6 +55,7 @@ export default function MemberEventList() {
       setTotalItems(res?.data?.count || res?.data?.total || eventItems.length);
     } catch (error) {
       console.error("Error fetching member events:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

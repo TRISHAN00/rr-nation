@@ -1,8 +1,8 @@
 "use client";
 
 import InnerBanner from "@/app/components/common/InnerBanner";
-import { cancelOrder, getOrderByNumber } from "@/services/checkout.service";
-import { ArrowLeft, Loader2, MapPin, Package, ShoppingBag, Truck } from "lucide-react";
+import { cancelOrder, getOrderByNumber, initiateOrderPayment } from "@/services/checkout.service";
+import { ArrowLeft, CreditCard, Loader2, MapPin, Package, ShoppingBag, Truck } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -40,6 +40,7 @@ export default function ShopOrderDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [cancelling, setCancelling] = useState(false);
+  const [paying, setPaying] = useState(false);
 
   useEffect(() => {
     if (!orderNumber) return;
@@ -83,6 +84,31 @@ export default function ShopOrderDetailPage() {
     }
   };
 
+  const handlePayNow = async () => {
+    try {
+      setPaying(true);
+      const res = await initiateOrderPayment(orderNumber);
+      const paymentUrl = res?.data?.paymentUrl || res?.data?.payment_url;
+      if (paymentUrl) {
+        sessionStorage.setItem(
+          "lastShopOrder",
+          JSON.stringify({ orderNumber, valId: "" }),
+        );
+        window.location.replace(paymentUrl);
+        return;
+      }
+      toast.error("Payment URL not found. Please try again.");
+    } catch (err) {
+      toast.error(
+        Array.isArray(err?.response?.data?.message)
+          ? err.response.data.message.join(", ")
+          : err?.response?.data?.message || "Failed to initiate payment.",
+      );
+    } finally {
+      setPaying(false);
+    }
+  };
+
   const address = order?.shippingAddressSnapshot || {};
   const method = order?.shippingMethodSnapshot || {};
   const addressParts = [
@@ -92,8 +118,10 @@ export default function ShopOrderDetailPage() {
     address.division?.name,
   ].filter(Boolean);
   const status = String(order?.orderStatus || "").toUpperCase();
+  const paymentStatus = String(order?.paymentStatus || "").toUpperCase();
   const canCancel =
     status !== "CANCELLED" && status !== "COMPLETED" && status !== "DELIVERED";
+  const canPay = paymentStatus !== "PAID" && status !== "CANCELLED";
 
   return (
     <>
@@ -140,6 +168,17 @@ export default function ShopOrderDetailPage() {
                 <div className="flex flex-wrap items-center gap-3">
                   <StatusBadge label="Order" value={order.orderStatus} />
                   <StatusBadge label="Payment" value={order.paymentStatus} />
+                  {canPay && (
+                    <button
+                      type="button"
+                      onClick={handlePayNow}
+                      disabled={paying}
+                      className="inline-flex items-center gap-2 rounded-lg bg-[#00a19a] px-4 py-2 text-xs font-bold text-white hover:bg-[#008c86] disabled:opacity-50"
+                    >
+                      {paying ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CreditCard className="h-3.5 w-3.5" />}
+                      {paying ? "Redirecting..." : "Checkout"}
+                    </button>
+                  )}
                   {canCancel && (
                     <button
                       type="button"

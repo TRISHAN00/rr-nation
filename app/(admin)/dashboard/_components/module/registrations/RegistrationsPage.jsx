@@ -12,6 +12,7 @@ import OrderSheet from "./_components/OrderSheet";
 import OrderSheetHeader from "./_components/OrderSheetHeader";
 import OrderStats from "./_components/OrderStats";
 import { OrderStatsSkeleton } from "./_components/Skeleton/OrderSkeleton";
+import { toast } from "sonner";
 
 export default function RegistrationsPage() {
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,7 @@ export default function RegistrationsPage() {
       setTotalPages(total);
     } catch (error) {
       console.error("Error fetching order history:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

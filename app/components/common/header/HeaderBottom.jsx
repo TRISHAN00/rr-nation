@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import CartIcon from "../CartIcon";
 import FillButton from "../FillButton";
 import MainMenu from "./NavigationMenuDemo";
+import { toast } from "sonner";
 
 export default function HeaderBottom() {
   const { isAuthenticated, user } = useAuthContext();
@@ -23,6 +24,7 @@ export default function HeaderBottom() {
       setGlobal(res?.data?.data || {});
     } catch (err) {
       console.error("Failed to load global data", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     }
   };
 

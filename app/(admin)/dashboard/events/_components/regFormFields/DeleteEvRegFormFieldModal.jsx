@@ -9,6 +9,7 @@ import {
 } from "@/app/components/ui/dialog";
 import { deleteRegistrationField } from "@/services/admin/admin.regFormField.service";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function DeleteEvRegFormFieldModal({
   open,
@@ -26,10 +27,12 @@ export default function DeleteEvRegFormFieldModal({
 
       await deleteRegistrationField(registrationFormFieldId);
 
+      toast.success("Registration field deleted successfully");
       onRefresh();
       setOpen(false);
     } catch (error) {
       console.error("Delete failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to delete registration field");
     } finally {
       setLoading(false);
     }

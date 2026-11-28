@@ -18,6 +18,7 @@ import {
 import { createEventTicket } from "@/services/admin/admin.event.ticket.service";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function CreateEventTicketModal({ open, setOpen, onTickets, eventId }) {
   const [tickets, setTickets] = useState([
@@ -92,11 +93,13 @@ export default function CreateEventTicketModal({ open, setOpen, onTickets, event
 
       await createEventTicket(eventId, payload);
 
+      toast.success("Ticket(s) created successfully");
       resetForm();
       setOpen(false);
       if (onTickets) onTickets();
     } catch (error) {
       console.error("Ticket creation failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to create ticket");
     } finally {
       setLoading(false);
     }

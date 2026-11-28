@@ -5,6 +5,7 @@ import UserProfileTabs from "@/app/components/tabs/UserProfileTabs";
 import { getMemberRegInfo } from "@/services/member.service";
 import { getProfileData } from "@/services/user.service";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -20,6 +21,7 @@ export default function ProfilePage() {
       setUser(res);
     } catch (err) {
       console.error("Failed to load profile");
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -31,6 +33,7 @@ export default function ProfilePage() {
       setMemberInfo(res)
     } catch (err) {
       console.error(`Failed to load member registration data`)
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     } finally {
       setLoading(false)
     }

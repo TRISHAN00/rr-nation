@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import OrderPagination from "../../_components/module/registrations/_components/OrderPagination";
 import UserSearch from "./UserSearch"; // Make sure this path is correct
 import UserTable from "./UserTable";
+import { toast } from "sonner";
 
 export default function DashboardUsersList() {
   const [users, setUsers] = useState([]);
@@ -29,6 +30,7 @@ export default function DashboardUsersList() {
       setTotalCount(userData?.count || 0);
     } catch (error) {
       console.error("Failed to fetch users:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

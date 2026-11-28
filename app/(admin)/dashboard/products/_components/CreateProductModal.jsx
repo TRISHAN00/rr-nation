@@ -13,6 +13,7 @@ import { buildProductFormData, initialProductForm } from "@/utils/productForm";
 import { ImagePlus, Loader2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ProductFormFields from "./ProductFormFields";
+import { toast } from "sonner";
 
 export default function CreateProductModal({ open, setOpen, onRefresh }) {
   const [form, setForm] = useState(initialProductForm);
@@ -36,6 +37,7 @@ export default function CreateProductModal({ open, setOpen, onRefresh }) {
         setBrands(brandsRes?.data?.brands || []);
       } catch (err) {
         console.error("Failed to fetch product options:", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
       }
     };
     fetchOptions();
@@ -90,6 +92,7 @@ export default function CreateProductModal({ open, setOpen, onRefresh }) {
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error("Product create failed:", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
       const message = err?.response?.data?.message;
       setError(
         Array.isArray(message)

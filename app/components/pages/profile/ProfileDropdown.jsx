@@ -11,26 +11,43 @@ import {
 } from "@/app/components/ui/dropdown-menu";
 import { logoutUser } from "@/services/auth.service";
 import { getGlobalData } from "@/services/global.service";
+import { getMyOrganizerRegistration } from "@/services/organizer.service";
 import { Building2, LayoutDashboard, LogOut, User, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export function ProfileDropdown({ user }) {
   const name = user?.firstName;
   const [global, setGlobal] = useState({});
+  const [organizerApproved, setOrganizerApproved] = useState(false);
 
   const fetchGlobal = async () => {
     try {
       const res = await getGlobalData();
-      setGlobal(res?.data?.data)
+      const data = res?.data?.data || {};
+      setGlobal(data);
+      if (data?.isOrganizer) {
+        try {
+          const orgRes = await getMyOrganizerRegistration();
+          setOrganizerApproved(
+            String(orgRes?.data?.adminApproval || "").toLowerCase() === "approved",
+          );
+        } catch {
+          setOrganizerApproved(false);
+        }
+      } else {
+        setOrganizerApproved(false);
+      }
     } catch (err) {
-      console.error(`FAiled to load global data`, err)
+      console.error(`FAiled to load global data`, err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     }
-  }
+  };
 
   useEffect(() => {
-    fetchGlobal()
-  }, [])
+    fetchGlobal();
+  }, []);
 
 
 
@@ -98,16 +115,22 @@ export function ProfileDropdown({ user }) {
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          {
-            global?.isOrganizer ? <Link href="/dashboard/organizer" className="flex items-center gap-2">
+          {organizerApproved ? (
+            <Link href="/organizer/dashboard" className="flex items-center gap-2">
               <Building2 className="h-4 w-4 text-cyan-500" />
-             Organizer Dashboard
-            </Link> : <Link href="/organizer-register" className="flex items-center gap-2">
+              Organizer Dashboard
+            </Link>
+          ) : global?.isOrganizer ? (
+            <Link href="/organizer-register" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-cyan-500" />
+              Organizer Pending Approval
+            </Link>
+          ) : (
+            <Link href="/organizer-register" className="flex items-center gap-2">
               <Building2 className="h-4 w-4 text-cyan-500" />
               Become an Organizer
             </Link>
-          }
-
+          )}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import FillButton from "../FillButton";
+import { toast } from "sonner";
 
 export default function FooterCTA() {
   const { isAuthenticated } = useAuthContext();
@@ -19,6 +20,7 @@ export default function FooterCTA() {
       setGlobal(res?.data?.data || {});
     } catch (err) {
       console.error("Failed to load global data", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     }
   };
 

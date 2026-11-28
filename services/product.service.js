@@ -27,3 +27,23 @@ export const getPublicCategories = async () => {
     return { data: [] };
   }
 };
+
+// GET Public Brands
+export const getPublicBrands = async () => {
+  try {
+    const { data } = await api.get("/e-commerce/brands");
+    return data;
+  } catch {
+    return { data: [] };
+  }
+};
+
+// GET Home (categories + deals)
+export const getHomeData = async () => {
+  try {
+    const { data } = await api.get("/e-commerce/home");
+    return data;
+  } catch {
+    return { data: { categories: [], dealsForYou: [] } };
+  }
+};

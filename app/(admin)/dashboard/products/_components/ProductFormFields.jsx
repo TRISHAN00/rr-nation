@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
-import { Switch } from "@/app/components/ui/switch";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/app/components/ui/textarea";
 import MultiValueInput from "./MultiValueInput";
 
@@ -21,9 +21,7 @@ export default function ProductFormFields({
   includeActive = false,
 }) {
   const toggles = [
-    { key: "hasVariant", label: "Has Variant" },
     { key: "isDeal", label: "Deal" },
-    { key: "isFeatured", label: "Featured" },
     ...(includeActive ? [{ key: "isActive", label: "Active" }] : []),
   ];
 

@@ -14,6 +14,7 @@ import {
 import { ConfirmModal } from "../../_components/ConfirmModal";
 import CreateDeliveryOptionModal from "./CreateDeliveryOptionModal";
 import EditDeliveryOptionModal from "./EditDeliveryOptionModal";
+import { toast } from "sonner";
 
 export default function DeliveryOptionList() {
   const [options, setOptions] = useState([]);
@@ -58,6 +59,7 @@ export default function DeliveryOptionList() {
       fetchOptions();
     } catch (error) {
       console.error("Delete failed:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setDeleting(false);
     }

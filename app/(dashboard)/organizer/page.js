@@ -1,6 +1,5 @@
+import { redirect } from "next/navigation";
 
 export default function Organizer() {
-  return (
-    <div>Organizer</div>
-  )
+  redirect("/organizer/dashboard");
 }

@@ -59,6 +59,7 @@ const menuItems = [
       { title: "Products", path: "/dashboard/products" },
       { title: "Orders", path: "/dashboard/shop/orders" },
       { title: "Categories", path: "/dashboard/categories" },
+      { title: "Brands", path: "/dashboard/brands" },
       { title: "Delivery Options", path: "/dashboard/delivery-options" },
       { title: "Shipping Methods", path: "/dashboard/shop/shipping-methods" },
       { title: "Coupons", path: "/dashboard/shop/coupons" },

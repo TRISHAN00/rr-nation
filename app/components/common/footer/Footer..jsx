@@ -10,6 +10,7 @@ import FooterCTA from "./FooterCTA";
 import FooterInfo from "./FooterInfo";
 import FooterList from "./FooterList";
 import FooterSocial from "./FooterSocial";
+import { toast } from "sonner";
 
 export default function Footer() {
   const { isAuthenticated } = useAuthContext();
@@ -24,6 +25,7 @@ export default function Footer() {
       setGlobal(res?.data?.data || {});
     } catch (err) {
       console.error("Failed to load global data", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     }
   };
 

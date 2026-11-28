@@ -20,12 +20,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
   Edit,
   Eye,
   MoreHorizontal,
   Trash2,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -37,9 +39,13 @@ export default function DashboardEventCardHeader({
   expandedEvent,
   event,
   onDelete,
+  onApprovalChange,
   loading,
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const status = String(event?.adminApproval || "pending").toLowerCase();
+  const canApprove = status !== "approved";
+  const canReject = status !== "rejected";
 
   return (
     <CardHeader className="pb-3">
@@ -85,6 +91,30 @@ export default function DashboardEventCardHeader({
                   <Edit className="mr-2 h-4 w-4" /> Edit
                 </Link>
               </DropdownMenuItem>
+              {canApprove && (
+                <DropdownMenuItem
+                  className="text-emerald-600 focus:text-emerald-600"
+                  disabled={loading}
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    onApprovalChange?.(event.id, "approved");
+                  }}
+                >
+                  <CheckCircle2 className="mr-2 h-4 w-4" /> Approve
+                </DropdownMenuItem>
+              )}
+              {canReject && (
+                <DropdownMenuItem
+                  className="text-rose-600 focus:text-rose-600"
+                  disabled={loading}
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    onApprovalChange?.(event.id, "rejected");
+                  }}
+                >
+                  <XCircle className="mr-2 h-4 w-4" /> Reject
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 className="text-destructive"
                 onSelect={(e) => {

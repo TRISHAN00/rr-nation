@@ -10,6 +10,7 @@ import {
 } from "@/app/components/ui/dialog";
 import { deleteTicket } from "@/services/admin/admin.ticket.service";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function DeleteEventTicketDialog({
   open,
@@ -27,10 +28,12 @@ export default function DeleteEventTicketDialog({
       // Assumes your service accepts the ticketId directly
       await deleteTicket(ticketId);
 
+      toast.success("Ticket deleted successfully");
       if (onSuccess) onSuccess();
       setOpen(false);
     } catch (error) {
       console.error("Ticket deletion failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to delete ticket");
     } finally {
       setLoading(false);
     }

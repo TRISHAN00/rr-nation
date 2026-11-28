@@ -19,6 +19,7 @@ import {
 import { updateRegistrationField } from "@/services/admin/admin.regFormField.service";
 import { Plus, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fieldData }) {
   const originalData = useRef(null);
@@ -129,10 +130,12 @@ export default function UpdateEvRegFormFieldModal({ open, setOpen, onRefresh, fi
       }
 
       await updateRegistrationField(payload);
+      toast.success("Registration field updated successfully");
       setOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Field update failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to update registration field");
     } finally {
       setLoading(false);
     }

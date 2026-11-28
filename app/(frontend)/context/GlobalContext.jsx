@@ -2,6 +2,7 @@
 
 import { getGlobalData } from "@/services/global.service";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const GlobalContext = createContext(null);
 GlobalContext.displayName = "GlobalContext";
@@ -17,6 +18,7 @@ export const GlobalProvider = ({ children }) => {
       setGlobal(res?.data?.data || res?.data || res || {});
     } catch (err) {
       console.error("Failed to load global data", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     } finally {
       setLoadingGlobal(false);
     }

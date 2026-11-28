@@ -1,44 +1,89 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
-import { CalendarClock, MapPin, Monitor, Radio, Trophy } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
 
-export default function DashboardEventTab({ 
-  eventStage, 
-  setEventStage, 
-  eventType, 
-  setEventType 
+const filterConfig = [
+  {
+    key: "eventStage",
+    label: "Stage",
+    options: [
+      { value: "all", label: "All stages" },
+      { value: "ongoing", label: "Ongoing" },
+      { value: "upcoming", label: "Upcoming" },
+      { value: "completed", label: "Completed" },
+    ],
+  },
+  {
+    key: "eventType",
+    label: "Type",
+    options: [
+      { value: "all", label: "All types" },
+      { value: "live", label: "Live" },
+      { value: "virtual", label: "Virtual" },
+    ],
+  },
+  {
+    key: "adminApproval",
+    label: "Approval",
+    options: [
+      { value: "all", label: "All approvals" },
+      { value: "pending", label: "Pending" },
+      { value: "approved", label: "Approved" },
+      { value: "rejected", label: "Rejected" },
+    ],
+  },
+  {
+    key: "isRunRiseNation",
+    label: "Source",
+    options: [
+      { value: "all", label: "All sources" },
+      { value: "true", label: "RunRise" },
+      { value: "false", label: "External" },
+    ],
+  },
+];
+
+export default function DashboardEventTab({
+  eventStage,
+  setEventStage,
+  eventType,
+  setEventType,
+  adminApproval,
+  setAdminApproval,
+  isRunRiseNation,
+  setIsRunRiseNation,
 }) {
-  return (
-    <div className="flex flex-wrap items-center gap-4">
-      {/* --- Event Stage Filters --- */}
-      <Tabs value={eventStage || "all"} onValueChange={setEventStage} className="w-auto">
-        <TabsList>
-          <TabsTrigger value="all">All Stages</TabsTrigger>
-          <TabsTrigger value="ongoing" className="gap-1">
-            <Radio className="h-3 w-3" /> Ongoing
-          </TabsTrigger>
-          <TabsTrigger value="upcoming" className="gap-1">
-            <CalendarClock className="h-3 w-3" /> Upcoming
-          </TabsTrigger>
-          <TabsTrigger value="completed" className="gap-1">
-            <Trophy className="h-3 w-3" /> Completed
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+  const values = { eventStage, eventType, adminApproval, isRunRiseNation };
+  const setters = { setEventStage, setEventType, setAdminApproval, setIsRunRiseNation };
 
-      {/* --- Event Type Filters --- */}
-      <Tabs value={eventType || "all"} onValueChange={setEventType} className="w-auto">
-        <TabsList>
-          <TabsTrigger value="all">All Types</TabsTrigger>
-          <TabsTrigger value="live" className="gap-1">
-            <MapPin className="h-3 w-3" /> Live
-          </TabsTrigger>
-          <TabsTrigger value="virtual" className="gap-1">
-            <Monitor className="h-3 w-3" /> Virtual
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+  return (
+    <div className="grid w-full gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {filterConfig.map(({ key, label, options }) => {
+        const setter = setters[`set${key.charAt(0).toUpperCase()}${key.slice(1)}`];
+        return (
+          <div key={key} className="space-y-1.5">
+            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+            <Select value={String(values[key] || "all")} onValueChange={setter}>
+              <SelectTrigger className="h-10 w-full bg-background">
+                <SelectValue placeholder={label} />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        );
+      })}
     </div>
   );
 }

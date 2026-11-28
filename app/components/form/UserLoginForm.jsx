@@ -7,6 +7,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { loginUser } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function UserLoginForm({ onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -54,6 +55,7 @@ export default function UserLoginForm({ onSuccess }) {
       }
     } catch (err) {
       console.error("Login Error:", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
       setError(err.response?.data?.message || "Invalid credentials. Please try again.");
     } finally {
       setLoading(false);

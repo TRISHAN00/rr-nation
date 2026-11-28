@@ -19,6 +19,7 @@ import {
 import { createRegistrationFields } from "@/services/admin/admin.regFormField.service";
 import { Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, eventId }) {
   const [fields, setFields] = useState([
@@ -134,11 +135,13 @@ export default function CreateEvRegFormFieldsModal({ open, setOpen, onRefresh, e
 
       await createRegistrationFields(payload);
 
+      toast.success("Registration field(s) created successfully");
       resetForm();
       setOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Field creation failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to create registration field");
     } finally {
       setLoading(false);
     }

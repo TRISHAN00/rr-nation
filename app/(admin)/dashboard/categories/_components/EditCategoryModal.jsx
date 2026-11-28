@@ -13,6 +13,7 @@ import { Label } from "@/app/components/ui/label";
 import { Switch } from "@/app/components/ui/switch";
 import { updateCategory } from "@/services/admin/admin.ecommerce-category.service";
 import { ImagePlus, Loader2, X } from "lucide-react";
+import { toast } from "sonner";
 
 export default function EditCategoryModal({ open, setOpen, category, onRefresh }) {
   const [form, setForm] = useState({
@@ -101,11 +102,13 @@ export default function EditCategoryModal({ open, setOpen, category, onRefresh }
 
       await updateCategory(category.id, payload);
 
+      toast.success("Category updated successfully");
       resetForm();
       setOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Category update failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to update category");
     } finally {
       setLoading(false);
     }

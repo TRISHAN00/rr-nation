@@ -9,6 +9,7 @@ import {
 } from "@/app/components/ui/dropdown-menu";
 import { updateProductStatus } from "@/services/admin/admin.product.service";
 import { ChevronDown, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const statuses = [
   { value: "APPROVED", label: "Approved", color: "bg-green-100 text-green-700" },
@@ -31,6 +32,7 @@ export default function StatusDropdown({ product, onRefresh }) {
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Status update failed:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

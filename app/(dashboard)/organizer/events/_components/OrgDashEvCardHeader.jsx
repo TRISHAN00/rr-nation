@@ -73,12 +73,12 @@ export default function OrgDashEvCardHeader({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/events/${event?.id}`}>
+                <Link href={`/organizer/events/${event?.id}`}>
                   <Eye className="mr-2 h-4 w-4" /> View Details
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/events/edit/${event.id}`}>
+                <Link href={`/organizer/events/${event.id}/edit`}>
                   <Edit className="mr-2 h-4 w-4" /> Edit
                 </Link>
               </DropdownMenuItem>
@@ -96,15 +96,13 @@ export default function OrgDashEvCardHeader({
         </div>
       </div>
 
-      {/* Confirmation Dialog */}
       <AlertDialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              event <strong>{event.name}</strong> and remove all associated
-              data.
+              event <strong>{event.name}</strong>.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

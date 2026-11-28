@@ -21,6 +21,7 @@ import { toggleEventCouponActiveInactive, updateCouponById } from "@/services/ad
 
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function UpdateEventCouponModal({
   open,
@@ -77,10 +78,12 @@ export default function UpdateEventCouponModal({
         await toggleEventCouponActiveInactive(coupon.id);
       }
 
+      toast.success("Coupon updated successfully");
       onSuccess();
       setOpen(false);
     } catch (error) {
       console.error("Update failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to update coupon");
     } finally {
       setLoading(false);
     }

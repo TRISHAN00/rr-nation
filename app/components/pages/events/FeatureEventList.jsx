@@ -2,6 +2,7 @@
 import { getAllEvent } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import FeaturedEventCard from "./FeaturedEventCard";
+import { toast } from "sonner";
 
 export default function FeatureEventList({ data }) {
   const [events, setEvents] = useState([]);
@@ -16,6 +17,7 @@ export default function FeatureEventList({ data }) {
       setEvents(res?.data?.items || []);
     } catch (err) {
       console.error("Failed to load events", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

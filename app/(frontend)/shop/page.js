@@ -5,7 +5,7 @@ import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
-import { getProducts, getPublicCategories } from "@/services/product.service";
+import { getProducts, getPublicBrands, getPublicCategories } from "@/services/product.service";
 import {
   Check,
   ChevronDown,
@@ -17,7 +17,15 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/app/components/ui/carousel";
 import ProductCard from "./_components/ProductCard";
+import { toast } from "sonner";
 
 const PAGE_SIZE = 12;
 // The products endpoint filters by a single category at a time, so when
@@ -26,65 +34,92 @@ const CATEGORY_FETCH_LIMIT = 100;
 const MAX_CATEGORY_PAGES = 10;
 const CATEGORY_PREVIEW_COUNT = 6;
 
+const PRODUCT_TYPES = ["Jersey", "Shorts", "Shoes", "Accessories", "Equipment", "T-Shirt", "Medal", "Other"];
+const GENDERS = ["Unisex", "Men", "Women", "Kids"];
+
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [searchInput, setSearchInput] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [brandId, setBrandId] = useState("");
+  const [type, setType] = useState("");
+  const [gender, setGender] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [isDeal, setIsDeal] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [sidebarElevated, setSidebarElevated] = useState(false);
   const search = useDebounce(searchInput, 400);
+  const debouncedMinPrice = useDebounce(minPrice, 400);
+  const debouncedMaxPrice = useDebounce(maxPrice, 400);
 
   const totalPages = Math.ceil(totalItems / PAGE_SIZE);
-  const activeFilterCount = selectedCategories.length + (searchInput ? 1 : 0);
+  const activeFilterCount =
+    selectedCategories.length +
+    (searchInput ? 1 : 0) +
+    (brandId ? 1 : 0) +
+    (type ? 1 : 0) +
+    (gender ? 1 : 0) +
+    (debouncedMinPrice ? 1 : 0) +
+    (debouncedMaxPrice ? 1 : 0) +
+    (isDeal ? 1 : 0);
   const visibleCategories = showAllCategories
     ? categories
     : categories.slice(0, CATEGORY_PREVIEW_COUNT);
 
   const fetchCategories = useCallback(async () => {
     try {
-      const res = await getPublicCategories();
-      setCategories(res?.data || []);
+      const [catRes, brandRes] = await Promise.all([getPublicCategories(), getPublicBrands()]);
+      setCategories(catRes?.data || catRes?.data?.categories || []);
+      const brandList = brandRes?.data?.brands || brandRes?.data || [];
+      setBrands(Array.isArray(brandList) ? brandList : []);
     } catch (error) {
       console.error(error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     }
   }, []);
+
+  const buildParams = useCallback((extra = {}) => {
+    const params = { ...extra };
+    if (search) params.search = search;
+    if (brandId) params.brandId = brandId;
+    if (type) params.type = type;
+    if (gender) params.gender = gender;
+    if (debouncedMinPrice) params.minPrice = debouncedMinPrice;
+    if (debouncedMaxPrice) params.maxPrice = debouncedMaxPrice;
+    if (isDeal) params.isDeal = true;
+    return params;
+  }, [search, brandId, type, gender, debouncedMinPrice, debouncedMaxPrice, isDeal]);
 
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
 
       if (selectedCategories.length === 0) {
-        const params = { page, limit: PAGE_SIZE };
-        if (search) params.search = search;
+        const params = buildParams({ page, limit: PAGE_SIZE });
         const res = await getProducts(params);
         setProducts(res?.data?.products || []);
         setTotalItems(res?.data?.meta?.total || 0);
         return;
       }
 
-      // Fetch every selected category and merge them into one unique list.
       const categoryItems = await Promise.all(
         selectedCategories.map(async (categoryId) => {
-          const params = { page: 1, limit: CATEGORY_FETCH_LIMIT, categoryId };
-          if (search) params.search = search;
-
+          const params = buildParams({ page: 1, limit: CATEGORY_FETCH_LIMIT, categoryId });
           const first = await getProducts(params);
           const items = [...(first?.data?.products || [])];
-          const pages = Math.min(
-            first?.data?.meta?.totalPages || 1,
-            MAX_CATEGORY_PAGES,
-          );
+          const pages = Math.min(first?.data?.meta?.totalPages || 1, MAX_CATEGORY_PAGES);
 
           for (let nextPage = 2; nextPage <= pages; nextPage++) {
             const res = await getProducts({ ...params, page: nextPage });
             items.push(...(res?.data?.products || []));
           }
-
           return items;
         }),
       );
@@ -92,17 +127,17 @@ export default function ShopPage() {
       const merged = new Map();
       categoryItems.flat().forEach((product) => merged.set(product.id, product));
       const allProducts = Array.from(merged.values());
-
       setTotalItems(allProducts.length);
       setProducts(allProducts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE));
     } catch (error) {
       console.error(error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
       setProducts([]);
       setTotalItems(0);
     } finally {
       setLoading(false);
     }
-  }, [page, search, selectedCategories]);
+  }, [page, selectedCategories, buildParams]);
 
   useEffect(() => {
     fetchCategories();
@@ -114,7 +149,7 @@ export default function ShopPage() {
 
   useEffect(() => {
     setPage(1);
-  }, [search, selectedCategories]);
+  }, [search, selectedCategories, brandId, type, gender, debouncedMinPrice, debouncedMaxPrice, isDeal]);
 
   // Subtle elevation once the page scrolls, so the sticky panel reads as floating.
   useEffect(() => {
@@ -135,6 +170,12 @@ export default function ShopPage() {
   const clearFilters = () => {
     setSelectedCategories([]);
     setSearchInput("");
+    setBrandId("");
+    setType("");
+    setGender("");
+    setMinPrice("");
+    setMaxPrice("");
+    setIsDeal(false);
   };
 
   const filters = (
@@ -169,20 +210,11 @@ export default function ShopPage() {
       {/* Categories */}
       <div>
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray">
-            Categories
-          </h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray">Categories</h3>
           {selectedCategories.length > 0 && (
-            <button
-              type="button"
-              onClick={() => setSelectedCategories([])}
-              className="text-xs font-medium text-brand transition-opacity hover:opacity-80"
-            >
-              Clear
-            </button>
+            <button type="button" onClick={() => setSelectedCategories([])} className="text-xs font-medium text-brand transition-opacity hover:opacity-80">Clear</button>
           )}
         </div>
-
         {categories.length === 0 ? (
           <p className="text-sm text-gray">Loading categories...</p>
         ) : (
@@ -191,63 +223,68 @@ export default function ShopPage() {
               const id = String(category.id);
               const checked = selectedCategories.includes(id);
               return (
-                <label
-                  key={category.id}
-                  className={cn(
-                    "group/cat flex cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2 text-sm transition-all duration-200",
-                    "focus-within:ring-2 focus-within:ring-brand/25",
-                    checked
-                      ? "bg-brand/[0.08] text-dark"
-                      : "text-dark hover:bg-neutral-50",
-                  )}
-                >
-                  <input
-                    type="checkbox"
-                    className="sr-only"
-                    checked={checked}
-                    onChange={() => toggleCategory(id)}
-                  />
-                  <span
-                    className={cn(
-                      "grid h-[18px] w-[18px] shrink-0 place-items-center rounded-[5px] border transition-all duration-200",
-                      checked
-                        ? "border-brand bg-brand text-white shadow-sm shadow-brand/30"
-                        : "border-neutral-300 bg-white text-transparent group-hover/cat:border-brand/50",
-                    )}
-                  >
+                <label key={category.id} className={cn("group/cat flex cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2 text-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-brand/25", checked ? "bg-brand/[0.08] text-dark" : "text-dark hover:bg-neutral-50")}>
+                  <input type="checkbox" className="sr-only" checked={checked} onChange={() => toggleCategory(id)} />
+                  <span className={cn("grid h-[18px] w-[18px] shrink-0 place-items-center rounded-[5px] border transition-all duration-200", checked ? "border-brand bg-brand text-white shadow-sm shadow-brand/30" : "border-neutral-300 bg-white text-transparent group-hover/cat:border-brand/50")}>
                     <Check className="h-3 w-3" strokeWidth={3} />
                   </span>
-                  <span
-                    className={cn(
-                      "flex-1 truncate transition-colors",
-                      checked && "font-medium",
-                    )}
-                  >
-                    {category.name}
-                  </span>
+                  <span className={cn("flex-1 truncate transition-colors", checked && "font-medium")}>{category.name}</span>
                 </label>
               );
             })}
-
             {categories.length > CATEGORY_PREVIEW_COUNT && (
-              <button
-                type="button"
-                onClick={() => setShowAllCategories((value) => !value)}
-                className="mt-1 flex w-full items-center justify-center gap-1 rounded-lg py-1.5 text-xs font-medium text-brand transition-colors hover:bg-brand/5"
-              >
-                {showAllCategories
-                  ? "Show less"
-                  : `Show all ${categories.length}`}
-                <ChevronDown
-                  className={cn(
-                    "h-3.5 w-3.5 transition-transform duration-200",
-                    showAllCategories && "rotate-180",
-                  )}
-                />
+              <button type="button" onClick={() => setShowAllCategories((value) => !value)} className="mt-1 flex w-full items-center justify-center gap-1 rounded-lg py-1.5 text-xs font-medium text-brand transition-colors hover:bg-brand/5">
+                {showAllCategories ? "Show less" : `Show all ${categories.length}`}
+                <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-200", showAllCategories && "rotate-180")} />
               </button>
             )}
           </div>
         )}
+      </div>
+
+      <div>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray">Brand</h3>
+        <select value={brandId} onChange={(e) => setBrandId(e.target.value)} className="h-10 w-full rounded-md border border-input bg-neutral-50/70 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30">
+          <option value="">All brands</option>
+          {brands.map((b) => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray">Type</h3>
+          <select value={type} onChange={(e) => setType(e.target.value)} className="h-10 w-full rounded-md border border-input bg-neutral-50/70 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30">
+            <option value="">All</option>
+            {PRODUCT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray">Gender</h3>
+          <select value={gender} onChange={(e) => setGender(e.target.value)} className="h-10 w-full rounded-md border border-input bg-neutral-50/70 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30">
+            <option value="">All</option>
+            {GENDERS.map((g) => <option key={g} value={g}>{g}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray">Price Range</h3>
+        <div className="grid grid-cols-2 gap-2">
+          <Input type="number" min="0" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="h-10 bg-neutral-50/70" />
+          <Input type="number" min="0" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="h-10 bg-neutral-50/70" />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray">Flags</h3>
+        <div className="space-y-1">
+          {[["Deal for you", isDeal, setIsDeal]].map(([label, checked, setter]) => (
+            <label key={label} className="flex cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2 text-sm text-dark hover:bg-neutral-50">
+              <input type="checkbox" className="h-4 w-4 accent-[var(--brand,#00a19a)]" checked={checked} onChange={(e) => setter(e.target.checked)} />
+              <span>{label}</span>
+            </label>
+          ))}
+        </div>
       </div>
 
       {activeFilterCount > 0 && (
@@ -275,6 +312,52 @@ export default function ShopPage() {
       />
 
       <div className="container mx-auto px-4 py-8">
+        {categories.length > 0 && (
+          <section className="mb-10">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Browse</p>
+                <h2 className="text-2xl font-bold text-dark">Shop by Category</h2>
+              </div>
+            </div>
+            <Carousel opts={{ align: "start", dragFree: true }} className="w-full">
+              <CarouselContent className="-ml-3">
+                {categories.map((category) => {
+                  const id = String(category.id);
+                  const active = selectedCategories.includes(id);
+                  return (
+                    <CarouselItem key={category.id} className="basis-1/2 pl-3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+                      <button
+                        type="button"
+                        onClick={() => toggleCategory(id)}
+                        className={cn(
+                          "group flex w-full flex-col overflow-hidden rounded-xl border bg-white text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                          active ? "border-brand ring-2 ring-brand/20" : "border-border/70",
+                        )}
+                      >
+                        <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-100">
+                          {category.image ? (
+                            <img src={category.image} alt={category.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand/10 to-brand/5 text-brand">
+                              <ShoppingCart className="h-7 w-7" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between gap-2 p-3">
+                          <span className={cn("line-clamp-1 text-sm font-medium text-dark", active && "text-brand")}>{category.name}</span>
+                          {active && <Check className="h-4 w-4 shrink-0 text-brand" />}
+                        </div>
+                      </button>
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+              <CarouselPrevious className="-left-3 hidden md:flex" />
+              <CarouselNext className="-right-3 hidden md:flex" />
+            </Carousel>
+          </section>
+        )}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
           {/* Left sidebar (desktop) — sticky while the product grid scrolls */}
           <aside className="hidden lg:block">

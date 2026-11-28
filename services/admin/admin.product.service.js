@@ -57,3 +57,53 @@ export const createProduct = async (payload) => {
   });
   return data;
 };
+
+/* ---------- UPLOAD SINGLE PRODUCT IMAGE ---------- */
+export const uploadProductImage = async (productId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const { data } = await api.post(
+    `/e-commerce/admin/products/${productId}/images/upload`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } },
+  );
+  return data;
+};
+
+/* ---------- UPLOAD MULTIPLE PRODUCT IMAGES ---------- */
+export const uploadProductImagesBulk = async (productId, files) => {
+  const formData = new FormData();
+  Array.from(files || []).forEach((file) => formData.append("files", file));
+  const { data } = await api.post(
+    `/e-commerce/admin/products/${productId}/images/upload/bulk`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } },
+  );
+  return data;
+};
+
+/* ---------- SET PRODUCT IMAGE AS PRIMARY ---------- */
+export const setProductImagePrimary = async (imageId) => {
+  const { data } = await api.put(
+    `/e-commerce/admin/products/images/${imageId}/primary`,
+  );
+  return data;
+};
+
+/* ---------- REORDER PRODUCT IMAGES ---------- */
+export const reorderProductImages = async (productId, images) => {
+  const { data } = await api.put(
+    `/e-commerce/admin/products/${productId}/images/reorder`,
+    { images },
+  );
+  return data;
+};
+
+/* ---------- ASSIGN DELIVERY OPTIONS TO PRODUCT ---------- */
+export const assignProductDeliveryOptions = async (productId, deliveryOptionIds) => {
+  const { data } = await api.put(
+    `/e-commerce/admin/products/${productId}/delivery-options`,
+    { deliveryOptionIds },
+  );
+  return data;
+};

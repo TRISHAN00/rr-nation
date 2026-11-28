@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
+import { toast } from "sonner";
 
 export default function MobileSidebar() {
   const [open, setOpen] = useState(false);
@@ -31,6 +32,7 @@ export default function MobileSidebar() {
       setGlobal(res?.data?.data || {});
     } catch (err) {
       console.error("Failed to load global data", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     }
   };
 

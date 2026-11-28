@@ -6,6 +6,7 @@ import {
   getAllDashbaordEvents,
   getDashboardEventById,
   updateEvent,
+  updateEventAdminApproval,
 } from "@/services/admin/admin.event.service";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -30,13 +31,11 @@ export default function EventProvider({ children }) {
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
-  const [isRunRiseNation, setIsRunRiseNation] = useState(true);
+  const [isRunRiseNation, setIsRunRiseNation] = useState("all");
   const [eventType, setEventType] = useState("");
   const [eventStage, setEventStage] = useState("");
+  const [adminApproval, setAdminApproval] = useState("");
   const [date, setDate] = useState(null);
-
-  console.log("event type", eventType);
-  console.log("event stage", eventStage);
 
   const router = useRouter();
 
@@ -54,11 +53,12 @@ export default function EventProvider({ children }) {
       const response = await getAllDashbaordEvents(
         page,
         limit,
-        isRunRiseNation,
+        isRunRiseNation === "all" ? "" : isRunRiseNation,
         search,
         encodedDate,
-        eventStage === "all" ? "" : eventStage, // Correctly handles "all"
-        eventType === "all" ? "" : eventType,   // Correctly handles "all"
+        eventStage === "all" ? "" : eventStage,
+        eventType === "all" ? "" : eventType,
+        adminApproval === "all" ? "" : adminApproval,
       );
 
       const data = response?.data || response || {};
@@ -71,7 +71,7 @@ export default function EventProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, isRunRiseNation, search, eventStage, eventType, date]);
+  }, [page, limit, isRunRiseNation, search, eventStage, eventType, adminApproval, date]);
 
   useEffect(() => {
     fetchEvents();
@@ -79,7 +79,7 @@ export default function EventProvider({ children }) {
 
   useEffect(() => {
     setPage(1);
-  }, [search, eventStage, eventType, date]);
+  }, [search, eventStage, eventType, adminApproval, isRunRiseNation, date]);
 
   // --- CREATE EVENT ---
   const handleCreateEvent = useCallback(
@@ -140,6 +140,34 @@ export default function EventProvider({ children }) {
     }
   }, []);
 
+  // --- UPDATE ADMIN APPROVAL ---
+  const handleUpdateEventApproval = useCallback(
+    async (eventId, adminApproval) => {
+      try {
+        setLoading(true);
+        const res = await updateEventAdminApproval(eventId, adminApproval);
+        const updated = res?.data;
+        setEvents((prev) =>
+          prev.map((item) => (item.id === eventId ? { ...item, ...updated } : item)),
+        );
+        setEvent((prev) => (prev?.id === eventId ? { ...prev, ...updated } : prev));
+        toast.success(
+          adminApproval === "approved"
+            ? "Event approved successfully"
+            : "Event rejected successfully",
+        );
+        await fetchEvents();
+        return updated;
+      } catch (err) {
+        toast.error(err?.response?.data?.message || "Failed to update event approval");
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchEvents],
+  );
+
   // --- DELETE EVENT ---
   const handleDeleteDashboardEvent = useCallback(
     async (eventId) => {
@@ -171,15 +199,20 @@ export default function EventProvider({ children }) {
         limit,
         totalPages,
         totalItems,
+        isRunRiseNation,
+        setIsRunRiseNation,
         eventType,
         setEventType,
         eventStage,
         setEventStage,
+        adminApproval,
+        setAdminApproval,
         date,
         setDate,
         fetchEvents,
         handleCreateEvent,
         handleUpdateEvent,
+        handleUpdateEventApproval,
         handleDeleteDashboardEvent,
         handleGetEventById,
       }}

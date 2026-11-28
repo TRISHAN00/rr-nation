@@ -1,7 +1,5 @@
 "use client";
 
-
-import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import {
   createContext,
@@ -11,7 +9,13 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
-import { createOrganizerEvent, deleteDashboardOrganizerEvent, getAllDashboardOrganizerEvents, getDashboardOrganizerEventById, updateOrganizerEvent } from "../services/organizer.event.service";
+import {
+  createOrganizerEvent,
+  deleteOrganizerEvent,
+  getAllOrganizerEvents,
+  getOrganizerEventById,
+  updateOrganizerEvent,
+} from "../services/organizer.event.service";
 
 const OrganizerEventContext = createContext(null);
 
@@ -23,53 +27,44 @@ export default function OrganizerEventProvider({ children }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [isRunRiseNation, setIsRunRiseNation] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [eventType, setEventType] = useState("");
-  const [date, setDate] = useState(null);
+  const [eventStage, setEventStage] = useState("");
 
   const router = useRouter();
 
-  const fetchOrganizerEvents = useCallback(async () => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
-    if (!token) return;
-
+  const fetchEvents = useCallback(async () => {
     try {
       setLoading(true);
-      const formattedDateForAPI =
-        date instanceof Date ? format(date, "MM/dd/yyyy") : "";
-      const encodedDate = encodeURIComponent(formattedDateForAPI);
-
-      const response = await getAllDashboardOrganizerEvents(
-        page,
-        limit,
-        isRunRiseNation,
-        search,
-        eventType === "all" ? "" : eventType,
-        encodedDate,
-      );
-
-      setEvents(response?.data?.items || response?.items || []);
+      const response = await getAllOrganizerEvents(page, limit);
+      const data = response?.data || {};
+      setEvents(data?.items || []);
+      setTotalPages(data?.totalPages || 1);
+      setTotalItems(data?.total || data?.count || 0);
     } catch (err) {
       console.error("Fetch Error:", err);
-      toast.error("Failed to fetch events");
+      toast.error(err?.response?.data?.message || "Failed to fetch events");
     } finally {
       setLoading(false);
     }
-  }, [page, limit, isRunRiseNation, search, eventType, date]);
+  }, [page, limit]);
 
   useEffect(() => {
-    fetchOrganizerEvents();
-  }, [fetchOrganizerEvents]);
+    fetchEvents();
+  }, [fetchEvents]);
 
-  // --- CREATE EVENT ---
+  useEffect(() => {
+    setPage(1);
+  }, [search, eventStage, eventType]);
+
   const handleCreateEvent = useCallback(
     async (formData) => {
       try {
         setLoading(true);
         const res = await createOrganizerEvent(formData);
         toast.success("Event created successfully!");
-        await fetchOrganizerEvents();
+        await fetchEvents();
         return res?.data?.data?.id || res?.data?.id;
       } catch (err) {
         toast.error(err?.response?.data?.message || "Failed to create event");
@@ -78,64 +73,68 @@ export default function OrganizerEventProvider({ children }) {
         setLoading(false);
       }
     },
-    [fetchOrganizerEvents],
+    [fetchEvents],
   );
 
-  // --- UPDATE EVENT ---
   const handleUpdateEvent = useCallback(
-    async (formData, eventId) => { // Accept eventId as second param
+    async (formData, eventId, { silent = false } = {}) => {
       try {
         setLoading(true);
         await updateOrganizerEvent(formData);
-        toast.success("Event updated successfully!");
+        if (!silent) toast.success("Event updated successfully!");
+        await fetchEvents();
 
-        // Refresh list
-        await fetchOrganizerEvents();
-
-        // Refresh the single event state if we are in a detail view
         if (eventId) {
-          const res = await getDashboardOrganizerEventById(eventId);
+          const res = await getOrganizerEventById(eventId);
           setEvent(res?.data?.data || res?.data || null);
         }
 
-        router.push("/dashboard/events");
+        if (!silent) router.push("/organizer/events");
+        return { ok: true };
       } catch (err) {
-        toast.error(err?.response?.data?.message || "Failed to update event");
+        if (!silent) {
+          toast.error(err?.response?.data?.message || "Failed to update event");
+        }
+        return {
+          ok: false,
+          status: err?.response?.status,
+          message: err?.response?.data?.message || err?.message,
+        };
       } finally {
         setLoading(false);
       }
     },
-    [fetchOrganizerEvents, router],
+    [fetchEvents, router],
   );
 
-  // --- GET EVENT BY ID ---
   const handleGetEventById = useCallback(async (eventId) => {
     try {
       setLoading(true);
-      const res = await getDashboardOrganizerEventById(eventId);
-      setEvent(res?.data?.data || null);
+      const res = await getOrganizerEventById(eventId);
+      setEvent(res?.data?.data || res?.data || null);
     } catch (err) {
-      toast.error("Failed to get event details");
+      console.error(err);
+      toast.error(err?.response?.data?.message || "Failed to get event details");
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // --- DELETE EVENT ---
   const handleDeleteDashboardEvent = useCallback(
     async (eventId) => {
       try {
         setLoading(true);
-        await deleteDashboardOrganizerEvent(eventId);
+        await deleteOrganizerEvent(eventId);
         toast.success("Event deleted successfully");
-        await fetchOrganizerEvents();
+        await fetchEvents();
       } catch (err) {
-        toast.error("Failed to delete event");
+        console.error(err);
+        toast.error(err?.response?.data?.message || "Failed to delete event");
       } finally {
         setLoading(false);
       }
     },
-    [fetchOrganizerEvents],
+    [fetchEvents],
   );
 
   return (
@@ -146,11 +145,17 @@ export default function OrganizerEventProvider({ children }) {
         search,
         setSearch,
         loading,
+        page,
+        setPage,
+        limit,
+        setLimit,
+        totalPages,
+        totalItems,
         eventType,
-        date,
-        setDate,
         setEventType,
-        fetchOrganizerEvents,
+        eventStage,
+        setEventStage,
+        fetchEvents,
         handleCreateEvent,
         handleUpdateEvent,
         handleDeleteDashboardEvent,
@@ -165,6 +170,8 @@ export default function OrganizerEventProvider({ children }) {
 export const useDashboardOrganizerEvents = () => {
   const context = useContext(OrganizerEventContext);
   if (!context)
-    throw new Error("useDashboardOrganizerEvents must be used inside OrganizerEventProvider");
+    throw new Error(
+      "useDashboardOrganizerEvents must be used inside OrganizerEventProvider",
+    );
   return context;
 };

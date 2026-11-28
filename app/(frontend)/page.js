@@ -8,6 +8,7 @@ import AutoSlideLogo from "@/app/components/pages/home/AutoSlide/AutoSlideLogo";
 import Banner from "@/app/components/pages/home/banner/Banner";
 import JourneySection from "@/app/components/pages/home/journey/JourneySection";
 import Partners from "@/app/components/pages/home/partners/Partners";
+import HomeShopSection from "@/app/components/pages/home/shop/HomeShopSection";
 import ServiceSlide from "@/app/components/pages/services/ServiceSlide";
 import SuccessfulEvents from "../components/pages/events/SuccessfulEvents";
 import { getBlogListApi } from "./api/blog-api";
@@ -143,6 +144,7 @@ export default async function Home() {
       <Partners data={partners} />
       <PhotoGallery data={gallery} />
       <FeatureEventList data={featureEvents} />
+      <HomeShopSection />
       <FeaturedBlogSlide data={featureBlogSubtitle} featuredBlogs={featuredBlogs}  />
     </>
   );

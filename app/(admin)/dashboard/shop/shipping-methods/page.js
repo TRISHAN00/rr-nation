@@ -11,6 +11,7 @@ import ShippingMethodTableBody from "./_components/ShippingMethodTableBody";
 import CreateShippingMethodModal from "./_components/CreateShippingMethodModal";
 import EditShippingMethodModal from "./_components/EditShippingMethodModal";
 import DeleteShippingMethodDialog from "./_components/DeleteShippingMethodDialog";
+import { toast } from "sonner";
 
 export default function ShippingMethodsPage() {
   const [methods, setMethods] = useState([]);
@@ -27,6 +28,7 @@ export default function ShippingMethodsPage() {
       setMethods(res?.data || []);
     } catch (error) {
       console.error(error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

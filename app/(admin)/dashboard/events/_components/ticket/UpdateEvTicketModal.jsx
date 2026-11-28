@@ -9,6 +9,7 @@ import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { updateTicket } from "@/services/admin/admin.ticket.service";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 // Import your service here, e.g.
 
 
@@ -59,12 +60,12 @@ export default function UpdateEventTicketModal({ open, setOpen, ticket, eventId,
             // Example API Call:
             await updateTicket(eventId, payload);
             
-            console.log("Submitting to PATCH /admin/ticket/", eventId, payload);
-            
+            toast.success("Ticket updated successfully");
             if (onSuccess) onSuccess();
             setOpen(false);
         } catch (error) {
             console.error("Update failed:", error);
+            toast.error(error?.response?.data?.message || "Failed to update ticket");
         } finally {
             setLoading(false);
         }

@@ -9,6 +9,7 @@ import {
 } from "@/app/components/ui/dialog";
 import { deleteEventCoupon } from "@/services/admin/admin.event.coupon.service";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function DeleteEventCouponDialog({
   open,
@@ -24,10 +25,12 @@ export default function DeleteEventCouponDialog({
 
       await deleteEventCoupon(couponId);
 
+      toast.success("Coupon deleted successfully");
       onSuccess();
       setOpen(false);
     } catch (error) {
       console.error("Delete failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to delete coupon");
     } finally {
       setLoading(false);
     }

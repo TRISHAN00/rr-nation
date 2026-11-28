@@ -19,6 +19,13 @@ export default function ProductCard({ product, priority = false, className = "" 
   const inStock =
     product.stockQuantity == null ? true : Number(product.stockQuantity) > 0;
 
+  const primaryImage =
+    product.images?.find((img) => img?.isPrimary)?.imageUrl ||
+    [...(product.images || [])].sort((a, b) => (a?.sortOrder ?? 0) - (b?.sortOrder ?? 0))[0]?.imageUrl ||
+    product.thumbnailImage ||
+    product.imageUrl ||
+    "/placeholder.png";
+
   return (
     <div
       className={cn(
@@ -35,7 +42,7 @@ export default function ProductCard({ product, priority = false, className = "" 
       >
         <div className="relative aspect-square w-full">
           <Image
-            src={product.thumbnailImage || product.imageUrl || "/placeholder.png"}
+            src={primaryImage}
             alt={product.name}
             fill
             priority={priority}
@@ -100,7 +107,7 @@ export default function ProductCard({ product, priority = false, className = "" 
               stockQuantity={product.stockQuantity}
               productData={{
                 name: product.name,
-                imageUrl: product.thumbnailImage || product.imageUrl,
+                imageUrl: primaryImage,
                 basePrice,
                 salePrice: hasDiscount ? salePrice : 0,
               }}

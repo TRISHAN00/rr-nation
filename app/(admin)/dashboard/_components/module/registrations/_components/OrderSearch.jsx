@@ -11,6 +11,7 @@ import {
 import { getAllEvents } from "@/services/admin/admin.event.service";
 import { Calendar, ListFilter, Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function OrderSearch({
   searchQuery,
@@ -31,6 +32,7 @@ export default function OrderSearch({
         setEvents(eventData);
       } catch (error) {
         console.error("Error fetching events:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
       }
     };
 

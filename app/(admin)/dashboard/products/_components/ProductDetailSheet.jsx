@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { getProductById } from "@/services/admin/admin.product.service";
+import { toast } from "sonner";
 
 function DetailRow({ icon: Icon, label, value }) {
   return (
@@ -70,6 +71,7 @@ export default function ProductDetailSheet({ isOpen, onOpenChange, product }) {
         setDetail(res?.data || null);
       } catch (err) {
         console.error("Failed to fetch product detail:", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
         setDetail(null);
       } finally {
         setLoading(false);
@@ -190,8 +192,6 @@ export default function ProductDetailSheet({ isOpen, onOpenChange, product }) {
               <SectionTitle>Flags</SectionTitle>
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { label: "Has Variant", value: data.hasVariant },
-                  { label: "Featured", value: data.isFeatured },
                   { label: "Deal", value: data.isDeal },
                   { label: "Archived", value: data.isArchived },
                 ].map(({ label, value }) => (
@@ -214,18 +214,23 @@ export default function ProductDetailSheet({ isOpen, onOpenChange, product }) {
               {data.images?.length > 0 && (
                 <>
                   <SectionTitle>Images ({data.images.length})</SectionTitle>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="grid grid-cols-4 gap-2">
                     {data.images.map((img, i) => (
                       <div
-                        key={i}
-                        className="relative w-16 h-16 rounded-lg overflow-hidden border bg-muted"
+                        key={img.id || i}
+                        className="relative aspect-square rounded-lg overflow-hidden border bg-muted"
                       >
                         <Image
-                          src={img.full_path || img.path}
+                          src={img.imageUrl || img.full_path || img.path}
                           alt={img.img_alt || `Image ${i + 1}`}
                           fill
                           className="object-cover"
                         />
+                        {img.isPrimary && (
+                          <span className="absolute top-1 left-1 rounded bg-black/70 px-1 py-0.5 text-[9px] font-semibold text-white">
+                            Primary
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>

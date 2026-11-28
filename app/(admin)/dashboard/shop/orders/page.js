@@ -23,6 +23,7 @@ import {
 import { getAdminOrders } from "@/services/admin/admin.order.service";
 import { ChevronLeft, ChevronRight, Eye, Loader2, Search, ShoppingBag, X } from "lucide-react";
 import OrderDetailSheet from "./_components/OrderDetailSheet";
+import { toast } from "sonner";
 
 const getOrderNumber = (order) =>
   order.orderNumber || order.orderCode || (order.id ? `#${order.id}` : "—");
@@ -131,6 +132,7 @@ export default function OrdersPage() {
       setTotalItems(res?.data?.meta?.total || 0);
     } catch (err) {
       console.error("Failed to fetch orders:", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
       setError("Failed to load orders. Please try again.");
       setOrders([]);
       setTotalItems(0);

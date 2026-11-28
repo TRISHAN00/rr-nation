@@ -1,6 +1,7 @@
 "use client"
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { getSettingApi } from "../api/page-api";
+import { toast } from "sonner";
 
 const CMSGlobalContext = createContext(null);
 CMSGlobalContext.displayName = "CMSGlobalContext";
@@ -17,6 +18,7 @@ export default function CMSGlobalProvider({ children }) {
             setCMSGlobal(res?.data);
         } catch (err) {
             console.error("Failed to load cms global data", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }

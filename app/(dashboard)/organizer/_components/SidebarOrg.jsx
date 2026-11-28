@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getMyOrganizerRegistration } from "@/services/organizer.service";
 import {
   Calendar,
   ChevronDown,
@@ -9,11 +11,10 @@ import {
   ChevronRight,
   LayoutDashboard,
   Trophy,
-  UserCheck
+  UserCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const menuItems = [
   { title: "Dashboard", icon: LayoutDashboard, path: "/organizer/dashboard" },
@@ -24,8 +25,8 @@ const menuItems = [
 export function SidebarOrg({ collapsed, onToggle }) {
   const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState(null);
+  const [org, setOrg] = useState(null);
 
-  // Auto-open parent menu if a child path is active
   useEffect(() => {
     menuItems.forEach((item) => {
       if (item.children?.some((child) => child.path === pathname)) {
@@ -34,27 +35,43 @@ export function SidebarOrg({ collapsed, onToggle }) {
     });
   }, [pathname]);
 
+  useEffect(() => {
+    let active = true;
+    getMyOrganizerRegistration()
+      .then((res) => active && setOrg(res?.data || null))
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const logo = org?.organizationLogo;
+  const name = org?.organizationName || "Organizer";
+
   return (
     <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen bg-sidebar transition-all duration-300 border-r border-sidebar-border",
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-64",
       )}
     >
-      {/* Logo Section */}
       <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
         {!collapsed ? (
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand">
-              <Trophy className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <span className="block text-sm font-bold text-sidebar-foreground">
-                Run Rise
-              </span>
-              <span className="text-xs text-sidebar-muted">Dashboard</span>
+          <div className="flex items-center gap-2 min-w-0">
+            {logo ? (
+              <img src={logo} alt={name} className="h-9 w-9 rounded-lg object-contain bg-white border border-sidebar-border shrink-0" />
+            ) : (
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand shrink-0">
+                <Trophy className="h-5 w-5 text-white" />
+              </div>
+            )}
+            <div className="min-w-0">
+              <span className="block text-sm font-bold text-sidebar-foreground truncate">{name}</span>
+              <span className="text-xs text-sidebar-muted">Organizer Dashboard</span>
             </div>
           </div>
+        ) : logo ? (
+          <img src={logo} alt={name} className="mx-auto h-9 w-9 rounded-lg object-contain bg-white border border-sidebar-border" />
         ) : (
           <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg bg-brand">
             <Trophy className="h-5 w-5 text-white" />

@@ -13,6 +13,7 @@ import {
   deleteCategory,
   getCategories,
 } from "@/services/admin/admin.ecommerce-category.service";
+import { toast } from "sonner";
 import { ConfirmModal } from "../../_components/ConfirmModal";
 import CreateCategoryModal from "./CreateCategoryModal";
 import EditCategoryModal from "./EditCategoryModal";
@@ -61,11 +62,13 @@ export default function CategoryList() {
     try {
       setDeleting(true);
       await deleteCategory(deleteId);
+      toast.success("Category deleted successfully");
       setDeleteOpen(false);
       setDeleteId(null);
       fetchCategories();
     } catch (error) {
       console.error("Delete failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to delete category");
     } finally {
       setDeleting(false);
     }

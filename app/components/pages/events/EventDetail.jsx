@@ -9,6 +9,7 @@ import CallUsCard from "../services/CallUsCard";
 import EventContent from "./EventContent";
 import EventInfoCard from "./EventInfoCard";
 import SMFeatureEventCard from "./SMFeatureEventCard";
+import { toast } from "sonner";
 
 export default function EventDetail({ initialSlug }) {
   const [event, setEvent] = useState(null);
@@ -21,6 +22,7 @@ export default function EventDetail({ initialSlug }) {
       setRegFields(res?.data || []);
     } catch (err) {
       console.error("Failed to load registration fields", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     }
   };
 
@@ -37,6 +39,7 @@ export default function EventDetail({ initialSlug }) {
       }
     } catch (err) {
       console.error("Failed to load event", err);
+      toast.error(err?.response?.data?.message || err?.response?.data?.error || err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

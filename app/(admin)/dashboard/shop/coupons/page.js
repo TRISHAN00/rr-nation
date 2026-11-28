@@ -12,6 +12,7 @@ import CouponTableBody from "./_components/CouponTableBody";
 import CreateCouponModal from "./_components/CreateCouponModal";
 import EditCouponModal from "./_components/EditCouponModal";
 import DeleteCouponDialog from "./_components/DeleteCouponDialog";
+import { toast } from "sonner";
 
 export default function ShopCouponsPage() {
   const [coupons, setCoupons] = useState([]);
@@ -34,6 +35,7 @@ export default function ShopCouponsPage() {
       setTotalItems(res?.data?.meta?.total || 0);
     } catch (error) {
       console.error("Failed to fetch coupons:", error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

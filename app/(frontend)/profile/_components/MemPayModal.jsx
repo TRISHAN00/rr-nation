@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { createMemberPayment, getMemRegFee } from "@/services/member.service";
 import { useEffect, useState } from "react";
 import ApplyCouponMember from "./ApplyCouponMember";
+import { toast } from "sonner";
 
 export default function MemPayModal({ open, setOpen, memberId }) {
     const [fee, setFee] = useState(0);
@@ -29,6 +30,7 @@ export default function MemPayModal({ open, setOpen, memberId }) {
             setFee(res?.data?.fee || 0);
         } catch (error) {
             console.error(error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
@@ -77,6 +79,7 @@ export default function MemPayModal({ open, setOpen, memberId }) {
 
         } catch (error) {
             console.error(error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || "Something went wrong");
             alert("Payment error occurred");
         } finally {
             setPayLoading(false);
